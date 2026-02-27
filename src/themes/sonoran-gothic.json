@@ -1,0 +1,31 @@
+{
+  "name": "Sonoran Gothic",
+  "foreground": "#EAF4DE",
+  "background": "#241F17",
+  "cursorColor": "#EAF4DE",
+  "black": "#867F6E",
+  "red": "#EB6f6f",
+  "green": "#669C50",
+  "yellow": "#F2D696",
+  "blue": "#227B4d",
+  "purple": "#A5ABDA",
+  "cyan": "#E18F62",
+  "white": "#EAF4DE",
+  "brightBlack": "#867F6E",
+  "brightRed": "#EB6f6f",
+  "brightGreen": "#669C50",
+  "brightYellow": "#F2D696",
+  "brightBlue": "#227B4D",
+  "brightPurple": "#A5ABDA",
+  "brightCyan": "#E18F62",
+  "brightWhite": "#EAF4DE",
+  "meta": {
+    "isDark": true,
+    "credits": [
+      {
+        "name": "d-mckee",
+        "link": "https://github.com/d-mckee"
+      }
+    ]
+  }
+}

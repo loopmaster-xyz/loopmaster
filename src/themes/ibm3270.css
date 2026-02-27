@@ -1,0 +1,21 @@
+[theme="ibm3270"] {
+  --black: #222222;
+  --red: #F01818;
+  --green: #24D830;
+  --yellow: #F0D824;
+  --blue: #7890F0;
+  --purple: #F078D8;
+  --cyan: #54E4E4;
+  --white: #A5A5A5;
+  --brightBlack: #888888;
+  --brightRed: #EF8383;
+  --brightGreen: #7ED684;
+  --brightYellow: #EFE28B;
+  --brightBlue: #B3BFEF;
+  --brightPurple: #EFB3E3;
+  --brightCyan: #9CE2E2;
+  --brightWhite: #FFFFFF;
+  --foreground: #FDFDFD;
+  --background: #000000;
+  --cursorColor: #FDFDFD;
+}

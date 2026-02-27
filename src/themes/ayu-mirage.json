@@ -1,0 +1,22 @@
+{
+  "name": "AyuMirage",
+  "black": "#1F2430",
+  "red": "#FF3333",
+  "green": "#BAE67E",
+  "yellow": "#FFA759",
+  "blue": "#73D0FF",
+  "purple": "#D4BFFF",
+  "cyan": "#95E6CB",
+  "white": "#CBCCC6",
+  "brightBlack": "#707A8C",
+  "brightRed": "#FF3333",
+  "brightGreen": "#BAE67E",
+  "brightYellow": "#FFA759",
+  "brightBlue": "#73D0FF",
+  "brightPurple": "#D4BFFF",
+  "brightCyan": "#95E6CB",
+  "brightWhite": "#CBCCC6",
+  "foreground": "#CBCCC6",
+  "background": "#1F2430",
+  "cursorColor": "#FFCC66"
+}

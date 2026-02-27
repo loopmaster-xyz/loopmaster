@@ -1,0 +1,7 @@
+build
+node_modules
+.env*
+!.env.example
+!dist/as/build
+storage/*
+!.gitkeep

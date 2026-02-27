@@ -1,0 +1,22 @@
+{
+  "name": "Elic",
+  "black": "#303030",
+  "red": "#e1321a",
+  "green": "#6ab017",
+  "yellow": "#ffc005",
+  "blue": "#729FCF",
+  "purple": "#ec0048",
+  "cyan": "#f2f2f2",
+  "white": "#2aa7e7",
+  "brightBlack": "#5d5d5d",
+  "brightRed": "#ff361e",
+  "brightGreen": "#7bc91f",
+  "brightYellow": "#ffd00a",
+  "brightBlue": "#0071ff",
+  "brightPurple": "#ff1d62",
+  "brightCyan": "#4bb8fd",
+  "brightWhite": "#a020f0",
+  "foreground": "#f2f2f2",
+  "background": "#4A453E",
+  "cursorColor": "#f2f2f2"
+}

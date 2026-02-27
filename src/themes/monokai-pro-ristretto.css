@@ -1,0 +1,21 @@
+[theme="monokai-pro-ristretto"] {
+  --black: #3E3838;
+  --red: #DF7484;
+  --green: #BBD87E;
+  --yellow: #EDCE73;
+  --blue: #DC9373;
+  --purple: #A9AAE9;
+  --cyan: #A4D7CC;
+  --white: #FBF2F3;
+  --brightBlack: #70696A;
+  --brightRed: #DF7484;
+  --brightGreen: #BBD87E;
+  --brightYellow: #EDCE73;
+  --brightBlue: #DC9373;
+  --brightPurple: #A9AAE9;
+  --brightCyan: #A4D7CC;
+  --brightWhite: #FBF2F3;
+  --foreground: #FBF2F3;
+  --background: #3E3838;
+  --cursorColor: #FBF2F3;
+}

@@ -1,0 +1,21 @@
+[theme="shel"] {
+  --black: #2c2423;
+  --red: #ab2463;
+  --green: #6ca323;
+  --yellow: #ab6423;
+  --blue: #2c64a2;
+  --purple: #6c24a2;
+  --cyan: #2ca363;
+  --white: #918988;
+  --brightBlack: #918988;
+  --brightRed: #f588b9;
+  --brightGreen: #c2ee86;
+  --brightYellow: #f5ba86;
+  --brightBlue: #8fbaec;
+  --brightPurple: #c288ec;
+  --brightCyan: #8feeb9;
+  --brightWhite: #f5eeec;
+  --foreground: #4882cd;
+  --background: #2a201f;
+  --cursorColor: #4882cd;
+}

@@ -1,0 +1,21 @@
+[theme="horizon-dark"] {
+  --black: #16161C;
+  --red: #E95678;
+  --green: #29D398;
+  --yellow: #FAB795;
+  --blue: #26BBD9;
+  --purple: #EE64AE;
+  --cyan: #59E3E3;
+  --white: #FADAD1;
+  --brightBlack: #232530;
+  --brightRed: #EC6A88;
+  --brightGreen: #3FDAA4;
+  --brightYellow: #FBC3A7;
+  --brightBlue: #3FC6DE;
+  --brightPurple: #F075B7;
+  --brightCyan: #6BE6E6;
+  --brightWhite: #FDF0ED;
+  --foreground: #FDF0ED;
+  --background: #1C1E26;
+  --cursorColor: #FDF0ED;
+}

@@ -1,0 +1,21 @@
+[theme="kokuban"] {
+  --black: #2E8744;
+  --red: #D84E4C;
+  --green: #95DA5A;
+  --yellow: #D6E264;
+  --blue: #4B9ED7;
+  --purple: #945FC5;
+  --cyan: #D89B25;
+  --white: #D8E2D7;
+  --brightBlack: #34934F;
+  --brightRed: #FF4F59;
+  --brightGreen: #AFF56A;
+  --brightYellow: #FCFF75;
+  --brightBlue: #57AEFF;
+  --brightPurple: #AE63E9;
+  --brightCyan: #FFAA2B;
+  --brightWhite: #FFFEFE;
+  --foreground: #D8E2D7;
+  --background: #0D4A08;
+  --cursorColor: #D8E2D7;
+}

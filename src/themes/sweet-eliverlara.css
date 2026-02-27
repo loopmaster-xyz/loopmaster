@@ -1,0 +1,21 @@
+[theme="sweet-eliverlara"] {
+  --black: #282C34;
+  --red: #ED254E;
+  --green: #71F79F;
+  --yellow: #F9DC5C;
+  --blue: #7CB7FF;
+  --purple: #C74DED;
+  --cyan: #00C1E4;
+  --white: #DCDFE4;
+  --brightBlack: #282C34;
+  --brightRed: #ED254E;
+  --brightGreen: #71F79F;
+  --brightYellow: #F9DC5C;
+  --brightBlue: #7CB7FF;
+  --brightPurple: #C74DED;
+  --brightCyan: #00C1E4;
+  --brightWhite: #DCDFE4;
+  --foreground: #C3C7D1;
+  --background: #282C34;
+  --cursorColor: #C3C7D1;
+}

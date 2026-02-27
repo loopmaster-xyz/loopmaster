@@ -1,0 +1,21 @@
+[theme="gotham"] {
+  --black: #0a0f14;
+  --red: #c33027;
+  --green: #26a98b;
+  --yellow: #edb54b;
+  --blue: #195465;
+  --purple: #4e5165;
+  --cyan: #33859d;
+  --white: #98d1ce;
+  --brightBlack: #10151b;
+  --brightRed: #d26939;
+  --brightGreen: #081f2d;
+  --brightYellow: #245361;
+  --brightBlue: #093748;
+  --brightPurple: #888ba5;
+  --brightCyan: #599caa;
+  --brightWhite: #d3ebe9;
+  --foreground: #98d1ce;
+  --background: #0a0f14;
+  --cursorColor: #98d1ce;
+}

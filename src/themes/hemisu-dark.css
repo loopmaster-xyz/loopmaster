@@ -1,0 +1,21 @@
+[theme="hemisu-dark"] {
+  --black: #444444;
+  --red: #FF0054;
+  --green: #B1D630;
+  --yellow: #9D895E;
+  --blue: #67BEE3;
+  --purple: #B576BC;
+  --cyan: #569A9F;
+  --white: #EDEDED;
+  --brightBlack: #777777;
+  --brightRed: #D65E75;
+  --brightGreen: #BAFFAA;
+  --brightYellow: #ECE1C8;
+  --brightBlue: #9FD3E5;
+  --brightPurple: #DEB3DF;
+  --brightCyan: #B6E0E5;
+  --brightWhite: #FFFFFF;
+  --foreground: #FFFFFF;
+  --background: #000000;
+  --cursorColor: #BAFFAA;
+}

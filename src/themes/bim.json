@@ -1,0 +1,22 @@
+{
+  "name": "Bim",
+  "black": "#2c2423",
+  "red": "#f557a0",
+  "green": "#a9ee55",
+  "yellow": "#f5a255",
+  "blue": "#5ea2ec",
+  "purple": "#a957ec",
+  "cyan": "#5eeea0",
+  "white": "#918988",
+  "brightBlack": "#918988",
+  "brightRed": "#f579b2",
+  "brightGreen": "#bbee78",
+  "brightYellow": "#f5b378",
+  "brightBlue": "#81b3ec",
+  "brightPurple": "#bb79ec",
+  "brightCyan": "#81eeb2",
+  "brightWhite": "#f5eeec",
+  "foreground": "#a9bed8",
+  "background": "#012849",
+  "cursorColor": "#a9bed8"
+}

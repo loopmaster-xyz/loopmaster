@@ -1,0 +1,21 @@
+[theme="sat"] {
+  --black: #000000;
+  --red: #dd0007;
+  --green: #07dd00;
+  --yellow: #ddd600;
+  --blue: #0007dd;
+  --purple: #d600dd;
+  --cyan: #00ddd6;
+  --white: #f2f2f2;
+  --brightBlack: #7d7d7d;
+  --brightRed: #ff7478;
+  --brightGreen: #78ff74;
+  --brightYellow: #fffa74;
+  --brightBlue: #7478ff;
+  --brightPurple: #fa74ff;
+  --brightCyan: #74fffa;
+  --brightWhite: #ffffff;
+  --foreground: #23476a;
+  --background: #758480;
+  --cursorColor: #23476a;
+}

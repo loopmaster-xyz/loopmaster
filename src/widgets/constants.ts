@@ -1,0 +1,11 @@
+export const LINE_WIDTH = 2
+export const BEATS_PER_BAR = 4
+export const PAST_BARS = 1
+export const FUTURE_BARS = 4
+export const TIME_WINDOW_BARS = PAST_BARS + FUTURE_BARS
+export const DEFAULT_BARS = 128
+export const MINIMAP_MINOR_STEP = 4
+export const MINIMAP_MAJOR_STEP = 16
+export const HEADER_PADDING_LEFT = 160
+export const LABEL_PADDING = 5
+export const FILL_ALPHA = 0.30

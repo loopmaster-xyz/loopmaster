@@ -1,0 +1,23 @@
+{
+  "name": "Loopmaster",
+  "gray": "#444444",
+  "black": "#000000",
+  "red": "#FFFFFF",
+  "green": "#f3561e",
+  "yellow": "#888888",
+  "blue": "#888888",
+  "purple": "#ffff00",
+  "cyan": "#888888",
+  "white": "#bbbbbb",
+  "brightBlack": "#444444",
+  "brightRed": "#e0e0e0",
+  "brightGreen": "#cccccc",
+  "brightYellow": "#929292",
+  "brightBlue": "#969696",
+  "brightPurple": "#bbbbbb",
+  "brightCyan": "#aaaaaa",
+  "brightWhite": "#e0e0e0",
+  "foreground": "#888888",
+  "background": "#000000",
+  "cursorColor": "#FFFFFF"
+}

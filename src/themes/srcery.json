@@ -1,0 +1,22 @@
+{
+  "name": "Srcery",
+  "black": "#1C1B19",
+  "red": "#FF3128",
+  "green": "#519F50",
+  "yellow": "#FBB829",
+  "blue": "#5573A3",
+  "purple": "#E02C6D",
+  "cyan": "#0AAEB3",
+  "white": "#918175",
+  "brightBlack": "#2D2B28",
+  "brightRed": "#F75341",
+  "brightGreen": "#98BC37",
+  "brightYellow": "#FED06E",
+  "brightBlue": "#8EB2F7",
+  "brightPurple": "#E35682",
+  "brightCyan": "#53FDE9",
+  "brightWhite": "#FCE8C3",
+  "foreground": "#ebdbb2",
+  "background": "#282828",
+  "cursorColor": "#ebdbb2"
+}

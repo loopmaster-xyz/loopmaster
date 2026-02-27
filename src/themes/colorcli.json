@@ -1,0 +1,22 @@
+{
+  "name": "Colorcli",
+  "black": "#000000",
+  "red": "#D70000",
+  "green": "#5FAF00",
+  "yellow": "#5FAF00",
+  "blue": "#005F87",
+  "purple": "#D70000",
+  "cyan": "#5F5F5F",
+  "white": "#E4E4E4",
+  "brightBlack": "#5F5F5F",
+  "brightRed": "#D70000",
+  "brightGreen": "#5F5F5F",
+  "brightYellow": "#FFFF00",
+  "brightBlue": "#0087AF",
+  "brightPurple": "#0087AF",
+  "brightCyan": "#0087AF",
+  "brightWhite": "#FFFFFF",
+  "foreground": "#005F87",
+  "background": "#FFFFFF",
+  "cursorColor": "#005F87"
+}

@@ -1,0 +1,21 @@
+[theme="fairy-floss"] {
+  --black: #42395D;
+  --red: #A8757B;
+  --green: #FF857F;
+  --yellow: #E6C000;
+  --blue: #AE81FF;
+  --purple: #716799;
+  --cyan: #C2FFDF;
+  --white: #F8F8F2;
+  --brightBlack: #75507B;
+  --brightRed: #FFB8D1;
+  --brightGreen: #F1568E;
+  --brightYellow: #D5A425;
+  --brightBlue: #C5A3FF;
+  --brightPurple: #8077A8;
+  --brightCyan: #C2FFFF;
+  --brightWhite: #F8F8F0;
+  --foreground: #C2FFDF;
+  --background: #5A5475;
+  --cursorColor: #FFB8D1;
+}

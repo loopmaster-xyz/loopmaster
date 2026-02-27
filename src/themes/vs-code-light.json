@@ -1,0 +1,22 @@
+{
+  "name": "VSCodeLight+",
+  "black": "#020202",
+  "red": "#CD3232",
+  "green": "#00BC00",
+  "yellow": "#A5A900",
+  "blue": "#0752A8",
+  "purple": "#BC05BC",
+  "cyan": "#0598BC",
+  "white": "#343434",
+  "brightBlack": "#5E5E5E",
+  "brightRed": "#cd3333",
+  "brightGreen": "#1BCE1A",
+  "brightYellow": "#ADBB5B",
+  "brightBlue": "#0752A8",
+  "brightPurple": "#C451CE",
+  "brightCyan": "#52A8C7",
+  "brightWhite": "#A6A3A6",
+  "foreground": "#020202",
+  "background": "#f9f9f9",
+  "cursorColor": "#020202"
+}

@@ -1,0 +1,21 @@
+[theme="tin"] {
+  --black: #000000;
+  --red: #8d534e;
+  --green: #4e8d53;
+  --yellow: #888d4e;
+  --blue: #534e8d;
+  --purple: #8d4e88;
+  --cyan: #4e888d;
+  --white: #ffffff;
+  --brightBlack: #000000;
+  --brightRed: #b57d78;
+  --brightGreen: #78b57d;
+  --brightYellow: #b0b578;
+  --brightBlue: #7d78b5;
+  --brightPurple: #b578b0;
+  --brightCyan: #78b0b5;
+  --brightWhite: #ffffff;
+  --foreground: #ffffff;
+  --background: #2e2e35;
+  --cursorColor: #ffffff;
+}

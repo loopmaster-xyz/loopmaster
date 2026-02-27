@@ -1,0 +1,21 @@
+[theme="nep"] {
+  --black: #000000;
+  --red: #dd6f00;
+  --green: #00dd6f;
+  --yellow: #6fdd00;
+  --blue: #6f00dd;
+  --purple: #dd006f;
+  --cyan: #006fdd;
+  --white: #f2f2f2;
+  --brightBlack: #7d7d7d;
+  --brightRed: #ffb974;
+  --brightGreen: #74ffb9;
+  --brightYellow: #b9ff74;
+  --brightBlue: #b974ff;
+  --brightPurple: #ff74b9;
+  --brightCyan: #74b9ff;
+  --brightWhite: #ffffff;
+  --foreground: #23476a;
+  --background: #758480;
+  --cursorColor: #23476a;
+}

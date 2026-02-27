@@ -1,0 +1,21 @@
+[theme="mono-red"] {
+  --black: #401200;
+  --red: #FF3600;
+  --green: #FF3600;
+  --yellow: #FF3600;
+  --blue: #FF3600;
+  --purple: #FF3600;
+  --cyan: #FF3600;
+  --white: #FF3600;
+  --brightBlack: #FF3600;
+  --brightRed: #FF3600;
+  --brightGreen: #FF3600;
+  --brightYellow: #FF3600;
+  --brightBlue: #FF3600;
+  --brightPurple: #FF3600;
+  --brightCyan: #FF3600;
+  --brightWhite: #FF3600;
+  --foreground: #FF3600;
+  --background: #2B0C00;
+  --cursorColor: #FF3600;
+}

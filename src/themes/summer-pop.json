@@ -1,0 +1,22 @@
+{
+  "name": "summer-pop",
+  "black": "#666666",
+  "red": "#FF1E8E",
+  "green": "#8EFF1E",
+  "yellow": "#FFFB00",
+  "blue": "#1E8EFF",
+  "purple": "#E500E5",
+  "cyan": "#00E5E5",
+  "white": "#E5E5E5",
+  "brightBlack": "#666666",
+  "brightRed": "#FF1E8E",
+  "brightGreen": "#8EFF1E",
+  "brightYellow": "#FFFB00",
+  "brightBlue": "#1E8EFF",
+  "brightPurple": "#E500E5",
+  "brightCyan": "#00E5E5",
+  "brightWhite": "#E5E5E5",
+  "foreground": "#FFFFFF",
+  "background": "#272822",
+  "cursorColor": "#FFFFFF"
+}

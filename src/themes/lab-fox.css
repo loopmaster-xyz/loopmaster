@@ -1,0 +1,24 @@
+/* theatlasroom - https://github.com/theatlasroom */
+/* Gitlab design system - https://design.gitlab.com */
+[theme="lab-fox"] {
+  --black: #2e2e2e;
+  --red: #fc6d26;
+  --green: #3eb383;
+  --yellow: #fca121;
+  --blue: #db3b21;
+  --purple: #380d75;
+  --cyan: #6e49cb;
+  --white: #ffffff;
+  --brightBlack: #464646;
+  --brightRed: #ff6517;
+  --brightGreen: #53eaa8;
+  --brightYellow: #fca013;
+  --brightBlue: #db501f;
+  --brightPurple: #441090;
+  --brightCyan: #7d53e7;
+  --brightWhite: #ffffff;
+  --background: #2e2e2e;
+  --foreground: #ffffff;
+  --cursorColor: #7f7f7f;
+  --selectionBackground: #cb392e;
+}

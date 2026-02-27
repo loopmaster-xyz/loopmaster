@@ -1,0 +1,25 @@
+{
+  "name": "TokyoNightLight",
+  "black": "#0f0f14",
+  "red": "#8c4351",
+  "green": "#33635c",
+  "yellow": "#8f5e15",
+  "blue": "#34548a",
+  "purple": "#5a4a78",
+  "cyan": "#0f4b6e",
+  "white": "#828594",
+  "brightBlack": "#0f0f14",
+  "brightRed": "#8c4351",
+  "brightGreen": "#33635c",
+  "brightYellow": "#8f5e15",
+  "brightBlue": "#34548a",
+  "brightPurple": "#5a4a78",
+  "brightCyan": "#0f4b6e",
+  "brightWhite": "#828594",
+  "background": "#cbccd1",
+  "foreground": "#4c505e",
+  "meta": {
+    "isDark": false,
+    "credits": null
+  }
+}

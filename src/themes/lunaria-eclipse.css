@@ -1,0 +1,21 @@
+[theme="lunaria-eclipse"] {
+  --black: #323F46;
+  --red: #83615B;
+  --green: #7F9781;
+  --yellow: #A69875;
+  --blue: #53516F;
+  --purple: #856880;
+  --cyan: #7D96B2;
+  --white: #C9CDD7;
+  --brightBlack: #3D4950;
+  --brightRed: #BA9088;
+  --brightGreen: #BEDBC1;
+  --brightYellow: #F1DFB4;
+  --brightBlue: #767495;
+  --brightPurple: #BE9CB8;
+  --brightCyan: #BCDBFF;
+  --brightWhite: #DFE2ED;
+  --foreground: #C9CDD7;
+  --background: #323F46;
+  --cursorColor: #C9CDD7;
+}

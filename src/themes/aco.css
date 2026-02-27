@@ -1,0 +1,21 @@
+[theme="aco"] {
+  --black: #3f3f3f;
+  --red: #ff0883;
+  --green: #83ff08;
+  --yellow: #ff8308;
+  --blue: #0883ff;
+  --purple: #8308ff;
+  --cyan: #08ff83;
+  --white: #bebebe;
+  --brightBlack: #474747;
+  --brightRed: #ff1e8e;
+  --brightGreen: #8eff1e;
+  --brightYellow: #ff8e1e;
+  --brightBlue: #1e8eff;
+  --brightPurple: #8e1eff;
+  --brightCyan: #1eff8e;
+  --brightWhite: #c4c4c4;
+  --foreground: #b4e1fd;
+  --background: #1f1305;
+  --cursorColor: #b4e1fd;
+}

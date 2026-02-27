@@ -1,0 +1,22 @@
+{
+  "name": "mono-yellow",
+  "black": "#403500",
+  "red": "#FFD300",
+  "green": "#FFD300",
+  "yellow": "#FFD300",
+  "blue": "#FFD300",
+  "purple": "#FFD300",
+  "cyan": "#FFD300",
+  "white": "#FFD300",
+  "brightBlack": "#FFD300",
+  "brightRed": "#FFD300",
+  "brightGreen": "#FFD300",
+  "brightYellow": "#FFD300",
+  "brightBlue": "#FFD300",
+  "brightPurple": "#FFD300",
+  "brightCyan": "#FFD300",
+  "brightWhite": "#FFD300",
+  "foreground": "#FFD300",
+  "background": "#2B2400",
+  "cursorColor": "#FFD300"
+}

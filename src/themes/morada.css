@@ -1,0 +1,21 @@
+[theme="morada"] {
+  --black: #040404;
+  --red: #0f49c4;
+  --green: #48b117;
+  --yellow: #e87324;
+  --blue: #bc0116;
+  --purple: #665b93;
+  --cyan: #70a699;
+  --white: #f5dcbe;
+  --brightBlack: #4f7cbf;
+  --brightRed: #1c96c7;
+  --brightGreen: #3bff6f;
+  --brightYellow: #efc31c;
+  --brightBlue: #fb605b;
+  --brightPurple: #975b5a;
+  --brightCyan: #1eff8e;
+  --brightWhite: #f6f5fb;
+  --foreground: #ffffff;
+  --background: #211f46;
+  --cursorColor: #ffffff;
+}

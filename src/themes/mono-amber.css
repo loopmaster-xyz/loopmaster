@@ -1,0 +1,21 @@
+[theme="mono-amber"] {
+  --black: #402500;
+  --red: #FF9400;
+  --green: #FF9400;
+  --yellow: #FF9400;
+  --blue: #FF9400;
+  --purple: #FF9400;
+  --cyan: #FF9400;
+  --white: #FF9400;
+  --brightBlack: #FF9400;
+  --brightRed: #FF9400;
+  --brightGreen: #FF9400;
+  --brightYellow: #FF9400;
+  --brightBlue: #FF9400;
+  --brightPurple: #FF9400;
+  --brightCyan: #FF9400;
+  --brightWhite: #FF9400;
+  --foreground: #FF9400;
+  --background: #2B1900;
+  --cursorColor: #FF9400;
+}

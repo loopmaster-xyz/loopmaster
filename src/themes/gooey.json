@@ -1,0 +1,22 @@
+{
+  "name": "gooey",
+  "black": "#000009",
+  "red": "#BB4F6C",
+  "green": "#72CCAE",
+  "yellow": "#C65E3D",
+  "blue": "#58B6CA",
+  "purple": "#6488C4",
+  "cyan": "#8D84C6",
+  "white": "#858893",
+  "brightBlack": "#1f222d",
+  "brightRed": "#ee829f",
+  "brightGreen": "#a5ffe1",
+  "brightYellow": "#f99170",
+  "brightBlue": "#8be9fd",
+  "brightPurple": "#97bbf7",
+  "brightCyan": "#c0b7f9",
+  "brightWhite": "#ffffff",
+  "foreground": "#EBEEF9",
+  "background": "#0D101B",
+  "cursorColor": "#EBEEF9"
+}

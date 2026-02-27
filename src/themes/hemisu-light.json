@@ -1,0 +1,22 @@
+{
+  "name": "HemisuLight",
+  "black": "#777777",
+  "red": "#FF0055",
+  "green": "#739100",
+  "yellow": "#503D15",
+  "blue": "#538091",
+  "purple": "#5B345E",
+  "cyan": "#538091",
+  "white": "#999999",
+  "brightBlack": "#999999",
+  "brightRed": "#D65E76",
+  "brightGreen": "#9CC700",
+  "brightYellow": "#947555",
+  "brightBlue": "#9DB3CD",
+  "brightPurple": "#A184A4",
+  "brightCyan": "#85B2AA",
+  "brightWhite": "#BABABA",
+  "foreground": "#444444",
+  "background": "#EFEFEF",
+  "cursorColor": "#FF0054"
+}

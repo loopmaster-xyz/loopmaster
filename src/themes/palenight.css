@@ -1,0 +1,21 @@
+[theme="palenight"] {
+  --black: #292D3E;
+  --red: #F07178;
+  --green: #C3E88D;
+  --yellow: #FFCB6B;
+  --blue: #82AAFF;
+  --purple: #C792EA;
+  --cyan: #60ADEC;
+  --white: #ABB2BF;
+  --brightBlack: #959DCB;
+  --brightRed: #F07178;
+  --brightGreen: #C3E88D;
+  --brightYellow: #FF5572;
+  --brightBlue: #82AAFF;
+  --brightPurple: #FFCB6B;
+  --brightCyan: #676E95;
+  --brightWhite: #FFFEFE;
+  --foreground: #BFC7D5;
+  --background: #292D3E;
+  --cursorColor: #BFC7D5;
+}

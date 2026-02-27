@@ -1,0 +1,21 @@
+[theme="mar"] {
+  --black: #000000;
+  --red: #b5407b;
+  --green: #7bb540;
+  --yellow: #b57b40;
+  --blue: #407bb5;
+  --purple: #7b40b5;
+  --cyan: #40b57b;
+  --white: #f8f8f8;
+  --brightBlack: #737373;
+  --brightRed: #cd73a0;
+  --brightGreen: #a0cd73;
+  --brightYellow: #cda073;
+  --brightBlue: #73a0cd;
+  --brightPurple: #a073cd;
+  --brightCyan: #73cda0;
+  --brightWhite: #ffffff;
+  --foreground: #23476a;
+  --background: #ffffff;
+  --cursorColor: #23476a;
+}

@@ -1,0 +1,22 @@
+{
+  "name": "mono-cyan",
+  "black": "#003340",
+  "red": "#00CCFF",
+  "green": "#00CCFF",
+  "yellow": "#00CCFF",
+  "blue": "#00CCFF",
+  "purple": "#00CCFF",
+  "cyan": "#00CCFF",
+  "white": "#00CCFF",
+  "brightBlack": "#00CCFF",
+  "brightRed": "#00CCFF",
+  "brightGreen": "#00CCFF",
+  "brightYellow": "#00CCFF",
+  "brightBlue": "#00CCFF",
+  "brightPurple": "#00CCFF",
+  "brightCyan": "#00CCFF",
+  "brightWhite": "#00CCFF",
+  "foreground": "#00CCFF",
+  "background": "#00222B",
+  "cursorColor": "#00CCFF"
+}

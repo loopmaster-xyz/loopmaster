@@ -1,0 +1,22 @@
+{
+  "name": "nighty",
+  "black": "#373D48",
+  "red": "#9B3E46",
+  "green": "#095B32",
+  "yellow": "#808020",
+  "blue": "#1D3E6F",
+  "purple": "#823065",
+  "cyan": "#3A7458",
+  "white": "#828282",
+  "brightBlack": "#5C6370",
+  "brightRed": "#D0555F",
+  "brightGreen": "#119955",
+  "brightYellow": "#DFE048",
+  "brightBlue": "#4674B8",
+  "brightPurple": "#ED86C9",
+  "brightCyan": "#70D2A4",
+  "brightWhite": "#DFDFDF",
+  "foreground": "#DFDFDF",
+  "background": "#2F2F2F",
+  "cursorColor": "#DFDFDF"
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="loopmaster - Code music" />
+  <meta property="og:description" content="Code music in the browser." />
+  <meta property="og:image" content="https://loopmaster.xyz/screenshot.png?v=3" />
+  <meta property="og:image:width" content="1866" />
+  <meta property="og:image:height" content="1110" />
+  <meta property="og:url" content="/" />
+  <meta property="og:site_name" content="loopmaster" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="loopmaster - Code music" />
+  <meta name="twitter:description" content="Code music in the browser." />
+  <meta name="twitter:image" content="https://loopmaster.xyz/screenshot.png?v=3" />
+
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="manifest" href="/manifest.json" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Turret+Road:wght@200;300;400;500;700;800&display=block"
+    rel="stylesheet">
+
+  <title>loopmaster</title>
+
+  <style>
+    html {
+      font-family: 'Space Grotesk';
+    }
+  </style>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-width: 100dvw;
+      min-height: 100dvh;
+      background-color: #000;
+    }
+  </style>
+
+  <script src="https://cdn.twind.style"></script>
+
+  <script>
+    twind.install({
+      darkMode: 'class',
+    })
+    window.addEventListener('contextmenu', event => {
+      event.preventDefault()
+    })
+  </script>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/client.tsx"></script>
+  <img class="opacity-0 w-0 h-0"
+    src="https://mapmyvisitors.com/map.png?cl=0e1633&w=a&t=n&d=w9ySAnNM46ZLShfECBPZZs109VV75DkWs0slC43zMdA&co=0b4975&ct=cdd4d9" />
+</body>
+
+</html>

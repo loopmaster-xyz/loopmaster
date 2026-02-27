@@ -1,0 +1,22 @@
+{
+  "name": "Maia",
+  "black": "#232423",
+  "red": "#BA2922",
+  "green": "#7E807E",
+  "yellow": "#4C4F4D",
+  "blue": "#16A085",
+  "purple": "#43746A",
+  "cyan": "#00CCCC",
+  "white": "#E0E0E0",
+  "brightBlack": "#282928",
+  "brightRed": "#CC372C",
+  "brightGreen": "#8D8F8D",
+  "brightYellow": "#4E524F",
+  "brightBlue": "#13BF9D",
+  "brightPurple": "#487D72",
+  "brightCyan": "#00D1D1",
+  "brightWhite": "#E8E8E8",
+  "foreground": "#BDC3C7",
+  "background": "#31363B",
+  "cursorColor": "#BDC3C7"
+}

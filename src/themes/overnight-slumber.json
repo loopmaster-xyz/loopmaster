@@ -1,0 +1,36 @@
+{
+  "name": "Overnight Slumber",
+  "black": "#0a1222",
+  "red": "#ffa7c4",
+  "green": "#85cc95",
+  "yellow": "#ffcb8b",
+  "blue": "#8dabe1",
+  "purple": "#c792eb",
+  "cyan": "#78ccf0",
+  "white": "#ffffff",
+  "brightBlack": "#575656",
+  "brightRed": "#ffa7c4",
+  "brightGreen": "#85cc95",
+  "brightYellow": "#ffcb8b",
+  "brightBlue": "#8dabe1",
+  "brightPurple": "#c792eb",
+  "brightCyan": "#ffa7c4",
+  "brightWhite": "#ffffff",
+  "background": "#0e1729",
+  "foreground": "#ced2d6",
+  "cursorColor": "#ffa7c4",
+  "selectionBackground": "#1f2b41",
+  "meta": {
+    "isDark": true,
+    "credits": [
+      {
+        "name": "Cristian Velasquez Ramos",
+        "link": "https://github.com/cevr/overnight"
+      },
+      {
+        "name": "Gomah",
+        "link": "https://github.com/Gomah/overnight-slumber-iterm"
+      }
+    ]
+  }
+}

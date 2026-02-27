@@ -1,0 +1,22 @@
+{
+  "name": "Wzoreck",
+  "black": "#2E3436",
+  "red": "#FC6386",
+  "green": "#424043",
+  "yellow": "#FCE94F",
+  "blue": "#FB976B",
+  "purple": "#75507B",
+  "cyan": "#34E2E2",
+  "white": "#FFFFFF",
+  "brightBlack": "#989595",
+  "brightRed": "#FC6386",
+  "brightGreen": "#A9DC76",
+  "brightYellow": "#FCE94F",
+  "brightBlue": "#FB976B",
+  "brightPurple": "#AB9DF2",
+  "brightCyan": "#34E2E2",
+  "brightWhite": "#D1D1C0",
+  "foreground": "#FCFCFA",
+  "background": "#424043",
+  "cursorColor": "#FCFCFA"
+}

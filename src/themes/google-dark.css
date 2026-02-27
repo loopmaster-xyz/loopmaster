@@ -1,0 +1,21 @@
+[theme="google-dark"] {
+  --black: #202124;
+  --red: #EA4335;
+  --green: #34A853;
+  --yellow: #FBBC04;
+  --blue: #4285F4;
+  --purple: #A142F4;
+  --cyan: #24C1E0;
+  --white: #E8EAED;
+  --brightBlack: #5F6368;
+  --brightRed: #EA4335;
+  --brightGreen: #34A853;
+  --brightYellow: #FBBC05;
+  --brightBlue: #4285F4;
+  --brightPurple: #A142F4;
+  --brightCyan: #24C1E0;
+  --brightWhite: #FFFFFF;
+  --foreground: #E8EAED;
+  --background: #202124;
+  --cursorColor: #E8EAED;
+}

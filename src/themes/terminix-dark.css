@@ -1,0 +1,21 @@
+[theme="terminix-dark"] {
+  --black: #282a2e;
+  --red: #a54242;
+  --green: #a1b56c;
+  --yellow: #de935f;
+  --blue: #225555;
+  --purple: #85678f;
+  --cyan: #5e8d87;
+  --white: #777777;
+  --brightBlack: #373b41;
+  --brightRed: #c63535;
+  --brightGreen: #608360;
+  --brightYellow: #fa805a;
+  --brightBlue: #449da1;
+  --brightPurple: #ba8baf;
+  --brightCyan: #86c1b9;
+  --brightWhite: #c5c8c6;
+  --foreground: #868A8C;
+  --background: #091116;
+  --cursorColor: #868A8C;
+}

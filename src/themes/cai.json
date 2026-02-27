@@ -1,0 +1,22 @@
+{
+  "name": "Cai",
+  "black": "#000000",
+  "red": "#ca274d",
+  "green": "#4dca27",
+  "yellow": "#caa427",
+  "blue": "#274dca",
+  "purple": "#a427ca",
+  "cyan": "#27caa4",
+  "white": "#808080",
+  "brightBlack": "#808080",
+  "brightRed": "#e98da3",
+  "brightGreen": "#a3e98d",
+  "brightYellow": "#e9d48d",
+  "brightBlue": "#8da3e9",
+  "brightPurple": "#d48de9",
+  "brightCyan": "#8de9d4",
+  "brightWhite": "#ffffff",
+  "foreground": "#d9e6f2",
+  "background": "#09111a",
+  "cursorColor": "#d9e6f2"
+}

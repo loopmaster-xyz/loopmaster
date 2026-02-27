@@ -1,0 +1,37 @@
+{
+  "name": "wavefft",
+  "version": "1.0.5",
+  "description": "High-performance FFT and CQT library for web audio applications using WebAssembly",
+  "main": "WaveFFT.js",
+  "module": "WaveFFT.js",
+  "type": "module",
+  "scripts": {
+    "build": "./build.sh",
+    "build:lite": "./build.sh --no-cqt",
+    "test": "node test/test.js"
+  },
+  "keywords": [
+    "fft",
+    "cqt",
+    "dsp",
+    "audio",
+    "signal-processing",
+    "webassembly",
+    "wasm",
+    "fourier",
+    "constant-q-transform"
+  ],
+  "author": "Hunter Delattre",
+  "license": "MIT",
+  "files": [
+    "WaveFFT.js",
+    "WaveFFTWorker.js",
+    "dist/",
+    "src/",
+    "build.sh",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

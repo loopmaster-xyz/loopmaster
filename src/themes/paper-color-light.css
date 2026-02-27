@@ -1,0 +1,21 @@
+[theme="paper-color-light"] {
+  --black: #EEEEEE;
+  --red: #AF0000;
+  --green: #008700;
+  --yellow: #5F8700;
+  --blue: #0087AF;
+  --purple: #878787;
+  --cyan: #005F87;
+  --white: #444444;
+  --brightBlack: #BCBCBC;
+  --brightRed: #D70000;
+  --brightGreen: #D70087;
+  --brightYellow: #8700AF;
+  --brightBlue: #D75F00;
+  --brightPurple: #D75F00;
+  --brightCyan: #005FAF;
+  --brightWhite: #005F87;
+  --foreground: #444444;
+  --background: #EEEEEE;
+  --cursorColor: #444444;
+}

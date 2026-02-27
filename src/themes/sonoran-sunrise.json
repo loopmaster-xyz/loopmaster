@@ -1,0 +1,32 @@
+{
+  "name": "Sonoran Sunrise",
+  "foreground": "#61543E",
+  "background": "#F9FAE3",
+  "cursorColor": "#61543E",
+  "selectionBackground": "#a4f017",
+  "black": "#F9FAE3",
+  "red": "#EB6f6f",
+  "green": "#669C50",
+  "yellow": "#F2C55C",
+  "blue": "#227B4D",
+  "purple": "#7189D9",
+  "cyan": "#E07941",
+  "white": "#665E4B",
+  "brightBlack": "#F9FAE3",
+  "brightRed": "#EB6f6f",
+  "brightGreen": "#669C50",
+  "brightYellow": "#F2C55C",
+  "brightBlue": "#227B4D",
+  "brightPurple": "#7189D9",
+  "brightCyan": "#E07941",
+  "brightWhite": "#665E4B",
+  "meta": {
+    "isDark": false,
+    "credits": [
+      {
+        "name": "d-mckee",
+        "link": "https://github.com/d-mckee"
+      }
+    ]
+  }
+}

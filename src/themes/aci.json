@@ -1,0 +1,22 @@
+{
+  "name": "Aci",
+  "black": "#363636",
+  "red": "#ff0883",
+  "green": "#83ff08",
+  "yellow": "#ff8308",
+  "blue": "#0883ff",
+  "purple": "#8308ff",
+  "cyan": "#08ff83",
+  "white": "#b6b6b6",
+  "brightBlack": "#424242",
+  "brightRed": "#ff1e8e",
+  "brightGreen": "#8eff1e",
+  "brightYellow": "#ff8e1e",
+  "brightBlue": "#1e8eff",
+  "brightPurple": "#8e1eff",
+  "brightCyan": "#1eff8e",
+  "brightWhite": "#c2c2c2",
+  "foreground": "#b4e1fd",
+  "background": "#0d1926",
+  "cursorColor": "#b4e1fd"
+}

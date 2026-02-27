@@ -1,0 +1,22 @@
+{
+  "name": "OceanDark",
+  "black": "#4F4F4F",
+  "red": "#AF4B57",
+  "green": "#AFD383",
+  "yellow": "#E5C079",
+  "blue": "#7D90A4",
+  "purple": "#A4799D",
+  "cyan": "#85A6A5",
+  "white": "#EEEDEE",
+  "brightBlack": "#7B7B7B",
+  "brightRed": "#AF4B57",
+  "brightGreen": "#CEFFAB",
+  "brightYellow": "#FFFECC",
+  "brightBlue": "#B5DCFE",
+  "brightPurple": "#FB9BFE",
+  "brightCyan": "#DFDFFD",
+  "brightWhite": "#FEFFFE",
+  "foreground": "#979CAC",
+  "background": "#1C1F27",
+  "cursorColor": "#979CAC"
+}

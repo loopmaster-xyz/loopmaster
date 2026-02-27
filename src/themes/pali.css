@@ -1,0 +1,21 @@
+[theme="pali"] {
+  --black: #0a0a0a;
+  --red: #ab8f74;
+  --green: #74ab8f;
+  --yellow: #8fab74;
+  --blue: #8f74ab;
+  --purple: #ab748f;
+  --cyan: #748fab;
+  --white: #F2F2F2;
+  --brightBlack: #5D5D5D;
+  --brightRed: #FF1D62;
+  --brightGreen: #9cc3af;
+  --brightYellow: #FFD00A;
+  --brightBlue: #af9cc3;
+  --brightPurple: #FF1D62;
+  --brightCyan: #4BB8FD;
+  --brightWhite: #A020F0;
+  --foreground: #d9e6f2;
+  --background: #232E37;
+  --cursorColor: #d9e6f2;
+}

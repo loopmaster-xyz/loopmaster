@@ -1,0 +1,21 @@
+[theme="monokai-dark"] {
+  --black: #75715e;
+  --red: #f92672;
+  --green: #a6e22e;
+  --yellow: #f4bf75;
+  --blue: #66d9ef;
+  --purple: #ae81ff;
+  --cyan: #2AA198;
+  --white: #f9f8f5;
+  --brightBlack: #272822;
+  --brightRed: #f92672;
+  --brightGreen: #a6e22e;
+  --brightYellow: #f4bf75;
+  --brightBlue: #66d9ef;
+  --brightPurple: #ae81ff;
+  --brightCyan: #2AA198;
+  --brightWhite: #f8f8f2;
+  --foreground: #f8f8f2;
+  --background: #272822;
+  --cursorColor: #f8f8f2;
+}

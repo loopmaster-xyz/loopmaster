@@ -1,0 +1,22 @@
+{
+  "name": "IBM3270(HighContrast)",
+  "black": "#000000",
+  "red": "#FF0000",
+  "green": "#00FF00",
+  "yellow": "#FFFF00",
+  "blue": "#00BFFF",
+  "purple": "#FFC0CB",
+  "cyan": "#40E0D0",
+  "white": "#BEBEBE",
+  "brightBlack": "#414141",
+  "brightRed": "#FFA500",
+  "brightGreen": "#98FB98",
+  "brightYellow": "#FFFF00",
+  "brightBlue": "#0000CD",
+  "brightPurple": "#A020F0",
+  "brightCyan": "#AEEEEE",
+  "brightWhite": "#FFFFFF",
+  "foreground": "#FDFDFD",
+  "background": "#000000",
+  "cursorColor": "#FDFDFD"
+}

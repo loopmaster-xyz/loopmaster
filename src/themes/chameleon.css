@@ -1,0 +1,21 @@
+[theme="chameleon"] {
+  --black: #2C2C2C;
+  --red: #CC231C;
+  --green: #689D69;
+  --yellow: #D79922;
+  --blue: #366B71;
+  --purple: #4E5165;
+  --cyan: #458587;
+  --white: #C8BB97;
+  --brightBlack: #777777;
+  --brightRed: #CC231C;
+  --brightGreen: #689D69;
+  --brightYellow: #D79922;
+  --brightBlue: #366B71;
+  --brightPurple: #4E5165;
+  --brightCyan: #458587;
+  --brightWhite: #C8BB97;
+  --foreground: #DEDEDE;
+  --background: #2C2C2C;
+  --cursorColor: #DEDEDE;
+}

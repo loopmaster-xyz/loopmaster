@@ -1,0 +1,22 @@
+{
+  "name": "Vag",
+  "black": "#303030",
+  "red": "#a87139",
+  "green": "#39a871",
+  "yellow": "#71a839",
+  "blue": "#7139a8",
+  "purple": "#a83971",
+  "cyan": "#3971a8",
+  "white": "#8a8a8a",
+  "brightBlack": "#494949",
+  "brightRed": "#b0763b",
+  "brightGreen": "#3bb076",
+  "brightYellow": "#76b03b",
+  "brightBlue": "#763bb0",
+  "brightPurple": "#b03b76",
+  "brightCyan": "#3b76b0",
+  "brightWhite": "#cfcfcf",
+  "foreground": "#d9e6f2",
+  "background": "#191f1d",
+  "cursorColor": "#d9e6f2"
+}

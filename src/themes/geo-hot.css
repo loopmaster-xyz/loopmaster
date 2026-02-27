@@ -1,0 +1,21 @@
+[theme="geo-hot"] {
+  --black: #F9F5F5;
+  --red: #CC0000;
+  --green: #1F1E1F;
+  --yellow: #ADA110;
+  --blue: #FF004E;
+  --purple: #75507B;
+  --cyan: #06919A;
+  --white: #FFFFFF;
+  --brightBlack: #555753;
+  --brightRed: #EF2929;
+  --brightGreen: #FF0000;
+  --brightYellow: #ADA110;
+  --brightBlue: #5F4AA6;
+  --brightPurple: #B74438;
+  --brightCyan: #408F0C;
+  --brightWhite: #FFFFFF;
+  --foreground: #FFFFFF;
+  --background: #1F1E1F;
+  --cursorColor: #FFFFFF;
+}

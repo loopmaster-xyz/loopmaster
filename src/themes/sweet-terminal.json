@@ -1,0 +1,22 @@
+{
+  "name": "SweetTerminal",
+  "black": "#3F3F54",
+  "red": "#f60055",
+  "green": "#06c993",
+  "yellow": "#9700be",
+  "blue": "#f69154",
+  "purple": "#ec89cb",
+  "cyan": "#60ADEC",
+  "white": "#ABB2BF",
+  "brightBlack": "#959DCB",
+  "brightRed": "#f60055",
+  "brightGreen": "#06c993",
+  "brightYellow": "#9700be",
+  "brightBlue": "#f69154",
+  "brightPurple": "#ec89cb",
+  "brightCyan": "#00dded",
+  "brightWhite": "#ffffff",
+  "foreground": "#ffffff",
+  "background": "#222235",
+  "cursorColor": "#ffffff"
+}

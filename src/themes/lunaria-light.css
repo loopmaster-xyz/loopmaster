@@ -1,0 +1,21 @@
+[theme="lunaria-light"] {
+  --black: #3E3C3D;
+  --red: #783C1F;
+  --green: #497D46;
+  --yellow: #8F750B;
+  --blue: #3F3566;
+  --purple: #793F62;
+  --cyan: #3778A9;
+  --white: #D5CFCC;
+  --brightBlack: #484646;
+  --brightRed: #B06240;
+  --brightGreen: #7BC175;
+  --brightYellow: #DCB735;
+  --brightBlue: #5C4F89;
+  --brightPurple: #B56895;
+  --brightCyan: #64BAFF;
+  --brightWhite: #EBE4E1;
+  --foreground: #484646;
+  --background: #EBE4E1;
+  --cursorColor: #484646;
+}

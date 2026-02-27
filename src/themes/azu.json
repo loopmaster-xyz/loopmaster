@@ -1,0 +1,22 @@
+{
+  "name": "Azu",
+  "black": "#000000",
+  "red": "#ac6d74",
+  "green": "#74ac6d",
+  "yellow": "#aca46d",
+  "blue": "#6d74ac",
+  "purple": "#a46dac",
+  "cyan": "#6daca4",
+  "white": "#e6e6e6",
+  "brightBlack": "#262626",
+  "brightRed": "#d6b8bc",
+  "brightGreen": "#bcd6b8",
+  "brightYellow": "#d6d3b8",
+  "brightBlue": "#b8bcd6",
+  "brightPurple": "#d3b8d6",
+  "brightCyan": "#b8d6d3",
+  "brightWhite": "#ffffff",
+  "foreground": "#d9e6f2",
+  "background": "#09111a",
+  "cursorColor": "#d9e6f2"
+}

@@ -1,0 +1,22 @@
+{
+  "name": "AyuDark",
+  "black": "#0A0E14",
+  "red": "#FF3333",
+  "green": "#C2D94C",
+  "yellow": "#FF8F40",
+  "blue": "#59C2FF",
+  "purple": "#FFEE99",
+  "cyan": "#95E6CB",
+  "white": "#B3B1AD",
+  "brightBlack": "#4D5566",
+  "brightRed": "#FF3333",
+  "brightGreen": "#C2D94C",
+  "brightYellow": "#FF8F40",
+  "brightBlue": "#59C2FF",
+  "brightPurple": "#FFEE99",
+  "brightCyan": "#95E6CB",
+  "brightWhite": "#B3B1AD",
+  "foreground": "#B3B1AD",
+  "background": "#0A0E14",
+  "cursorColor": "#E6B450"
+}

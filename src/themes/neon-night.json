@@ -1,0 +1,22 @@
+{
+  "name": "neon-night",
+  "black": "#20242d",
+  "red": "#FF8E8E",
+  "green": "#7EFDD0",
+  "yellow": "#FCAD3F",
+  "blue": "#69B4F9",
+  "purple": "#DD92F6",
+  "cyan": "#8CE8ff",
+  "white": "#C9CCCD",
+  "brightBlack": "#20242d",
+  "brightRed": "#FF8E8E",
+  "brightGreen": "#7EFDD0",
+  "brightYellow": "#FCAD3F",
+  "brightBlue": "#69B4F9",
+  "brightPurple": "#DD92F6",
+  "brightCyan": "#8CE8ff",
+  "brightWhite": "#C9CCCD",
+  "foreground": "#C7C8FF",
+  "background": "#20242d",
+  "cursorColor": "#C7C8FF"
+}

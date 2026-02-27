@@ -1,0 +1,21 @@
+[theme="solarized-dark"] {
+  --black: #073642;
+  --red: #DC322F;
+  --green: #859900;
+  --yellow: #CF9A6B;
+  --blue: #268BD2;
+  --purple: #D33682;
+  --cyan: #2AA198;
+  --white: #EEE8D5;
+  --brightBlack: #657B83;
+  --brightRed: #D87979;
+  --brightGreen: #88CF76;
+  --brightYellow: #657B83;
+  --brightBlue: #2699FF;
+  --brightPurple: #D33682;
+  --brightCyan: #43B8C3;
+  --brightWhite: #FDF6E3;
+  --foreground: #839496;
+  --background: #002B36;
+  --cursorColor: #839496;
+}

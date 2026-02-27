@@ -1,0 +1,21 @@
+[theme="de-hydration"] {
+  --black: #333333;
+  --red: #ff5555;
+  --green: #5fd38d;
+  --yellow: #ff9955;
+  --blue: #3771c8;
+  --purple: #bc5fd3;
+  --cyan: #5fd3bc;
+  --white: #999999;
+  --brightBlack: #666666;
+  --brightRed: #ff8080;
+  --brightGreen: #87deaa;
+  --brightYellow: #ffb380;
+  --brightBlue: #5f8dd3;
+  --brightPurple: #cd87de;
+  --brightCyan: #87decd;
+  --brightWhite: #cccccc;
+  --foreground: #cccccc;
+  --background: #333333;
+  --cursorColor: #cccccc;
+}

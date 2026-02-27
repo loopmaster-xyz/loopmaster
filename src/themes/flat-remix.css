@@ -1,0 +1,21 @@
+[theme="flat-remix"] {
+  --black: #1F2229;
+  --red: #D41919;
+  --green: #5EBDAB;
+  --yellow: #FEA44C;
+  --blue: #367bf0;
+  --purple: #BF2E5D;
+  --cyan: #49AEE6;
+  --white: #E6E6E6;
+  --brightBlack: #8C42AB;
+  --brightRed: #EC0101;
+  --brightGreen: #47D4B9;
+  --brightYellow: #FF8A18;
+  --brightBlue: #277FFF;
+  --brightPurple: #D71655;
+  --brightCyan: #05A1F7;
+  --brightWhite: #FFFFFF;
+  --foreground: #FFFFFF;
+  --background: #272a34;
+  --cursorColor: #FFFFFF;
+}

@@ -1,0 +1,22 @@
+{
+  "name": "VSCodeDark+",
+  "black": "#6A787A",
+  "red": "#E9653B",
+  "green": "#39E9A8",
+  "yellow": "#E5B684",
+  "blue": "#44AAE6",
+  "purple": "#E17599",
+  "cyan": "#3DD5E7",
+  "white": "#C3DDE1",
+  "brightBlack": "#598489",
+  "brightRed": "#E65029",
+  "brightGreen": "#00FF9A",
+  "brightYellow": "#E89440",
+  "brightBlue": "#009AFB",
+  "brightPurple": "#FF578F",
+  "brightCyan": "#5FFFFF",
+  "brightWhite": "#D9FBFF",
+  "foreground": "#CCCCCC",
+  "background": "#1E1E1E",
+  "cursorColor": "#CCCCCC"
+}

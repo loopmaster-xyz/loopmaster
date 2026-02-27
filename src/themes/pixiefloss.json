@@ -1,0 +1,22 @@
+{
+  "name": "Pixiefloss",
+  "black": "#2f2942",
+  "red": "#ff857f",
+  "green": "#48b685",
+  "yellow": "#e6c000",
+  "blue": "#ae81ff",
+  "purple": "#ef6155",
+  "cyan": "#c2ffdf",
+  "white": "#f8f8f2",
+  "brightBlack": "#75507b",
+  "brightRed": "#f1568e",
+  "brightGreen": "#5adba2",
+  "brightYellow": "#d5a425",
+  "brightBlue": "#c5a3ff",
+  "brightPurple": "#ef6155",
+  "brightCyan": "#c2ffff",
+  "brightWhite": "#f8f8f0",
+  "foreground": "#d1cae8",
+  "background": "#241f33",
+  "cursorColor": "#d1cae8"
+}

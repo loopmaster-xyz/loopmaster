@@ -1,0 +1,22 @@
+{
+  "name": "mono-white",
+  "black": "#3B3B3B",
+  "red": "#FAFAFA",
+  "green": "#FAFAFA",
+  "yellow": "#FAFAFA",
+  "blue": "#FAFAFA",
+  "purple": "#FAFAFA",
+  "cyan": "#FAFAFA",
+  "white": "#FAFAFA",
+  "brightBlack": "#FAFAFA",
+  "brightRed": "#FAFAFA",
+  "brightGreen": "#FAFAFA",
+  "brightYellow": "#FAFAFA",
+  "brightBlue": "#FAFAFA",
+  "brightPurple": "#FAFAFA",
+  "brightCyan": "#FAFAFA",
+  "brightWhite": "#FAFAFA",
+  "foreground": "#FAFAFA",
+  "background": "#262626",
+  "cursorColor": "#FAFAFA"
+}

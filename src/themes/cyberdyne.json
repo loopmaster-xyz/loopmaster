@@ -1,0 +1,32 @@
+{
+  "name": "Cyberdyne",
+  "black": "#080808",
+  "red": "#ff8373",
+  "green": "#00c172",
+  "yellow": "#d2a700",
+  "blue": "#0071cf",
+  "purple": "#ff90fe",
+  "cyan": "#6bffdd",
+  "white": "#f1f1f1",
+  "brightBlack": "#2e2e2e",
+  "brightRed": "#ffc4be",
+  "brightGreen": "#d6fcba",
+  "brightYellow": "#fffed5",
+  "brightBlue": "#c2e3ff",
+  "brightPurple": "#ffb2fe",
+  "brightCyan": "#e6e7fe",
+  "brightWhite": "#ffffff",
+  "background": "#151144",
+  "foreground": "#00ff92",
+  "cursorColor": "#00ff9c",
+  "selectionBackground": "#454d96",
+  "meta": {
+    "isDark": true,
+    "credits": [
+      {
+        "name": "ReagentX",
+        "link": "https://github.com/ReagentX"
+      }
+    ]
+  }
+}
