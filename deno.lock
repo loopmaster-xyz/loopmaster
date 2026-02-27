@@ -3,7 +3,6 @@
   "specifiers": {
     "jsr:@bronti/bcrypt@^1.0.3": "1.0.3",
     "jsr:@hono/hono@^4.11.1": "4.11.9",
-    "jsr:@openai/openai@^6.25.0": "6.25.0",
     "jsr:@zip-js/zip-js@^2.8.8": "2.8.21",
     "jsr:@zod/zod@^4.3.5": "4.3.6"
   },
@@ -13,9 +12,6 @@
     },
     "@hono/hono@4.11.9": {
       "integrity": "c82c6b846abc3c1879d921d8365287d77cdef8073019f509ff80bf53033bdcba"
-    },
-    "@openai/openai@6.25.0": {
-      "integrity": "0e1910d6773638a95246b41136a2375d3ef23f810c036ec2002d8eeb2236b821"
     },
     "@zip-js/zip-js@2.8.21": {
       "integrity": "0787af769e7ed64f0728beba0dd7b52a57d26f202c08c54f0200a48d1c38845d"
@@ -49,7 +45,6 @@
         "dependencies": [
           "jsr:@bronti/bcrypt@^1.0.3",
           "jsr:@hono/hono@^4.11.1",
-          "jsr:@openai/openai@^6.25.0",
           "jsr:@zip-js/zip-js@^2.8.8",
           "jsr:@zod/zod@^4.3.5"
         ]

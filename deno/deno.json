@@ -4,7 +4,6 @@
     "@hono/hono": "jsr:@hono/hono@^4.11.1",
     "@hono/hono/cookie": "jsr:@hono/hono@^4.11.1/cookie",
     "@hono/hono/utils/http-status": "jsr:@hono/hono@^4.11.1/utils/http-status",
-    "@openai/openai": "jsr:@openai/openai@^6.25.0",
     "@zod/zod": "jsr:@zod/zod@^4.3.5",
     "zod": "jsr:@zod/zod@^4.3.5",
     "@zip-js/zip-js": "jsr:@zip-js/zip-js@^2.8.8"
