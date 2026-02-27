@@ -31,7 +31,9 @@ export const AboutMain = () => {
               </Link>
             </li>
             <li>
-              <Link to="https://github.com/stagas/loopmaster" target="_blank" class="text-white/90 hover:underline">
+              <Link to="https://github.com/loopmaster-xyz/loopmaster" target="_blank"
+                class="text-white/90 hover:underline"
+              >
                 GitHub
               </Link>
             </li>

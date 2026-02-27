@@ -38,7 +38,7 @@ export const helpItems: { name: string; url: string; Icon: typeof BookOpenIcon }
   },
   {
     name: 'GitHub',
-    url: 'https://github.com/stagas/loopmaster',
+    url: 'https://github.com/loopmaster-xyz/loopmaster',
     Icon: GithubLogoIcon,
   },
   {
