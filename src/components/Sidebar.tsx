@@ -11,6 +11,8 @@ import {
   WaveformIcon,
   WrenchIcon,
 } from '@phosphor-icons/react'
+import bmcLogo from '../assets/bmc.svg'
+import whopLogo from '../assets/whop.svg'
 import { cn } from '../lib/cn.ts'
 import { Link } from '../router.tsx'
 import { docsSearch, primaryColor, session, sidebarOpen, type SidebarTab, sidebarTab } from '../state.ts'
@@ -82,6 +84,16 @@ export const Sidebar = () => (
       {session.value?.isAdmin && <SidebarTabLink icon={<MagicWandIcon size={16} />} tab="ai" title="AI" />}
       {session.value?.isAdmin && <SidebarTabLink icon={<UsersThreeIcon size={16} />} tab="admin" title="Admin" />}
       <div class="flex-1" />
+      <Link to="https://whop.com/loopmaster" title="Support me on Whop" target="_blank"
+        class="p-4 flex items-center justify-center hover:bg-white/5 focus:bg-white/5 outline-none text-neutral-400 text-sm"
+      >
+        <img src={whopLogo} alt="Support me on Whop" width={16} height={16} />
+      </Link>
+      <Link to="https://www.buymeacoffee.com/loopmaster" title="Buy Me a Coffee" target="_blank"
+        class="p-4 flex items-center justify-center hover:bg-white/5 focus:bg-white/5 outline-none text-neutral-400 text-sm"
+      >
+        <img src={bmcLogo} alt="Buy Me a Coffee" width={16} height={16} />
+      </Link>
     </div>
     {sidebarOpen.value && (
       <div class="flex flex-col w-full h-full max-h-[100dvh]">
