@@ -38669,7 +38669,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-Db86Pn7s.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-BYma9hdy.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -48522,7 +48522,7 @@ const AboutMain = () => {
 							children: "Feedback"
 						}) }),
 						/* @__PURE__ */ u("li", { children: /* @__PURE__ */ u(Link$1, {
-							to: "https://github.com/stagas/loopmaster",
+							to: "https://github.com/loopmaster-xyz/loopmaster",
 							target: "_blank",
 							class: "text-white/90 hover:underline",
 							children: "GitHub"
@@ -50819,7 +50819,7 @@ const helpItems = [
 	},
 	{
 		name: "GitHub",
-		url: "https://github.com/stagas/loopmaster",
+		url: "https://github.com/loopmaster-xyz/loopmaster",
 		Icon: t$4
 	},
 	{
@@ -57297,4 +57297,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-BmJytKIv.js.map
+//# sourceMappingURL=index-CAASWmlH.js.map
