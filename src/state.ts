@@ -60,7 +60,7 @@ persist(
 export const editor = signal<Editor | null>(null)
 
 export const themeName = signal<string>(
-  localStorage.getItem('themeName') || 'Framer',
+  localStorage.getItem('themeName') || 'Dracula+',
 )
 export const themeVariation = signal<'A' | 'B' | 'C'>(
   localStorage.getItem('themeVariation') as 'A' | 'B' | 'C' || 'B',

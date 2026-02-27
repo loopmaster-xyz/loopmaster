@@ -5329,7 +5329,7 @@ function drawErrorSquiggles(context, line) {
 		drawSquiggle(c$7, startX, contentY + lineHeight$1 - 2, errorWidth);
 	}
 }
-function Deferred$2() {
+function Deferred$1() {
 	const _onwhen = () => {
 		deferred.hasSettled = true;
 		deferred.resolve = deferred.reject = noop;
@@ -5363,7 +5363,7 @@ var fontBase64Cache = /* @__PURE__ */ new Map();
 var ligatureCanvasCache = /* @__PURE__ */ new Map();
 async function loadFontAsBase64(fontUrl) {
 	if (fontBase64Cache.has(fontUrl)) return fontBase64Cache.get(fontUrl).promise;
-	const deferred = Deferred$2();
+	const deferred = Deferred$1();
 	fontBase64Cache.set(fontUrl, deferred);
 	const buffer = await fetch(fontUrl).then((response) => response.arrayBuffer());
 	const bytes = new Uint8Array(buffer);
@@ -9869,7 +9869,7 @@ async function loadFonts(fontFamilies$1) {
 	let promises = [];
 	for (const font of fontFamilies$1) {
 		if (!loadedUrls.has(font.url)) {
-			loadedUrls.set(font.url, Deferred$2());
+			loadedUrls.set(font.url, Deferred$1());
 			const fontFace = new FontFace(font.name, `url(${font.url})`, {
 				weight: font.weight,
 				style: font.style,
@@ -25873,7 +25873,7 @@ function createDspLatency(opts) {
 		}
 	};
 }
-function Deferred$1() {
+function Deferred() {
 	const _onwhen = () => {
 		deferred.hasSettled = true;
 		deferred.resolve = deferred.reject = noop;
@@ -25934,7 +25934,7 @@ function atomic$1(fn$1, { dropInbetween = false, timeout = null } = {}) {
 		const task = {
 			context: this,
 			args,
-			deferred: Deferred$1()
+			deferred: Deferred()
 		};
 		queue.push(task);
 		if (!isRunning) drain();
@@ -37488,7 +37488,7 @@ function createDspProgram(dspState, shared, worklet, record) {
 	};
 	return program;
 }
-function isMobile$1() {
+function isMobile() {
 	return /Mobi|Android|Tablet/i.test(navigator.userAgent);
 }
 var asconfig_mobile_default = {
@@ -37589,13 +37589,13 @@ var asconfig_default = {
 		"exportRuntime": true
 	}
 };
-var worklet_default = "/assets/worklet-tdcTUz15.js";
+var worklet_default = "/assets/worklet-ylIiwfnQ.js";
 function getWasmPaths() {
-	const base = isMobile$1() ? "/as/build/index-mobile.wasm" : "/as/build/index.wasm";
+	const base = isMobile() ? "/as/build/index-mobile.wasm" : "/as/build/index.wasm";
 	return {
 		wasm: new URL(base, location.origin).toString(),
 		sourcemap: new URL(base + ".map", location.origin).toString(),
-		config: isMobile$1() ? asconfig_mobile_default : asconfig_default
+		config: isMobile() ? asconfig_mobile_default : asconfig_default
 	};
 }
 async function fetchWasmBinary() {
@@ -37691,7 +37691,7 @@ const rpc = (port, api$1 = {}, transferables = defaultTransferables) => {
 	};
 	const call = (method, ...args) => {
 		const cid = ++callbackId;
-		const deferred = Deferred$1();
+		const deferred = Deferred();
 		calls.set(cid, deferred);
 		try {
 			port.postMessage({
@@ -38131,7 +38131,7 @@ function createDspPreview(runtime) {
 		}
 	};
 }
-var record_worker_default = "/assets/record-worker-CzIUO-ey.js";
+var record_worker_default = "/assets/record-worker-rKmzWuG0.js";
 async function createRecordWorker(wasmBinary, worklet) {
 	const url = new URL(record_worker_default, window.location.origin).toString();
 	const worker = new Worker(url, { type: "module" });
@@ -38411,9 +38411,6 @@ const memoryDebug = {
 	getInfo,
 	reset: reset$1
 };
-function isMobile() {
-	return /Mobi|Android|Tablet/i.test(navigator.userAgent);
-}
 function useReactiveEffect(fn$1, deps = []) {
 	_$1(() => m(fn$1), deps);
 }
@@ -38491,36 +38488,6 @@ function debounce(ms, fn$1, options$2) {
 		setTimeout(resolver, ms);
 	}
 	return wrapper;
-}
-function Deferred() {
-	const _onwhen = () => {
-		deferred.hasSettled = true;
-		deferred.resolve = deferred.reject = noop;
-	};
-	const noop = () => {};
-	let onwhen = _onwhen;
-	const deferred = {
-		hasSettled: false,
-		when: (fn$1) => {
-			onwhen = () => {
-				_onwhen();
-				fn$1();
-			};
-		}
-	};
-	deferred.promise = new Promise((resolve, reject) => {
-		deferred.resolve = (arg) => {
-			onwhen();
-			deferred.value = arg;
-			resolve(arg);
-		};
-		deferred.reject = (error$1) => {
-			onwhen();
-			deferred.error = error$1;
-			reject(error$1);
-		};
-	});
-	return deferred;
 }
 function hslToRgb([h$5, s$4, l$10]) {
 	h$5 /= 360;
@@ -38669,7 +38636,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-D9Y5kG7N.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-BbvPxccF.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -45951,7 +45918,7 @@ persist("session", () => session.value, () => ({ session: session.value }), (dat
 	session.value = data.session ?? null;
 });
 const editor = c$3(null);
-const themeName = c$3(localStorage.getItem("themeName") || "Framer");
+const themeName = c$3(localStorage.getItem("themeName") || "Dracula+");
 const themeVariation = c$3(localStorage.getItem("themeVariation") || "B");
 const theme = c$3(safeJsonParse(localStorage.getItem("theme")) || {
 	gray: "#444444",
@@ -57370,4 +57337,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-Jt0KBrAR.js.map
+//# sourceMappingURL=index-p53ccJMH.js.map
