@@ -6,6 +6,7 @@ import {
   BookOpenIcon,
   ChalkboardTeacherIcon,
   CodeIcon,
+  GithubLogoIcon,
   GlobeIcon,
   LightningIcon,
   MusicNotesIcon,
@@ -24,12 +25,12 @@ import {
   primaryGradientStyle,
   secondaryColor,
   showIntro,
-  widgetOptions,
   themeName,
   themeVariation,
+  widgetOptions,
 } from '../state.ts'
-import { InlineEditor } from './InlineEditor.tsx'
 import themes from '../themes/_all.json'
+import { InlineEditor } from './InlineEditor.tsx'
 
 const exampleCode = `
 fm=>sine($+sine($/2)*$*4)*ad(trig:every(1/8))
@@ -389,6 +390,26 @@ export function Landing() {
                 />
               </div>
               <div class="flex flex-col md:flex-row items-center justify-center gap-6 text-neutral-400">
+                <Link to="https://github.com/loopmaster-xyz/loopmaster" target="_blank"
+                  class="text-sm border-none rounded-md cursor-pointer font-semibold text-white hover:text-[#4c6dee] flex items-center gap-2"
+                >
+                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24px" height="24px"
+                    viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" fill="currentColor"
+                  >
+                    <g id="github-alt">
+                      <path id="_x3C_Zusammengesetzter_Pfad_x3E__3_"
+                        d="M15.999,0.2C7.273,0.2,0.2,7.453,0.2,16.401c0,7.157,4.526,13.229,10.805,15.372
+		c0.792,0.148,1.079-0.353,1.079-0.782c0-0.383-0.013-1.403-0.021-2.755c-4.394,0.979-5.322-2.172-5.322-2.172
+		c-0.717-1.873-1.754-2.369-1.754-2.369c-1.435-1.007,0.108-0.985,0.108-0.985c1.585,0.117,2.42,1.673,2.42,1.673
+		c1.409,2.473,3.699,1.76,4.599,1.343c0.144-1.044,0.551-1.762,1.003-2.166c-3.509-0.409-7.198-1.799-7.198-8.007
+		c0-1.768,0.616-3.214,1.627-4.346C7.382,10.796,6.84,9.15,7.7,6.918c0,0,1.327-0.436,4.345,1.66C13.305,8.22,14.657,8.04,16,8.034
+		c1.341,0.006,2.693,0.187,3.955,0.545c3.018-2.096,4.341-1.66,4.341-1.66c0.862,2.231,0.32,3.877,0.157,4.288
+		c1.014,1.132,1.625,2.578,1.625,4.346c0,6.224-3.694,7.593-7.216,7.993c0.568,0.502,1.074,1.489,1.074,3
+		c0,2.167-0.018,3.913-0.018,4.443c0,0.435,0.283,0.939,1.086,0.779C27.278,29.621,31.8,23.556,31.8,16.4
+		C31.8,7.453,24.724,0.2,15.999,0.2z" />
+                    </g>
+                  </svg>
+                </Link>
                 <Link
                   title="Discord"
                   class="text-sm border-none rounded-md cursor-pointer font-semibold text-white hover:text-[#4c6dee] flex items-center gap-2"
