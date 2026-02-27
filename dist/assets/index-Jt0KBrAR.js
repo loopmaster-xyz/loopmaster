@@ -38669,7 +38669,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-CUlsJjhZ.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-D9Y5kG7N.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -50919,6 +50919,8 @@ const Intro = () => {
 		})
 	});
 };
+var bmc_default = "/assets/bmc-C5cvnaXs.svg";
+var whop_default = "data:image/svg+xml,%3csvg%20width='1000'%20height='515'%20viewBox='0%200%201000%20515'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_3041_689)'%3e%3cpath%20d='M158.881%20-0.00366211C93.2014%20-0.00366211%2047.9251%2028.989%2013.6619%2061.7749C13.6619%2061.7749%20-0.173169%2074.965%200.00164277%2075.3669L143.897%20220.129L287.766%2075.3669C260.521%2037.6314%20209.152%20-0.00366211%20158.881%20-0.00366211Z'%20fill='%23FCF6F5'/%3e%3cpath%20d='M514.191%20-0.00360107C448.513%20-0.00360107%20403.236%2028.989%20368.971%2061.775C368.971%2061.775%20356.336%2074.6133%20355.763%2075.367L177.903%20254.322L321.574%20398.857L643.077%2075.367C615.831%2037.6315%20564.488%20-0.00360107%20514.191%20-0.00360107Z'%20fill='%23FCF6F5'/%3e%3cpath%20d='M870.479%20-0.00360107C804.798%20-0.00360107%20759.524%2028.989%20725.259%2061.775C725.259%2061.775%20712.098%2074.7137%20711.6%2075.367L355.806%20433.351L393.466%20471.237C451.73%20529.852%20547.101%20529.852%20605.365%20471.237L998.914%2075.367H999.365C972.119%2037.6315%20920.773%20-0.00360107%20870.479%20-0.00360107Z'%20fill='%23FCF6F5'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_3041_689'%3e%3crect%20width='1000'%20height='514.706'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e";
 var exampleCode = `
 fm=>sine($+sine($/2)*$*4)*ad(trig:every(1/8))
 
@@ -51371,6 +51373,30 @@ function Landing() {
 											height: "32",
 											viewBox: "0 0 20 20",
 											children: /* @__PURE__ */ u("path", { d: "M16.074,4.361a14.243,14.243,0,0,0-3.61-1.134,10.61,10.61,0,0,0-.463.96,13.219,13.219,0,0,0-4,0,10.138,10.138,0,0,0-.468-.96A14.206,14.206,0,0,0,3.919,4.364,15.146,15.146,0,0,0,1.324,14.5a14.435,14.435,0,0,0,4.428,2.269A10.982,10.982,0,0,0,6.7,15.21a9.294,9.294,0,0,1-1.494-.727c.125-.093.248-.19.366-.289a10.212,10.212,0,0,0,8.854,0c.119.1.242.2.366.289a9.274,9.274,0,0,1-1.5.728,10.8,10.8,0,0,0,.948,1.562,14.419,14.419,0,0,0,4.431-2.27A15.128,15.128,0,0,0,16.074,4.361Zm-8.981,8.1a1.7,1.7,0,0,1-1.573-1.79A1.689,1.689,0,0,1,7.093,8.881a1.679,1.679,0,0,1,1.573,1.791A1.687,1.687,0,0,1,7.093,12.462Zm5.814,0a1.7,1.7,0,0,1-1.573-1.79,1.689,1.689,0,0,1,1.573-1.791,1.679,1.679,0,0,1,1.573,1.791A1.688,1.688,0,0,1,12.907,12.462Z" })
+										})
+									}),
+									/* @__PURE__ */ u(Link$1, {
+										to: "https://whop.com/loopmaster",
+										title: "Support me on Whop",
+										target: "_blank",
+										class: "text-sm border-none rounded-md cursor-pointer font-semibold text-white hover:text-[#4c6dee] flex items-center gap-2",
+										children: /* @__PURE__ */ u("img", {
+											src: whop_default,
+											alt: "Support me on Whop",
+											width: 24,
+											height: 24
+										})
+									}),
+									/* @__PURE__ */ u(Link$1, {
+										to: "https://www.buymeacoffee.com/loopmaster",
+										title: "Buy Me a Coffee",
+										target: "_blank",
+										class: "text-sm border-none rounded-md cursor-pointer font-semibold text-white hover:text-[#4c6dee] flex items-center gap-2",
+										children: /* @__PURE__ */ u("img", {
+											src: bmc_default,
+											alt: "Buy Me a Coffee",
+											width: 24,
+											height: 24
 										})
 									}),
 									/* @__PURE__ */ u(Link$1, {
@@ -56278,7 +56304,31 @@ const Sidebar = () => /* @__PURE__ */ u("div", {
 				tab: "admin",
 				title: "Admin"
 			}),
-			/* @__PURE__ */ u("div", { class: "flex-1" })
+			/* @__PURE__ */ u("div", { class: "flex-1" }),
+			/* @__PURE__ */ u(Link$1, {
+				to: "https://whop.com/loopmaster",
+				title: "Support me on Whop",
+				target: "_blank",
+				class: "p-4 flex items-center justify-center hover:bg-white/5 focus:bg-white/5 outline-none text-neutral-400 text-sm",
+				children: /* @__PURE__ */ u("img", {
+					src: whop_default,
+					alt: "Support me on Whop",
+					width: 16,
+					height: 16
+				})
+			}),
+			/* @__PURE__ */ u(Link$1, {
+				to: "https://www.buymeacoffee.com/loopmaster",
+				title: "Buy Me a Coffee",
+				target: "_blank",
+				class: "p-4 flex items-center justify-center hover:bg-white/5 focus:bg-white/5 outline-none text-neutral-400 text-sm",
+				children: /* @__PURE__ */ u("img", {
+					src: bmc_default,
+					alt: "Buy Me a Coffee",
+					width: 16,
+					height: 16
+				})
+			})
 		]
 	}), sidebarOpen.value && /* @__PURE__ */ u("div", {
 		class: "flex flex-col w-full h-full max-h-[100dvh]",
@@ -57320,4 +57370,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-B9DG0AoH.js.map
+//# sourceMappingURL=index-Jt0KBrAR.js.map
