@@ -26,7 +26,7 @@ import {
 import { newId } from './id.ts'
 import { getKv, k, restoreProject, updateCommentArtistNames, updateProject } from './kv.ts'
 import { runMigrations } from './migrations.ts'
-import { generateAITrack, generateSimilarTrack, modifyAITrack } from './openai.ts'
+// import { generateAITrack, generateSimilarTrack, modifyAITrack } from './openai.ts'
 import {
   AuthLoginRequestSchema,
   AuthRegisterRequestSchema,
@@ -881,53 +881,53 @@ app.get('/api/user-projects/:id', async c => {
   return c.json(ProjectsSchema.parse(values.map(v => v.value).filter(Boolean)), 200)
 })
 
-// AI
-app.post('/api/ai/generate-track', async c => {
-  const body = await c.req.json().catch(() => null)
-  if (body === null) {
-    return errorResponse(c, 'Invalid JSON', 400)
-  }
+// // AI
+// app.post('/api/ai/generate-track', async c => {
+//   const body = await c.req.json().catch(() => null)
+//   if (body === null) {
+//     return errorResponse(c, 'Invalid JSON', 400)
+//   }
 
-  const parsed = GenerateTrackRequestSchema.safeParse(body)
-  if (!parsed.success) {
-    return errorResponse(c, zodErrorMessage(parsed.error), 400)
-  }
+//   const parsed = GenerateTrackRequestSchema.safeParse(body)
+//   if (!parsed.success) {
+//     return errorResponse(c, zodErrorMessage(parsed.error), 400)
+//   }
 
-  const track = await generateAITrack(parsed.data.prompt, parsed.data.temperature, parsed.data.topP, parsed.data.model)
-  return c.json(GenerateTrackResponseSchema.parse(track), 201)
-})
+//   const track = await generateAITrack(parsed.data.prompt, parsed.data.temperature, parsed.data.topP, parsed.data.model)
+//   return c.json(GenerateTrackResponseSchema.parse(track), 201)
+// })
 
-app.post('/api/ai/modify-track', async c => {
-  const body = await c.req.json().catch(() => null)
-  if (body === null) {
-    return errorResponse(c, 'Invalid JSON', 400)
-  }
+// app.post('/api/ai/modify-track', async c => {
+//   const body = await c.req.json().catch(() => null)
+//   if (body === null) {
+//     return errorResponse(c, 'Invalid JSON', 400)
+//   }
 
-  const parsed = ModifyTrackRequestSchema.safeParse(body)
-  if (!parsed.success) {
-    return errorResponse(c, zodErrorMessage(parsed.error), 400)
-  }
+//   const parsed = ModifyTrackRequestSchema.safeParse(body)
+//   if (!parsed.success) {
+//     return errorResponse(c, zodErrorMessage(parsed.error), 400)
+//   }
 
-  const track = await modifyAITrack(parsed.data.prompt, parsed.data.currentCode, parsed.data.temperature,
-    parsed.data.topP, parsed.data.model)
-  return c.json(ModifyTrackResponseSchema.parse(track), 201)
-})
+//   const track = await modifyAITrack(parsed.data.prompt, parsed.data.currentCode, parsed.data.temperature,
+//     parsed.data.topP, parsed.data.model)
+//   return c.json(ModifyTrackResponseSchema.parse(track), 201)
+// })
 
-app.post('/api/ai/generate-similar-track', async c => {
-  const body = await c.req.json().catch(() => null)
-  if (body === null) {
-    return errorResponse(c, 'Invalid JSON', 400)
-  }
+// app.post('/api/ai/generate-similar-track', async c => {
+//   const body = await c.req.json().catch(() => null)
+//   if (body === null) {
+//     return errorResponse(c, 'Invalid JSON', 400)
+//   }
 
-  const parsed = GenerateSimilarTrackRequestSchema.safeParse(body)
-  if (!parsed.success) {
-    return errorResponse(c, zodErrorMessage(parsed.error), 400)
-  }
+//   const parsed = GenerateSimilarTrackRequestSchema.safeParse(body)
+//   if (!parsed.success) {
+//     return errorResponse(c, zodErrorMessage(parsed.error), 400)
+//   }
 
-  const track = await generateSimilarTrack(parsed.data.currentCode, parsed.data.temperature, parsed.data.topP,
-    parsed.data.model)
-  return c.json(GenerateSimilarTrackResponseSchema.parse(track), 201)
-})
+//   const track = await generateSimilarTrack(parsed.data.currentCode, parsed.data.temperature, parsed.data.topP,
+//     parsed.data.model)
+//   return c.json(GenerateSimilarTrackResponseSchema.parse(track), 201)
+// })
 
 // Admin
 app.get('/api/admin/users', async c => {
