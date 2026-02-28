@@ -26415,6 +26415,10 @@ function collectClosureVarNames(fnExpr, outerLocals, opts) {
 				walkExpr(s$4.iterable);
 				walkStmt(s$4.body);
 				return;
+			case "switch":
+				walkExpr(s$4.test);
+				for (const c$7 of s$4.cases) for (const st of c$7.body) walkStmt(st);
+				return;
 			case "return":
 				if (s$4.value) walkExpr(s$4.value);
 				return;
@@ -26520,6 +26524,10 @@ function collectCapturedVarNames(body, opts) {
 				walkExpr(s$4.iterable);
 				walkStmt(s$4.body);
 				return;
+			case "switch":
+				walkExpr(s$4.test);
+				for (const c$7 of s$4.cases) for (const st of c$7.body) walkStmt(st);
+				return;
 			case "return":
 				if (s$4.value) walkExpr(s$4.value);
 				return;
@@ -26601,6 +26609,7 @@ function assignRecordCallIds(program) {
 			case "do": return checkStmtForRecord(s$4.body) || checkForRecord(s$4.test);
 			case "for": return checkForRecord(s$4.from) || checkForRecord(s$4.to) || checkStmtForRecord(s$4.body);
 			case "for-of": return checkForRecord(s$4.iterable) || checkStmtForRecord(s$4.body);
+			case "switch": return checkForRecord(s$4.test) || s$4.cases.some((c$7) => c$7.body.some((st) => checkStmtForRecord(st)));
 			case "return": return s$4.value ? checkForRecord(s$4.value) : false;
 			case "throw": return s$4.value ? checkForRecord(s$4.value) : false;
 			case "try": return checkStmtForRecord(s$4.body) || (s$4.catch ? checkStmtForRecord(s$4.catch.body) : false) || (s$4.finally ? checkStmtForRecord(s$4.finally) : false);
@@ -26653,6 +26662,15 @@ function assignRecordCallIds(program) {
 			case "do": return findRecordCallLocInStmt(s$4.body) || findRecordCallLoc(s$4.test);
 			case "for": return findRecordCallLoc(s$4.from) || findRecordCallLoc(s$4.to) || findRecordCallLocInStmt(s$4.body);
 			case "for-of": return findRecordCallLoc(s$4.iterable) || findRecordCallLocInStmt(s$4.body);
+			case "switch": {
+				const loc = findRecordCallLoc(s$4.test);
+				if (loc) return loc;
+				for (const c$7 of s$4.cases) for (const st of c$7.body) {
+					const stLoc = findRecordCallLocInStmt(st);
+					if (stLoc) return stLoc;
+				}
+				return null;
+			}
 			case "return": return s$4.value ? findRecordCallLoc(s$4.value) : null;
 			case "throw": return s$4.value ? findRecordCallLoc(s$4.value) : null;
 			case "try": return findRecordCallLocInStmt(s$4.body) || (s$4.catch ? findRecordCallLocInStmt(s$4.catch.body) : null) || (s$4.finally ? findRecordCallLocInStmt(s$4.finally) : null);
@@ -26741,6 +26759,10 @@ function assignRecordCallIds(program) {
 				case "for-of":
 					walkExpr$1(s$4.iterable);
 					walkStmt$1(s$4.body);
+					return;
+				case "switch":
+					walkExpr$1(s$4.test);
+					for (const c$7 of s$4.cases) for (const st of c$7.body) walkStmt$1(st);
 					return;
 				case "return":
 					if (s$4.value) walkExpr$1(s$4.value);
@@ -26849,6 +26871,10 @@ function assignRecordCallIds(program) {
 			case "for-of":
 				walkExpr(s$4.iterable);
 				walkStmt(s$4.body);
+				return;
+			case "switch":
+				walkExpr(s$4.test);
+				for (const c$7 of s$4.cases) for (const st of c$7.body) walkStmt(st);
 				return;
 			case "return":
 				if (s$4.value) walkExpr(s$4.value);
@@ -33950,12 +33976,76 @@ function compileContinue(state, stmt) {
 			return;
 		}
 	} else targetLoop = state.loopStack[state.loopStack.length - 1];
+	if (targetLoop.isSwitch) {
+		error(state, "continue statement not allowed in switch", stmt.loc);
+		return;
+	}
 	state.ops.push(AudioVmOp.Jump);
 	const patchIndex = state.ops.length;
 	state.ops.push(0);
 	targetLoop.continueTargets.push(patchIndex);
 }
+function compileSwitch(state, stmt) {
+	const loopContext = {
+		breakTargets: [],
+		continueTargets: [],
+		isSwitch: true
+	};
+	state.loopStack.push(loopContext);
+	compileExpr(state, stmt.test);
+	if (state.stack.length === 0) {
+		error(state, "switch expression has no value", stmt.loc);
+		state.loopStack.pop();
+		return;
+	}
+	const tempVar = declareVariable(state, `__switch_${state.nextTempId++}`, stmt.loc);
+	compileSetVariable(state, tempVar, stmt.test);
+	state.stack.pop();
+	const jumpToEndPatchIndices = [];
+	for (const c$7 of stmt.cases) if (c$7.test !== null) {
+		compileGetVariable(state, tempVar);
+		state.stack.push({ expr: stmt.test });
+		compileExpr(state, c$7.test);
+		state.ops.push(AudioVmOp.Equal);
+		state.stack.pop();
+		state.stack.pop();
+		state.stack.push({ expr: c$7.test });
+		state.ops.push(AudioVmOp.JumpIfFalse);
+		const jumpToNextIndex = state.ops.length;
+		state.ops.push(0);
+		state.stack.pop();
+		pushScope(state);
+		for (const s$4 of c$7.body) compileStmt(state, s$4);
+		popScope(state);
+		state.ops.push(AudioVmOp.Jump);
+		jumpToEndPatchIndices.push(state.ops.length);
+		state.ops.push(0);
+		const nextCaseTarget = state.ops.length;
+		state.ops[jumpToNextIndex] = nextCaseTarget;
+	} else {
+		pushScope(state);
+		for (const s$4 of c$7.body) compileStmt(state, s$4);
+		popScope(state);
+	}
+	const endTarget = state.ops.length;
+	for (const idx of jumpToEndPatchIndices) state.ops[idx] = endTarget;
+	for (const idx of loopContext.breakTargets) state.ops[idx] = endTarget;
+	state.loopStack.pop();
+}
 function compileLabel(state, stmt) {
+	if (stmt.stmt.type === "switch") {
+		const labelContext = {
+			label: stmt.name,
+			breakTargets: [],
+			continueTargets: []
+		};
+		state.loopStack.push(labelContext);
+		compileSwitch(state, stmt.stmt);
+		const endTarget = state.ops.length;
+		for (const idx of labelContext.breakTargets) state.ops[idx] = endTarget;
+		state.loopStack.pop();
+		return;
+	}
 	if (stmt.stmt.type === "while" || stmt.stmt.type === "do" || stmt.stmt.type === "for" || stmt.stmt.type === "for-of") {
 		const loopContext = {
 			label: stmt.name,
@@ -34686,6 +34776,9 @@ function compileStmt(state, stmt) {
 		case "for-of":
 			compileForOf(state, stmt);
 			break;
+		case "switch":
+			compileSwitch(state, stmt);
+			break;
 		case "break":
 			compileBreak(state, stmt);
 			break;
@@ -35154,6 +35247,10 @@ function collectNumberLiterals(program) {
 			case "label":
 				walkStmt(s$4.stmt);
 				return;
+			case "switch":
+				walkExpr(s$4.test);
+				for (const c$7 of s$4.cases) for (const st of c$7.body) walkStmt(st);
+				return;
 			case "break":
 			case "continue": return;
 		}
@@ -35518,6 +35615,68 @@ var Parser = class {
 				loc: this.locFrom(start, this.prev())
 			};
 		}
+		if (this.eat("keyword", "switch")) {
+			const start = t$12;
+			this.expect("punct", "(", "Expected \"(\" after switch");
+			const test = this.parseExpr();
+			this.expect("punct", ")", "Expected \")\" after switch expression");
+			this.expect("punct", "{", "Expected \"{\" after switch");
+			const cases = [];
+			while (!this.is("eof") && !this.is("punct", "}") && !this.hasFatalError) {
+				this.tick();
+				if (this.eat("keyword", "case")) {
+					const caseTest = this.parseExpr();
+					this.expect("punct", ":", "Expected \":\" after case value");
+					const body = [];
+					while (!this.is("eof") && !this.is("punct", "}") && !this.is("keyword", "case") && !this.is("keyword", "default") && !this.hasFatalError) {
+						this.tick();
+						if (this.is("punct", ";")) {
+							this.pos++;
+							continue;
+						}
+						const stmt = this.parseStmt();
+						if (stmt) body.push(stmt);
+						this.eat("punct", ";");
+					}
+					cases.push({
+						test: caseTest,
+						body
+					});
+					continue;
+				}
+				if (this.eat("keyword", "default")) {
+					this.expect("punct", ":", "Expected \":\" after default");
+					const body = [];
+					while (!this.is("eof") && !this.is("punct", "}") && !this.is("keyword", "case") && !this.hasFatalError) {
+						this.tick();
+						if (this.is("punct", ";")) {
+							this.pos++;
+							continue;
+						}
+						const stmt = this.parseStmt();
+						if (stmt) body.push(stmt);
+						this.eat("punct", ";");
+					}
+					cases.push({
+						test: null,
+						body
+					});
+					continue;
+				}
+				if (this.is("punct", ";")) {
+					this.pos++;
+					continue;
+				}
+				break;
+			}
+			const endTok = this.expect("punct", "}", "Unclosed switch block");
+			return {
+				type: "switch",
+				test,
+				cases,
+				loc: this.locFrom(start, endTok)
+			};
+		}
 		if (this.eat("keyword", "try")) {
 			const start = t$12;
 			const body = this.parseStmt();
@@ -35771,6 +35930,22 @@ var Parser = class {
 			};
 		}
 		if (t$12.type === "keyword") {
+			if (t$12.value === "if") {
+				const start = t$12;
+				this.pos++;
+				this.expect("punct", "(", "Expected \"(\" after if");
+				const test = this.parseExpr();
+				this.expect("punct", ")", "Expected \")\" after if condition");
+				const then = this.parseExpr();
+				this.expect("keyword", "else", "Expected \"else\" in if expression");
+				return {
+					type: "ternary",
+					test,
+					then,
+					else: this.parseExpr(),
+					loc: this.locFrom(start, this.prev())
+				};
+			}
 			if (t$12.value === "true" || t$12.value === "false" || t$12.value === "null") {
 				this.pos++;
 				return {
@@ -38726,7 +38901,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-fcGVYw6Z.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DUmE3zuZ.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -39448,6 +39623,7 @@ var operators = new Set([
 	"|->",
 	"|",
 	"...",
+	"..",
 	"..<",
 	"..<.",
 	"!!!",
@@ -41571,6 +41747,8 @@ function createKnobWidgets(doc, result, cache) {
 		if (value.value === 0) return;
 		const startIndex = value.loc.start - preludeLen;
 		const endIndex = value.loc.end - preludeLen;
+		const literalText = src.slice(startIndex, endIndex).trim();
+		if (literalText === "true" || literalText === "false") return;
 		const { line: startLine, column: startColumn } = indexToLoc(src, startIndex);
 		const { line: endLine, column: endColumn } = indexToLoc(src, endIndex);
 		const key = makeWidgetCacheKey("Knob", startIndex, endIndex);
@@ -57956,4 +58134,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-D5ZZtb6g.js.map
+//# sourceMappingURL=index-CmX36t2z.js.map
