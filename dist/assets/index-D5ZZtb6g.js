@@ -32705,6 +32705,25 @@ function compileCall(state, expr) {
 			compileCallWithArgs(state, syntheticCall, syntheticCall.args, -1);
 			return;
 		}
+		if (memberExpr.property === "reduce") {
+			if (!expr.args.length || !expr.args[0]?.value) error(state, "reduce requires a reducer function", expr.loc);
+			const syntheticCall = {
+				type: "call",
+				callee: {
+					type: "identifier",
+					name: "reduce",
+					loc: expr.loc
+				},
+				args: [{
+					type: "arg",
+					value: memberExpr.object,
+					loc: memberExpr.object.loc
+				}, ...expr.args],
+				loc: expr.loc
+			};
+			compileCallWithArgs(state, syntheticCall, syntheticCall.args, -1);
+			return;
+		}
 		if (memberExpr.property === "walk") {
 			const syntheticCall = {
 				type: "call",
@@ -34334,7 +34353,7 @@ function compileMember(state, expr) {
 		state.stack.pop();
 		state.stack.push({ expr });
 		return;
-	} else if (expr.property === "avg" || expr.property === "push" || expr.property === "shuffle" || expr.property === "map") return;
+	} else if (expr.property === "avg" || expr.property === "push" || expr.property === "shuffle" || expr.property === "map" || expr.property === "reduce") return;
 	else error(state, `Unknown property: ${expr.property}`, expr.loc);
 }
 function isTopLevelFnAssign(state, stmt) {
@@ -36028,6 +36047,15 @@ reverse=array->{
   n:=array.length
   for (i in 0 .. n - 1) copy.push(array[n-1-i])
   copy
+}
+
+reduce=(arr,reducer,initial=0)->{
+  acc:=initial
+  for (i in 0..arr.length-1) {
+    item:=arr[i]
+    acc=reducer(acc, item, i)
+  }
+  acc
 }
 
 /**
@@ -38698,7 +38726,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-BtYDPx8J.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-fcGVYw6Z.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -43434,6 +43462,23 @@ const extra = [
 		description: ["Returns a new array with elements in reverse order."],
 		return: "array",
 		parameters: []
+	}],
+	["reduce", {
+		type: "function",
+		name: "reduce",
+		arrayMethod: true,
+		category: "utilities",
+		description: ["Reduces an array to a single value using a reducer function (acc, item, index) -> acc."],
+		return: "any",
+		parameters: [{
+			name: "reducer",
+			description: ["Function (acc, item, index) -> acc."],
+			type: "function"
+		}, {
+			name: "initial",
+			description: ["Initial accumulator value."],
+			default: 0
+		}]
 	}],
 	["print", {
 		type: "function",
@@ -57911,4 +57956,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-C0xLUUI-.js.map
+//# sourceMappingURL=index-D5ZZtb6g.js.map
