@@ -219,7 +219,6 @@ async function createDspProgramContextImpl(
             userCallHistories.value = previewResult.userCallHistories
           })
         }
-
         await program.setControlCompileSnapshot(ccs)
         historiesRefreshed.value++
       }
