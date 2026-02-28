@@ -5,12 +5,13 @@ var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
-var __export = (all) => {
+var __export = (all, symbols) => {
 	let target = {};
 	for (var name in all) __defProp(target, name, {
 		get: all[name],
 		enumerable: true
 	});
+	if (symbols) __defProp(target, Symbol.toStringTag, { value: "Module" });
 	return target;
 };
 var __copyProps = (to, from, except, desc) => {
@@ -5329,7 +5330,7 @@ function drawErrorSquiggles(context, line) {
 		drawSquiggle(c$7, startX, contentY + lineHeight$1 - 2, errorWidth);
 	}
 }
-function Deferred$1() {
+function Deferred$2() {
 	const _onwhen = () => {
 		deferred.hasSettled = true;
 		deferred.resolve = deferred.reject = noop;
@@ -5363,7 +5364,7 @@ var fontBase64Cache = /* @__PURE__ */ new Map();
 var ligatureCanvasCache = /* @__PURE__ */ new Map();
 async function loadFontAsBase64(fontUrl) {
 	if (fontBase64Cache.has(fontUrl)) return fontBase64Cache.get(fontUrl).promise;
-	const deferred = Deferred$1();
+	const deferred = Deferred$2();
 	fontBase64Cache.set(fontUrl, deferred);
 	const buffer = await fetch(fontUrl).then((response) => response.arrayBuffer());
 	const bytes = new Uint8Array(buffer);
@@ -9869,7 +9870,7 @@ async function loadFonts(fontFamilies$1) {
 	let promises = [];
 	for (const font of fontFamilies$1) {
 		if (!loadedUrls.has(font.url)) {
-			loadedUrls.set(font.url, Deferred$1());
+			loadedUrls.set(font.url, Deferred$2());
 			const fontFace = new FontFace(font.name, `url(${font.url})`, {
 				weight: font.weight,
 				style: font.style,
@@ -25873,7 +25874,7 @@ function createDspLatency(opts) {
 		}
 	};
 }
-function Deferred() {
+function Deferred$1() {
 	const _onwhen = () => {
 		deferred.hasSettled = true;
 		deferred.resolve = deferred.reject = noop;
@@ -25903,7 +25904,7 @@ function Deferred() {
 	});
 	return deferred;
 }
-function atomic$1(fn$1, { dropInbetween = false, timeout = null } = {}) {
+function atomic(fn$1, { dropInbetween = false, timeout = null } = {}) {
 	const queue = [];
 	let isRunning = false;
 	const apply = async (task) => {
@@ -25934,7 +25935,7 @@ function atomic$1(fn$1, { dropInbetween = false, timeout = null } = {}) {
 		const task = {
 			context: this,
 			args,
-			deferred: Deferred()
+			deferred: Deferred$1()
 		};
 		queue.push(task);
 		if (!isRunning) drain();
@@ -36824,7 +36825,7 @@ async function fetchEspeakSample(ctx$1, opts) {
 		sampleRate: audioBuffer.sampleRate
 	};
 }
-const fetchRequiredSamples = atomic$1(async (audioContext$1, worklet, record, fetchingSamples, programId, getRecordGeneration, recordCallbacks, mainBytecode, onCapturedValues) => {
+const fetchRequiredSamples = atomic(async (audioContext$1, worklet, record, fetchingSamples, programId, getRecordGeneration, recordCallbacks, mainBytecode, onCapturedValues) => {
 	const generation = getRecordGeneration(programId);
 	const toFetch = (await worklet.getRequiredSamples()).filter(({ handle }) => !fetchingSamples.has(handle));
 	if (toFetch.length === 0) return;
@@ -37078,12 +37079,6 @@ async function setControlOpsSwap(dspState, worklet, program, ops) {
 	});
 	program.lastOps = ops;
 }
-function compileAndValidate(src, opts) {
-	const result = controlPipeline.compileSource(src, opts);
-	if (result.errors.length > 0) console.error(new Error(result.errors.join("\n") || "compilation failed"));
-	if (!result.compile.bytecode) console.error(/* @__PURE__ */ new Error("No bytecode generated"));
-	return result;
-}
 function applyCompileState(result) {
 	const mainBytecode = result.compile.bytecode;
 	const historySourceMap = result.compile.historySourceMap || [];
@@ -37216,12 +37211,10 @@ async function rebindProgram(worklet, shared, dspState) {
 	if (!init) return shared;
 	return bindProgramShared(dspState.buffer, init, shared.historyMetaU32);
 }
-var setCodeImpl = atomic$1(async (src, shared, dspState, worklet, record, setCodeToken, program, recordCallbacks, lastStructureHash, lastMainBytecodeHash, lastCallbackBytecodeHashes, lastCapturedValues, lastRecordSecondsByCallbackId, freesoundIds, opts) => {
+var setControlCompileSnapshotImpl = atomic(async (ccs, shared, dspState, worklet, record, setCodeToken, program, recordCallbacks, lastStructureHash, lastMainBytecodeHash, lastCallbackBytecodeHashes, lastCapturedValues, lastRecordSecondsByCallbackId, freesoundIds, opts) => {
 	const token = setCodeToken + 1 >>> 0;
 	setCodeToken = token;
-	const result = compileAndValidate(src, { projectId: opts?.projectId });
-	if (result.errors.length > 0) return { result };
-	const { mainBytecode, newRecordCallbacks, structureHash, historySourceMap: newHistorySourceMap, functionReturnPcs: newFunctionReturnPcs, arrayGetHistoryCount } = applyCompileState(result);
+	const { mainBytecode, newRecordCallbacks, structureHash, historySourceMap: newHistorySourceMap, functionReturnPcs: newFunctionReturnPcs, arrayGetHistoryCount } = applyCompileState(ccs);
 	const historySourceMap = newHistorySourceMap;
 	const functionReturnPcs = newFunctionReturnPcs;
 	const hashResult = updateMainBytecodeHash(mainBytecode, lastMainBytecodeHash);
@@ -37235,7 +37228,7 @@ var setCodeImpl = atomic$1(async (src, shared, dspState, worklet, record, setCod
 	let freesoundsChanged = false;
 	let inlineSamplesPresent = false;
 	let espeakSamplesPresent = false;
-	for (const reg of result.compile.sampleRegistrations) if (reg.type === "record" && reg.recordCallbackId != null && reg.recordSeconds != null) {
+	for (const reg of ccs.compile.sampleRegistrations) if (reg.type === "record" && reg.recordCallbackId != null && reg.recordSeconds != null) {
 		if (lastRecordSecondsByCallbackId.get(reg.recordCallbackId) !== reg.recordSeconds) {
 			recordDurationChanged = true;
 			break;
@@ -37251,7 +37244,6 @@ var setCodeImpl = atomic$1(async (src, shared, dspState, worklet, record, setCod
 		if (nextShared$1) shared = nextShared$1;
 		await setControlOps(dspState, worklet, program, mainBytecode);
 		return {
-			result,
 			shared,
 			historySourceMap,
 			functionReturnPcs,
@@ -37260,18 +37252,18 @@ var setCodeImpl = atomic$1(async (src, shared, dspState, worklet, record, setCod
 		};
 	}
 	markRemovedCallbacksAsChanged(newRecordCallbacks, changedCallbackIds, lastCallbackBytecodeHashes, lastCapturedValues);
-	const invalidatedHandles = invalidateHandlesForChangedCallbacks(shared.id, changedCallbackIds, result.compile.sampleRegistrations, dspState);
+	const invalidatedHandles = invalidateHandlesForChangedCallbacks(shared.id, changedCallbackIds, ccs.compile.sampleRegistrations, dspState);
 	recordCallbacks.clear();
 	for (const [k$4, v$4] of newRecordCallbacks) recordCallbacks.set(k$4, v$4);
 	lastCallbackBytecodeHashes.clear();
 	for (const [k$4, v$4] of newBytecodeHashes) lastCallbackBytecodeHashes.set(k$4, v$4);
 	lastRecordSecondsByCallbackId.clear();
-	for (const reg of result.compile.sampleRegistrations) if (reg.type === "record" && reg.recordCallbackId != null && reg.recordSeconds != null) lastRecordSecondsByCallbackId.set(reg.recordCallbackId, reg.recordSeconds);
+	for (const reg of ccs.compile.sampleRegistrations) if (reg.type === "record" && reg.recordCallbackId != null && reg.recordSeconds != null) lastRecordSecondsByCallbackId.set(reg.recordCallbackId, reg.recordSeconds);
 	await worklet.syncSampleRegistrations({
-		registrations: result.compile.sampleRegistrations,
+		registrations: ccs.compile.sampleRegistrations,
 		invalidatedHandles: invalidatedHandles.length > 0 ? invalidatedHandles : void 0
 	});
-	for (const reg of result.compile.sampleRegistrations) if (reg.type === "inline" && reg.inlineChannels && reg.inlineSampleRate != null) {
+	for (const reg of ccs.compile.sampleRegistrations) if (reg.type === "inline" && reg.inlineChannels && reg.inlineSampleRate != null) {
 		await worklet.setSampleDataDirect({
 			handle: reg.handle,
 			channels: reg.inlineChannels,
@@ -37318,7 +37310,6 @@ var setCodeImpl = atomic$1(async (src, shared, dspState, worklet, record, setCod
 	if (nextShared) shared = nextShared;
 	await setControlOpsSwap(dspState, worklet, program, mainBytecode);
 	return {
-		result,
 		shared,
 		historySourceMap,
 		functionReturnPcs,
@@ -37356,14 +37347,13 @@ function createDspProgram(dspState, shared, worklet, record) {
 		chunkSamples: 128,
 		currentChunkPos: 0
 	};
-	async function setCode(src, opts) {
-		const result = await setCodeImpl(src, shared, dspState, worklet, record, setCodeToken, program, recordCallbacks, lastStructureHash, lastMainBytecodeHash, lastCallbackBytecodeHashes, lastCapturedValues, lastRecordSecondsByCallbackId, freesoundIds, opts);
+	async function setControlCompileSnapshot(ccs, opts) {
+		const result = await setControlCompileSnapshotImpl(ccs, shared, dspState, worklet, record, setCodeToken, program, recordCallbacks, lastStructureHash, lastMainBytecodeHash, lastCallbackBytecodeHashes, lastCapturedValues, lastRecordSecondsByCallbackId, freesoundIds, opts);
 		if (result.lastStructureHash) lastStructureHash = result.lastStructureHash;
 		if (result.lastMainBytecodeHash) lastMainBytecodeHash = result.lastMainBytecodeHash;
 		if (result.historySourceMap) historySourceMap = result.historySourceMap;
 		if (result.functionReturnPcs) functionReturnPcs = result.functionReturnPcs;
 		if (result.shared) shared = result.shared;
-		return result.result;
 	}
 	function updateHistoriesFromCurrentPack() {
 		const memory = dspState.memory;
@@ -37466,7 +37456,7 @@ function createDspProgram(dspState, shared, worklet, record) {
 		async rebind() {
 			shared = await rebindProgram(worklet, shared, dspState);
 		},
-		setCode,
+		setControlCompileSnapshot,
 		start() {
 			setProgramState(shared, DspProgramState.Start);
 		},
@@ -37488,7 +37478,7 @@ function createDspProgram(dspState, shared, worklet, record) {
 	};
 	return program;
 }
-function isMobile() {
+function isMobile$1() {
 	return /Mobi|Android|Tablet/i.test(navigator.userAgent);
 }
 var asconfig_mobile_default = {
@@ -37589,13 +37579,13 @@ var asconfig_default = {
 		"exportRuntime": true
 	}
 };
-var worklet_default = "/assets/worklet-ylIiwfnQ.js";
+var worklet_default = "/assets/worklet-DRhRbGdh.js";
 function getWasmPaths() {
-	const base = isMobile() ? "/as/build/index-mobile.wasm" : "/as/build/index.wasm";
+	const base = isMobile$1() ? "/as/build/index-mobile.wasm" : "/as/build/index.wasm";
 	return {
 		wasm: new URL(base, location.origin).toString(),
 		sourcemap: new URL(base + ".map", location.origin).toString(),
-		config: isMobile() ? asconfig_mobile_default : asconfig_default
+		config: isMobile$1() ? asconfig_mobile_default : asconfig_default
 	};
 }
 async function fetchWasmBinary() {
@@ -37691,7 +37681,7 @@ const rpc = (port, api$1 = {}, transferables = defaultTransferables) => {
 	};
 	const call = (method, ...args) => {
 		const cid = ++callbackId;
-		const deferred = Deferred();
+		const deferred = Deferred$1();
 		calls.set(cid, deferred);
 		try {
 			port.postMessage({
@@ -37999,18 +37989,12 @@ function createDspPreview(runtime) {
 		}
 	}
 	return {
-		setCode(code, opts) {
-			const t0 = DEBUG_PREVIEW_TIMING$1 ? performance.now() : 0;
-			const result = controlPipeline.compileSource(code, opts);
-			if (DEBUG_PREVIEW_TIMING$1) console.log("[preview] setCode", (performance.now() - t0).toFixed(2), "ms");
-			if (result.errors.length > 0) console.error(/* @__PURE__ */ new Error(`Compilation failed:\n${result.errors.join("\n")}`));
-			if (!result.compile.bytecode) console.error(/* @__PURE__ */ new Error("No bytecode generated"));
-			state.result = result;
-			state.bytecode = result.compile.bytecode;
-			state.historySourceMap = result.compile.historySourceMap || [];
+		setControlCompileSnapshot(ccs) {
+			state.result = ccs;
+			state.bytecode = ccs.compile.bytecode;
+			state.historySourceMap = ccs.compile.historySourceMap || [];
 			if (state.bytecode) state.structureHash = bytecodeStructureHash(state.bytecode);
-			if (result.compile.sampleRegistrations?.length) ensurePreviewSamples(result.compile.sampleRegistrations);
-			return result;
+			if (ccs.compile.sampleRegistrations?.length) ensurePreviewSamples(ccs.compile.sampleRegistrations);
 		},
 		runPreview(vmId$1 = 0, sampleCount = 0, bufferLength = 128) {
 			const t0 = DEBUG_PREVIEW_TIMING$1 ? performance.now() : 0;
@@ -38093,10 +38077,11 @@ function createDspPreview(runtime) {
 			return entries$1;
 		},
 		*renderToAudio(code, bars, beatsPerBar = 4, vmId$1 = 999) {
-			const result = this.setCode(code);
-			if (result.errors.length > 0) throw new Error(`Compilation failed:\n${result.errors.join("\n")}`);
+			const ccs = controlPipeline.compileSource(code);
+			this.setControlCompileSnapshot(ccs);
+			if (ccs.errors.length > 0) throw new Error(`Compilation failed:\n${ccs.errors.join("\n")}`);
 			if (!state.bytecode) throw new Error("No bytecode generated");
-			const bpm$1 = result.compile.bpm;
+			const bpm$1 = ccs.compile.bpm;
 			const totalSamples = Math.floor(bars * beatsPerBar * 60 / bpm$1 * state.sampleRate);
 			const chunk = 128;
 			const numChunks = Math.ceil(totalSamples / chunk);
@@ -38131,7 +38116,7 @@ function createDspPreview(runtime) {
 		}
 	};
 }
-var record_worker_default = "/assets/record-worker-rKmzWuG0.js";
+var record_worker_default = "/assets/record-worker-DuCzxijb.js";
 async function createRecordWorker(wasmBinary, worklet) {
 	const url = new URL(record_worker_default, window.location.origin).toString();
 	const worker = new Worker(url, { type: "module" });
@@ -38192,7 +38177,7 @@ async function createDsp(state) {
 	});
 	const core = await createDspCore(state.wasmBinary, state.processor, transportBuffer);
 	state.memory = core.memory;
-	const control = atomic$1(async function(fn$1) {
+	const control = atomic(async function(fn$1) {
 		return await fn$1();
 	});
 	function start(programs$1) {
@@ -38260,7 +38245,7 @@ async function createDsp(state) {
 	async function refreshHistories() {
 		for (const program of programs) await program.refreshHistories();
 	}
-	const refresh = atomic$1(async function(inits) {
+	const refresh = atomic(async function(inits) {
 		if (inits?.length) await rebindAllPrograms(inits);
 		await refreshHistories();
 		state.onHistoriesRefreshed?.();
@@ -38411,6 +38396,9 @@ const memoryDebug = {
 	getInfo,
 	reset: reset$1
 };
+function isMobile() {
+	return /Mobi|Android|Tablet/i.test(navigator.userAgent);
+}
 function useReactiveEffect(fn$1, deps = []) {
 	_$1(() => m(fn$1), deps);
 }
@@ -38488,6 +38476,36 @@ function debounce(ms, fn$1, options$2) {
 		setTimeout(resolver, ms);
 	}
 	return wrapper;
+}
+function Deferred() {
+	const _onwhen = () => {
+		deferred.hasSettled = true;
+		deferred.resolve = deferred.reject = noop;
+	};
+	const noop = () => {};
+	let onwhen = _onwhen;
+	const deferred = {
+		hasSettled: false,
+		when: (fn$1) => {
+			onwhen = () => {
+				_onwhen();
+				fn$1();
+			};
+		}
+	};
+	deferred.promise = new Promise((resolve, reject) => {
+		deferred.resolve = (arg) => {
+			onwhen();
+			deferred.value = arg;
+			resolve(arg);
+		};
+		deferred.reject = (error$1) => {
+			onwhen();
+			deferred.error = error$1;
+			reject(error$1);
+		};
+	});
+	return deferred;
 }
 function hslToRgb([h$5, s$4, l$10]) {
 	h$5 /= 360;
@@ -38636,7 +38654,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-BbvPxccF.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DEOe4nCD.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -39966,40 +39984,6 @@ queueMicrotask(() => {
 		});
 	});
 });
-function atomic(fn$1, { dropInbetween = false } = {}) {
-	const queue = [];
-	let isRunning = false;
-	const apply = async (task) => {
-		try {
-			const result = await fn$1.apply(task.context, task.args);
-			task.deferred.resolve(result);
-		} catch (error$1) {
-			task.deferred.reject(error$1);
-		}
-	};
-	const drain = async () => {
-		isRunning = true;
-		if (dropInbetween) {
-			const tasks = queue.splice(0);
-			const last = tasks.pop();
-			tasks.forEach((task) => task.deferred.reject(/* @__PURE__ */ new Error("Dropped")));
-			await apply(last);
-		} else await apply(queue.shift());
-		if (queue.length) drain();
-		else isRunning = false;
-	};
-	function cb(...args) {
-		const task = {
-			context: this,
-			args,
-			deferred: Deferred()
-		};
-		queue.push(task);
-		if (!isRunning) drain();
-		return task.deferred.promise;
-	}
-	return cb;
-}
 function formatErrors(errors) {
 	return errors.map((e$58) => {
 		const { line, column, start, end } = e$58.loc;
@@ -43109,53 +43093,9 @@ function createWaveWidget(history$1, target, doc, type, buffers, animatedHeights
 	});
 	return widget;
 }
-function runPreviewSync(p$6, dsp) {
-	try {
-		p$6.result.value = dsp.core.preview.setCode(p$6.doc.code, { projectId: p$6.opts.projectId });
-		p$6.doc.errors = computeDocErrors(p$6.result.value);
-	} catch (error$1) {
-		console.error(error$1);
-		p$6.doc.errors = computeDocErrors(null, (error$1 instanceof Error ? error$1.message : String(error$1)).split(" in ")[0]);
-		return null;
-	}
-	try {
-		const previewResult = dsp.core.preview.runPreview(p$6.opts.vmId);
-		return {
-			histories: previewResult.histories,
-			userCallHistories: previewResult.userCallHistories
-		};
-	} catch (error$1) {
-		console.error(error$1);
-		const message = error$1 instanceof Error ? error$1.message : String(error$1);
-		p$6.doc.errors = computeDocErrors(p$6.result.value, message);
-		return null;
-	}
-}
-var updatePreview = atomic(async (p$6, dsp, fullResync) => {
-	try {
-		const result = await p$6.program.setCode(p$6.doc.code, {
-			fullResync,
-			projectId: p$6.opts.projectId
-		});
-		if (p$6.opts.isPlayingThis.value) {
-			p$6.result.value = result;
-			return {
-				histories: p$6.program.histories,
-				userCallHistories: p$6.program.userCallHistories
-			};
-		}
-	} catch (error$1) {
-		console.error(error$1);
-		p$6.doc.errors = computeDocErrors(null, (error$1 instanceof Error ? error$1.message : String(error$1)).split(" in ")[0]);
-		return null;
-	}
-	return runPreviewSync(p$6, dsp);
-});
 async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRefreshed) {
 	const program = await dsp.createProgram();
 	const doc = opts.doc ?? createDoc(tokenize);
-	const previewEpoch = c$3(-1);
-	const setCodeEpoch = c$3(-1);
 	const result = c$3(null);
 	const latency = c$3(program.latency);
 	const timeSeconds = c$3(0);
@@ -43228,49 +43168,6 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 		fullResync,
 		dispose
 	};
-	const syncPreviewEpoch = c$3(-1);
-	m(() => {
-		if (shouldSkipSyncPreview.peek()) return;
-		doc.code;
-		const epoch = doc.epoch;
-		queueMicrotask(() => {
-			if (epoch !== doc.epoch) return;
-			n(() => {
-				if (syncPreviewEpoch.value === doc.epoch) return;
-				const snapshot = runPreviewSync(p$6, dsp);
-				if (snapshot) {
-					syncPreviewEpoch.value = doc.epoch;
-					program.latency.update();
-					latency.value = program.latency;
-					timeSeconds.value = program.latency.state.timeSeconds ?? 0;
-					histories.value = snapshot.histories;
-					userCallHistories.value = snapshot.userCallHistories;
-					fullResync.value = false;
-					doc.widgets = createWidgets(widgetContext, snapshot.histories, snapshot.userCallHistories);
-					previewEpoch.value = doc.epoch;
-				}
-			});
-		});
-	});
-	m(() => {
-		if (opts.isPlayingThis.value || isScrubbing.value) return;
-		if (!fullResync.value) return;
-		doc.code;
-		updatePreview(p$6, dsp, fullResync.value).then((result$1) => {
-			n(() => {
-				if (result$1) {
-					setCodeEpoch.value = doc.epoch;
-					previewEpoch.value = doc.epoch;
-					program.latency.update();
-					latency.value = program.latency;
-					timeSeconds.value = program.latency.state.timeSeconds ?? 0;
-					histories.value = result$1.histories;
-					userCallHistories.value = result$1.userCallHistories;
-				}
-				fullResync.value = false;
-			});
-		});
-	});
 	m(() => {
 		if (!opts.isPlayingThis.value) return;
 		tickCount.value;
@@ -43281,44 +43178,42 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 		});
 	});
 	m(() => {
-		if (!opts.isPlayingThis.value) return;
 		historiesRefreshed.value;
-		o$18(() => {
-			program.refreshHistories();
+		program.refreshHistories();
+		if (program.histories.length > 0 && opts.isPlayingThis.value && isActuallyPlaying.value) {
 			histories.value = program.histories;
 			userCallHistories.value = program.userCallHistories;
-		});
+		}
 	});
 	m(() => {
-		if (!opts.isPlayingThis.value) return;
+		doc.widgets = createWidgets(widgetContext, histories.value, userCallHistories.value);
+	});
+	m(() => {
 		doc.code;
 		const epoch = doc.epoch;
-		queueMicrotask(() => {
+		queueMicrotask(async () => {
 			if (epoch !== doc.epoch) return;
-			program.setCode(doc.code, { projectId: opts.projectId }).then((r$11) => {
-				if (epoch !== doc.epoch) return;
-				n(() => {
-					result.value = r$11;
-					program.reapplySourceMapping(r$11);
-					setCodeEpoch.value = epoch;
-					historiesRefreshed.value++;
-				});
-			}).catch((e$58) => {
-				if (e$58 instanceof Error && e$58.message.includes("Dropped")) return;
-				console.error(e$58);
-				doc.errors = computeDocErrors(null, (e$58 instanceof Error ? e$58.message : String(e$58)).split(" in ")[0]);
-			});
+			try {
+				const ccs = controlPipeline.compileSource(doc.code);
+				result.value = ccs;
+				if (ccs.errors.length > 0) {
+					doc.errors = computeDocErrors(ccs);
+					return;
+				} else doc.errors = [];
+				if (!shouldSkipSyncPreview.value) {
+					dsp.core.preview.setControlCompileSnapshot(ccs);
+					const previewResult = dsp.core.preview.runPreview(opts.vmId);
+					n(() => {
+						histories.value = previewResult.histories;
+						userCallHistories.value = previewResult.userCallHistories;
+					});
+				}
+				await program.setControlCompileSnapshot(ccs);
+				historiesRefreshed.value++;
+			} catch (error$1) {
+				doc.errors = computeDocErrors(null, (error$1 instanceof Error ? error$1.message : String(error$1)).split(" in ")[0]);
+			}
 		});
-	});
-	m(() => {
-		if (!opts.isPlayingThis.value) return;
-		tickCount.value;
-		const workletError = dsp.state.workletError;
-		doc.errors = computeDocErrors(result.value, workletError ?? null);
-	});
-	m(() => {
-		if (!histories.value.length) return;
-		if (setCodeEpoch.value === previewEpoch.value) doc.widgets = createWidgets(widgetContext, histories.value, userCallHistories.value);
 	});
 	return p$6;
 }
@@ -46331,10 +46226,6 @@ const inlineTransport = {
 			await inlineTransport.stop();
 			await new Promise((resolve) => setTimeout(resolve, 100));
 		}
-		await inline.program.setCode(inline.doc.code, {
-			fullResync: true,
-			projectId: inline.opts.projectId
-		});
 		playingInlineContext.value = inline;
 		await dsp.start([inline.program]);
 		await dsp.refreshUntilHistories(inline.program, { maxTries: 60 });
@@ -50404,7 +50295,7 @@ sampler(espeak('hello world'),trig:every(1)) |> out($)`
 var examples_exports = /* @__PURE__ */ __export({
 	sine: () => sine,
 	slicer: () => slicer
-});
+}, 1);
 const sine = [`melody=[60,63,69].map(ntof)
 
 sine(melody[t])*ad(trig:every(1/8)) |> out($)`, `melody=[60,63,69].map(ntof)
@@ -53092,6 +52983,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 			return u$5;
 		}({
 			1: [function(e$58, t$12, r$11) {
+				"use strict";
 				var d$5 = e$58("./utils"), c$7 = e$58("./support"), p$6 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 				r$11.encode = function(e$59) {
 					for (var t$13, r$12, n$4, i$6, s$4, a$36, o$33, h$5 = [], u$5 = 0, l$10 = e$59.length, f$5 = l$10, c$8 = "string" !== d$5.getTypeOf(e$59); u$5 < e$59.length;) f$5 = l$10 - u$5, n$4 = c$8 ? (t$13 = e$59[u$5++], r$12 = u$5 < l$10 ? e$59[u$5++] : 0, u$5 < l$10 ? e$59[u$5++] : 0) : (t$13 = e$59.charCodeAt(u$5++), r$12 = u$5 < l$10 ? e$59.charCodeAt(u$5++) : 0, u$5 < l$10 ? e$59.charCodeAt(u$5++) : 0), i$6 = t$13 >> 2, s$4 = (3 & t$13) << 4 | r$12 >> 4, a$36 = 1 < f$5 ? (15 & r$12) << 2 | n$4 >> 6 : 64, o$33 = 2 < f$5 ? 63 & n$4 : 64, h$5.push(p$6.charAt(i$6) + p$6.charAt(s$4) + p$6.charAt(a$36) + p$6.charAt(o$33));
@@ -53109,6 +53001,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./utils": 32
 			}],
 			2: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("./external"), i$6 = e$58("./stream/DataWorker"), s$4 = e$58("./stream/Crc32Probe"), a$36 = e$58("./stream/DataLengthProbe");
 				function o$33(e$59, t$13, r$12, n$5, i$7) {
 					this.compressedSize = e$59, this.uncompressedSize = t$13, this.crc32 = r$12, this.compression = n$5, this.compressedContent = i$7;
@@ -53133,6 +53026,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./stream/DataWorker": 27
 			}],
 			3: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("./stream/GenericWorker");
 				r$11.STORE = {
 					magic: "\0\0",
@@ -53148,6 +53042,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./stream/GenericWorker": 28
 			}],
 			4: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("./utils");
 				var o$33 = function() {
 					for (var e$59, t$13 = [], r$12 = 0; r$12 < 256; r$12++) {
@@ -53172,13 +53067,16 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				};
 			}, { "./utils": 32 }],
 			5: [function(e$58, t$12, r$11) {
+				"use strict";
 				r$11.base64 = !1, r$11.binary = !1, r$11.dir = !1, r$11.createFolders = !0, r$11.date = null, r$11.compression = null, r$11.compressionOptions = null, r$11.comment = null, r$11.unixPermissions = null, r$11.dosPermissions = null;
 			}, {}],
 			6: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = null;
 				n$4 = "undefined" != typeof Promise ? Promise : e$58("lie"), t$12.exports = { Promise: n$4 };
 			}, { lie: 37 }],
 			7: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = "undefined" != typeof Uint8Array && "undefined" != typeof Uint16Array && "undefined" != typeof Uint32Array, i$6 = e$58("pako"), s$4 = e$58("./utils"), a$36 = e$58("./stream/GenericWorker"), o$33 = n$4 ? "uint8array" : "array";
 				function h$5(e$59, t$13) {
 					a$36.call(this, "FlateWorker/" + e$59), this._pako = null, this._pakoAction = e$59, this._pakoOptions = t$13, this.meta = {};
@@ -53212,6 +53110,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				pako: 38
 			}],
 			8: [function(e$58, t$12, r$11) {
+				"use strict";
 				function A$3(e$59, t$13) {
 					var r$12, n$5 = "";
 					for (r$12 = 0; r$12 < t$13; r$12++) n$5 += String.fromCharCode(255 & e$59), e$59 >>>= 8;
@@ -53322,6 +53221,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"../utils": 32
 			}],
 			9: [function(e$58, t$12, r$11) {
+				"use strict";
 				var u$5 = e$58("../compressions"), n$4 = e$58("./ZipFileWorker");
 				r$11.generateWorker = function(e$59, a$36, t$13) {
 					var o$33 = new n$4(a$36.streamFiles, t$13, a$36.platform, a$36.encodeFileName), h$5 = 0;
@@ -53352,6 +53252,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./ZipFileWorker": 8
 			}],
 			10: [function(e$58, t$12, r$11) {
+				"use strict";
 				function n$4() {
 					if (!(this instanceof n$4)) return new n$4();
 					if (arguments.length) throw new Error("The constructor with parameters has been removed in JSZip 3.0, please check the upgrade guide.");
@@ -53372,6 +53273,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./support": 30
 			}],
 			11: [function(e$58, t$12, r$11) {
+				"use strict";
 				var u$5 = e$58("./utils"), i$6 = e$58("./external"), n$4 = e$58("./utf8"), s$4 = e$58("./zipEntries"), a$36 = e$58("./stream/Crc32Probe"), l$10 = e$58("./nodejsUtils");
 				function f$5(n$5) {
 					return new i$6.Promise(function(e$59, t$13) {
@@ -53424,6 +53326,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./zipEntries": 33
 			}],
 			12: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("../utils"), i$6 = e$58("../stream/GenericWorker");
 				function s$4(e$59, t$13) {
 					i$6.call(this, "Nodejs stream input adapter for " + e$59), this._upstreamEnded = !1, this._bindStream(t$13);
@@ -53450,6 +53353,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"../utils": 32
 			}],
 			13: [function(e$58, t$12, r$11) {
+				"use strict";
 				var i$6 = e$58("readable-stream").Readable;
 				function n$4(e$59, t$13, r$12) {
 					i$6.call(this, t$13), this._helper = e$59;
@@ -53470,6 +53374,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"readable-stream": 16
 			}],
 			14: [function(e$58, t$12, r$11) {
+				"use strict";
 				t$12.exports = {
 					isNode: "undefined" != typeof Buffer,
 					newBufferFrom: function(e$59, t$13) {
@@ -53491,6 +53396,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				};
 			}, {}],
 			15: [function(e$58, t$12, r$11) {
+				"use strict";
 				function s$4(e$59, t$13, r$12) {
 					var n$4, i$7 = u$5.getTypeOf(t$13), s$5 = u$5.extend(r$12 || {}, f$5);
 					s$5.date = s$5.date || /* @__PURE__ */ new Date(), null !== s$5.compression && (s$5.compression = s$5.compression.toUpperCase()), "string" == typeof s$5.unixPermissions && (s$5.unixPermissions = parseInt(s$5.unixPermissions, 8)), s$5.unixPermissions && 16384 & s$5.unixPermissions && (s$5.dir = !0), s$5.dosPermissions && 16 & s$5.dosPermissions && (s$5.dir = !0), s$5.dir && (e$59 = g$5(e$59)), s$5.createFolders && (n$4 = _$5(e$59)) && b$4.call(this, n$4, !0);
@@ -53602,9 +53508,11 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./zipObject": 35
 			}],
 			16: [function(e$58, t$12, r$11) {
+				"use strict";
 				t$12.exports = e$58("stream");
 			}, { stream: void 0 }],
 			17: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("./DataReader");
 				function i$6(e$59) {
 					n$4.call(this, e$59);
@@ -53628,6 +53536,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./DataReader": 18
 			}],
 			18: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("../utils");
 				function i$6(e$59) {
 					this.data = e$59, this.length = e$59.length, this.index = 0, this.zero = 0;
@@ -53664,6 +53573,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				}, t$12.exports = i$6;
 			}, { "../utils": 32 }],
 			19: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("./Uint8ArrayReader");
 				function i$6(e$59) {
 					n$4.call(this, e$59);
@@ -53678,6 +53588,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./Uint8ArrayReader": 21
 			}],
 			20: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("./DataReader");
 				function i$6(e$59) {
 					n$4.call(this, e$59);
@@ -53698,6 +53609,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./DataReader": 18
 			}],
 			21: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("./ArrayReader");
 				function i$6(e$59) {
 					n$4.call(this, e$59);
@@ -53712,6 +53624,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./ArrayReader": 17
 			}],
 			22: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("../utils"), i$6 = e$58("../support"), s$4 = e$58("./ArrayReader"), a$36 = e$58("./StringReader"), o$33 = e$58("./NodeBufferReader"), h$5 = e$58("./Uint8ArrayReader");
 				t$12.exports = function(e$59) {
 					var t$13 = n$4.getTypeOf(e$59);
@@ -53726,9 +53639,11 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./Uint8ArrayReader": 21
 			}],
 			23: [function(e$58, t$12, r$11) {
+				"use strict";
 				r$11.LOCAL_FILE_HEADER = "PK", r$11.CENTRAL_FILE_HEADER = "PK", r$11.CENTRAL_DIRECTORY_END = "PK", r$11.ZIP64_CENTRAL_DIRECTORY_LOCATOR = "PK\x07", r$11.ZIP64_CENTRAL_DIRECTORY_END = "PK", r$11.DATA_DESCRIPTOR = "PK\x07\b";
 			}, {}],
 			24: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("./GenericWorker"), i$6 = e$58("../utils");
 				function s$4(e$59) {
 					n$4.call(this, "ConvertWorker to " + e$59), this.destType = e$59;
@@ -53744,6 +53659,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./GenericWorker": 28
 			}],
 			25: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("./GenericWorker"), i$6 = e$58("../crc32");
 				function s$4() {
 					n$4.call(this, "Crc32Probe"), this.withStreamInfo("crc32", 0);
@@ -53757,6 +53673,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./GenericWorker": 28
 			}],
 			26: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("../utils"), i$6 = e$58("./GenericWorker");
 				function s$4(e$59) {
 					i$6.call(this, "DataLengthProbe for " + e$59), this.propName = e$59, this.withStreamInfo(e$59, 0);
@@ -53773,6 +53690,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./GenericWorker": 28
 			}],
 			27: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("../utils"), i$6 = e$58("./GenericWorker");
 				function s$4(e$59) {
 					i$6.call(this, "DataWorker");
@@ -53813,6 +53731,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./GenericWorker": 28
 			}],
 			28: [function(e$58, t$12, r$11) {
+				"use strict";
 				function n$4(e$59) {
 					this.name = e$59 || "default", this.streamInfo = {}, this.generatedError = null, this.extraStreamInfo = {}, this.isPaused = !0, this.isFinished = !1, this.isLocked = !1, this._listeners = {
 						data: [],
@@ -53890,6 +53809,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				}, t$12.exports = n$4;
 			}, {}],
 			29: [function(e$58, t$12, r$11) {
+				"use strict";
 				var h$5 = e$58("../utils"), i$6 = e$58("./ConvertWorker"), s$4 = e$58("./GenericWorker"), u$5 = e$58("../base64"), n$4 = e$58("../support"), a$36 = e$58("../external"), o$33 = null;
 				if (n$4.nodestream) try {
 					o$33 = e$58("../nodejs/NodejsStreamOutputAdapter");
@@ -53977,6 +53897,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./GenericWorker": 28
 			}],
 			30: [function(e$58, t$12, r$11) {
+				"use strict";
 				if (r$11.base64 = !0, r$11.array = !0, r$11.string = !0, r$11.arraybuffer = "undefined" != typeof ArrayBuffer && "undefined" != typeof Uint8Array, r$11.nodebuffer = "undefined" != typeof Buffer, r$11.uint8array = "undefined" != typeof Uint8Array, "undefined" == typeof ArrayBuffer) r$11.blob = !1;
 				else {
 					var n$4 = /* @__PURE__ */ new ArrayBuffer(0);
@@ -53998,6 +53919,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				}
 			}, { "readable-stream": 16 }],
 			31: [function(e$58, t$12, s$4) {
+				"use strict";
 				for (var o$33 = e$58("./utils"), h$5 = e$58("./support"), r$11 = e$58("./nodejsUtils"), n$4 = e$58("./stream/GenericWorker"), u$5 = new Array(256), i$6 = 0; i$6 < 256; i$6++) u$5[i$6] = 252 <= i$6 ? 6 : 248 <= i$6 ? 5 : 240 <= i$6 ? 4 : 224 <= i$6 ? 3 : 192 <= i$6 ? 2 : 1;
 				u$5[254] = u$5[254] = 1;
 				function a$36() {
@@ -54060,6 +53982,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./utils": 32
 			}],
 			32: [function(e$58, t$12, a$36) {
+				"use strict";
 				var o$33 = e$58("./support"), h$5 = e$58("./base64"), r$11 = e$58("./nodejsUtils"), u$5 = e$58("./external");
 				function n$4(e$59) {
 					return e$59;
@@ -54242,6 +54165,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				setimmediate: 54
 			}],
 			33: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("./reader/readerFor"), i$6 = e$58("./utils"), s$4 = e$58("./signature"), a$36 = e$58("./zipEntry"), o$33 = e$58("./support");
 				function h$5(e$59) {
 					this.files = [], this.loadOptions = e$59;
@@ -54316,6 +54240,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./zipEntry": 34
 			}],
 			34: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = e$58("./reader/readerFor"), s$4 = e$58("./utils"), i$6 = e$58("./compressedObject"), a$36 = e$58("./crc32"), o$33 = e$58("./utf8"), h$5 = e$58("./compressions"), u$5 = e$58("./support");
 				function l$10(e$59, t$13) {
 					this.options = e$59, this.loadOptions = t$13;
@@ -54407,6 +54332,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./utils": 32
 			}],
 			35: [function(e$58, t$12, r$11) {
+				"use strict";
 				function n$4(e$59, t$13, r$12) {
 					this.name = e$59, this.dir = r$12.dir, this.date = r$12.date, this.comment = r$12.comment, this.unixPermissions = r$12.unixPermissions, this.dosPermissions = r$12.dosPermissions, this._data = t$13, this._dataBinary = r$12.binary, this.options = {
 						compression: r$12.compression,
@@ -54462,6 +54388,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 			}],
 			36: [function(e$58, l$10, t$12) {
 				(function(t$13) {
+					"use strict";
 					var r$11, n$4, e$59 = t$13.MutationObserver || t$13.WebKitMutationObserver;
 					if (e$59) {
 						var i$6 = 0, s$4 = new e$59(u$5), a$36 = t$13.document.createTextNode("");
@@ -54498,6 +54425,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				}).call(this, "undefined" != typeof global ? global : "undefined" != typeof self ? self : "undefined" != typeof window ? window : {});
 			}, {}],
 			37: [function(e$58, t$12, r$11) {
+				"use strict";
 				var i$6 = e$58("immediate");
 				function u$5() {}
 				var l$10 = {}, s$4 = ["REJECTED"], a$36 = ["FULFILLED"], n$4 = ["PENDING"];
@@ -54625,6 +54553,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				};
 			}, { immediate: 36 }],
 			38: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = {};
 				(0, e$58("./lib/utils/common").assign)(n$4, e$58("./lib/deflate"), e$58("./lib/inflate"), e$58("./lib/zlib/constants")), t$12.exports = n$4;
 			}, {
@@ -54634,6 +54563,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./lib/zlib/constants": 44
 			}],
 			39: [function(e$58, t$12, r$11) {
+				"use strict";
 				var a$36 = e$58("./zlib/deflate"), o$33 = e$58("./utils/common"), h$5 = e$58("./utils/strings"), i$6 = e$58("./zlib/messages"), s$4 = e$58("./zlib/zstream"), u$5 = Object.prototype.toString, l$10 = 0, f$5 = -1, c$7 = 0, d$5 = 8;
 				function p$6(e$59) {
 					if (!(this instanceof p$6)) return new p$6(e$59);
@@ -54687,6 +54617,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./zlib/zstream": 53
 			}],
 			40: [function(e$58, t$12, r$11) {
+				"use strict";
 				var c$7 = e$58("./zlib/inflate"), d$5 = e$58("./utils/common"), p$6 = e$58("./utils/strings"), m$5 = e$58("./zlib/constants"), n$4 = e$58("./zlib/messages"), i$6 = e$58("./zlib/zstream"), s$4 = e$58("./zlib/gzheader"), _$5 = Object.prototype.toString;
 				function a$36(e$59) {
 					if (!(this instanceof a$36)) return new a$36(e$59);
@@ -54732,6 +54663,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				"./zlib/zstream": 53
 			}],
 			41: [function(e$58, t$12, r$11) {
+				"use strict";
 				var n$4 = "undefined" != typeof Uint8Array && "undefined" != typeof Uint16Array && "undefined" != typeof Int32Array;
 				r$11.assign = function(e$59) {
 					for (var t$13 = Array.prototype.slice.call(arguments, 1); t$13.length;) {
@@ -54769,6 +54701,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				}, r$11.setTyped(n$4);
 			}, {}],
 			42: [function(e$58, t$12, r$11) {
+				"use strict";
 				var h$5 = e$58("./common"), i$6 = !0, s$4 = !0;
 				try {
 					String.fromCharCode.apply(null, [0]);
@@ -54812,6 +54745,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				};
 			}, { "./common": 41 }],
 			43: [function(e$58, t$12, r$11) {
+				"use strict";
 				t$12.exports = function(e$59, t$13, r$12, n$4) {
 					for (var i$6 = 65535 & e$59 | 0, s$4 = e$59 >>> 16 & 65535 | 0, a$36 = 0; 0 !== r$12;) {
 						for (r$12 -= a$36 = 2e3 < r$12 ? 2e3 : r$12; s$4 = s$4 + (i$6 = i$6 + t$13[n$4++] | 0) | 0, --a$36;);
@@ -54821,6 +54755,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				};
 			}, {}],
 			44: [function(e$58, t$12, r$11) {
+				"use strict";
 				t$12.exports = {
 					Z_NO_FLUSH: 0,
 					Z_PARTIAL_FLUSH: 1,
@@ -54852,6 +54787,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				};
 			}, {}],
 			45: [function(e$58, t$12, r$11) {
+				"use strict";
 				var o$33 = function() {
 					for (var e$59, t$13 = [], r$12 = 0; r$12 < 256; r$12++) {
 						e$59 = r$12;
@@ -54868,6 +54804,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				};
 			}, {}],
 			46: [function(e$58, t$12, r$11) {
+				"use strict";
 				var h$5, c$7 = e$58("../utils/common"), u$5 = e$58("./trees"), d$5 = e$58("./adler32"), p$6 = e$58("./crc32"), n$4 = e$58("./messages"), l$10 = 0, f$5 = 4, m$5 = 0, _$5 = -2, g$5 = -1, b$4 = 4, i$6 = 2, v$4 = 8, y$5 = 9, s$4 = 286, a$36 = 30, o$33 = 19, w$5 = 2 * s$4 + 1, k$4 = 15, x$4 = 3, S$3 = 258, z$3 = S$3 + x$4 + 1, C$4 = 42, E$4 = 113, A$3 = 1, I$2 = 2, O$3 = 3, B$4 = 4;
 				function R$2(e$59, t$13) {
 					return e$59.msg = n$4[t$13], t$13;
@@ -55091,11 +55028,13 @@ while (n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 
 				"./trees": 52
 			}],
 			47: [function(e$58, t$12, r$11) {
+				"use strict";
 				t$12.exports = function() {
 					this.text = 0, this.time = 0, this.xflags = 0, this.os = 0, this.extra = null, this.extra_len = 0, this.name = "", this.comment = "", this.hcrc = 0, this.done = !1;
 				};
 			}, {}],
 			48: [function(e$58, t$12, r$11) {
+				"use strict";
 				t$12.exports = function(e$59, t$13) {
 					var r$12 = e$59.state, n$4 = e$59.next_in, i$6, s$4, a$36, o$33, h$5, u$5, l$10, f$5, c$7, d$5, p$6, m$5, _$5, g$5, b$4, v$4, y$5, w$5, k$4, x$4, S$3, z$3 = e$59.input, C$4;
 					i$6 = n$4 + (e$59.avail_in - 5), s$4 = e$59.next_out, C$4 = e$59.output, a$36 = s$4 - (t$13 - e$59.avail_out), o$33 = s$4 + (e$59.avail_out - 257), h$5 = r$12.dmax, u$5 = r$12.wsize, l$10 = r$12.whave, f$5 = r$12.wnext, c$7 = r$12.window, d$5 = r$12.hold, p$6 = r$12.bits, m$5 = r$12.lencode, _$5 = r$12.distcode, g$5 = (1 << r$12.lenbits) - 1, b$4 = (1 << r$12.distbits) - 1;
@@ -55168,6 +55107,7 @@ while (n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 
 				};
 			}, {}],
 			49: [function(e$58, t$12, r$11) {
+				"use strict";
 				var I$2 = e$58("../utils/common"), O$3 = e$58("./adler32"), B$4 = e$58("./crc32"), R$2 = e$58("./inffast"), T$4 = e$58("./inftrees"), D$4 = 1, F$4 = 2, N$3 = 0, U$2 = -2, P$3 = 1, n$4 = 852, i$6 = 592;
 				function L$3(e$59) {
 					return (e$59 >>> 24 & 255) + (e$59 >>> 8 & 65280) + ((65280 & e$59) << 8) + ((255 & e$59) << 24);
@@ -55599,6 +55539,7 @@ while (n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 
 				"./inftrees": 50
 			}],
 			50: [function(e$58, t$12, r$11) {
+				"use strict";
 				var D$4 = e$58("../utils/common"), F$4 = [
 					3,
 					4,
@@ -55759,6 +55700,7 @@ while (n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 
 				};
 			}, { "../utils/common": 41 }],
 			51: [function(e$58, t$12, r$11) {
+				"use strict";
 				t$12.exports = {
 					2: "need dictionary",
 					1: "stream end",
@@ -55772,6 +55714,7 @@ while (n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 
 				};
 			}, {}],
 			52: [function(e$58, t$12, r$11) {
+				"use strict";
 				var i$6 = e$58("../utils/common"), o$33 = 0, h$5 = 1;
 				function n$4(e$59) {
 					for (var t$13 = e$59.length; 0 <= --t$13;) e$59[t$13] = 0;
@@ -56019,6 +55962,7 @@ while (n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 
 				};
 			}, { "../utils/common": 41 }],
 			53: [function(e$58, t$12, r$11) {
+				"use strict";
 				t$12.exports = function() {
 					this.input = null, this.next_in = 0, this.avail_in = 0, this.total_in = 0, this.output = null, this.next_out = 0, this.avail_out = 0, this.total_out = 0, this.msg = "", this.state = null, this.data_type = 2, this.adler = 0;
 				};
@@ -56026,6 +55970,7 @@ while (n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 === a$38[++i$8] && n$6 
 			54: [function(e$58, t$12, r$11) {
 				(function(e$59) {
 					(function(r$12, n$4) {
+						"use strict";
 						if (!r$12.setImmediate) {
 							var i$6, s$4, t$13, a$36, o$33 = 1, h$5 = {}, u$5 = !1, l$10 = r$12.document, e$60 = Object.getPrototypeOf && Object.getPrototypeOf(r$12);
 							e$60 = e$60 && e$60.setTimeout ? e$60 : r$12, i$6 = "[object process]" === {}.toString.call(r$12.process) ? function(e$61) {
@@ -57337,4 +57282,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-p53ccJMH.js.map
+//# sourceMappingURL=index-DfrTXQ4A.js.map
