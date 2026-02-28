@@ -114,6 +114,18 @@ export const extra: [string, Definition][] = [
     return: 'array',
     parameters: [],
   }],
+  ['reduce', {
+    type: 'function',
+    name: 'reduce',
+    arrayMethod: true,
+    category: 'utilities',
+    description: ['Reduces an array to a single value using a reducer function (acc, item, index) -> acc.'],
+    return: 'any',
+    parameters: [
+      { name: 'reducer', description: ['Function (acc, item, index) -> acc.'], type: 'function' },
+      { name: 'initial', description: ['Initial accumulator value.'], default: 0 },
+    ],
+  }],
   ['print', {
     type: 'function',
     name: 'print',
