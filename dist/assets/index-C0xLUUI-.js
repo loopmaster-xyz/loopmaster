@@ -23976,7 +23976,7 @@ function getActiveTimelineSegIndex(arrayRaw, sampleCount, sampleRate, bpm$1) {
 const gens = {
 	Phasor: {
 		name: "Phasor",
-		description: "Phase ramp 0..1 with trigger reset",
+		description: "Phase ramp 0..1",
 		category: "generators",
 		parameters: [
 			{
@@ -23994,7 +23994,7 @@ const gens = {
 			},
 			{
 				name: "trig",
-				description: "Trigger impulse"
+				description: "Trigger impulse, resets to offset phase"
 			}
 		]
 	},
@@ -24118,7 +24118,7 @@ const gens = {
 			},
 			{
 				name: "trig",
-				description: "Trigger impulse"
+				description: "Trigger impulse, resets to offset phase"
 			}
 		]
 	},
@@ -24184,7 +24184,7 @@ const gens = {
 			},
 			{
 				name: "trig",
-				description: "Trigger impulse"
+				description: "Trigger impulse, resets to offset phase"
 			}
 		]
 	},
@@ -24216,7 +24216,7 @@ const gens = {
 			{
 				name: "trig",
 				unit: "impulse",
-				description: "Trigger impulse"
+				description: "Trigger impulse, resets to offset phase"
 			}
 		]
 	},
@@ -24368,7 +24368,7 @@ const gens = {
 			},
 			{
 				name: "trig",
-				description: "Trigger impulse"
+				description: "Trigger impulse, resets to offset phase"
 			}
 		]
 	},
@@ -24442,7 +24442,7 @@ const gens = {
 			},
 			{
 				name: "trig",
-				description: "Trigger impulse"
+				description: "Trigger impulse, resets to offset phase"
 			}
 		]
 	},
@@ -24623,7 +24623,7 @@ const gens = {
 			},
 			{
 				name: "trig",
-				description: "Trigger impulse"
+				description: "Trigger impulse, resets to offset phase"
 			}
 		]
 	},
@@ -24773,7 +24773,7 @@ const gens = {
 			},
 			{
 				name: "trig",
-				description: "Trigger impulse"
+				description: "Trigger impulse, resets to offset phase"
 			}
 		]
 	},
@@ -25178,7 +25178,7 @@ const gens = {
 	},
 	Inc: {
 		name: "Inc",
-		description: "Ramp from offset to ceil at hz rate, trigger reset",
+		description: "Ramp from offset to ceil at hz rate",
 		category: "generators",
 		parameters: [
 			{
@@ -25202,7 +25202,7 @@ const gens = {
 			},
 			{
 				name: "trig",
-				description: "Trigger impulse"
+				description: "Trigger impulse, resets to offset value"
 			}
 		]
 	},
@@ -38126,7 +38126,7 @@ function createDspPreview(runtime) {
 		}
 	};
 }
-var record_worker_default = "/assets/record-worker-QmGCic6L.js";
+var record_worker_default = "/assets/record-worker-DGTcE2cp.js";
 async function createRecordWorker(wasmBinary, worklet) {
 	const url = new URL(record_worker_default, window.location.origin).toString();
 	const worker = new Worker(url, { type: "module" });
@@ -38698,7 +38698,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-p9LbPB5k.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-BtYDPx8J.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -57911,4 +57911,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-C5YSovd7.js.map
+//# sourceMappingURL=index-C0xLUUI-.js.map

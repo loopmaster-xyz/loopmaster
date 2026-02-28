@@ -13127,7 +13127,7 @@
 	const gens = {
 		Phasor: {
 			name: "Phasor",
-			description: "Phase ramp 0..1 with trigger reset",
+			description: "Phase ramp 0..1",
 			category: "generators",
 			parameters: [
 				{
@@ -13145,7 +13145,7 @@
 				},
 				{
 					name: "trig",
-					description: "Trigger impulse"
+					description: "Trigger impulse, resets to offset phase"
 				}
 			]
 		},
@@ -13269,7 +13269,7 @@
 				},
 				{
 					name: "trig",
-					description: "Trigger impulse"
+					description: "Trigger impulse, resets to offset phase"
 				}
 			]
 		},
@@ -13335,7 +13335,7 @@
 				},
 				{
 					name: "trig",
-					description: "Trigger impulse"
+					description: "Trigger impulse, resets to offset phase"
 				}
 			]
 		},
@@ -13367,7 +13367,7 @@
 				{
 					name: "trig",
 					unit: "impulse",
-					description: "Trigger impulse"
+					description: "Trigger impulse, resets to offset phase"
 				}
 			]
 		},
@@ -13519,7 +13519,7 @@
 				},
 				{
 					name: "trig",
-					description: "Trigger impulse"
+					description: "Trigger impulse, resets to offset phase"
 				}
 			]
 		},
@@ -13593,7 +13593,7 @@
 				},
 				{
 					name: "trig",
-					description: "Trigger impulse"
+					description: "Trigger impulse, resets to offset phase"
 				}
 			]
 		},
@@ -13774,7 +13774,7 @@
 				},
 				{
 					name: "trig",
-					description: "Trigger impulse"
+					description: "Trigger impulse, resets to offset phase"
 				}
 			]
 		},
@@ -13924,7 +13924,7 @@
 				},
 				{
 					name: "trig",
-					description: "Trigger impulse"
+					description: "Trigger impulse, resets to offset phase"
 				}
 			]
 		},
@@ -14329,7 +14329,7 @@
 		},
 		Inc: {
 			name: "Inc",
-			description: "Ramp from offset to ceil at hz rate, trigger reset",
+			description: "Ramp from offset to ceil at hz rate",
 			category: "generators",
 			parameters: [
 				{
@@ -14353,7 +14353,7 @@
 				},
 				{
 					name: "trig",
-					description: "Trigger impulse"
+					description: "Trigger impulse, resets to offset value"
 				}
 			]
 		},
@@ -18267,4 +18267,4 @@
 	};
 })();
 
-//# sourceMappingURL=record-worker-QmGCic6L.js.map
+//# sourceMappingURL=record-worker-DGTcE2cp.js.map
