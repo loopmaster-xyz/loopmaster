@@ -2,7 +2,9 @@ import { MouseButton } from 'utils/mouse-buttons'
 import { editor, primaryColor, transport } from '../state.ts'
 import { PauseGradientIcon, PlayGradientIcon, StopGradientIcon } from './Icons.tsx'
 
-export const Nav = () => (
+export type NavTransport = Pick<typeof transport, 'start' | 'pause' | 'stop' | 'restart'>
+
+export const Nav = ({ transport: t = transport }: { transport?: NavTransport }) => (
   <div
     class={`absolute flex left-0 right-0 pointer-events-none items-center min-h-[50px] border-b-2 border-[${primaryColor.value}]`}
   >
@@ -12,10 +14,10 @@ export const Nav = () => (
         e.preventDefault()
         editor.value?.focus()
         if ((e.ctrlKey || e.metaKey) || e.button === MouseButton.Right) {
-          transport.restart()
+          t.restart()
         }
         else {
-          transport.start()
+          t.start()
         }
       }}
     >
@@ -27,10 +29,10 @@ export const Nav = () => (
         e.preventDefault()
         editor.value?.focus()
         if ((e.ctrlKey || e.metaKey) || e.button === MouseButton.Right) {
-          transport.restart()
+          t.restart()
         }
         else {
-          transport.pause()
+          t.pause()
         }
       }}
     >
@@ -42,10 +44,10 @@ export const Nav = () => (
         e.preventDefault()
         editor.value?.focus()
         if ((e.ctrlKey || e.metaKey) || e.button === MouseButton.Right) {
-          transport.restart()
+          t.restart()
         }
         else {
-          transport.stop()
+          t.stop()
         }
       }}
     >

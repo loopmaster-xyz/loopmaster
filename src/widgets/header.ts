@@ -26,7 +26,33 @@ import {
 } from './constants.ts'
 import { clamp01 } from './util.ts'
 
-export const createHeader = (rootCtx: DspContext | null, programCtx: DspProgramContext | null): Header => {
+export type HeaderTransport = Pick<
+  typeof transport,
+  | 'restart'
+  | 'beginSeek'
+  | 'endSeek'
+  | 'seek'
+  | 'getLoopBeginSamples'
+  | 'getLoopEndSamples'
+  | 'setLoopBeginSamples'
+  | 'setLoopEndSamples'
+>
+
+export type CreateHeaderOpts = {
+  transport?: HeaderTransport
+  setTargetSeconds?: (seconds: number) => void
+}
+
+export const createHeader = (
+  rootCtx: DspContext | null,
+  programCtx: DspProgramContext | null,
+  opts: CreateHeaderOpts = {},
+): Header => {
+  const t = opts.transport ?? transport
+  const setTargetSeconds = opts.setTargetSeconds ?? ((seconds: number) => {
+    if (!rootCtx) return
+    rootCtx.targetSeconds.value = seconds
+  })
   return {
     height: 48,
     onMouseDown: (e, x, y, w, h) => {
@@ -44,13 +70,13 @@ export const createHeader = (rootCtx: DspContext | null, programCtx: DspProgramC
           const phraseBar = Math.floor(barIndex / 4) * 4
           const begin = secToSamples(phraseBar * barLengthSeconds)
           const end = secToSamples((phraseBar + 4) * barLengthSeconds)
-          if (begin === transport.getLoopBeginSamples() && end === transport.getLoopEndSamples()) {
-            transport.setLoopBeginSamples(0)
-            transport.setLoopEndSamples(0)
+          if (begin === t.getLoopBeginSamples() && end === t.getLoopEndSamples()) {
+            t.setLoopBeginSamples(0)
+            t.setLoopEndSamples(0)
           }
           else {
-            transport.setLoopBeginSamples(begin)
-            transport.setLoopEndSamples(end)
+            t.setLoopBeginSamples(begin)
+            t.setLoopEndSamples(end)
           }
         }
         else {
@@ -62,31 +88,31 @@ export const createHeader = (rootCtx: DspContext | null, programCtx: DspProgramC
           const barStartSeconds = barIndex * barLengthSeconds
           const begin = secToSamples(barStartSeconds)
           const end = secToSamples(barStartSeconds + barLengthSeconds)
-          if (begin === transport.getLoopBeginSamples() && end === transport.getLoopEndSamples()) {
-            transport.setLoopBeginSamples(0)
-            transport.setLoopEndSamples(0)
+          if (begin === t.getLoopBeginSamples() && end === t.getLoopEndSamples()) {
+            t.setLoopBeginSamples(0)
+            t.setLoopEndSamples(0)
           }
           else {
-            transport.setLoopBeginSamples(begin)
-            transport.setLoopEndSamples(end)
+            t.setLoopBeginSamples(begin)
+            t.setLoopEndSamples(end)
           }
         }
         return
       }
       if (ratio < 0 || e.button === MouseButton.Right) {
-        transport.restart()
+        t.restart()
         return
       }
       const half = h / 2
       const dx = e.clientX - x
       if (y < half) {
-        transport.beginSeek()
+        t.beginSeek()
         const seek = () => {
           const seconds = ratio * DEFAULT_BARS * BEATS_PER_BAR * 60 / programCtx.result.value!.compile.bpm
           const beatLengthSeconds = 60 / programCtx.result.value!.compile.bpm / 4
           const snappedSeconds = Math.max(0, Math.round(seconds / beatLengthSeconds) * beatLengthSeconds)
-          transport.seek(snappedSeconds)
-          rootCtx.targetSeconds.value = seconds
+          t.seek(snappedSeconds)
+          setTargetSeconds(seconds)
         }
         seek()
         const handleMove = (e: MouseEvent) => {
@@ -96,17 +122,18 @@ export const createHeader = (rootCtx: DspContext | null, programCtx: DspProgramC
         }
         window.addEventListener('mousemove', handleMove)
         window.addEventListener('mouseup', () => {
-          transport.endSeek()
+          t.endSeek()
           window.removeEventListener('mousemove', handleMove)
         }, { once: true })
       }
       else {
-        transport.beginSeek()
+        t.beginSeek()
         let currentSeconds = programCtx.latency.value.state.timeSeconds ?? 0
         const seek = (delta: number) => {
           const seconds = Math.max(0, currentSeconds + delta * 0.015)
-          transport.seek(seconds)
-          currentSeconds = rootCtx.targetSeconds.value = seconds
+          t.seek(seconds)
+          currentSeconds = seconds
+          setTargetSeconds(seconds)
         }
         const handleMove = (e: MouseEvent) => {
           const cx = e.clientX - dx
@@ -115,7 +142,7 @@ export const createHeader = (rootCtx: DspContext | null, programCtx: DspProgramC
         }
         window.addEventListener('mousemove', handleMove)
         window.addEventListener('mouseup', () => {
-          transport.endSeek()
+          t.endSeek()
           window.removeEventListener('mousemove', handleMove)
         }, { once: true })
       }
@@ -197,8 +224,8 @@ export const createHeader = (rootCtx: DspContext | null, programCtx: DspProgramC
         }
       }
 
-      const loopBegin = transport.getLoopBeginSamples()
-      const loopEnd = transport.getLoopEndSamples()
+      const loopBegin = t.getLoopBeginSamples()
+      const loopEnd = t.getLoopEndSamples()
       if (loopBegin != null && loopEnd != null && loopEnd > loopBegin) {
         const loopBeginSec = loopBegin / sampleRate
         const loopEndSec = loopEnd / sampleRate

@@ -76,7 +76,7 @@ export const Sidebar = () => (
         </Link>
       </div>
       <SidebarTabLink icon={<WaveformIcon size={16} />} tab="projects" title="Projects" />
-      <SidebarTabLink icon={<HeadphonesIcon size={16} />} tab="dj" title="DJ" />
+      {session.value?.isAdmin && <SidebarTabLink icon={<HeadphonesIcon size={16} />} tab="dj" title="DJ" />}
       <SidebarTabLink icon={<WrenchIcon size={16} />} tab="tools" title="Tools" />
       <SidebarTabButton icon={<GearSixIcon size={16} />} tab="settings" title="Settings" />
       <SidebarTabLink icon={<GlobeIcon size={16} />} tab="browse/newest" title="Browse" />

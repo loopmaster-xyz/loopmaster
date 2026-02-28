@@ -43,6 +43,8 @@ export const App = () => {
   useEffect(() => () => ctx.value?.dispose(), [])
 
   useReactiveEffect(() => {
+    if (!settings.debug) return
+
     const c = ctx.value
     if (!c?.dsp?.core?.worklet) {
       memoryDebugInfo.value = null
