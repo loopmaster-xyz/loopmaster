@@ -62,6 +62,7 @@ export function createKnobWidgets(doc: Doc, result: ControlCompileSnapshot | nul
 
     let text: string
     let hasK = false
+    let hasLeadingZero = true
 
     const entryRef: { doc: Doc; widget: Widget; value: Expr & { type: 'number' }; preludeLen: number } = {
       doc,
@@ -98,6 +99,7 @@ export function createKnobWidgets(doc: Doc, result: ControlCompileSnapshot | nul
       hasK = k
       const numPart = hasK ? text.trimEnd().slice(0, -1) : text
       const numPartAbs = numPart.replace(/^-/, '')
+      hasLeadingZero = numPartAbs.startsWith('0.')
       const digitsSplit = numPartAbs.split('.')
       const digitsBeforeDecimal = digitsSplit[0]?.length ?? 0
       digitsAfterDecimal = digitsSplit[1]?.length ?? 0
@@ -185,15 +187,9 @@ export function createKnobWidgets(doc: Doc, result: ControlCompileSnapshot | nul
           const vn = clamp01(initialNormal + dy)
           const val = vn * scale + min
           let f: string
-          if (hasK) {
-            f = val.toFixed(digitsAfterDecimal)
-            if (f.startsWith('0.')) f = f.slice(1)
-            f += 'k'
-          }
-          else {
-            f = val.toFixed(digitsAfterDecimal)
-            if (f.startsWith('0.')) f = f.slice(1)
-          }
+          f = val.toFixed(digitsAfterDecimal)
+          if (!hasLeadingZero && (f.startsWith('0.') || f.startsWith('-0.'))) f = f.replace(/^(-?)0\./, '$1.')
+          if (hasK) f += 'k'
 
           const index = start
 
