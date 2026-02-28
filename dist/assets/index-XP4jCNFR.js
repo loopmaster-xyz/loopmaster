@@ -38688,7 +38688,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-8_DVeT6v.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-nkfeorgB.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -41555,6 +41555,7 @@ function createKnobWidgets(doc, result, cache) {
 		let min = 0;
 		let text;
 		let hasK = false;
+		let hasLeadingZero = true;
 		const entryRef = {
 			doc,
 			widget: null,
@@ -41584,7 +41585,9 @@ function createKnobWidgets(doc, result, cache) {
 			text = src$1.slice(start, end);
 			const { value: parsedVal, hasK: k$4 } = parseValueFromText(text);
 			hasK = k$4;
-			const digitsSplit = (hasK ? text.trimEnd().slice(0, -1) : text).replace(/^-/, "").split(".");
+			const numPartAbs = (hasK ? text.trimEnd().slice(0, -1) : text).replace(/^-/, "");
+			hasLeadingZero = numPartAbs.startsWith("0.");
+			const digitsSplit = numPartAbs.split(".");
 			const digitsBeforeDecimal = digitsSplit[0]?.length ?? 0;
 			digitsAfterDecimal = digitsSplit[1]?.length ?? 0;
 			const firstSignificantPosition = digitsSplit[1]?.indexOf(digitsSplit[1]?.match(/[1-9]/)?.[0] ?? "") ?? 0;
@@ -41657,14 +41660,9 @@ function createKnobWidgets(doc, result, cache) {
 					const vn = clamp01(initialNormal + dy);
 					const val = vn * scale + min;
 					let f$5;
-					if (hasK) {
-						f$5 = val.toFixed(digitsAfterDecimal);
-						if (f$5.startsWith("0.")) f$5 = f$5.slice(1);
-						f$5 += "k";
-					} else {
-						f$5 = val.toFixed(digitsAfterDecimal);
-						if (f$5.startsWith("0.")) f$5 = f$5.slice(1);
-					}
+					f$5 = val.toFixed(digitsAfterDecimal);
+					if (!hasLeadingZero && (f$5.startsWith("0.") || f$5.startsWith("-0."))) f$5 = f$5.replace(/^(-?)0\./, "$1.");
+					if (hasK) f$5 += "k";
 					const index = start;
 					if (f$5 !== text) {
 						doc.replace(index, len, f$5);
@@ -41801,27 +41799,16 @@ function createLfoWidget(lfo, target, doc, latency, lfoType, cache) {
 	});
 	return widget;
 }
-function createLogWidget(history$1, target, doc, latency, mapFn, cache) {
+function createLogWidget(history$1, target, doc, latency, mapFn) {
 	const startCol = target.source.column;
 	const endCol = startCol + getFunctionCallLength(doc.code, target.source.line, target.source.column);
 	const line = target.source.line;
-	const key = makeWidgetCacheKey("Log", locToIndex(doc.code, line, startCol), locToIndex(doc.code, line, endCol));
-	const cached = cache.get(key);
-	if (cached?.doc === doc) {
-		cached.historyRef.current = history$1;
-		cached.widget.pos = {
-			x: [startCol, endCol],
-			y: line
-		};
-		return cached.widget;
-	}
-	cache.delete(key);
 	const historyRef = { current: history$1 };
 	const reader = createHistoryReader(history$1.size, history$1.mask, { value: 0 }, () => {}, () => latency.value.state, () => historyRef.current.writeIndex, (index) => historyRef.current.sampleCounts[index], (state, index) => {
 		state.value = historyRef.current.params.value.at(index);
 	});
 	let epoch = -1;
-	const widget = {
+	return {
 		type: "above",
 		pos: {
 			x: [startCol, endCol],
@@ -41834,12 +41821,6 @@ function createLogWidget(history$1, target, doc, latency, mapFn, cache) {
 			drawText(c$7, mapFn(v$4), x$4, y$5 + h$5, grayColor.value);
 		}
 	};
-	cache.set(key, {
-		doc,
-		widget,
-		historyRef
-	});
-	return widget;
 }
 const BLACK_KEY_STEPS = new Set([
 	1,
@@ -43223,6 +43204,7 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 		doc.widgets = createWidgets(widgetContext, histories.value, userCallHistories.value);
 	});
 	m(() => {
+		shouldSkipSyncPreview.value;
 		doc.code;
 		const epoch = doc.epoch;
 		queueMicrotask(async () => {
@@ -43280,7 +43262,7 @@ async function createDspContext() {
 					if (h$5 !== target) {
 						if ("funcName" in target) {
 							if (target.funcName === "ntof") widgets.push(createPianoWidget(h$5, target, ctx$1.doc, ctx$1.latency, ctx$1.widgetsCache));
-							else if (target.funcName === "print") widgets.push(createLogWidget(h$5, target, ctx$1.doc, ctx$1.latency, (v$4) => v$4.toFixed(2), ctx$1.widgetsCache));
+							else if (target.funcName === "print") widgets.push(createLogWidget(h$5, target, ctx$1.doc, ctx$1.latency, (v$4) => v$4.toFixed(2)));
 						}
 					}
 				} else if (h$5.genName === "Biquad" || h$5.genName === "Biquadshelf" || h$5.genName === "Svf" || h$5.genName === "Onepole" || h$5.genName === "Moog" || h$5.genName === "Diodeladder") {
@@ -57919,4 +57901,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-DoLiNWjp.js.map
+//# sourceMappingURL=index-XP4jCNFR.js.map
