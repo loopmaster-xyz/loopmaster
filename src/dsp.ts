@@ -201,7 +201,7 @@ async function createDspProgramContextImpl(
       if (epoch !== doc.epoch) return
 
       try {
-        const ccs = controlPipeline.compileSource(doc.code)
+        const ccs = controlPipeline.compileSource(doc.code, { projectId: opts.projectId ?? undefined })
         result.value = ccs
         if (ccs.errors.length > 0) {
           doc.errors = computeDocErrors(ccs)
