@@ -146,6 +146,11 @@ effect(() => {
     main = mainPage.value
     section.value = 'AI'
   }
+  else if (p === '/dj') {
+    side = 'dj'
+    main = 'dj'
+    section.value = 'DJ'
+  }
   else if (p === '/') {
     sidebarTab.value = null
     main = null

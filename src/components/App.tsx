@@ -26,6 +26,7 @@ import { AboutMain } from './AboutMain.tsx'
 import { AdminMain } from './AdminMain.tsx'
 import { ArtistMain } from './ArtistMain.tsx'
 import { BrowseMain } from './BrowseMain.tsx'
+import { DJMain } from './DJMain.tsx'
 import { DocsMain } from './DocsMain.tsx'
 import { Editor } from './Editor.tsx'
 import { HelpMain } from './HelpMain.tsx'
@@ -154,6 +155,8 @@ export const App = () => {
                 ? <HelpMain />
                 : mainPage.value === 'about'
                 ? <AboutMain />
+                : mainPage.value === 'dj'
+                ? <DJMain />
                 : mainPage.value === 'editor'
                 ? (
                   <>

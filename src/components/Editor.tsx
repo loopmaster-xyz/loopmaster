@@ -22,9 +22,9 @@ export const Editor = ({ doc, header }: { doc: Signal<Doc | null>; header: Heade
       wordWrap: true,
       autoHeight: false,
       paddingLeft: 5,
-      paddingTop: 17,
+      paddingTop: !header ? 15.5 : 17,
       paddingRight: 12,
-      paddingBottom: 17,
+      paddingBottom: !header ? 15.5 : 17,
       ...editorSettings,
     }), [])
 

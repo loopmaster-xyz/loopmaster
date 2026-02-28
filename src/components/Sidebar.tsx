@@ -3,6 +3,7 @@ import {
   ChalkboardTeacherIcon,
   GearSixIcon,
   GlobeIcon,
+  HeadphonesIcon,
   MagicWandIcon,
   MagnifyingGlassIcon,
   QuestionIcon,
@@ -23,6 +24,7 @@ import { Artist } from './Artist.tsx'
 import { Browse } from './Browse.tsx'
 import { Bytecode } from './Bytecode.tsx'
 import { Console } from './Console.tsx'
+import { DJ } from './DJ.tsx'
 import { Docs } from './Docs.tsx'
 import { ExportAudio } from './ExportAudio.tsx'
 import { Help } from './Help.tsx'
@@ -74,6 +76,7 @@ export const Sidebar = () => (
         </Link>
       </div>
       <SidebarTabLink icon={<WaveformIcon size={16} />} tab="projects" title="Projects" />
+      <SidebarTabLink icon={<HeadphonesIcon size={16} />} tab="dj" title="DJ" />
       <SidebarTabLink icon={<WrenchIcon size={16} />} tab="tools" title="Tools" />
       <SidebarTabButton icon={<GearSixIcon size={16} />} tab="settings" title="Settings" />
       <SidebarTabLink icon={<GlobeIcon size={16} />} tab="browse/newest" title="Browse" />
@@ -128,6 +131,7 @@ export const Sidebar = () => (
               'admin': 'Admin',
               'artist': '',
               'ai': 'AI',
+              'dj': 'DJ',
             }[sidebarTab.value ?? ''] ?? ''}
           </h2>
         </div>
@@ -165,6 +169,8 @@ export const Sidebar = () => (
               ? <Artist />
               : sidebarTab.value === 'ai'
               ? <AI />
+              : sidebarTab.value === 'dj'
+              ? <DJ />
               : ''}
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { batch, computed, effect, signal, untracked } from '@preact/signals'
 import { activeEditor, createPersistedDoc, type Doc, type Editor, onKeyOverride } from 'editor'
+import type { Header } from 'editor'
 import { ThemeColors } from 'editor/src/settings.ts'
 import type { AggregatedMemoryInfo } from 'engine'
 import { disassembleBytecode } from 'engine'
@@ -22,6 +23,7 @@ import { tokenize } from './lib/tokenizer.ts'
 import { settings } from './settings.ts'
 import themes from './themes/_all.json' with { type: 'json' }
 import { BEATS_PER_BAR, FILL_ALPHA } from './widgets/constants.ts'
+import { createHeader } from './widgets/header.ts'
 
 export const session = signal<Session | null>(null)
 
@@ -177,6 +179,7 @@ export type MainPage =
   | 'admin'
   | 'artist'
   | 'project'
+  | 'dj'
 export const mainPage = signal<MainPage>(null)
 
 export type SidebarTab =
@@ -198,6 +201,7 @@ export type SidebarTab =
   | 'admin'
   | 'artist'
   | 'ai'
+  | 'dj'
 export const sidebarTab = signal<SidebarTab>(null)
 export const sidebarOpen = computed(() => sidebarTab.value !== null)
 
@@ -976,4 +980,38 @@ effect(() => {
   else {
     transport.setProjectEndSamples(0)
   }
+})
+
+export const djDocA = signal(createPersistedDoc('dj-doc-a', tokenize))
+export const djDocB = signal(createPersistedDoc('dj-doc-b', tokenize))
+export const djProgramA = signal<DspProgramContext | null>(null)
+export const djProgramB = signal<DspProgramContext | null>(null)
+export const djHeaderA = signal<Header | null>(null)
+export const djHeaderB = signal<Header | null>(null)
+export const djTitleA = signal<string>('')
+export const djTitleB = signal<string>('')
+
+effect(() => {
+  if (!ctx.value) return
+
+  getProgramContext(ctx.value, 'dj-doc-a', { doc: djDocA.value }).then(programContext => {
+    djProgramA.value = programContext
+    djHeaderA.value = createHeader(ctx.value, programContext)
+  })
+
+  getProgramContext(ctx.value, 'dj-doc-b', { doc: djDocB.value }).then(programContext => {
+    djProgramB.value = programContext
+    djHeaderB.value = createHeader(ctx.value, programContext)
+  })
+})
+
+persist('dj', () => {
+  djTitleA.value
+  djTitleB.value
+}, () => ({
+  djTitleA: djTitleA.value,
+  djTitleB: djTitleB.value,
+}), data => {
+  djTitleA.value = data.djTitleA ?? ''
+  djTitleB.value = data.djTitleB ?? ''
 })
