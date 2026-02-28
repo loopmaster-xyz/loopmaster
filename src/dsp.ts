@@ -180,7 +180,7 @@ async function createDspProgramContextImpl(
   effect(() => {
     historiesRefreshed.value
     program.refreshHistories()
-    if (program.histories.length > 0 && opts.isPlayingThis.value && isActuallyPlaying.value) {
+    if (isActuallyPlaying.value && opts.isPlayingThis.value && program.histories.length > 0) {
       histories.value = program.histories
       userCallHistories.value = program.userCallHistories
     }
