@@ -37243,7 +37243,9 @@ var setControlCompileSnapshotImpl = atomic(async (ccs, shared, dspState, worklet
 		lastMainBytecodeHash = updateMainBytecodeHash(mainBytecode, lastMainBytecodeHash).newHash;
 		const nextShared$1 = await ensureSharedBound(dspState, worklet, shared);
 		if (nextShared$1) shared = nextShared$1;
+		console.log("set control ops");
 		await setControlOps(dspState, worklet, program, mainBytecode);
+		console.log("set control ops done");
 		return {
 			shared,
 			historySourceMap,
@@ -37317,10 +37319,7 @@ var setControlCompileSnapshotImpl = atomic(async (ccs, shared, dspState, worklet
 		lastStructureHash,
 		lastMainBytecodeHash
 	};
-}, {
-	dropInbetween: true,
-	timeout: 1e3
-});
+}, { timeout: 1e3 });
 function createDspProgram(dspState, shared, worklet, record) {
 	let lastOps = null;
 	let lastStructureHash = null;
@@ -38670,7 +38669,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DhqWIYwJ.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-HtEVOvQG.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -57388,4 +57387,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-BvNtMb1o.js.map
+//# sourceMappingURL=index-DiAbWg-k.js.map
