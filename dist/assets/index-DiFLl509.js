@@ -37535,7 +37535,7 @@ var setControlCompileSnapshotImpl = atomic(async (ccs, shared, dspState, worklet
 		lastStructureHash,
 		lastMainBytecodeHash
 	};
-}, { timeout: 1e3 });
+}, { timeout: 5e3 });
 function createDspProgram(dspState, shared, worklet, record) {
 	let lastOps = null;
 	let lastStructureHash = null;
@@ -38901,7 +38901,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DUmE3zuZ.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DjDKwruz.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -43411,7 +43411,7 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 	m(() => {
 		historiesRefreshed.value;
 		program.refreshHistories();
-		if (program.histories.length > 0 && opts.isPlayingThis.value && isActuallyPlaying.value) {
+		if (isActuallyPlaying.value && opts.isPlayingThis.value && program.histories.length > 0) {
 			histories.value = program.histories;
 			userCallHistories.value = program.userCallHistories;
 		}
@@ -58134,4 +58134,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-CmX36t2z.js.map
+//# sourceMappingURL=index-DiFLl509.js.map
