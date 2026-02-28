@@ -36,6 +36,9 @@ export function createKnobWidgets(doc: Doc, result: ControlCompileSnapshot | nul
 
     const startIndex = value.loc.start - preludeLen
     const endIndex = value.loc.end - preludeLen
+    const literalText = src.slice(startIndex, endIndex).trim()
+    if (literalText === 'true' || literalText === 'false') return
+
     const { line: startLine, column: startColumn } = indexToLoc(src, startIndex)
     const { line: endLine, column: endColumn } = indexToLoc(src, endIndex)
     const key = makeWidgetCacheKey('Knob', startIndex, endIndex)
