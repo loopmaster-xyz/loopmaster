@@ -6190,7 +6190,9 @@ function drawContext(context, overlayCanvas, activeTooltip) {
 	const primaryPosition = hoverIsPrimary ? hoverPosition : caretPosition;
 	const positionToPreferAbove = (p$6) => p$6 === Position.BottomLeft || p$6 === Position.BottomRight;
 	const preferErrorAbove = hoverDrew && caretDrew ? !positionToPreferAbove(primaryPosition) : primaryPosition != null ? positionToPreferAbove(primaryPosition) : false;
-	drawTooltip(context, context.mouse.hovered.error ?? context.pinnedError, overlayCanvas, preferErrorAbove);
+	const error$1 = context.tooltipDismissed ? context.mouse.hovered.error : context.mouse.hovered.error ?? context.pinnedError;
+	if (context.mouse.hovered.error) context.tooltipDismissed = false;
+	drawTooltip(context, error$1, overlayCanvas, preferErrorAbove);
 	if (hoverDrew) {
 		activeTooltip.set(context, "hover");
 		if (caretToken) context.caret.caretToken = null;
@@ -9646,10 +9648,12 @@ function createContext(editorSettings$1, doc, activeEditorOpts) {
 	const caret = createCaret(settings$1);
 	const selection = createSelection();
 	let pinnedError = null;
+	let tooltipDismissed = false;
 	const notifyActivated = () => activeEditorOpts?.setActiveEditor(activeEditorOpts.editorRef.current);
 	const mouse = createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scrollbars, selection, gutter, blocks, header, notifyActivated);
 	const keyboard = createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, caches, selection, blocks, header, mouse, () => {
 		pinnedError = null;
+		tooltipDismissed = true;
 	}, activeEditorOpts);
 	const reset$2 = () => {
 		n(() => {
@@ -9673,6 +9677,12 @@ function createContext(editorSettings$1, doc, activeEditorOpts) {
 		},
 		set pinnedError(v$4) {
 			pinnedError = v$4;
+		},
+		get tooltipDismissed() {
+			return tooltipDismissed;
+		},
+		set tooltipDismissed(v$4) {
+			tooltipDismissed = v$4;
 		},
 		canvas,
 		scroll,
@@ -38688,7 +38698,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-nkfeorgB.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-p9LbPB5k.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -57901,4 +57911,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-XP4jCNFR.js.map
+//# sourceMappingURL=index-C5YSovd7.js.map
