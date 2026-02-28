@@ -7,10 +7,7 @@ import {
   type TypedHistory,
   type UserCallHistory,
 } from 'engine'
-import { locToIndex } from '../lib/index-loc.ts'
 import { grayColor } from '../state.ts'
-import { makeWidgetCacheKey } from './cache-key.ts'
-import type { WidgetCacheEntry } from './cache.ts'
 import { getFunctionCallLength } from './util.ts'
 
 export function createLogWidget(
@@ -19,22 +16,10 @@ export function createLogWidget(
   doc: Doc,
   latency: Signal<DspLatency>,
   mapFn: (value: number) => string,
-  cache: Map<string, WidgetCacheEntry>,
 ): Widget {
   const startCol = target.source.column
   const endCol = startCol + getFunctionCallLength(doc.code, target.source.line, target.source.column)
   const line = target.source.line
-
-  const startIndex = locToIndex(doc.code, line, startCol)
-  const endIndex = locToIndex(doc.code, line, endCol)
-  const key = makeWidgetCacheKey('Log', startIndex, endIndex)
-  const cached = cache.get(key) as { doc: Doc; widget: Widget; historyRef: { current: EmitHistory } } | undefined
-  if (cached?.doc === doc) {
-    cached.historyRef.current = history
-    cached.widget.pos = { x: [startCol, endCol], y: line }
-    return cached.widget
-  }
-  cache.delete(key)
 
   const historyRef = { current: history }
   const reader = createHistoryReader(
@@ -64,6 +49,6 @@ export function createLogWidget(
       drawText(c, text, x, y + h, grayColor.value)
     },
   }
-  cache.set(key, { doc, widget, historyRef })
+
   return widget
 }

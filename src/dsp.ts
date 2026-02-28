@@ -195,6 +195,7 @@ async function createDspProgramContextImpl(
   })
 
   effect(() => {
+    shouldSkipSyncPreview.value
     doc.code
     const epoch = doc.epoch
     queueMicrotask(async () => {
@@ -319,7 +320,7 @@ export async function createDspContext() {
                 )
               }
               else if (target.funcName === 'print') {
-                widgets.push(createLogWidget(h, target, ctx.doc, ctx.latency, v => v.toFixed(2), ctx.widgetsCache))
+                widgets.push(createLogWidget(h, target, ctx.doc, ctx.latency, v => v.toFixed(2)))
               }
             }
           }
