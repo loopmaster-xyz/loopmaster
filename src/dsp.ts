@@ -1,6 +1,6 @@
 import { batch, computed, effect, type Signal, signal, untracked } from '@preact/signals-core'
 import { createDoc, type Doc, type Widgets } from 'editor'
-import type { ControlCompileSnapshot, Dsp, EveryHistory, LfosineHistory } from 'engine'
+import type { ControlCompileSnapshot, EveryHistory, LfosineHistory } from 'engine'
 import {
   createDsp,
   createDspState,
@@ -8,13 +8,19 @@ import {
   type TypedHistory,
   UserCallHistory,
 } from 'engine'
-import { atomic } from './lib/atomic.ts'
+import { controlPipeline } from 'engine/src/live/pipeline.ts'
 import { computeDocErrors } from './lib/format-errors.ts'
 import { tokenize } from './lib/tokenizer.ts'
 import type { WaveformBuffer } from './lib/waveform-buffer.ts'
 import { settings } from './settings.ts'
-import { backgroundColor, busyBounce, isScrubbing, shouldSkipSyncPreview, skipSyncPreview, tickCount,
-  widgetOptions } from './state.ts'
+import {
+  backgroundColor,
+  busyBounce,
+  isActuallyPlaying,
+  shouldSkipSyncPreview,
+  tickCount,
+  widgetOptions,
+} from './state.ts'
 import { createAdWidget } from './widgets/ad.ts'
 import { createAdsrWidget } from './widgets/adsr.ts'
 import { createArrayGetWidgets } from './widgets/array-get.ts'
@@ -67,59 +73,6 @@ type CreateWidgetsFn = (
   userCallHistories: UserCallHistory[],
 ) => Widgets
 
-const DEBUG_PREVIEW_TIMING = false
-
-function runPreviewSync(
-  p: DspProgramContext,
-  dsp: Dsp,
-): { histories: TypedHistory[]; userCallHistories: UserCallHistory[] } | null {
-  const t0 = DEBUG_PREVIEW_TIMING ? performance.now() : 0
-  try {
-    p.result.value = dsp.core.preview.setCode(p.doc.code, { projectId: p.opts.projectId })
-    p.doc.errors = computeDocErrors(p.result.value)
-  }
-  catch (error) {
-    console.error(error)
-    p.doc.errors = computeDocErrors(null, (error instanceof Error ? error.message : String(error)).split(' in ')[0])
-    return null
-  }
-  try {
-    const previewResult = dsp.core.preview.runPreview(p.opts.vmId)
-    if (DEBUG_PREVIEW_TIMING) console.log('[dsp] runPreviewSync total', (performance.now() - t0).toFixed(2), 'ms')
-    return {
-      histories: previewResult.histories,
-      userCallHistories: previewResult.userCallHistories,
-    }
-  }
-  catch (error) {
-    console.error(error)
-    const message = error instanceof Error ? error.message : String(error)
-    p.doc.errors = computeDocErrors(p.result.value, message)
-    return null
-  }
-}
-
-const updatePreview = atomic(
-  async (p: DspProgramContext, dsp: Dsp, fullResync: boolean) => {
-    try {
-      const result = await p.program.setCode(p.doc.code, { fullResync, projectId: p.opts.projectId })
-      if (p.opts.isPlayingThis.value) {
-        p.result.value = result
-        return {
-          histories: p.program.histories,
-          userCallHistories: p.program.userCallHistories,
-        }
-      }
-    }
-    catch (error) {
-      console.error(error)
-      p.doc.errors = computeDocErrors(null, (error instanceof Error ? error.message : String(error)).split(' in ')[0])
-      return null
-    }
-    return runPreviewSync(p, dsp)
-  },
-)
-
 async function createDspProgramContextImpl(
   dsp: Awaited<ReturnType<typeof createDsp>>,
   createWidgets: CreateWidgetsFn,
@@ -128,9 +81,6 @@ async function createDspProgramContextImpl(
 ) {
   const program = await dsp.createProgram()
   const doc = opts.doc ?? createDoc(tokenize)
-
-  const previewEpoch = signal(-1)
-  const setCodeEpoch = signal(-1)
 
   const result = signal<ControlCompileSnapshot | null>(null)
   const latency = signal<DspLatency>(program.latency)
@@ -217,62 +167,6 @@ async function createDspProgramContextImpl(
     dispose,
   }
 
-  // effect(() => {
-  //   docLength.value = doc.code.length
-  // })
-
-  // effect(() => {
-  //   docLength.value
-  //   widgetsCache.clear()
-  // })
-
-  const syncPreviewEpoch = signal(-1)
-
-  effect(() => {
-    if (shouldSkipSyncPreview.peek()) return
-    doc.code
-    const epoch = doc.epoch
-    queueMicrotask(() => {
-      if (epoch !== doc.epoch) return
-      batch(() => {
-        if (syncPreviewEpoch.value === doc.epoch) return
-        const snapshot = runPreviewSync(p, dsp)
-        if (snapshot) {
-          syncPreviewEpoch.value = doc.epoch
-          program.latency.update()
-          latency.value = program.latency
-          timeSeconds.value = program.latency.state.timeSeconds ?? 0
-          histories.value = snapshot.histories
-          userCallHistories.value = snapshot.userCallHistories
-          fullResync.value = false
-          doc.widgets = createWidgets(widgetContext, snapshot.histories, snapshot.userCallHistories)
-          previewEpoch.value = doc.epoch
-        }
-      })
-    })
-  })
-
-  effect(() => {
-    if (opts.isPlayingThis.value || isScrubbing.value) return
-    if (!fullResync.value) return
-    doc.code
-    updatePreview(p, dsp, fullResync.value).then(result => {
-      batch(() => {
-        if (result) {
-          setCodeEpoch.value = doc.epoch
-          previewEpoch.value = doc.epoch
-          program.latency.update()
-          latency.value = program.latency
-          timeSeconds.value = program.latency.state.timeSeconds ?? 0
-          histories.value = result.histories
-          userCallHistories.value = result.userCallHistories
-        }
-        fullResync.value = false
-      })
-    })
-  })
-
-  // cheap per-frame latency/time update while playing
   effect(() => {
     if (!opts.isPlayingThis.value) return
     tickCount.value
@@ -283,60 +177,56 @@ async function createDspProgramContextImpl(
     })
   })
 
-  // pull histories only when the engine tells us they changed
   effect(() => {
-    if (!opts.isPlayingThis.value) return
     historiesRefreshed.value
-    untracked(() => {
-      program.refreshHistories()
+    program.refreshHistories()
+    if (program.histories.length > 0 && opts.isPlayingThis.value && isActuallyPlaying.value) {
       histories.value = program.histories
       userCallHistories.value = program.userCallHistories
-    })
+    }
   })
 
   effect(() => {
-    if (!opts.isPlayingThis.value) return
-    doc.code
-    const epoch = doc.epoch
-    queueMicrotask(() => {
-      if (epoch !== doc.epoch) return
-      program.setCode(doc.code, { projectId: opts.projectId }).then(r => {
-        if (epoch !== doc.epoch) return
-        batch(() => {
-          result.value = r
-          program.reapplySourceMapping(r)
-          setCodeEpoch.value = epoch
-          historiesRefreshed.value++
-        })
-      }).catch(e => {
-        if (e instanceof Error && e.message.includes('Dropped')) return
-        console.error(e)
-        doc.errors = computeDocErrors(null, (e instanceof Error ? e.message : String(e)).split(' in ')[0])
-      })
-    })
-  })
-
-  effect(() => {
-    if (!opts.isPlayingThis.value) return
-    tickCount.value
-    const workletError = dsp.state.workletError
-    doc.errors = computeDocErrors(
-      result.value,
-      workletError ?? null,
+    doc.widgets = createWidgets(
+      widgetContext,
+      histories.value,
+      userCallHistories.value,
     )
   })
 
   effect(() => {
-    if (!histories.value.length) {
-      return
-    }
-    if (setCodeEpoch.value === previewEpoch.value) {
-      doc.widgets = createWidgets(
-        widgetContext,
-        histories.value,
-        userCallHistories.value,
-      )
-    }
+    doc.code
+    const epoch = doc.epoch
+    queueMicrotask(async () => {
+      if (epoch !== doc.epoch) return
+
+      try {
+        const ccs = controlPipeline.compileSource(doc.code)
+        result.value = ccs
+        if (ccs.errors.length > 0) {
+          doc.errors = computeDocErrors(ccs)
+          return
+        }
+        else {
+          doc.errors = []
+        }
+
+        if (!shouldSkipSyncPreview.value) {
+          dsp.core.preview.setControlCompileSnapshot(ccs)
+          const previewResult = dsp.core.preview.runPreview(opts.vmId)
+          batch(() => {
+            histories.value = previewResult.histories
+            userCallHistories.value = previewResult.userCallHistories
+          })
+        }
+
+        await program.setControlCompileSnapshot(ccs)
+        historiesRefreshed.value++
+      }
+      catch (error) {
+        doc.errors = computeDocErrors(null, (error instanceof Error ? error.message : String(error)).split(' in ')[0])
+      }
+    })
   })
 
   return p

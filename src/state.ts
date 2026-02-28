@@ -611,7 +611,6 @@ export const inlineTransport = {
       await inlineTransport.stop()
       await new Promise(resolve => setTimeout(resolve, 100))
     }
-    await inline.program.setCode(inline.doc.code, { fullResync: true, projectId: inline.opts.projectId })
     playingInlineContext.value = inline
     await dsp.start([inline.program])
     await dsp.refreshUntilHistories(inline.program, { maxTries: 60 })
