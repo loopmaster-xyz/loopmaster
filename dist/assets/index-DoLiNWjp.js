@@ -26140,10 +26140,10 @@ var SampleManager = class {
 		});
 		return handle;
 	}
-	ensureRecordHandle(handle, seconds, callbackId) {
+	ensureRecordHandle(handle, seconds, callbackId, projectId = null) {
 		if (this.samples.has(handle)) return;
 		this.recordRequests.set(handle, {
-			projectId: null,
+			projectId,
 			seconds,
 			callbackId
 		});
@@ -31744,7 +31744,8 @@ function addCallSiteToSampleRegistrations(state, handle, scopeId, seconds) {
 		handle,
 		type: "record",
 		recordSeconds: seconds,
-		recordCallbackId: scopeId
+		recordCallbackId: scopeId,
+		recordProjectId: state.projectId
 	});
 }
 function processRecordCall(state, callExpr, callbackId, templateLocKey) {
@@ -32068,7 +32069,8 @@ function processRecordCall(state, callExpr, callbackId, templateLocKey) {
 			handle,
 			type: "record",
 			recordSeconds: seconds,
-			recordCallbackId: scopeId
+			recordCallbackId: scopeId,
+			recordProjectId: state.projectId
 		});
 		state.ops.push(AudioVmOp.Pop);
 		state.ops.push(AudioVmOp.Pop);
@@ -34588,7 +34590,8 @@ function compile$2(state, program, preludeLines = 0) {
 							handle,
 							type: "record",
 							recordSeconds: seconds,
-							recordCallbackId: callSiteId
+							recordCallbackId: callSiteId,
+							recordProjectId: state.projectId
 						});
 					}
 				}
@@ -37573,7 +37576,7 @@ var asconfig_default = {
 		"exportRuntime": true
 	}
 };
-var worklet_default = "/assets/worklet-CS8C1VOR.js";
+var worklet_default = "/assets/worklet-BSGFxBDd.js";
 function getWasmPaths() {
 	const base = isMobile$1() ? "/as/build/index-mobile.wasm" : "/as/build/index.wasm";
 	return {
@@ -38113,7 +38116,7 @@ function createDspPreview(runtime) {
 		}
 	};
 }
-var record_worker_default = "/assets/record-worker-DuCzxijb.js";
+var record_worker_default = "/assets/record-worker-QmGCic6L.js";
 async function createRecordWorker(wasmBinary, worklet) {
 	const url = new URL(record_worker_default, window.location.origin).toString();
 	const worker = new Worker(url, { type: "module" });
@@ -38685,7 +38688,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-B1K5U7QH.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-8_DVeT6v.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -43225,7 +43228,7 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 		queueMicrotask(async () => {
 			if (epoch !== doc.epoch) return;
 			try {
-				const ccs = controlPipeline.compileSource(doc.code);
+				const ccs = controlPipeline.compileSource(doc.code, { projectId: opts.projectId ?? void 0 });
 				result.value = ccs;
 				if (ccs.errors.length > 0) {
 					doc.errors = computeDocErrors(ccs);
@@ -57916,4 +57919,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-BFrHW_MB.js.map
+//# sourceMappingURL=index-DoLiNWjp.js.map

@@ -12960,10 +12960,10 @@
 			});
 			return handle;
 		}
-		ensureRecordHandle(handle, seconds, callbackId) {
+		ensureRecordHandle(handle, seconds, callbackId, projectId = null) {
 			if (this.samples.has(handle)) return;
 			this.recordRequests.set(handle, {
-				projectId: null,
+				projectId,
 				seconds,
 				callbackId
 			});
@@ -18267,4 +18267,4 @@
 	};
 })();
 
-//# sourceMappingURL=record-worker-DuCzxijb.js.map
+//# sourceMappingURL=record-worker-QmGCic6L.js.map

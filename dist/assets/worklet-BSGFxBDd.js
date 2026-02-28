@@ -327,10 +327,10 @@
 			});
 			return handle;
 		}
-		ensureRecordHandle(handle, seconds, callbackId) {
+		ensureRecordHandle(handle, seconds, callbackId, projectId = null) {
 			if (this.samples.has(handle)) return;
 			this.recordRequests.set(handle, {
-				projectId: null,
+				projectId,
 				seconds,
 				callbackId
 			});
@@ -1729,7 +1729,7 @@
 		async syncSampleRegistrations(opts) {
 			if (opts.invalidatedHandles) for (const handle of opts.invalidatedHandles) sampleManager.clearHandle(handle);
 			for (const reg of opts.registrations) if (reg.type === "freesound" && reg.freesoundId !== void 0) sampleManager.ensureFreesoundHandle(reg.handle, reg.freesoundId);
-			else if (reg.type === "record" && reg.recordSeconds !== void 0 && reg.recordCallbackId !== void 0) sampleManager.ensureRecordHandle(reg.handle, reg.recordSeconds, reg.recordCallbackId);
+			else if (reg.type === "record" && reg.recordSeconds !== void 0 && reg.recordCallbackId !== void 0) sampleManager.ensureRecordHandle(reg.handle, reg.recordSeconds, reg.recordCallbackId, reg.recordProjectId ?? null);
 			else if (reg.type === "inline" || reg.type === "espeak") sampleManager.ensureInlineHandle(reg.handle);
 		}
 		async bpmOverride(opts) {
@@ -1804,4 +1804,4 @@
 	registerProcessor("dsp", DspProcessor);
 })();
 
-//# sourceMappingURL=worklet-CS8C1VOR.js.map
+//# sourceMappingURL=worklet-BSGFxBDd.js.map
