@@ -21,7 +21,7 @@ import { signalify } from './lib/signalify.ts'
 import { tokenize } from './lib/tokenizer.ts'
 import { settings } from './settings.ts'
 import themes from './themes/_all.json' with { type: 'json' }
-import { FILL_ALPHA } from './widgets/constants.ts'
+import { BEATS_PER_BAR, FILL_ALPHA } from './widgets/constants.ts'
 
 export const session = signal<Session | null>(null)
 
@@ -597,6 +597,31 @@ export const transport = {
       scrubbingProgramState.value === DspProgramState.Start && isPlayingCurrent.value,
     )
   },
+  getLoopBeginSamples: () => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    return dsp.loopBeginSamples
+  },
+  getLoopEndSamples: () => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    return dsp.loopEndSamples
+  },
+  setLoopBeginSamples: (samples: number) => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    dsp.loopBeginSamples = samples
+  },
+  setLoopEndSamples: (samples: number) => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    dsp.loopEndSamples = samples
+  },
+  setProjectEndSamples: (samples: number) => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    dsp.projectEndSamples = samples
+  },
 }
 
 export const inlineTransport = {
@@ -935,4 +960,20 @@ persist('ai', () => {
   aiModel.value = data.aiModel ?? 'gpt-5.2-chat-latest'
   aiPromptNew.value = data.aiPromptNew ?? ''
   aiPromptModify.value = data.aiPromptModify ?? ''
+})
+
+effect(() => {
+  const labels = [...(playingProgramContext.value?.result.value?.compile?.labels ?? [])]
+  const end = labels.find(l => l.text.toLowerCase() === 'end')
+  if (end) {
+    transport.setProjectEndSamples(
+      Math.round(
+        end.bar * BEATS_PER_BAR * 60 / bpm.value
+          * (playingProgramContext.value?.latency.value.state.sampleRate || 44100),
+      ),
+    )
+  }
+  else {
+    transport.setProjectEndSamples(0)
+  }
 })

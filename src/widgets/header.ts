@@ -34,6 +34,45 @@ export const createHeader = (rootCtx: DspContext | null, programCtx: DspProgramC
       x -= HEADER_PADDING_LEFT
       w -= HEADER_PADDING_LEFT
       let ratio = x / w
+      if (e.altKey) {
+        const bpm = programCtx.result.value.compile.bpm ?? 120
+        const barLengthSeconds = (BEATS_PER_BAR * 60) / bpm
+        const sampleRate = programCtx.latency.value.state.sampleRate || 44100
+        const secToSamples = (sec: number) => Math.round(sec * sampleRate)
+        if (y < h / 2) {
+          const barIndex = ratio * DEFAULT_BARS
+          const phraseBar = Math.floor(barIndex / 4) * 4
+          const begin = secToSamples(phraseBar * barLengthSeconds)
+          const end = secToSamples((phraseBar + 4) * barLengthSeconds)
+          if (begin === transport.getLoopBeginSamples() && end === transport.getLoopEndSamples()) {
+            transport.setLoopBeginSamples(0)
+            transport.setLoopEndSamples(0)
+          }
+          else {
+            transport.setLoopBeginSamples(begin)
+            transport.setLoopEndSamples(end)
+          }
+        }
+        else {
+          const timeSeconds = programCtx.timeSeconds.value
+          const windowStartTime = timeSeconds - PAST_BARS * barLengthSeconds
+          const timeWindowSeconds = TIME_WINDOW_BARS * barLengthSeconds
+          const clickedSeconds = windowStartTime + ratio * timeWindowSeconds
+          const barIndex = Math.floor(clickedSeconds / barLengthSeconds)
+          const barStartSeconds = barIndex * barLengthSeconds
+          const begin = secToSamples(barStartSeconds)
+          const end = secToSamples(barStartSeconds + barLengthSeconds)
+          if (begin === transport.getLoopBeginSamples() && end === transport.getLoopEndSamples()) {
+            transport.setLoopBeginSamples(0)
+            transport.setLoopEndSamples(0)
+          }
+          else {
+            transport.setLoopBeginSamples(begin)
+            transport.setLoopEndSamples(end)
+          }
+        }
+        return
+      }
       if (ratio < 0 || e.button === MouseButton.Right) {
         transport.restart()
         return
@@ -158,6 +197,20 @@ export const createHeader = (rootCtx: DspContext | null, programCtx: DspProgramC
         }
       }
 
+      const loopBegin = transport.getLoopBeginSamples()
+      const loopEnd = transport.getLoopEndSamples()
+      if (loopBegin != null && loopEnd != null && loopEnd > loopBegin) {
+        const loopBeginSec = loopBegin / sampleRate
+        const loopEndSec = loopEnd / sampleRate
+        const loopStartX = (loopBeginSec / totalSeconds) * w
+        const loopEndX = (loopEndSec / totalSeconds) * w
+        c.save()
+        c.globalAlpha = 0.3
+        c.fillStyle = primaryColor.value
+        c.fillRect(Math.max(0, loopStartX), 0, Math.min(w, loopEndX) - Math.max(0, loopStartX), h)
+        c.restore()
+      }
+
       for (const timeline of timelineHistories) {
         const compiled = compileTimelineNotation(timeline.sequence)
         const segs = readTimelineSegsFromCompiledTimeline(compiled.bytecode, sampleRate, bpm, 0, totalSeconds)
@@ -271,6 +324,23 @@ export const createHeader = (rootCtx: DspContext | null, programCtx: DspProgramC
         if (scrubLabelPositions.length >= 1) {
           scrubDrawTint(scrubLabelPositions[scrubLabelPositions.length - 1]!.x, w,
             scrubLabelPositions[scrubLabelPositions.length - 1]!.color)
+        }
+      }
+
+      if (loopBegin != null && loopEnd != null && loopEnd > loopBegin) {
+        const loopBeginSec = loopBegin / sampleRate
+        const loopEndSec = loopEnd / sampleRate
+        const loopStartX = (loopBeginSec - windowStartTime) * pxPerSecond
+        const loopEndX = (loopEndSec - windowStartTime) * pxPerSecond
+        const start = Math.max(0, Math.min(w, loopStartX))
+        const end = Math.max(0, Math.min(w, loopEndX))
+        const ww = Math.max(0, end - start)
+        if (ww > 0) {
+          c.save()
+          c.globalAlpha = 0.3
+          c.fillStyle = primaryColor.value
+          c.fillRect(start, y, ww, h)
+          c.restore()
         }
       }
 
