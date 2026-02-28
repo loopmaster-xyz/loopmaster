@@ -943,16 +943,14 @@
 		DspProgramState$1[DspProgramState$1["Pause"] = 2] = "Pause";
 		return DspProgramState$1;
 	}({});
-	const SHARED_PROGRAM_STATE_SLOTS = 7;
+	const SHARED_PROGRAM_STATE_SLOTS = 5;
 	const SHARED_PROGRAM_STATE_BYTE_LENGTH = SHARED_PROGRAM_STATE_SLOTS * 4;
 	let SharedProgramStateIndex = /* @__PURE__ */ function(SharedProgramStateIndex$1) {
-		SharedProgramStateIndex$1[SharedProgramStateIndex$1["_Unused0"] = 0] = "_Unused0";
-		SharedProgramStateIndex$1[SharedProgramStateIndex$1["HistoryPackIndex"] = 1] = "HistoryPackIndex";
-		SharedProgramStateIndex$1[SharedProgramStateIndex$1["HistoryPackEpoch"] = 2] = "HistoryPackEpoch";
-		SharedProgramStateIndex$1[SharedProgramStateIndex$1["Bpm"] = 3] = "Bpm";
-		SharedProgramStateIndex$1[SharedProgramStateIndex$1["State"] = 4] = "State";
-		SharedProgramStateIndex$1[SharedProgramStateIndex$1["SampleCount"] = 5] = "SampleCount";
-		SharedProgramStateIndex$1[SharedProgramStateIndex$1["_Unused6"] = 6] = "_Unused6";
+		SharedProgramStateIndex$1[SharedProgramStateIndex$1["HistoryPackIndex"] = 0] = "HistoryPackIndex";
+		SharedProgramStateIndex$1[SharedProgramStateIndex$1["HistoryPackEpoch"] = 1] = "HistoryPackEpoch";
+		SharedProgramStateIndex$1[SharedProgramStateIndex$1["Bpm"] = 2] = "Bpm";
+		SharedProgramStateIndex$1[SharedProgramStateIndex$1["State"] = 3] = "State";
+		SharedProgramStateIndex$1[SharedProgramStateIndex$1["SampleCount"] = 4] = "SampleCount";
 		return SharedProgramStateIndex$1;
 	}({});
 	function createSharedProgramStateViewsFromBuffer(buffer, byteOffset = 0) {
@@ -967,7 +965,7 @@
 		SharedTransportRunningState$1[SharedTransportRunningState$1["Pause"] = 2] = "Pause";
 		return SharedTransportRunningState$1;
 	}({});
-	const SHARED_TRANSPORT_SLOTS = 6;
+	const SHARED_TRANSPORT_SLOTS = 9;
 	SHARED_TRANSPORT_SLOTS * 4;
 	let SharedTransportIndex = /* @__PURE__ */ function(SharedTransportIndex$1) {
 		SharedTransportIndex$1[SharedTransportIndex$1["SampleCount"] = 0] = "SampleCount";
@@ -976,6 +974,9 @@
 		SharedTransportIndex$1[SharedTransportIndex$1["StopAndSeekToZero"] = 3] = "StopAndSeekToZero";
 		SharedTransportIndex$1[SharedTransportIndex$1["ActuallyPlaying"] = 4] = "ActuallyPlaying";
 		SharedTransportIndex$1[SharedTransportIndex$1["HistorySyncRequested"] = 5] = "HistorySyncRequested";
+		SharedTransportIndex$1[SharedTransportIndex$1["LoopBeginSamples"] = 6] = "LoopBeginSamples";
+		SharedTransportIndex$1[SharedTransportIndex$1["LoopEndSamples"] = 7] = "LoopEndSamples";
+		SharedTransportIndex$1[SharedTransportIndex$1["ProjectEndSamples"] = 8] = "ProjectEndSamples";
 		return SharedTransportIndex$1;
 	}({});
 	function createSharedTransportViewsFromBuffer(buffer, byteOffset = 0) {
@@ -1248,8 +1249,15 @@
 						runProgram(runtime, nyquist, piOverNyquist, bpmOverrideValueRef.value, bpmRef.value, p, p.slots[to], bufferLength, baseSampleCount, outputL, outputR, t$1, true);
 						p.swapFadeRemaining = Math.max(0, p.swapFadeRemaining - bufferLength);
 					} else runProgram(runtime, nyquist, piOverNyquist, bpmOverrideValueRef.value, bpmRef.value, p, p.slots[p.activeSlot], bufferLength, baseSampleCount, outputL, outputR, 1, true);
-					if (advanceSampleCount) p.sampleCount = baseSampleCount + bufferLength;
-					else p.seekSampleCount = baseSampleCount + bufferLength;
+					if (advanceSampleCount) {
+						p.sampleCount = baseSampleCount + bufferLength;
+						if (state.loopBeginSamples >= 0 && state.loopEndSamples > 0) {
+							if (p.sampleCount >= state.loopEndSamples) p.sampleCount = state.loopBeginSamples + (p.sampleCount - state.loopEndSamples);
+						}
+						if (state.projectEndSamples > 0) {
+							if (p.sampleCount >= state.projectEndSamples) p.sampleCount = 0 + (p.sampleCount - state.projectEndSamples);
+						}
+					} else p.seekSampleCount = baseSampleCount + bufferLength;
 					const pending = pendingProgramApplied.get(p.id);
 					const pendingSlot = pendingProgramAppliedSlot.get(p.id);
 					if (pending && pendingSlot === p.activeSlot) {
@@ -1276,6 +1284,12 @@
 				scheduleRefresh = true;
 			}
 			state.sampleCount = state.sampleCount + bufferLength;
+			if (state.loopBeginSamples >= 0 && state.loopEndSamples > 0) {
+				if (state.sampleCount >= state.loopEndSamples) state.sampleCount = state.loopBeginSamples + (state.sampleCount - state.loopEndSamples);
+			}
+			if (state.projectEndSamples > 0) {
+				if (state.sampleCount >= state.projectEndSamples) state.sampleCount = 0 + (state.sampleCount - state.projectEndSamples);
+			}
 			state.transportSampleCount = state.sampleCount;
 			if (idsNowPlaying.symmetricDifference(idsWasPlaying).size !== 0) {
 				scheduleRefresh = true;
@@ -1346,6 +1360,15 @@
 			},
 			set transportActuallyPlaying(v) {
 				Atomics.store(transportU32, SharedTransportIndex.ActuallyPlaying, v);
+			},
+			get loopBeginSamples() {
+				return Atomics.load(transportU32, SharedTransportIndex.LoopBeginSamples);
+			},
+			get loopEndSamples() {
+				return Atomics.load(transportU32, SharedTransportIndex.LoopEndSamples);
+			},
+			get projectEndSamples() {
+				return Atomics.load(transportU32, SharedTransportIndex.ProjectEndSamples);
 			},
 			get sampleCount() {
 				return sampleCountRef.value;
@@ -1705,4 +1728,4 @@
 	registerProcessor("dsp", DspProcessor);
 })();
 
-//# sourceMappingURL=worklet-DRhRbGdh.js.map
+//# sourceMappingURL=worklet-D_v2nKSj.js.map

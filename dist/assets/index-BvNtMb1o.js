@@ -36903,19 +36903,17 @@ let DspProgramState = /* @__PURE__ */ function(DspProgramState$1) {
 	return DspProgramState$1;
 }({});
 let SharedProgramStateIndex = /* @__PURE__ */ function(SharedProgramStateIndex$1) {
-	SharedProgramStateIndex$1[SharedProgramStateIndex$1["_Unused0"] = 0] = "_Unused0";
-	SharedProgramStateIndex$1[SharedProgramStateIndex$1["HistoryPackIndex"] = 1] = "HistoryPackIndex";
-	SharedProgramStateIndex$1[SharedProgramStateIndex$1["HistoryPackEpoch"] = 2] = "HistoryPackEpoch";
-	SharedProgramStateIndex$1[SharedProgramStateIndex$1["Bpm"] = 3] = "Bpm";
-	SharedProgramStateIndex$1[SharedProgramStateIndex$1["State"] = 4] = "State";
-	SharedProgramStateIndex$1[SharedProgramStateIndex$1["SampleCount"] = 5] = "SampleCount";
-	SharedProgramStateIndex$1[SharedProgramStateIndex$1["_Unused6"] = 6] = "_Unused6";
+	SharedProgramStateIndex$1[SharedProgramStateIndex$1["HistoryPackIndex"] = 0] = "HistoryPackIndex";
+	SharedProgramStateIndex$1[SharedProgramStateIndex$1["HistoryPackEpoch"] = 1] = "HistoryPackEpoch";
+	SharedProgramStateIndex$1[SharedProgramStateIndex$1["Bpm"] = 2] = "Bpm";
+	SharedProgramStateIndex$1[SharedProgramStateIndex$1["State"] = 3] = "State";
+	SharedProgramStateIndex$1[SharedProgramStateIndex$1["SampleCount"] = 4] = "SampleCount";
 	return SharedProgramStateIndex$1;
 }({});
 function createSharedProgramStateViewsFromBuffer(buffer, byteOffset = 0) {
 	return {
-		u32: new Uint32Array(buffer, byteOffset, 7),
-		f32: new Float32Array(buffer, byteOffset, 7)
+		u32: new Uint32Array(buffer, byteOffset, 5),
+		f32: new Float32Array(buffer, byteOffset, 5)
 	};
 }
 let SharedTransportRunningState = /* @__PURE__ */ function(SharedTransportRunningState$1) {
@@ -36931,12 +36929,15 @@ let SharedTransportIndex = /* @__PURE__ */ function(SharedTransportIndex$1) {
 	SharedTransportIndex$1[SharedTransportIndex$1["StopAndSeekToZero"] = 3] = "StopAndSeekToZero";
 	SharedTransportIndex$1[SharedTransportIndex$1["ActuallyPlaying"] = 4] = "ActuallyPlaying";
 	SharedTransportIndex$1[SharedTransportIndex$1["HistorySyncRequested"] = 5] = "HistorySyncRequested";
+	SharedTransportIndex$1[SharedTransportIndex$1["LoopBeginSamples"] = 6] = "LoopBeginSamples";
+	SharedTransportIndex$1[SharedTransportIndex$1["LoopEndSamples"] = 7] = "LoopEndSamples";
+	SharedTransportIndex$1[SharedTransportIndex$1["ProjectEndSamples"] = 8] = "ProjectEndSamples";
 	return SharedTransportIndex$1;
 }({});
 function createSharedTransportViewsFromBuffer(buffer, byteOffset = 0) {
 	return {
-		u32: new Uint32Array(buffer, byteOffset, 6),
-		f32: new Float32Array(buffer, byteOffset, 6)
+		u32: new Uint32Array(buffer, byteOffset, 9),
+		f32: new Float32Array(buffer, byteOffset, 9)
 	};
 }
 function bytecodeStructureHash(bytecode$1) {
@@ -37579,7 +37580,7 @@ var asconfig_default = {
 		"exportRuntime": true
 	}
 };
-var worklet_default = "/assets/worklet-DRhRbGdh.js";
+var worklet_default = "/assets/worklet-D_v2nKSj.js";
 function getWasmPaths() {
 	const base = isMobile$1() ? "/as/build/index-mobile.wasm" : "/as/build/index.wasm";
 	return {
@@ -38163,8 +38164,8 @@ async function createDspCore(wasmBinary, processor, transportBuffer) {
 }
 async function createDsp(state) {
 	const programs = /* @__PURE__ */ new Set();
-	const transportBuffer = new SharedArrayBuffer(24);
-	track("sab-transport", "SharedArrayBuffer", 24, { source: "dsp" });
+	const transportBuffer = new SharedArrayBuffer(36);
+	track("sab-transport", "SharedArrayBuffer", 36, { source: "dsp" });
 	const t$12 = createSharedTransportViewsFromBuffer(transportBuffer);
 	const transport$1 = {
 		transportU32: t$12.u32,
@@ -38311,6 +38312,21 @@ async function createDsp(state) {
 		},
 		get isActuallyStopped() {
 			return Atomics.load(transport$1.transportU32, SharedTransportIndex.ActuallyPlaying) === SharedTransportRunningState.Stop;
+		},
+		get loopBeginSamples() {
+			return Atomics.load(transport$1.transportU32, SharedTransportIndex.LoopBeginSamples);
+		},
+		set loopBeginSamples(v$4) {
+			Atomics.store(transport$1.transportU32, SharedTransportIndex.LoopBeginSamples, v$4);
+		},
+		get loopEndSamples() {
+			return Atomics.load(transport$1.transportU32, SharedTransportIndex.LoopEndSamples);
+		},
+		set loopEndSamples(v$4) {
+			Atomics.store(transport$1.transportU32, SharedTransportIndex.LoopEndSamples, v$4);
+		},
+		set projectEndSamples(v$4) {
+			Atomics.store(transport$1.transportU32, SharedTransportIndex.ProjectEndSamples, v$4);
 		},
 		togglePause(programs$1) {
 			if (this.isPlaying) this.pause(programs$1);
@@ -38654,7 +38670,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DEOe4nCD.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DhqWIYwJ.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -46214,6 +46230,29 @@ const transport = {
 		const sampleRate = contexts.currentProgramContext.latency.value.state.sampleRate;
 		const sampleCount = Math.round(seconds * sampleRate);
 		await dsp.seek(sampleCount, [contexts.currentProgramContext.program], scrubbingProgramState.value === DspProgramState.Start && isPlayingCurrent.value);
+	},
+	getLoopBeginSamples: () => {
+		if (!ctx.value) return;
+		return ctx.value.dsp.loopBeginSamples;
+	},
+	getLoopEndSamples: () => {
+		if (!ctx.value) return;
+		return ctx.value.dsp.loopEndSamples;
+	},
+	setLoopBeginSamples: (samples) => {
+		if (!ctx.value) return;
+		const dsp = ctx.value.dsp;
+		dsp.loopBeginSamples = samples;
+	},
+	setLoopEndSamples: (samples) => {
+		if (!ctx.value) return;
+		const dsp = ctx.value.dsp;
+		dsp.loopEndSamples = samples;
+	},
+	setProjectEndSamples: (samples) => {
+		if (!ctx.value) return;
+		const dsp = ctx.value.dsp;
+		dsp.projectEndSamples = samples;
 	}
 };
 const inlineTransport = {
@@ -46486,6 +46525,11 @@ persist("ai", () => {
 	aiPromptNew.value = data.aiPromptNew ?? "";
 	aiPromptModify.value = data.aiPromptModify ?? "";
 });
+m(() => {
+	const end = [...playingProgramContext.value?.result.value?.compile?.labels ?? []].find((l$10) => l$10.text.toLowerCase() === "end");
+	if (end) transport.setProjectEndSamples(Math.round(end.bar * 4 * 60 / bpm.value * (playingProgramContext.value?.latency.value.state.sampleRate || 44100)));
+	else transport.setProjectEndSamples(0);
+});
 let MouseButton = /* @__PURE__ */ function(MouseButton$2) {
 	MouseButton$2[MouseButton$2["Left"] = 0] = "Left";
 	MouseButton$2[MouseButton$2["Middle"] = 1] = "Middle";
@@ -46502,6 +46546,39 @@ const createHeader = (rootCtx, programCtx) => {
 			x$4 -= 160;
 			w$5 -= 160;
 			let ratio = x$4 / w$5;
+			if (e$58.altKey) {
+				const barLengthSeconds = 240 / (programCtx.result.value.compile.bpm ?? 120);
+				const sampleRate = programCtx.latency.value.state.sampleRate || 44100;
+				const secToSamples = (sec) => Math.round(sec * sampleRate);
+				if (y$5 < h$5 / 2) {
+					const barIndex = ratio * 128;
+					const phraseBar = Math.floor(barIndex / 4) * 4;
+					const begin = secToSamples(phraseBar * barLengthSeconds);
+					const end = secToSamples((phraseBar + 4) * barLengthSeconds);
+					if (begin === transport.getLoopBeginSamples() && end === transport.getLoopEndSamples()) {
+						transport.setLoopBeginSamples(0);
+						transport.setLoopEndSamples(0);
+					} else {
+						transport.setLoopBeginSamples(begin);
+						transport.setLoopEndSamples(end);
+					}
+				} else {
+					const windowStartTime = programCtx.timeSeconds.value - 1 * barLengthSeconds;
+					const timeWindowSeconds = TIME_WINDOW_BARS * barLengthSeconds;
+					const clickedSeconds = windowStartTime + ratio * timeWindowSeconds;
+					const barStartSeconds = Math.floor(clickedSeconds / barLengthSeconds) * barLengthSeconds;
+					const begin = secToSamples(barStartSeconds);
+					const end = secToSamples(barStartSeconds + barLengthSeconds);
+					if (begin === transport.getLoopBeginSamples() && end === transport.getLoopEndSamples()) {
+						transport.setLoopBeginSamples(0);
+						transport.setLoopEndSamples(0);
+					} else {
+						transport.setLoopBeginSamples(begin);
+						transport.setLoopEndSamples(end);
+					}
+				}
+				return;
+			}
 			if (ratio < 0 || e$58.button === MouseButton.Right) {
 				transport.restart();
 				return;
@@ -46614,6 +46691,19 @@ const createHeader = (rootCtx, programCtx) => {
 				for (let i$6 = 0; i$6 < labelPositions.length - 1; i$6++) drawTint(labelPositions[i$6].x, labelPositions[i$6 + 1].x, labelPositions[i$6].color);
 				if (labelPositions.length >= 1) drawTint(labelPositions[labelPositions.length - 1].x, w$5, labelPositions[labelPositions.length - 1].color);
 			}
+			const loopBegin = transport.getLoopBeginSamples();
+			const loopEnd = transport.getLoopEndSamples();
+			if (loopBegin != null && loopEnd != null && loopEnd > loopBegin) {
+				const loopBeginSec = loopBegin / sampleRate;
+				const loopEndSec = loopEnd / sampleRate;
+				const loopStartX = loopBeginSec / totalSeconds * w$5;
+				const loopEndX = loopEndSec / totalSeconds * w$5;
+				c$7.save();
+				c$7.globalAlpha = .3;
+				c$7.fillStyle = primaryColor.value;
+				c$7.fillRect(Math.max(0, loopStartX), 0, Math.min(w$5, loopEndX) - Math.max(0, loopStartX), h$5);
+				c$7.restore();
+			}
 			for (const timeline of timelineHistories) {
 				const segs = readTimelineSegsFromCompiledTimeline(compileTimelineNotation(timeline.sequence).bytecode, sampleRate, bpm$1, 0, totalSeconds);
 				c$7.strokeStyle = getTimelineColor(timeline.colorIndex);
@@ -46700,6 +46790,22 @@ const createHeader = (rootCtx, programCtx) => {
 				});
 				for (let i$6 = 0; i$6 < scrubLabelPositions.length - 1; i$6++) scrubDrawTint(scrubLabelPositions[i$6].x, scrubLabelPositions[i$6 + 1].x, scrubLabelPositions[i$6].color);
 				if (scrubLabelPositions.length >= 1) scrubDrawTint(scrubLabelPositions[scrubLabelPositions.length - 1].x, w$5, scrubLabelPositions[scrubLabelPositions.length - 1].color);
+			}
+			if (loopBegin != null && loopEnd != null && loopEnd > loopBegin) {
+				const loopBeginSec = loopBegin / sampleRate;
+				const loopEndSec = loopEnd / sampleRate;
+				const loopStartX = (loopBeginSec - windowStartTime) * pxPerSecond;
+				const loopEndX = (loopEndSec - windowStartTime) * pxPerSecond;
+				const start = Math.max(0, Math.min(w$5, loopStartX));
+				const end = Math.max(0, Math.min(w$5, loopEndX));
+				const ww = Math.max(0, end - start);
+				if (ww > 0) {
+					c$7.save();
+					c$7.globalAlpha = .3;
+					c$7.fillStyle = primaryColor.value;
+					c$7.fillRect(start, y$5, ww, h$5);
+					c$7.restore();
+				}
 			}
 			const barSizes = /* @__PURE__ */ new Map();
 			const firstBarStart = Math.floor(windowStartTime / barLengthSeconds) * barLengthSeconds;
@@ -57282,4 +57388,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-DfrTXQ4A.js.map
+//# sourceMappingURL=index-BvNtMb1o.js.map
