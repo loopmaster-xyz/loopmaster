@@ -183,7 +183,7 @@ export function createKnobWidgets(doc: Doc, result: ControlCompileSnapshot | nul
         const y = event.clientY
 
         const handleMove = (e: MouseEvent) => {
-          skipSyncPreview()
+          skipSyncPreview(doc)
           const { start, end } = getRange()
           const len = end - start
           const dy = (y - e.clientY) * 0.008

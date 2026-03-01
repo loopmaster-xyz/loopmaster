@@ -937,12 +937,12 @@ persist('admin', () => {
 
 export const favIconSvgText = signal('')
 
-export const shouldSkipSyncPreview = signal(false)
-const restoreSyncPreview = debounce(100, () => {
-  shouldSkipSyncPreview.value = false
+export const shouldSkipSyncPreview = signal<Doc | null>(null)
+const restoreSyncPreview = debounce(500, () => {
+  shouldSkipSyncPreview.value = null
 })
-export function skipSyncPreview() {
-  shouldSkipSyncPreview.value = true
+export function skipSyncPreview(doc: Doc) {
+  shouldSkipSyncPreview.value = doc
   restoreSyncPreview()
 }
 
@@ -1134,7 +1134,8 @@ export const djTransport = {
     if (deck === 'a') djTargetSecondsA.value = seconds
     else djTargetSecondsB.value = seconds
 
-    const preview = (deck === 'a' ? djScrubbingProgramStateA.value : djScrubbingProgramStateB.value) === DspProgramState.Start
+    const preview =
+      (deck === 'a' ? djScrubbingProgramStateA.value : djScrubbingProgramStateB.value) === DspProgramState.Start
       && isActuallyPlaying.value
     await dsp.seekPrograms(aligned, [p.program], preview)
   },
@@ -1161,7 +1162,8 @@ effect(() => {
   if (x < 0.5) {
     gainA = 1
     gainB = x * 2
-  } else {
+  }
+  else {
     gainA = 1 - (x - 0.5) * 2
     gainB = 1
   }

@@ -1,4 +1,4 @@
-import { CodeIcon, HouseIcon, LightbulbFilamentIcon } from '@phosphor-icons/react'
+import { CodeIcon, HouseIcon, LightbulbFilamentIcon, LightningIcon } from '@phosphor-icons/react'
 import { useComputed } from '@preact/signals'
 import { cn } from '../lib/cn.ts'
 import { pathname } from '../router.tsx'
@@ -7,10 +7,10 @@ import { SidebarMain } from './SidebarMain.tsx'
 
 export const tutorials: { name: string; description: string; href: string; Icon: typeof LightbulbFilamentIcon }[] = [
   {
-    name: 'Getting Started',
-    description: 'Learn the basics of loopmaster',
-    href: '/tutorials/getting-started',
-    Icon: LightbulbFilamentIcon,
+    name: 'Zero to Hero',
+    description: 'Everything you need to know',
+    href: '/tutorials/zero-to-hero',
+    Icon: LightningIcon,
   },
   {
     name: 'Drum One-Liners',

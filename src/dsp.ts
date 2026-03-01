@@ -81,6 +81,7 @@ async function createDspProgramContextImpl(
 ) {
   const program = await dsp.createProgram()
   const doc = opts.doc ?? createDoc(tokenize)
+  let compiledEpoch = -1
 
   const result = signal<ControlCompileSnapshot | null>(null)
   const latency = signal<DspLatency>(program.latency)
@@ -195,9 +196,10 @@ async function createDspProgramContextImpl(
   })
 
   effect(() => {
-    shouldSkipSyncPreview.value
+    if (shouldSkipSyncPreview.value && shouldSkipSyncPreview.value !== doc) return
     doc.code
     const epoch = doc.epoch
+    if (epoch === compiledEpoch) return
     queueMicrotask(async () => {
       if (epoch !== doc.epoch) return
 
@@ -220,7 +222,13 @@ async function createDspProgramContextImpl(
             userCallHistories.value = previewResult.userCallHistories
           })
         }
-        await program.setControlCompileSnapshot(ccs)
+        if (shouldSkipSyncPreview.value) {
+          await program.setControlCompileSnapshotFast(ccs)
+        }
+        else {
+          await program.setControlCompileSnapshot(ccs)
+        }
+        compiledEpoch = doc.epoch
         historiesRefreshed.value++
       }
       catch (error) {

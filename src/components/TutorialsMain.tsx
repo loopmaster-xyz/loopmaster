@@ -5,6 +5,7 @@ import {
   LinkIcon as LinkIconPhosphor,
 } from '@phosphor-icons/react'
 import { useComputed, useSignal } from '@preact/signals'
+import { useEffect, useRef } from 'preact/hooks'
 import { isMobile } from 'utils/is-mobile'
 import { useAsyncMemo } from '../hooks/useAsyncMemo.ts'
 import { useReactiveEffect } from '../hooks/useReactiveEffect.ts'
@@ -105,6 +106,45 @@ const getHeadingId = (children: MarkdownNode[]) => {
     '-')
 }
 
+const getHeadingText = (children: MarkdownNode[]) =>
+  children.map(child => child.type === 'text' ? child.value : '').join('')
+
+type TocEntry = { id: string; level: number; text: string }
+
+type TocNode = TocEntry & { children: TocNode[] }
+
+const extractHeadings = (nodes: MarkdownNode[]): TocEntry[] =>
+  nodes.filter((n): n is MarkdownNode & { type: 'heading'; level: number } => n.type === 'heading')
+    .map(n => ({ id: getHeadingId(n.children), level: n.level, text: getHeadingText(n.children) }))
+
+const buildTocTree = (entries: TocEntry[]): TocNode[] => {
+  const root: TocNode = { id: '', level: 0, text: '', children: [] }
+  const stack: TocNode[] = [root]
+  for (const e of entries) {
+    while (stack.length > 1 && stack[stack.length - 1].level >= e.level)
+      stack.pop()
+    const node: TocNode = { ...e, children: [] }
+    stack[stack.length - 1].children.push(node)
+    stack.push(node)
+  }
+  return root.children
+}
+
+const isAncestorOf = (ancestorId: string, descendantId: string, entries: TocEntry[]): boolean => {
+  const idx = entries.findIndex(e => e.id === descendantId)
+  if (idx < 0) return false
+  const ancIdx = entries.findIndex(e => e.id === ancestorId)
+  if (ancIdx < 0 || ancIdx >= idx) return false
+  const ancLevel = entries[ancIdx].level
+  for (let i = ancIdx + 1; i < idx; i++) {
+    if (entries[i].level <= ancLevel) return false
+  }
+  return true
+}
+
+const isExpanded = (nodeId: string, activeId: string, entries: TocEntry[]): boolean =>
+  nodeId === activeId || isAncestorOf(nodeId, activeId, entries)
+
 const Heading = ({ level, children }: { level: number; children: MarkdownNode[] }) => {
   const sizes = ['md', 'lg', 'md', 'md', 'sm', 'xs']
   const className = `text-${sizes[level - 1]} text-white font-bold ${
@@ -200,7 +240,7 @@ const ListItem = ({ children }: { children: MarkdownNode[] }) => {
 
 const Link = ({ href, children }: { href: string; children: MarkdownNode[] }) => {
   const ch = children.map(compile)
-  return <a href={href}>{ch}</a>
+  return <a href={href} target="_blank" rel="noopener noreferrer" class="text-white underline">{ch}</a>
 }
 
 const Image = ({ src, alt }: { src: string; alt: string }) => {
@@ -212,7 +252,7 @@ const Code = ({ value }: { value: string }) => {
 }
 
 const InlineCode = ({ value }: { value: string }) => {
-  return <code class={`text-[${primaryColor.value}]`}>{value}</code>
+  return <code class={`text-[${primaryColor.value}] font-[Liga_Space_Mono]`}>{value}</code>
 }
 
 const Emphasis = ({ children }: { children: MarkdownNode[] }) => {
@@ -231,7 +271,7 @@ const StrikeThrough = ({ children }: { children: MarkdownNode[] }) => {
 }
 
 const Divider = () => {
-  return <hr />
+  return <></>
 }
 
 const Checkbox = ({ checked, children }: { checked: boolean; children: MarkdownNode[] }) => {
@@ -296,6 +336,89 @@ const LineBreak = () => {
   return <br />
 }
 
+const TocItem = ({
+  node,
+  activeId,
+  headings,
+  depth,
+  expanded,
+}: {
+  node: TocNode
+  activeId: string
+  headings: TocEntry[]
+  depth: number
+  expanded: boolean
+}) => {
+  const onClick = () => {
+    const el = document.getElementById(node.id)
+    if (!el) return
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+  const hasChildren = node.children.length > 0
+
+  return (
+    <div>
+      <button
+        type="button"
+        class={`block w-full text-left py-1 truncate hover:text-white cursor-pointer ${
+          activeId === node.id ? 'text-white font-medium' : ''
+        }`}
+        style={depth > 0 ? { paddingLeft: `${depth * 12}px` } : {}}
+        onClick={onClick}
+      >
+        {node.text}
+      </button>
+      {hasChildren && (
+        <div
+          class={`grid transition-[grid-template-rows] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+            expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+          }`}
+        >
+          <div class="overflow-hidden min-h-0">
+            {node.children.map(child => (
+              <TocItem
+                key={child.id}
+                node={child}
+                activeId={activeId}
+                headings={headings}
+                depth={depth + 1}
+                expanded={isExpanded(child.id, activeId, headings)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const Toc = ({
+  headings,
+  activeId,
+}: {
+  headings: TocEntry[]
+  activeId: string
+}) => {
+  const tree = buildTocTree(headings)
+
+  return (
+    <aside class="hidden lg:block sticky top-4 self-start shrink-0 w-48 pl-8 border-l border-white/10">
+      <nav class="text-sm text-white/50">
+        {tree.map(node => (
+          <TocItem
+            key={node.id}
+            node={node}
+            activeId={activeId}
+            headings={headings}
+            depth={0}
+            expanded={isExpanded(node.id, activeId, headings)}
+          />
+        ))}
+      </nav>
+    </aside>
+  )
+}
+
 export const TutorialsMain = () => {
   widgetOptions.showVisuals = true
   widgetOptions.showKnobs = true
@@ -303,6 +426,12 @@ export const TutorialsMain = () => {
 
   const parsed = useSignal<MarkdownNode[] | null>(null)
   const teardown = useSignal(false)
+  const activeId = useSignal('')
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
+  const headings = useComputed(() =>
+    parsed.value ? extractHeadings(parsed.value.slice(1)) : []
+  )
 
   const tutorialName = useComputed(() => pathname.value.split('/')[2])
 
@@ -333,6 +462,34 @@ export const TutorialsMain = () => {
     }
   })
 
+  useEffect(() => {
+    if (!parsed.value || headings.value.length === 0) return
+    const firstId = headings.value[0]?.id
+    if (firstId) activeId.value = firstId
+    const root = containerRef.current?.parentElement as HTMLElement | null
+    if (!root) return
+    const ids = headings.value.map(h => h.id)
+    const update = () => {
+      const rect = root.getBoundingClientRect()
+      const activeLine = rect.top + rect.height * 0.15
+      let bestId = ids[0]
+      let bestTop = -Infinity
+      for (const id of ids) {
+        const el = document.getElementById(id)
+        if (!el) continue
+        const top = el.getBoundingClientRect().top
+        if (top <= activeLine && top > bestTop) {
+          bestTop = top
+          bestId = id
+        }
+      }
+      activeId.value = bestId
+    }
+    update()
+    root.addEventListener('scroll', update, { passive: true })
+    return () => root.removeEventListener('scroll', update)
+  }, [parsed.value, headings.value])
+
   return (
     <>
       <Header>
@@ -351,10 +508,15 @@ export const TutorialsMain = () => {
       <Main key={tutorialName.value} class={parsed.value ? 'px-4 md:px-8 md:pl-12 py-4' : 'p-4'}>
         {teardown.value ? null : (parsed.value
           ? (
-            <>
-              {parsed.value.slice(1).map(compile)}
-              <CodeIcon size={20} class="my-6" />
-            </>
+            <div ref={containerRef} class="flex gap-8 min-h-0">
+              <div class="flex-1 min-w-0">
+                {parsed.value.slice(1).map(compile)}
+                <CodeIcon size={20} class="my-6" />
+              </div>
+              {headings.value.length > 0 && (
+                <Toc headings={headings.value} activeId={activeId.value} />
+              )}
+            </div>
           )
           : (
             <Grid cols={isMobile() ? 1 : 3}>

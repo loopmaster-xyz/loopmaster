@@ -3,7 +3,7 @@ import { isMobile } from 'utils/is-mobile'
 import type { DspProgramContext } from '../dsp.ts'
 import { createDefinitionTooltipHandlers } from './definition-tooltip.ts'
 
-export const editorSettings: Partial<EditorSettings> = {
+export const editorSettings = {
   showGutter: !isMobile(),
   lineHeight: isMobile() ? 14 : 18,
   fontSize: isMobile() ? '8pt' : '11.5pt',
@@ -40,7 +40,7 @@ export const editorSettings: Partial<EditorSettings> = {
     text: { color: c.white, style: 'normal', weight: 'regular' },
     special: { color: c.red, style: 'normal', weight: 'bold' },
   }),
-}
+} satisfies Partial<EditorSettings>
 
 export const createEditorOnHover = (editor: Editor, getInline?: () => DspProgramContext | null | undefined) => {
   const { onHoverToken, onCaretToken } = createDefinitionTooltipHandlers(editor, getInline)
