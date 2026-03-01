@@ -971,7 +971,7 @@
 		SharedTransportRunningState$1[SharedTransportRunningState$1["Pause"] = 2] = "Pause";
 		return SharedTransportRunningState$1;
 	}({});
-	const SHARED_TRANSPORT_SLOTS = 9;
+	const SHARED_TRANSPORT_SLOTS = 15;
 	SHARED_TRANSPORT_SLOTS * 4;
 	let SharedTransportIndex = /* @__PURE__ */ function(SharedTransportIndex$1) {
 		SharedTransportIndex$1[SharedTransportIndex$1["SampleCount"] = 0] = "SampleCount";
@@ -983,6 +983,12 @@
 		SharedTransportIndex$1[SharedTransportIndex$1["LoopBeginSamples"] = 6] = "LoopBeginSamples";
 		SharedTransportIndex$1[SharedTransportIndex$1["LoopEndSamples"] = 7] = "LoopEndSamples";
 		SharedTransportIndex$1[SharedTransportIndex$1["ProjectEndSamples"] = 8] = "ProjectEndSamples";
+		SharedTransportIndex$1[SharedTransportIndex$1["LoopBeginSamplesA"] = 9] = "LoopBeginSamplesA";
+		SharedTransportIndex$1[SharedTransportIndex$1["LoopEndSamplesA"] = 10] = "LoopEndSamplesA";
+		SharedTransportIndex$1[SharedTransportIndex$1["ProjectEndSamplesA"] = 11] = "ProjectEndSamplesA";
+		SharedTransportIndex$1[SharedTransportIndex$1["LoopBeginSamplesB"] = 12] = "LoopBeginSamplesB";
+		SharedTransportIndex$1[SharedTransportIndex$1["LoopEndSamplesB"] = 13] = "LoopEndSamplesB";
+		SharedTransportIndex$1[SharedTransportIndex$1["ProjectEndSamplesB"] = 14] = "ProjectEndSamplesB";
 		return SharedTransportIndex$1;
 	}({});
 	function createSharedTransportViewsFromBuffer(buffer, byteOffset = 0) {
@@ -1263,6 +1269,15 @@
 				wasPlaying = false;
 				isPlaying = false;
 				return true;
+			} else if (state.scheduleStopAndSeekToZero.length > 0) {
+				setProgramsState(programsById, DspProgramState.Stop, state.scheduleStopAndSeekToZero);
+				applyProgramSeek(programsById, 0, state.scheduleStopAndSeekToZero);
+				for (const p of [...programsById.values()].filter((p$1) => state.scheduleStopAndSeekToZero.includes(p$1.id))) {
+					const slot = p.slots[p.activeSlot];
+					copyHistoryMetaToProgramShared(runtime, p, slot.vm);
+					slot.vm.softReset();
+				}
+				state.scheduleStopAndSeekToZero = [];
 			}
 			const seekVersion = state.transportSeekVersion;
 			const next = Math.round(state.transportSampleCount);
@@ -1317,6 +1332,21 @@
 						}
 						if (state.projectEndSamples > 0) {
 							if (p.sampleCount >= state.projectEndSamples) p.sampleCount = 0 + (p.sampleCount - state.projectEndSamples);
+						}
+						if (p.id === state.programAId) {
+							if (state.loopBeginSamplesA >= 0 && state.loopEndSamplesA > 0) {
+								if (p.sampleCount >= state.loopEndSamplesA) p.sampleCount = state.loopBeginSamplesA + (p.sampleCount - state.loopEndSamplesA);
+							}
+							if (state.projectEndSamplesA > 0) {
+								if (p.sampleCount >= state.projectEndSamplesA) p.sampleCount = 0 + (p.sampleCount - state.projectEndSamplesA);
+							}
+						} else if (p.id === state.programBId) {
+							if (state.loopBeginSamplesB >= 0 && state.loopEndSamplesB > 0) {
+								if (p.sampleCount >= state.loopEndSamplesB) p.sampleCount = state.loopBeginSamplesB + (p.sampleCount - state.loopEndSamplesB);
+							}
+							if (state.projectEndSamplesB > 0) {
+								if (p.sampleCount >= state.projectEndSamplesB) p.sampleCount = 0 + (p.sampleCount - state.projectEndSamplesB);
+							}
 						}
 					} else p.seekSampleCount = baseSampleCount + bufferLength;
 					const pending = pendingProgramApplied.get(p.id);
@@ -1393,6 +1423,8 @@
 			transportF32,
 			nyquist,
 			piOverNyquist,
+			programAId: -1,
+			programBId: -1,
 			scheduleStopAndSeekToZero: [],
 			get transportSampleCount() {
 				return transportF32[SharedTransportIndex.SampleCount];
@@ -1432,6 +1464,24 @@
 			},
 			get projectEndSamples() {
 				return Atomics.load(transportU32, SharedTransportIndex.ProjectEndSamples);
+			},
+			get loopBeginSamplesA() {
+				return Atomics.load(transportU32, SharedTransportIndex.LoopBeginSamplesA);
+			},
+			get loopEndSamplesA() {
+				return Atomics.load(transportU32, SharedTransportIndex.LoopEndSamplesA);
+			},
+			get projectEndSamplesA() {
+				return Atomics.load(transportU32, SharedTransportIndex.ProjectEndSamplesA);
+			},
+			get loopBeginSamplesB() {
+				return Atomics.load(transportU32, SharedTransportIndex.LoopBeginSamplesB);
+			},
+			get loopEndSamplesB() {
+				return Atomics.load(transportU32, SharedTransportIndex.LoopEndSamplesB);
+			},
+			get projectEndSamplesB() {
+				return Atomics.load(transportU32, SharedTransportIndex.ProjectEndSamplesB);
 			},
 			get sampleCount() {
 				return sampleCountRef.value;
@@ -1753,12 +1803,31 @@
 			s.transportRunning = SharedTransportRunningState.Start;
 			return this.getInits();
 		}
+		async startSync(programIds) {
+			const s = this.state;
+			if (!s) throw new Error("No state");
+			const sampleCount = [...s.programsById.values()].find((p) => p.state === DspProgramState.Start)?.sampleCount;
+			if (sampleCount != null) {
+				const co = sampleRate * 60 * 4 / s.bpm;
+				const currentMusicalPosition = sampleCount / co;
+				const offset = currentMusicalPosition - Math.floor(currentMusicalPosition);
+				for (const program of [...s.programsById.values()].filter((p) => programIds.includes(p.id))) {
+					const programMusicalPosition = program.sampleCount / co;
+					program.sampleCount = (Math.floor(programMusicalPosition) + offset) * co;
+				}
+			}
+			s.setProgramsState(DspProgramState.Start, programIds);
+			s.transportRunning = SharedTransportRunningState.Start;
+			return this.getInits();
+		}
 		async stop(programIds) {
 			const s = this.state;
 			if (!s) throw new Error("No state");
 			s.scheduleStopAndSeekToZero = programIds;
-			s.transportStopAndSeekToZero = 1;
-			s.transportRunning = SharedTransportRunningState.Stop;
+			if (![...s.programsById.values()].filter((p) => !programIds.includes(p.id)).some((p) => p.state === DspProgramState.Start)) {
+				s.transportStopAndSeekToZero = 1;
+				s.transportRunning = SharedTransportRunningState.Stop;
+			}
 			return this.getInits();
 		}
 		async pause(programIds) {
@@ -1795,6 +1864,16 @@
 			s.setProgramsState(DspProgramState.Start, programIds2);
 			return this.getInits();
 		}
+		async setProgramA(programId) {
+			const s = this.state;
+			if (!s) throw new Error("No state");
+			s.programAId = programId;
+		}
+		async setProgramB(programId) {
+			const s = this.state;
+			if (!s) throw new Error("No state");
+			s.programBId = programId;
+		}
 		process(_inputs, outputs) {
 			const s = this.state;
 			if (!s) return true;
@@ -1804,4 +1883,4 @@
 	registerProcessor("dsp", DspProcessor);
 })();
 
-//# sourceMappingURL=worklet-BSGFxBDd.js.map
+//# sourceMappingURL=worklet-CFQsHJoe.js.map

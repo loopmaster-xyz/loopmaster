@@ -37253,12 +37253,18 @@ let SharedTransportIndex = /* @__PURE__ */ function(SharedTransportIndex$1) {
 	SharedTransportIndex$1[SharedTransportIndex$1["LoopBeginSamples"] = 6] = "LoopBeginSamples";
 	SharedTransportIndex$1[SharedTransportIndex$1["LoopEndSamples"] = 7] = "LoopEndSamples";
 	SharedTransportIndex$1[SharedTransportIndex$1["ProjectEndSamples"] = 8] = "ProjectEndSamples";
+	SharedTransportIndex$1[SharedTransportIndex$1["LoopBeginSamplesA"] = 9] = "LoopBeginSamplesA";
+	SharedTransportIndex$1[SharedTransportIndex$1["LoopEndSamplesA"] = 10] = "LoopEndSamplesA";
+	SharedTransportIndex$1[SharedTransportIndex$1["ProjectEndSamplesA"] = 11] = "ProjectEndSamplesA";
+	SharedTransportIndex$1[SharedTransportIndex$1["LoopBeginSamplesB"] = 12] = "LoopBeginSamplesB";
+	SharedTransportIndex$1[SharedTransportIndex$1["LoopEndSamplesB"] = 13] = "LoopEndSamplesB";
+	SharedTransportIndex$1[SharedTransportIndex$1["ProjectEndSamplesB"] = 14] = "ProjectEndSamplesB";
 	return SharedTransportIndex$1;
 }({});
 function createSharedTransportViewsFromBuffer(buffer, byteOffset = 0) {
 	return {
-		u32: new Uint32Array(buffer, byteOffset, 9),
-		f32: new Float32Array(buffer, byteOffset, 9)
+		u32: new Uint32Array(buffer, byteOffset, 15),
+		f32: new Float32Array(buffer, byteOffset, 15)
 	};
 }
 function bytecodeStructureHash(bytecode$1) {
@@ -37896,7 +37902,7 @@ var asconfig_default = {
 		"exportRuntime": true
 	}
 };
-var worklet_default = "/assets/worklet-BSGFxBDd.js";
+var worklet_default = "/assets/worklet-CFQsHJoe.js";
 function getWasmPaths() {
 	const base = isMobile$1() ? "/as/build/index-mobile.wasm" : "/as/build/index.wasm";
 	return {
@@ -38483,8 +38489,8 @@ async function createDspCore(wasmBinary, processor, transportBuffer) {
 }
 async function createDsp(state) {
 	const programs = /* @__PURE__ */ new Set();
-	const transportBuffer = new SharedArrayBuffer(36);
-	track("sab-transport", "SharedArrayBuffer", 36, { source: "dsp" });
+	const transportBuffer = new SharedArrayBuffer(60);
+	track("sab-transport", "SharedArrayBuffer", 60, { source: "dsp" });
 	const t$12 = createSharedTransportViewsFromBuffer(transportBuffer);
 	const transport$1 = {
 		transportU32: t$12.u32,
@@ -38504,6 +38510,11 @@ async function createDsp(state) {
 		return control(async () => {
 			await state.audioContext.resume();
 			await rebindAllPrograms(await core.worklet.start(programs$1.map((p$6) => p$6.id)));
+		});
+	}
+	function startSync(programs$1) {
+		return control(async () => {
+			await rebindAllPrograms(await core.worklet.startSync(programs$1.map((p$6) => p$6.id)));
 		});
 	}
 	function pause(programs$1) {
@@ -38547,7 +38558,17 @@ async function createDsp(state) {
 			});
 		});
 	}
-	function bpmOverride(bpm$1) {
+	function setProgramA(program) {
+		return control(async () => {
+			await core.worklet.setProgramA(program.id);
+		});
+	}
+	function setProgramB(program) {
+		return control(async () => {
+			await core.worklet.setProgramB(program.id);
+		});
+	}
+	function bpmOverride$1(bpm$1) {
 		return control(async () => {
 			await core.worklet.bpmOverride({ bpm: bpm$1 });
 		});
@@ -38618,12 +38639,13 @@ async function createDsp(state) {
 		latency,
 		sampleManager,
 		start,
+		startSync,
 		pause,
 		stop,
 		seek,
 		seekPrograms,
 		setProgramGain,
-		bpmOverride,
+		bpmOverride: bpmOverride$1,
 		createProgram,
 		playProgram,
 		stopProgram,
@@ -38633,6 +38655,8 @@ async function createDsp(state) {
 		refresh,
 		refreshUntilHistories,
 		setWorkletError,
+		setProgramA,
+		setProgramB,
 		get isPlaying() {
 			return Atomics.load(transport$1.transportU32, SharedTransportIndex.Running) === SharedTransportRunningState.Start;
 		},
@@ -38666,9 +38690,39 @@ async function createDsp(state) {
 		set projectEndSamples(v$4) {
 			Atomics.store(transport$1.transportU32, SharedTransportIndex.ProjectEndSamples, v$4);
 		},
+		get loopBeginSamplesA() {
+			return Atomics.load(transport$1.transportU32, SharedTransportIndex.LoopBeginSamplesA);
+		},
+		set loopBeginSamplesA(v$4) {
+			Atomics.store(transport$1.transportU32, SharedTransportIndex.LoopBeginSamplesA, v$4);
+		},
+		get loopEndSamplesA() {
+			return Atomics.load(transport$1.transportU32, SharedTransportIndex.LoopEndSamplesA);
+		},
+		set loopEndSamplesA(v$4) {
+			Atomics.store(transport$1.transportU32, SharedTransportIndex.LoopEndSamplesA, v$4);
+		},
+		set projectEndSamplesA(v$4) {
+			Atomics.store(transport$1.transportU32, SharedTransportIndex.ProjectEndSamplesA, v$4);
+		},
+		get loopBeginSamplesB() {
+			return Atomics.load(transport$1.transportU32, SharedTransportIndex.LoopBeginSamplesB);
+		},
+		set loopBeginSamplesB(v$4) {
+			Atomics.store(transport$1.transportU32, SharedTransportIndex.LoopBeginSamplesB, v$4);
+		},
+		get loopEndSamplesB() {
+			return Atomics.load(transport$1.transportU32, SharedTransportIndex.LoopEndSamplesB);
+		},
+		set loopEndSamplesB(v$4) {
+			Atomics.store(transport$1.transportU32, SharedTransportIndex.LoopEndSamplesB, v$4);
+		},
+		set projectEndSamplesB(v$4) {
+			Atomics.store(transport$1.transportU32, SharedTransportIndex.ProjectEndSamplesB, v$4);
+		},
 		togglePause(programs$1) {
-			if (this.isPlaying) this.pause(programs$1);
-			else this.start(programs$1);
+			if (this.isPlaying) return this.pause(programs$1);
+			else return this.start(programs$1);
 		}
 	};
 	Object.assign(core.workletRpcApi, dsp);
@@ -39008,7 +39062,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-CPIF4mGb.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-CMn5rpHv.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -43464,14 +43518,20 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 		fullResync,
 		dispose
 	};
-	m(() => {
-		if (!opts.isPlayingThis.value) return;
-		tickCount.value;
+	const updateLatency = () => {
 		o$24(() => {
 			program.latency.update();
 			latency.value = program.latency;
 			timeSeconds.value = program.latency.state.timeSeconds ?? 0;
 		});
+	};
+	m(() => {
+		if (!opts.isPlayingThis.value) {
+			requestAnimationFrame(updateLatency);
+			return;
+		}
+		tickCount.value;
+		updateLatency();
 	});
 	m(() => {
 		historiesRefreshed.value;
@@ -46113,6 +46173,8 @@ let MouseButton = /* @__PURE__ */ function(MouseButton$2) {
 }({});
 const createHeader = (rootCtx, programCtx, opts = {}) => {
 	const t$12 = opts.transport ?? transport;
+	const paddingLeft = opts.paddingLeft ?? 160;
+	const paddingRight = opts.paddingRight ?? 0;
 	const setTargetSeconds = opts.setTargetSeconds ?? ((seconds) => {
 		if (!rootCtx) return;
 		rootCtx.targetSeconds.value = seconds;
@@ -46121,11 +46183,13 @@ const createHeader = (rootCtx, programCtx, opts = {}) => {
 		height: 48,
 		onMouseDown: (e$57, x$4, y$5, w$5, h$5) => {
 			if (!rootCtx || !programCtx?.result.value) return;
-			x$4 -= 160;
-			w$5 -= 160;
+			x$4 -= paddingLeft;
+			w$5 -= paddingLeft + paddingRight;
+			if (w$5 <= 0) return;
 			let ratio = x$4 / w$5;
+			if (ratio > 1) return;
 			if (e$57.altKey) {
-				const barLengthSeconds = 240 / (programCtx.result.value.compile.bpm ?? 120);
+				const barLengthSeconds = 240 / (bpmOverride.value || (programCtx.result.value.compile.bpm ?? 120));
 				const sampleRate = programCtx.latency.value.state.sampleRate || 44100;
 				const secToSamples = (sec) => Math.round(sec * sampleRate);
 				if (y$5 < h$5 / 2) {
@@ -46166,8 +46230,9 @@ const createHeader = (rootCtx, programCtx, opts = {}) => {
 			if (y$5 < half) {
 				t$12.beginSeek();
 				const seek = () => {
-					const seconds = ratio * 128 * 4 * 60 / programCtx.result.value.compile.bpm;
-					const beatLengthSeconds = 60 / programCtx.result.value.compile.bpm / 4;
+					const bpm$1 = bpmOverride.value || (programCtx.result.value.compile.bpm ?? 120);
+					const seconds = ratio * 128 * 4 * 60 / bpm$1;
+					const beatLengthSeconds = 60 / bpm$1 / 4;
 					const snappedSeconds = Math.max(0, Math.round(seconds / beatLengthSeconds) * beatLengthSeconds);
 					t$12.seek(snappedSeconds);
 					setTargetSeconds(seconds);
@@ -46210,10 +46275,11 @@ const createHeader = (rootCtx, programCtx, opts = {}) => {
 			c$7.fillRect(x$4, y$5, w$5, h$5);
 			c$7.restore();
 			if (!programCtx?.result?.value) return;
-			x$4 += 160;
-			w$5 -= 160;
+			x$4 += paddingLeft;
+			w$5 -= paddingLeft + paddingRight;
+			if (w$5 <= 0) return;
 			const timeSeconds = programCtx.timeSeconds;
-			const bpm$1 = programCtx.result.value.compile.bpm ?? 120;
+			const bpm$1 = bpmOverride.value || (programCtx.result.value.compile.bpm ?? 120);
 			const barLengthSeconds = 240 / bpm$1;
 			const windowStartTime = timeSeconds.value - 1 * barLengthSeconds;
 			const windowEndTime = timeSeconds.value + 4 * barLengthSeconds;
@@ -46711,10 +46777,10 @@ var vmId = 0;
 const programContexts = c$3(/* @__PURE__ */ new Map());
 const playingContext = c$3(null);
 const playingInlineContext = c$3(null);
-const playingDjContexts = c$3([]);
+const playingDjContexts = c$3(/* @__PURE__ */ new Set());
 async function createProgramContext(ctx$1, opts) {
 	const ref = c$3(null);
-	const isPlayingThis = b(() => ref.value !== null && (playingContext.value === ref.value || playingInlineContext.value === ref.value || playingDjContexts.value.includes(ref.value)));
+	const isPlayingThis = b(() => ref.value !== null && (playingContext.value === ref.value || playingInlineContext.value === ref.value || playingDjContexts.value.has(ref.value)));
 	const programCtx = await ctx$1.createDspProgramContext({
 		vmId: vmId++,
 		isPlayingThis,
@@ -46841,7 +46907,8 @@ const transport = {
 		const dsp = ctx.value.dsp;
 		const contexts = await ensureProgramContexts();
 		if (!contexts) return;
-		dsp.togglePause([contexts.playingProgramContext.program]);
+		if (isPlaying.value) await dsp.pause([contexts.playingProgramContext.program]);
+		else return transport.start();
 	},
 	stop: async () => {
 		if (!ctx.value) return;
@@ -47219,26 +47286,13 @@ const djTitleA = c$3("");
 const djTitleB = c$3("");
 const djCrossfade = c$3(.5);
 const djBpm = c$3(120);
+var DJ_HEADER_NAV_WIDTH = 160;
 const djTargetSecondsA = c$3(0);
 const djTargetSecondsB = c$3(0);
 const djIsScrubbingA = c$3(false);
 const djIsScrubbingB = c$3(false);
 const djScrubbingProgramStateA = c$3(DspProgramState.Stop);
 const djScrubbingProgramStateB = c$3(DspProgramState.Stop);
-function djGridSamples(sampleRate, bpm$1) {
-	const stepSeconds = 60 / (bpm$1 || 120) / 4;
-	return Math.max(1, Math.round(stepSeconds * (sampleRate || 44100)));
-}
-function djAlignToPhase(sampleCount, grid, phase) {
-	const g$5 = Math.max(1, Math.round(grid) || 1);
-	const p$6 = (Math.round(phase) % g$5 + g$5) % g$5;
-	const s$4 = Math.max(0, Math.round(sampleCount));
-	let delta = p$6 - (s$4 % g$5 + g$5) % g$5;
-	const half = g$5 / 2;
-	if (delta > half) delta -= g$5;
-	else if (delta < -half) delta += g$5;
-	return Math.max(0, s$4 + delta);
-}
 async function ensureDjProgramContexts() {
 	if (!ctx.value) return;
 	const c$7 = ctx.value;
@@ -47253,7 +47307,7 @@ async function ensureDjProgramContexts() {
 		b: b$4
 	};
 }
-const djTransport = {
+var createDjTransport = (deck) => ({
 	start: async () => {
 		if (!ctx.value) return;
 		const dsp = ctx.value.dsp;
@@ -47270,31 +47324,46 @@ const djTransport = {
 		}
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts) return;
-		const { a: a$36, b: b$4 } = contexts;
-		playingDjContexts.value = [a$36, b$4];
-		await dsp.start([a$36.program, b$4.program]);
-		await Promise.all([dsp.refreshUntilHistories(a$36.program, { maxTries: 60 }), dsp.refreshUntilHistories(b$4.program, { maxTries: 60 })]);
+		const p$6 = deck === "a" ? contexts.a : contexts.b;
+		playingDjContexts.value.add(p$6);
+		playingDjContexts.value = new Set(playingDjContexts.value);
+		if (deck === "a") await dsp.setProgramA(p$6.program);
+		else await dsp.setProgramB(p$6.program);
+		await dsp.startSync([p$6.program]);
+		await dsp.refreshUntilHistories(p$6.program, { maxTries: 60 });
 		deferDraw.value = true;
 	},
 	pause: async () => {
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts || !ctx.value) return;
-		ctx.value.dsp.togglePause([contexts.a.program, contexts.b.program]);
+		const p$6 = deck === "a" ? contexts.a : contexts.b;
+		if (playingDjContexts.value.has(p$6)) {
+			playingDjContexts.value.delete(p$6);
+			playingDjContexts.value = new Set(playingDjContexts.value);
+			ctx.value.dsp.pause([p$6.program]);
+		} else {
+			playingDjContexts.value.add(p$6);
+			playingDjContexts.value = new Set(playingDjContexts.value);
+			ctx.value.dsp.startSync([p$6.program]);
+		}
 	},
 	stop: async () => {
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts || !ctx.value) return;
-		playingDjContexts.value = [];
-		await ctx.value.dsp.stop([contexts.a.program, contexts.b.program]);
+		const p$6 = deck === "a" ? contexts.a : contexts.b;
+		playingDjContexts.value.delete(p$6);
+		playingDjContexts.value = new Set(playingDjContexts.value);
+		await ctx.value.dsp.stop([p$6.program]);
 	},
 	restart: async () => {
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts || !ctx.value) return;
 		await ctx.value.dsp.state.audioContext.resume();
 		skipAnimations.value += 1;
-		await ctx.value.dsp.seek(0, [contexts.a.program, contexts.b.program], false);
+		const p$6 = deck === "a" ? contexts.a : contexts.b;
+		await ctx.value.dsp.seek(0, [p$6.program], false);
 	},
-	beginSeek: async (deck) => {
+	beginSeek: async () => {
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts || !ctx.value) return;
 		const p$6 = deck === "a" ? contexts.a : contexts.b;
@@ -47307,44 +47376,56 @@ const djTransport = {
 		}
 		ctx.value.dsp.pause([p$6.program]);
 	},
-	endSeek: async (deck) => {
+	endSeek: async () => {
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts || !ctx.value) return;
 		const dsp = ctx.value.dsp;
 		const p$6 = deck === "a" ? contexts.a : contexts.b;
-		if ((deck === "a" ? djScrubbingProgramStateA.value : djScrubbingProgramStateB.value) === DspProgramState.Start) dsp.start([p$6.program]);
+		if ((deck === "a" ? djScrubbingProgramStateA.value : djScrubbingProgramStateB.value) === DspProgramState.Start) dsp.startSync([p$6.program]);
 		else dsp.pause([p$6.program]);
 		if (deck === "a") djIsScrubbingA.value = false;
 		else djIsScrubbingB.value = false;
 	},
-	seek: async (deck, seconds) => {
+	seek: async (seconds) => {
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts || !ctx.value) return;
 		const dsp = ctx.value.dsp;
 		const p$6 = deck === "a" ? contexts.a : contexts.b;
-		const other = deck === "a" ? contexts.b : contexts.a;
-		const sampleRate = p$6.latency.value.state.sampleRate || 44100;
-		const bpm$1 = p$6.result.value?.compile.bpm ?? other.result.value?.compile.bpm ?? 120;
-		const desired = Math.round(seconds * sampleRate);
-		const grid = djGridSamples(sampleRate, bpm$1);
-		other.program.latency.update();
-		const aligned = djAlignToPhase(desired, grid, ((other.program.latency.state.sampleCount ?? 0) % grid + grid) % grid);
 		if (deck === "a") djTargetSecondsA.value = seconds;
 		else djTargetSecondsB.value = seconds;
-		const preview = (deck === "a" ? djScrubbingProgramStateA.value : djScrubbingProgramStateB.value) === DspProgramState.Start && isActuallyPlaying.value;
-		await dsp.seekPrograms(aligned, [p$6.program], preview);
+		await dsp.seekPrograms(Math.round(seconds * (p$6.latency.value.state.sampleRate ?? 48e3)), [p$6.program], false);
 	},
-	deck: (deck) => ({
-		restart: () => djTransport.restart(),
-		beginSeek: () => djTransport.beginSeek(deck),
-		endSeek: () => djTransport.endSeek(deck),
-		seek: (seconds) => djTransport.seek(deck, seconds),
-		getLoopBeginSamples: () => transport.getLoopBeginSamples(),
-		getLoopEndSamples: () => transport.getLoopEndSamples(),
-		setLoopBeginSamples: (samples) => transport.setLoopBeginSamples(samples),
-		setLoopEndSamples: (samples) => transport.setLoopEndSamples(samples)
-	})
-};
+	getLoopBeginSamples: () => {
+		if (!ctx.value) return;
+		const dsp = ctx.value.dsp;
+		return deck === "a" ? dsp.loopBeginSamplesA : dsp.loopBeginSamplesB;
+	},
+	getLoopEndSamples: () => {
+		if (!ctx.value) return;
+		const dsp = ctx.value.dsp;
+		return deck === "a" ? dsp.loopEndSamplesA : dsp.loopEndSamplesB;
+	},
+	setLoopBeginSamples: (samples) => {
+		if (!ctx.value) return;
+		const dsp = ctx.value.dsp;
+		if (deck === "a") dsp.loopBeginSamplesA = samples;
+		else dsp.loopBeginSamplesB = samples;
+	},
+	setLoopEndSamples: (samples) => {
+		if (!ctx.value) return;
+		const dsp = ctx.value.dsp;
+		if (deck === "a") dsp.loopEndSamplesA = samples;
+		else dsp.loopEndSamplesB = samples;
+	},
+	setProjectEndSamples: (samples) => {
+		if (!ctx.value) return;
+		const dsp = ctx.value.dsp;
+		if (deck === "a") dsp.projectEndSamplesA = samples;
+		else dsp.projectEndSamplesB = samples;
+	}
+});
+const djTransportA = createDjTransport("a");
+const djTransportB = createDjTransport("b");
 m(() => {
 	const c$7 = ctx.value;
 	const a$36 = djProgramA.value;
@@ -47364,13 +47445,19 @@ m(() => {
 	c$7.dsp.setProgramGain(a$36.program, gainA);
 	c$7.dsp.setProgramGain(b$4.program, gainB);
 });
+const bpmOverride = c$3(0);
 m(() => {
 	const c$7 = ctx.value;
 	if (!c$7) return;
 	const page = mainPage.value;
 	const bpmValue = djBpm.value;
-	if (page === "dj") c$7.dsp.bpmOverride(bpmValue);
-	else c$7.dsp.bpmOverride(0);
+	if (page === "dj") {
+		bpmOverride.value = bpmValue;
+		c$7.dsp.bpmOverride(bpmValue);
+	} else {
+		bpmOverride.value = 0;
+		c$7.dsp.bpmOverride(0);
+	}
 });
 m(() => {
 	if (mainPage.value !== "dj") return;
@@ -47412,14 +47499,16 @@ m(() => {
 	getProgramContext(ctx.value, "dj-doc-a", { doc: djDocA.value }).then((programContext) => {
 		djProgramA.value = programContext;
 		djHeaderA.value = createHeader(ctx.value, programContext, {
-			transport: djTransport.deck("a"),
-			setTargetSeconds: (seconds) => djTargetSecondsA.value = seconds
+			transport: djTransportA,
+			setTargetSeconds: (seconds) => djTargetSecondsA.value = seconds,
+			paddingLeft: 0,
+			paddingRight: DJ_HEADER_NAV_WIDTH
 		});
 	});
 	getProgramContext(ctx.value, "dj-doc-b", { doc: djDocB.value }).then((programContext) => {
 		djProgramB.value = programContext;
 		djHeaderB.value = createHeader(ctx.value, programContext, {
-			transport: djTransport.deck("b"),
+			transport: djTransportB,
 			setTargetSeconds: (seconds) => djTargetSecondsB.value = seconds
 		});
 	});
@@ -50879,7 +50968,7 @@ function Fader({ value, min, max, step = .01, faderWidth = 12, onChange, classNa
 	}, [isDragging, handleInteraction]);
 	return /* @__PURE__ */ u("div", {
 		ref: containerRef,
-		className: `relative cursor-pointer select-none ${className}`,
+		className: `relative cursor-crosshair select-none ${className}`,
 		onMouseDown: handleMouseDown,
 		role: "slider",
 		"aria-label": ariaLabel,
@@ -50982,8 +51071,8 @@ function Fader({ value, min, max, step = .01, faderWidth = 12, onChange, classNa
 		})
 	});
 }
-const Nav = ({ transport: t$12 = transport }) => /* @__PURE__ */ u("div", {
-	class: `absolute flex left-0 right-0 pointer-events-none items-center min-h-[50px] border-b-2 border-[${primaryColor.value}]`,
+const Nav = ({ transport: t$12 = transport, align = "left" }) => /* @__PURE__ */ u("div", {
+	class: `absolute top-0 left-0 right-0 flex pointer-events-none items-center min-h-[50px] border-b-2 border-[${primaryColor.value}] ${align === "right" ? "justify-end border-r border-r-[#fff3]" : "justify-start"}`,
 	children: [
 		/* @__PURE__ */ u("button", {
 			class: "px-3 h-[48px] pointer-events-auto hover:bg-white/5 active:hover:scale-95 outline-none focus:bg-white/5",
@@ -51023,64 +51112,91 @@ const DJMain = () => {
 		children: /* @__PURE__ */ u("div", {
 			class: "flex flex-row w-full justify-between items-center",
 			children: [
-				/* @__PURE__ */ u("h2", {
-					class: "flex-1 font-bold text-left",
-					children: ["A: ", djTitleA.value]
+				/* @__PURE__ */ u("div", {
+					class: "flex-1 flex flex-row items-center gap-1 text-xs",
+					children: [/* @__PURE__ */ u("span", {
+						class: "opacity-70",
+						children: "BPM"
+					}), /* @__PURE__ */ u("input", {
+						type: "number",
+						min: 40,
+						max: 240,
+						step: 1,
+						value: djBpm.value,
+						onInput: (e$57) => {
+							const el = e$57.currentTarget;
+							djBpm.value = Number(el.value) || 0;
+						},
+						class: "w-16 bg-transparent px-1 py-0.5 text-xs outline-none focus:border-white"
+					})]
 				}),
 				/* @__PURE__ */ u("div", {
 					class: "flex flex-row items-center gap-1 relative",
-					children: [/* @__PURE__ */ u("div", {
-						class: "h-10",
-						children: /* @__PURE__ */ u(Fader, {
-							className: "h-10",
-							faderWidth: 8,
-							value: djCrossfade.value,
-							min: 0,
-							max: 1,
-							step: .01,
-							onChange: (v$4) => djCrossfade.value = v$4
+					children: [
+						/* @__PURE__ */ u("h2", {
+							class: "absolute -left-2 translate-x-[-100%] flex-1 flex gap-4 items-center pl-2 pointer-events-none",
+							children: [
+								/* @__PURE__ */ u("span", {
+									class: "text-sm",
+									children: djTitleA.value
+								}),
+								" ",
+								/* @__PURE__ */ u("span", {
+									class: "opacity-30 font-bold text-sm",
+									children: "A"
+								})
+							]
+						}),
+						/* @__PURE__ */ u("div", {
+							class: "h-10",
+							children: /* @__PURE__ */ u(Fader, {
+								className: "h-10",
+								faderWidth: 8,
+								value: djCrossfade.value,
+								min: 0,
+								max: 1,
+								step: .01,
+								onChange: (v$4) => djCrossfade.value = v$4
+							})
+						}),
+						/* @__PURE__ */ u("h2", {
+							class: "absolute -right-2 translate-x-[100%] flex-1 flex gap-4 items-center pr-2 pointer-events-none",
+							children: [
+								/* @__PURE__ */ u("span", {
+									class: "opacity-30 font-bold text-sm",
+									children: "B"
+								}),
+								" ",
+								/* @__PURE__ */ u("span", {
+									class: "text-sm",
+									children: djTitleB.value
+								})
+							]
 						})
-					}), /* @__PURE__ */ u("div", {
-						class: "absolute left-0 translate-x-[-100%] flex flex-row items-center gap-1 text-xs",
-						children: [/* @__PURE__ */ u("span", {
-							class: "opacity-70",
-							children: "BPM"
-						}), /* @__PURE__ */ u("input", {
-							type: "number",
-							min: 40,
-							max: 240,
-							step: 1,
-							value: djBpm.value,
-							onInput: (e$57) => {
-								const el = e$57.currentTarget;
-								djBpm.value = Number(el.value) || 0;
-							},
-							class: "w-16 bg-transparent px-1 py-0.5 text-xs outline-none focus:border-white"
-						})]
-					})]
+					]
 				}),
-				/* @__PURE__ */ u("h2", {
-					class: "flex-1 font-bold text-right",
-					children: [djTitleB.value, " :B"]
-				})
+				/* @__PURE__ */ u("div", { class: "flex-1" })
 			]
 		})
 	}), /* @__PURE__ */ u(Main, {
-		class: "flex flex-row w-full",
+		class: "flex flex-row w-full min-w-0 flex-shrink",
 		children: [/* @__PURE__ */ u("div", {
-			class: "flex flex-col flex-1",
+			class: "flex flex-col flex-1 min-w-0 flex-shrink",
 			children: [/* @__PURE__ */ u("div", {
 				class: "relative",
-				children: /* @__PURE__ */ u(Nav, { transport: djTransport })
+				children: /* @__PURE__ */ u(Nav, {
+					transport: djTransportA,
+					align: "right"
+				})
 			}), /* @__PURE__ */ u(Editor, {
 				doc: djDocA,
 				header: djHeaderA.value
 			})]
 		}), /* @__PURE__ */ u("div", {
-			class: "flex flex-col flex-1",
+			class: "flex flex-col flex-1 min-w-0 flex-shrink",
 			children: [/* @__PURE__ */ u("div", {
 				class: "relative",
-				children: /* @__PURE__ */ u(Nav, { transport: djTransport })
+				children: /* @__PURE__ */ u(Nav, { transport: djTransportB })
 			}), /* @__PURE__ */ u(Editor, {
 				doc: djDocB,
 				header: djHeaderB.value
@@ -57088,7 +57204,7 @@ const Sidebar = () => /* @__PURE__ */ u("div", {
 				class: `w-full h-[50px] leading-none flex items-end border-b-2 border-[${primaryColor.value}]`,
 				children: /* @__PURE__ */ u(Link$1, {
 					to: "/",
-					class: "px-2 py-1 top-[1px] relative hover:bg-white/5 focus:bg-white/5 outline-none",
+					class: "px-2 py-1 h-[50px] top-[3px] relative hover:bg-white/5 focus:bg-white/5 outline-none",
 					children: /* @__PURE__ */ u(Logo, {})
 				})
 			}),
@@ -58338,4 +58454,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-CHZNzaNE.js.map
+//# sourceMappingURL=index-Cl0sbKei.js.map
