@@ -1,6 +1,6 @@
 import { batch, computed, effect, signal, untracked } from '@preact/signals'
-import { activeEditor, createPersistedDoc, type Doc, type Editor, onKeyOverride } from 'editor'
 import type { Header } from 'editor'
+import { activeEditor, createPersistedDoc, type Doc, type Editor, onKeyOverride } from 'editor'
 import { ThemeColors } from 'editor/src/settings.ts'
 import type { AggregatedMemoryInfo } from 'engine'
 import { disassembleBytecode } from 'engine'
@@ -370,7 +370,7 @@ let vmId = 0
 export const programContexts = signal<Map<string, Promise<DspProgramContext>>>(new Map())
 export const playingContext = signal<DspProgramContext | null>(null)
 export const playingInlineContext = signal<DspProgramContext | null>(null)
-export const playingDjContexts = signal<DspProgramContext[]>([])
+export const playingDjContexts = signal<Set<DspProgramContext>>(new Set())
 
 async function createProgramContext(ctx: DspContext, opts: Partial<DspProgramContextOpts>) {
   const ref = signal<DspProgramContext | null>(null)
@@ -379,7 +379,7 @@ async function createProgramContext(ctx: DspContext, opts: Partial<DspProgramCon
     && (
       playingContext.value === ref.value
       || playingInlineContext.value === ref.value
-      || playingDjContexts.value.includes(ref.value)
+      || playingDjContexts.value.has(ref.value)
     )
   )
   const programCtx = await ctx.createDspProgramContext({
@@ -1008,23 +1008,6 @@ export const djScrubbingProgramStateB = signal<DspProgramState>(DspProgramState.
 
 type DjDeck = 'a' | 'b'
 
-function djGridSamples(sampleRate: number, bpm: number): number {
-  const stepSeconds = 60 / (bpm || 120) / 4
-  return Math.max(1, Math.round(stepSeconds * (sampleRate || 44100)))
-}
-
-function djAlignToPhase(sampleCount: number, grid: number, phase: number): number {
-  const g = Math.max(1, Math.round(grid) || 1)
-  const p = ((Math.round(phase) % g) + g) % g
-  const s = Math.max(0, Math.round(sampleCount))
-  const sp = ((s % g) + g) % g
-  let delta = p - sp
-  const half = g / 2
-  if (delta > half) delta -= g
-  else if (delta < -half) delta += g
-  return Math.max(0, s + delta)
-}
-
 async function ensureDjProgramContexts() {
   if (!ctx.value) return
   const c = ctx.value
@@ -1037,7 +1020,7 @@ async function ensureDjProgramContexts() {
   return { a, b }
 }
 
-export const djTransport = {
+const createDjTransport = (deck: DjDeck) => ({
   start: async () => {
     if (!ctx.value) return
     const dsp = ctx.value.dsp
@@ -1057,14 +1040,16 @@ export const djTransport = {
 
     const contexts = await ensureDjProgramContexts()
     if (!contexts) return
-    const { a, b } = contexts
 
-    playingDjContexts.value = [a, b]
-    await dsp.start([a.program, b.program])
-    await Promise.all([
-      dsp.refreshUntilHistories(a.program, { maxTries: 60 }),
-      dsp.refreshUntilHistories(b.program, { maxTries: 60 }),
-    ])
+    const p = deck === 'a' ? contexts.a : contexts.b
+
+    playingDjContexts.value.add(p)
+    playingDjContexts.value = new Set(playingDjContexts.value)
+    if (deck === 'a') await dsp.setProgramA(p.program)
+    else await dsp.setProgramB(p.program)
+    await dsp.startSync([p.program])
+    await dsp.refreshUntilHistories(p.program, { maxTries: 60 })
+
     deferDraw.value = true
   },
   pause: async () => {
@@ -1075,17 +1060,20 @@ export const djTransport = {
   stop: async () => {
     const contexts = await ensureDjProgramContexts()
     if (!contexts || !ctx.value) return
-    playingDjContexts.value = []
-    await ctx.value.dsp.stop([contexts.a.program, contexts.b.program])
+    const p = deck === 'a' ? contexts.a : contexts.b
+    playingDjContexts.value.delete(p)
+    playingDjContexts.value = new Set(playingDjContexts.value)
+    await ctx.value.dsp.stop([p.program])
   },
   restart: async () => {
     const contexts = await ensureDjProgramContexts()
     if (!contexts || !ctx.value) return
     await ctx.value.dsp.state.audioContext.resume()
     skipAnimations.value += 1
-    await ctx.value.dsp.seek(0, [contexts.a.program, contexts.b.program], false)
+    const p = deck === 'a' ? contexts.a : contexts.b
+    await ctx.value.dsp.seek(0, [p.program], false)
   },
-  beginSeek: async (deck: DjDeck) => {
+  beginSeek: async () => {
     const contexts = await ensureDjProgramContexts()
     if (!contexts || !ctx.value) return
     const p = deck === 'a' ? contexts.a : contexts.b
@@ -1099,14 +1087,14 @@ export const djTransport = {
     }
     ctx.value.dsp.pause([p.program])
   },
-  endSeek: async (deck: DjDeck) => {
+  endSeek: async () => {
     const contexts = await ensureDjProgramContexts()
     if (!contexts || !ctx.value) return
     const dsp = ctx.value.dsp
     const p = deck === 'a' ? contexts.a : contexts.b
     const prev = deck === 'a' ? djScrubbingProgramStateA.value : djScrubbingProgramStateB.value
     if (prev === DspProgramState.Start) {
-      dsp.start([p.program])
+      dsp.startSync([p.program])
     }
     else {
       dsp.pause([p.program])
@@ -1114,42 +1102,50 @@ export const djTransport = {
     if (deck === 'a') djIsScrubbingA.value = false
     else djIsScrubbingB.value = false
   },
-  seek: async (deck: DjDeck, seconds: number) => {
+  seek: async (seconds: number) => {
     const contexts = await ensureDjProgramContexts()
     if (!contexts || !ctx.value) return
     const dsp = ctx.value.dsp
 
     const p = deck === 'a' ? contexts.a : contexts.b
-    const other = deck === 'a' ? contexts.b : contexts.a
-
-    const sampleRate = p.latency.value.state.sampleRate || 44100
-    const bpm = p.result.value?.compile.bpm ?? other.result.value?.compile.bpm ?? 120
-    const desired = Math.round(seconds * sampleRate)
-    const grid = djGridSamples(sampleRate, bpm)
-    other.program.latency.update()
-    const otherSamples = other.program.latency.state.sampleCount ?? 0
-    const otherPhase = ((otherSamples % grid) + grid) % grid
-    const aligned = djAlignToPhase(desired, grid, otherPhase)
 
     if (deck === 'a') djTargetSecondsA.value = seconds
     else djTargetSecondsB.value = seconds
 
-    const preview =
-      (deck === 'a' ? djScrubbingProgramStateA.value : djScrubbingProgramStateB.value) === DspProgramState.Start
-      && isActuallyPlaying.value
-    await dsp.seekPrograms(aligned, [p.program], preview)
+    await dsp.seekPrograms(Math.round(seconds * (p.latency.value.state.sampleRate ?? 48000)), [p.program], false)
   },
-  deck: (deck: DjDeck) => ({
-    restart: () => djTransport.restart(),
-    beginSeek: () => djTransport.beginSeek(deck),
-    endSeek: () => djTransport.endSeek(deck),
-    seek: (seconds: number) => djTransport.seek(deck, seconds),
-    getLoopBeginSamples: () => transport.getLoopBeginSamples(),
-    getLoopEndSamples: () => transport.getLoopEndSamples(),
-    setLoopBeginSamples: (samples: number) => transport.setLoopBeginSamples(samples),
-    setLoopEndSamples: (samples: number) => transport.setLoopEndSamples(samples),
-  }),
-}
+  getLoopBeginSamples: () => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    return deck === 'a' ? dsp.loopBeginSamplesA : dsp.loopBeginSamplesB
+  },
+  getLoopEndSamples: () => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    return deck === 'a' ? dsp.loopEndSamplesA : dsp.loopEndSamplesB
+  },
+  setLoopBeginSamples: (samples: number) => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    if (deck === 'a') dsp.loopBeginSamplesA = samples
+    else dsp.loopBeginSamplesB = samples
+  },
+  setLoopEndSamples: (samples: number) => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    if (deck === 'a') dsp.loopEndSamplesA = samples
+    else dsp.loopEndSamplesB = samples
+  },
+  setProjectEndSamples: (samples: number) => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    if (deck === 'a') dsp.projectEndSamplesA = samples
+    else dsp.projectEndSamplesB = samples
+  },
+})
+
+export const djTransportA = createDjTransport('a')
+export const djTransportB = createDjTransport('b')
 
 effect(() => {
   const c = ctx.value
@@ -1174,15 +1170,19 @@ effect(() => {
   c.dsp.setProgramGain(b.program, gainB)
 })
 
+export const bpmOverride = signal(0)
+
 effect(() => {
   const c = ctx.value
   if (!c) return
   const page = mainPage.value
   const bpmValue = djBpm.value
   if (page === 'dj') {
+    bpmOverride.value = bpmValue
     c.dsp.bpmOverride(bpmValue)
   }
   else {
+    bpmOverride.value = 0
     c.dsp.bpmOverride(0)
   }
 })
@@ -1237,7 +1237,7 @@ effect(() => {
   getProgramContext(ctx.value, 'dj-doc-a', { doc: djDocA.value }).then(programContext => {
     djProgramA.value = programContext
     djHeaderA.value = createHeader(ctx.value, programContext, {
-      transport: djTransport.deck('a'),
+      transport: djTransportA,
       setTargetSeconds: seconds => djTargetSecondsA.value = seconds,
     })
   })
@@ -1245,7 +1245,7 @@ effect(() => {
   getProgramContext(ctx.value, 'dj-doc-b', { doc: djDocB.value }).then(programContext => {
     djProgramB.value = programContext
     djHeaderB.value = createHeader(ctx.value, programContext, {
-      transport: djTransport.deck('b'),
+      transport: djTransportB,
       setTargetSeconds: seconds => djTargetSecondsB.value = seconds,
     })
   })

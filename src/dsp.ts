@@ -168,14 +168,21 @@ async function createDspProgramContextImpl(
     dispose,
   }
 
-  effect(() => {
-    if (!opts.isPlayingThis.value) return
-    tickCount.value
+  const updateLatency = () => {
     untracked(() => {
       program.latency.update()
       latency.value = program.latency
       timeSeconds.value = program.latency.state.timeSeconds ?? 0
     })
+  }
+
+  effect(() => {
+    if (!opts.isPlayingThis.value) {
+      requestAnimationFrame(updateLatency)
+      return
+    }
+    tickCount.value
+    updateLatency()
   })
 
   effect(() => {

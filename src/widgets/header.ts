@@ -7,6 +7,7 @@ import {
 import { MouseButton } from 'utils/mouse-buttons'
 import type { DspContext, DspProgramContext } from '../dsp.ts'
 import {
+  bpmOverride,
   getTimelineColor,
   primaryColor,
   secondaryColor,
@@ -61,7 +62,7 @@ export const createHeader = (
       w -= HEADER_PADDING_LEFT
       let ratio = x / w
       if (e.altKey) {
-        const bpm = programCtx.result.value.compile.bpm ?? 120
+        const bpm = bpmOverride.value || (programCtx.result.value.compile.bpm ?? 120)
         const barLengthSeconds = (BEATS_PER_BAR * 60) / bpm
         const sampleRate = programCtx.latency.value.state.sampleRate || 44100
         const secToSamples = (sec: number) => Math.round(sec * sampleRate)
@@ -108,8 +109,9 @@ export const createHeader = (
       if (y < half) {
         t.beginSeek()
         const seek = () => {
-          const seconds = ratio * DEFAULT_BARS * BEATS_PER_BAR * 60 / programCtx.result.value!.compile.bpm
-          const beatLengthSeconds = 60 / programCtx.result.value!.compile.bpm / 4
+          const bpm = bpmOverride.value || (programCtx.result.value!.compile.bpm ?? 120)
+          const seconds = ratio * DEFAULT_BARS * BEATS_PER_BAR * 60 / bpm
+          const beatLengthSeconds = 60 / bpm / 4
           const snappedSeconds = Math.max(0, Math.round(seconds / beatLengthSeconds) * beatLengthSeconds)
           t.seek(snappedSeconds)
           setTargetSeconds(seconds)
@@ -159,7 +161,7 @@ export const createHeader = (
       w -= HEADER_PADDING_LEFT
 
       const timeSeconds = programCtx.timeSeconds
-      const bpm = programCtx.result.value.compile.bpm ?? 120
+      const bpm = bpmOverride.value || (programCtx.result.value.compile.bpm ?? 120)
       const barLengthSeconds = (BEATS_PER_BAR * 60) / bpm
       const windowStartTime = timeSeconds.value - PAST_BARS * barLengthSeconds
       const windowEndTime = timeSeconds.value + FUTURE_BARS * barLengthSeconds

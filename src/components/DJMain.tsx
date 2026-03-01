@@ -1,5 +1,16 @@
-import { djBpm, djCrossfade, djDocA, djDocB, djHeaderA, djHeaderB, djTitleA, djTitleB, djTransport,
-  primaryColor } from '../state.ts'
+import {
+  djBpm,
+  djCrossfade,
+  djDocA,
+  djDocB,
+  djHeaderA,
+  djHeaderB,
+  djTitleA,
+  djTitleB,
+  djTransportA,
+  djTransportB,
+  primaryColor,
+} from '../state.ts'
 import { Editor } from './Editor.tsx'
 import { Fader } from './Fader.tsx'
 import { Main } from './Main.tsx'
@@ -47,13 +58,13 @@ export const DJMain = () => {
       <Main class="flex flex-row w-full">
         <div class="flex flex-col flex-1">
           <div class="relative">
-            <Nav transport={djTransport} />
+            <Nav transport={djTransportA} />
           </div>
           <Editor doc={djDocA} header={djHeaderA.value} />
         </div>
         <div class="flex flex-col flex-1">
           <div class="relative">
-            <Nav transport={djTransport} />
+            <Nav transport={djTransportB} />
           </div>
           <Editor doc={djDocB} header={djHeaderB.value} />
         </div>
