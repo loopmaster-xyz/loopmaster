@@ -4,9 +4,13 @@ import { PauseGradientIcon, PlayGradientIcon, StopGradientIcon } from './Icons.t
 
 export type NavTransport = Pick<typeof transport, 'start' | 'pause' | 'stop' | 'restart'>
 
-export const Nav = ({ transport: t = transport }: { transport?: NavTransport }) => (
+export const Nav = (
+  { transport: t = transport, align = 'left' }: { transport?: NavTransport; align?: 'left' | 'right' },
+) => (
   <div
-    class={`absolute flex left-0 right-0 pointer-events-none items-center min-h-[50px] border-b-2 border-[${primaryColor.value}]`}
+    class={`absolute top-0 left-0 right-0 flex pointer-events-none items-center min-h-[50px] border-b-2 border-[${primaryColor.value}] ${
+      align === 'right' ? 'justify-end border-r border-r-[#fff3]' : 'justify-start'
+    }`}
   >
     <button
       class="px-3 h-[48px] pointer-events-auto hover:bg-white/5 active:hover:scale-95 outline-none focus:bg-white/5"

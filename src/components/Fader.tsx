@@ -79,7 +79,7 @@ export function Fader({
   return (
     <div
       ref={containerRef}
-      className={`relative cursor-pointer select-none ${className}`}
+      className={`relative cursor-crosshair select-none ${className}`}
       onMouseDown={handleMouseDown}
       role="slider"
       aria-label={ariaLabel}

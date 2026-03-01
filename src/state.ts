@@ -532,7 +532,12 @@ export const transport = {
     const dsp = ctx.value.dsp
     const contexts = await ensureProgramContexts()
     if (!contexts) return
-    dsp.togglePause([contexts.playingProgramContext.program])
+    if (isPlaying.value) {
+      await dsp.pause([contexts.playingProgramContext.program])
+    }
+    else {
+      return transport.start()
+    }
   },
   stop: async () => {
     if (!ctx.value) return
@@ -998,6 +1003,7 @@ export const djTitleA = signal<string>('')
 export const djTitleB = signal<string>('')
 export const djCrossfade = signal(0.5)
 export const djBpm = signal(120)
+const DJ_HEADER_NAV_WIDTH = 160
 
 export const djTargetSecondsA = signal(0)
 export const djTargetSecondsB = signal(0)
@@ -1055,7 +1061,17 @@ const createDjTransport = (deck: DjDeck) => ({
   pause: async () => {
     const contexts = await ensureDjProgramContexts()
     if (!contexts || !ctx.value) return
-    ctx.value.dsp.togglePause([contexts.a.program, contexts.b.program])
+    const p = deck === 'a' ? contexts.a : contexts.b
+    if (playingDjContexts.value.has(p)) {
+      playingDjContexts.value.delete(p)
+      playingDjContexts.value = new Set(playingDjContexts.value)
+      ctx.value.dsp.pause([p.program])
+    }
+    else {
+      playingDjContexts.value.add(p)
+      playingDjContexts.value = new Set(playingDjContexts.value)
+      ctx.value.dsp.startSync([p.program])
+    }
   },
   stop: async () => {
     const contexts = await ensureDjProgramContexts()
@@ -1239,6 +1255,8 @@ effect(() => {
     djHeaderA.value = createHeader(ctx.value, programContext, {
       transport: djTransportA,
       setTargetSeconds: seconds => djTargetSecondsA.value = seconds,
+      paddingLeft: 0,
+      paddingRight: DJ_HEADER_NAV_WIDTH,
     })
   })
 

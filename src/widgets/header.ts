@@ -42,6 +42,8 @@ export type HeaderTransport = Pick<
 export type CreateHeaderOpts = {
   transport?: HeaderTransport
   setTargetSeconds?: (seconds: number) => void
+  paddingLeft?: number
+  paddingRight?: number
 }
 
 export const createHeader = (
@@ -50,6 +52,8 @@ export const createHeader = (
   opts: CreateHeaderOpts = {},
 ): Header => {
   const t = opts.transport ?? transport
+  const paddingLeft = opts.paddingLeft ?? HEADER_PADDING_LEFT
+  const paddingRight = opts.paddingRight ?? 0
   const setTargetSeconds = opts.setTargetSeconds ?? ((seconds: number) => {
     if (!rootCtx) return
     rootCtx.targetSeconds.value = seconds
@@ -58,9 +62,11 @@ export const createHeader = (
     height: 48,
     onMouseDown: (e, x, y, w, h) => {
       if (!rootCtx || !programCtx?.result.value) return
-      x -= HEADER_PADDING_LEFT
-      w -= HEADER_PADDING_LEFT
+      x -= paddingLeft
+      w -= paddingLeft + paddingRight
+      if (w <= 0) return
       let ratio = x / w
+      if (ratio > 1) return
       if (e.altKey) {
         const bpm = bpmOverride.value || (programCtx.result.value.compile.bpm ?? 120)
         const barLengthSeconds = (BEATS_PER_BAR * 60) / bpm
@@ -157,8 +163,9 @@ export const createHeader = (
       c.restore()
       if (!programCtx?.result?.value) return
 
-      x += HEADER_PADDING_LEFT
-      w -= HEADER_PADDING_LEFT
+      x += paddingLeft
+      w -= paddingLeft + paddingRight
+      if (w <= 0) return
 
       const timeSeconds = programCtx.timeSeconds
       const bpm = bpmOverride.value || (programCtx.result.value.compile.bpm ?? 120)

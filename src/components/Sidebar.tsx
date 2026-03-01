@@ -71,7 +71,7 @@ export const Sidebar = () => (
   <div class="flex flex-row w-full h-[100dvh] overflow-hidden text-neutral-500">
     <div class="flex flex-col items-stretch justify-start h-full">
       <div class={`w-full h-[50px] leading-none flex items-end border-b-2 border-[${primaryColor.value}]`}>
-        <Link to="/" class="px-2 py-1 top-[1px] relative hover:bg-white/5 focus:bg-white/5 outline-none">
+        <Link to="/" class="px-2 py-1 h-[50px] top-[3px] relative hover:bg-white/5 focus:bg-white/5 outline-none">
           <Logo />
         </Link>
       </div>
