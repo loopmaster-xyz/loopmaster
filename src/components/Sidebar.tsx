@@ -7,6 +7,7 @@ import {
   MagicWandIcon,
   MagnifyingGlassIcon,
   QuestionIcon,
+  SquaresFourIcon,
   UserIcon,
   UsersThreeIcon,
   WaveformIcon,
@@ -35,6 +36,7 @@ import { ShareProject } from './ShareProject.tsx'
 import { Themes } from './Themes.tsx'
 import { Tools } from './Tools.tsx'
 import { Tutorials } from './Tutorials.tsx'
+import { WallOfSounds } from './WallOfSounds.tsx'
 
 const sidebarButtonClass =
   'select-none p-4 flex items-center justify-center hover:bg-white/5 focus:bg-white/5 outline-none text-neutral-400 text-sm'
@@ -75,28 +77,33 @@ export const Sidebar = () => (
           <Logo />
         </Link>
       </div>
-      <SidebarTabLink icon={<WaveformIcon size={16} />} tab="projects" title="Projects" />
-      <SidebarTabLink icon={<HeadphonesIcon size={16} />} tab="dj" title="DJ" />
-      <SidebarTabLink icon={<WrenchIcon size={16} />} tab="tools" title="Tools" />
-      <SidebarTabButton icon={<GearSixIcon size={16} />} tab="settings" title="Settings" />
-      <SidebarTabLink icon={<GlobeIcon size={16} />} tab="browse/newest" title="Browse" />
-      <SidebarTabButton icon={<UserIcon size={16} />} tab="account" title="Account" />
-      <SidebarTabLink icon={<BookOpenIcon size={16} />} tab="docs" title="Docs" />
-      <SidebarTabLink icon={<ChalkboardTeacherIcon size={16} />} tab="tutorials" title="Tutorials" />
-      <SidebarTabLink icon={<QuestionIcon size={16} />} tab="help" title="Help" />
-      {session.value?.isAdmin && <SidebarTabLink icon={<MagicWandIcon size={16} />} tab="ai" title="AI" />}
-      {session.value?.isAdmin && <SidebarTabLink icon={<UsersThreeIcon size={16} />} tab="admin" title="Admin" />}
-      <div class="flex-1" />
-      <Link to="https://whop.com/loopmaster" title="Support me on Whop" target="_blank"
-        class="p-4 flex items-center justify-center hover:bg-white/5 focus:bg-white/5 outline-none text-neutral-400 text-sm"
-      >
-        <img src={whopLogo} alt="Support me on Whop" width={16} height={16} />
-      </Link>
-      <Link to="https://www.buymeacoffee.com/loopmaster" title="Buy Me a Coffee" target="_blank"
-        class="p-4 flex items-center justify-center hover:bg-white/5 focus:bg-white/5 outline-none text-neutral-400 text-sm"
-      >
-        <img src={bmcLogo} alt="Buy Me a Coffee" width={16} height={16} />
-      </Link>
+      <div class="flex flex-col items-stretch justify-start h-full overflow-y-scroll overflow-x-hidden">
+        <SidebarTabLink icon={<WaveformIcon size={16} />} tab="projects" title="Projects" />
+        <SidebarTabLink icon={<HeadphonesIcon size={16} />} tab="dj" title="DJ" />
+        <SidebarTabLink icon={<WrenchIcon size={16} />} tab="tools" title="Tools" />
+        <SidebarTabButton icon={<GearSixIcon size={16} />} tab="settings" title="Settings" />
+        <SidebarTabLink icon={<GlobeIcon size={16} />} tab="browse/newest" title="Browse" />
+        <SidebarTabButton icon={<UserIcon size={16} />} tab="account" title="Account" />
+        <SidebarTabLink icon={<BookOpenIcon size={16} />} tab="docs" title="Docs" />
+        <SidebarTabLink icon={<ChalkboardTeacherIcon size={16} />} tab="tutorials" title="Tutorials" />
+        <SidebarTabLink icon={<QuestionIcon size={16} />} tab="help" title="Help" />
+        {session.value?.isAdmin && (
+          <SidebarTabLink icon={<SquaresFourIcon size={16} />} tab="wall-of-sounds" title="Wall of Sounds" />
+        )}
+        {session.value?.isAdmin && <SidebarTabLink icon={<MagicWandIcon size={16} />} tab="ai" title="AI" />}
+        {session.value?.isAdmin && <SidebarTabLink icon={<UsersThreeIcon size={16} />} tab="admin" title="Admin" />}
+        <div class="flex-1" />
+        <Link to="https://whop.com/loopmaster" title="Support me on Whop" target="_blank"
+          class="p-4 flex items-center justify-center hover:bg-white/5 focus:bg-white/5 outline-none text-neutral-400 text-sm"
+        >
+          <img src={whopLogo} alt="Support me on Whop" width={16} height={16} />
+        </Link>
+        <Link to="https://www.buymeacoffee.com/loopmaster" title="Buy Me a Coffee" target="_blank"
+          class="p-4 flex items-center justify-center hover:bg-white/5 focus:bg-white/5 outline-none text-neutral-400 text-sm"
+        >
+          <img src={bmcLogo} alt="Buy Me a Coffee" width={16} height={16} />
+        </Link>
+      </div>
     </div>
     {sidebarOpen.value && (
       <div class="flex flex-col w-full h-full max-h-[100dvh]">

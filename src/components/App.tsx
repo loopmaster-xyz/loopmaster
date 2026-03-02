@@ -36,6 +36,7 @@ import { Nav } from './Nav.tsx'
 import { ProjectMain } from './ProjectMain.tsx'
 import { Sidebar } from './Sidebar.tsx'
 import { TutorialsMain } from './TutorialsMain.tsx'
+import { WallOfSounds } from './WallOfSounds.tsx'
 
 export const App = () => {
   const header = useSignal<Header | null>(null)
@@ -130,7 +131,7 @@ export const App = () => {
           background-color: ${theme.value.blue + '42'};
         }
     ` }} />
-      {mainPage.value === null ? <Landing /> : (
+      {mainPage.value === null ? <Landing /> : mainPage.value === 'wall-of-sounds' ? <WallOfSounds /> : (
         <>
           <div class="flex flex-row w-screen h-screen max-w-full max-h-full"
             style={{ backgroundColor: theme.value.black }}

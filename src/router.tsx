@@ -151,6 +151,11 @@ effect(() => {
     main = 'dj'
     section.value = 'DJ'
   }
+  else if (p === '/wall-of-sounds') {
+    side = null
+    main = 'wall-of-sounds'
+    section.value = 'Wall of Sounds'
+  }
   else if (p === '/') {
     sidebarTab.value = null
     main = null

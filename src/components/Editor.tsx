@@ -10,7 +10,9 @@ import { createEditorOnHover, editorSettings } from '../lib/editor-common.ts'
 import { settings } from '../settings.ts'
 import { editor as stateEditor, theme, widgetOptions } from '../state.ts'
 
-export const Editor = ({ doc, header }: { doc: Signal<Doc | null>; header: Header | null }) => {
+export const Editor = (
+  { doc, header, autoHeight = false }: { doc: Signal<Doc | null>; header: Header | null; autoHeight?: boolean },
+) => {
   widgetOptions.showVisuals = settings.showVisuals
   widgetOptions.showKnobs = settings.showKnobs
   widgetOptions.noHeader = false
@@ -20,7 +22,7 @@ export const Editor = ({ doc, header }: { doc: Signal<Doc | null>; header: Heade
   const editor = stateEditor.value = useMemo(() =>
     createEditor({
       wordWrap: true,
-      autoHeight: false,
+      autoHeight,
       paddingLeft: 5,
       paddingTop: !header ? 15.5 : 17,
       paddingRight: 12,

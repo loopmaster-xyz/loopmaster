@@ -180,6 +180,7 @@ export type MainPage =
   | 'artist'
   | 'project'
   | 'dj'
+  | 'wall-of-sounds'
 export const mainPage = signal<MainPage>(null)
 
 export type SidebarTab =
@@ -371,6 +372,7 @@ export const programContexts = signal<Map<string, Promise<DspProgramContext>>>(n
 export const playingContext = signal<DspProgramContext | null>(null)
 export const playingInlineContext = signal<DspProgramContext | null>(null)
 export const playingDjContexts = signal<Set<DspProgramContext>>(new Set())
+export const wallPlayingContexts = signal<Set<DspProgramContext>>(new Set())
 
 async function createProgramContext(ctx: DspContext, opts: Partial<DspProgramContextOpts>) {
   const ref = signal<DspProgramContext | null>(null)
@@ -380,6 +382,7 @@ async function createProgramContext(ctx: DspContext, opts: Partial<DspProgramCon
       playingContext.value === ref.value
       || playingInlineContext.value === ref.value
       || playingDjContexts.value.has(ref.value)
+      || wallPlayingContexts.value.has(ref.value)
     )
   )
   const isScrubbingThis = computed(() =>
@@ -1171,6 +1174,51 @@ const createDjTransport = (deck: DjDeck) => ({
 
 export const djTransportA = createDjTransport('a')
 export const djTransportB = createDjTransport('b')
+
+export const wallTransport = {
+  start: async (id: string, doc: Doc) => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    await dsp.state.audioContext.resume()
+
+    const programCtx = await getProgramContext(ctx.value, id, { doc })
+    wallPlayingContexts.value.add(programCtx)
+    wallPlayingContexts.value = new Set(wallPlayingContexts.value)
+
+    await dsp.startSync([programCtx.program])
+    await dsp.refreshUntilHistories(programCtx.program, { maxTries: 60 })
+
+    deferDraw.value = true
+  },
+  stop: async (id: string) => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    const programCtx = await getProgramContext(ctx.value, id)
+
+    wallPlayingContexts.value.delete(programCtx)
+    wallPlayingContexts.value = new Set(wallPlayingContexts.value)
+
+    await dsp.stop([programCtx.program])
+  },
+  toggle: async (id: string, doc: Doc) => {
+    if (!ctx.value) return
+    const programCtx = await getProgramContext(ctx.value, id, { doc })
+    if (wallPlayingContexts.value.has(programCtx)) {
+      await wallTransport.stop(id)
+    }
+    else {
+      await wallTransport.start(id, doc)
+    }
+  },
+  stopAll: async () => {
+    if (!ctx.value) return
+    const dsp = ctx.value.dsp
+    const contexts = [...wallPlayingContexts.value]
+    wallPlayingContexts.value = new Set()
+    if (!contexts.length) return
+    await dsp.stop(contexts.map(c => c.program))
+  },
+}
 
 effect(() => {
   const c = ctx.value
