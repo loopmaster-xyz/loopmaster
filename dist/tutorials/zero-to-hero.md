@@ -327,14 +327,14 @@ We can also use `else if` to chain multiple conditions:
 (if (t % 4 < 1) saw(c4) else if (t % 4 < 2) tri(e4) else sqr(a4)) |> out($)
 ```
 
-A shorter way to write these is using the **ternary** operator:
+A shorter way to write `if` `else` is the **ternary** (`?` `:`) operator:
 
 ```js
 
 (t % 4 < 1 ? saw(c4) : t % 4 < 2 ? tri(e4) : sqr(a4)) |> out($)
 ```
 
-### for and while
+### for
 
 Here we use a `for of` loop to iterate over an array of notes:
 
@@ -348,6 +348,34 @@ There is also `for in` to iterate over a range of numbers:
 ```js
 
 for (i in 0..3) saw(#scale[i*2]*o4)/3 |> out($)
+```
+
+The range is inclusive, meaning it will include the end value, in this case `3`.
+
+### while
+
+We can also use a `while` loop to iterate over a condition until it is false:
+
+```js
+i = 0
+while (i < 3) {
+
+  saw(#scale[i*2]*o4)/3 |> out($)
+  i += 1
+}
+```
+
+#### do while
+
+We can also use a `do while` loop to iterate over a condition until it is false, but it is executed at least once:
+
+```js
+i = 0
+do {
+
+  saw(#scale[i*2]*o4)/3 |> out($)
+  i += 1
+} while (i < 3)
 ```
 
 ### switch
@@ -392,8 +420,6 @@ There is also one more parameter that we can use to shape the envelope: `exponen
 
 sine(a4) * ad(attack:0.001, decay:0.9, exponent:10, trig:every(1/2)) |> out($)
 ```
-
-## LFOs
 
 ## Filters
 
@@ -458,6 +484,15 @@ The reverb is also based on multiple short delays with large feedbacks. It puts 
 ```js
 
 saw(e4)*ad(trig:every(1/2)) |> $+dattorro($) |> out($)
+```
+
+## LFOs
+
+LFOs are short for Low Frequency Oscillators. They are used to modulate values over time, usually in a rhythmic way. Where sound oscillators produce values from `-1` to `1`, LFOs produce values from `0` to `1`, making them ideal for multiplying them with other values to create interesting effects.
+
+```js
+
+saw(c1) |> lp($, cutoff:100+2000*lfotri(2), q:3) |> out($)
 ```
 
 ## Rhythms
@@ -604,26 +639,26 @@ Simply changing `out` to `solo` will mute all the other `out` calls. You can use
 
 ### mix
 
-`mix` is a special function that we optionally define that applies a chain of effects to the overall signal. It is also called **post-processing**.
+`mix` is a special function that we can use to define a chain of effects that will be applied to the overall signal. This is called **post-processing**.
 
 ```js
 
 drums() |> out($)
 
-mix => compressor($) |> limiter($) |> out($)
+mix => hp($,cutoff:1000)
 ```
 
 ## Putting it all together
 
 
 ```
-scale='mixolydian'
+scale = 'mixolydian'
 
-progr=[#i,#i,#vi,#v]
+progr = [#i,#i,#vi,#v]
 
-chord=progr[t/2]
+chord = progr[t/2]
 
-fm=(in,trig)->in|>sine($+sine($/2)*$)*ad(trig) |> lp($,cutoff:300+10000*ad(e:40,trig),q:1)
+fm = (in,trig) -> in |> sine($+sine($/2)*$)*ad(trig) |> lp($,cutoff:300+10000*ad(e:40,trig),q:1)
 
 fm(chord[t*2]*o4, euclid(3, 8, bar:1/2)) |> out($*.5)
 
@@ -634,7 +669,7 @@ saw(chord[0]*o2) |> lp($,chord[0]*o2,1.5)*.2 |> out($)
 drums() |> out($)
 
 
-mix=>compressor($,threshold:-10) |> limiter($)
+mix => compressor($,threshold:-10) |> limiter($)
 ```
 
 ...

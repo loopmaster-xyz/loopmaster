@@ -39062,7 +39062,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external--SU3AJJk.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-Ptpr9zAJ.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -39691,7 +39691,9 @@ var keywords = new Set([
 	"true",
 	"false",
 	"return",
-	"default"
+	"default",
+	"while",
+	"do"
 ]);
 var operators = new Set([
 	"|>",
@@ -58034,6 +58036,7 @@ var isAncestorOf = (ancestorId, descendantId, entries$1) => {
 	const ancIdx = entries$1.findIndex((e$57) => e$57.id === ancestorId);
 	if (ancIdx < 0 || ancIdx >= idx) return false;
 	const ancLevel = entries$1[ancIdx].level;
+	if (entries$1[idx].level <= ancLevel) return false;
 	for (let i$6 = ancIdx + 1; i$6 < idx; i$6++) if (entries$1[i$6].level <= ancLevel) return false;
 	return true;
 };
@@ -58187,6 +58190,7 @@ var TocItem = ({ node, activeId, headings, depth, expanded }) => {
 	const onClick = () => {
 		const el = document.getElementById(node.id);
 		if (!el) return;
+		history.replaceState(null, "", `${window.location.pathname}#${node.id}`);
 		el.scrollIntoView({
 			behavior: "smooth",
 			block: "start"
@@ -58256,11 +58260,23 @@ const TutorialsMain = () => {
 	});
 	y(() => {
 		if (!parsed.value || headings.value.length === 0) return;
-		const firstId = headings.value[0]?.id;
-		if (firstId) activeId.value = firstId;
 		const root = containerRef.current?.parentElement;
 		if (!root) return;
 		const ids = headings.value.map((h$5) => h$5.id);
+		const hashId = window.location.hash ? window.location.hash.slice(1) : "";
+		if (hashId && ids.includes(hashId)) {
+			const hashEl = document.getElementById(hashId);
+			if (hashEl) {
+				hashEl.scrollIntoView({
+					behavior: "smooth",
+					block: "start"
+				});
+				activeId.value = hashId;
+			}
+		} else {
+			const firstId = headings.value[0]?.id;
+			if (firstId) activeId.value = firstId;
+		}
 		const update = () => {
 			const rect = root.getBoundingClientRect();
 			const activeLine = rect.top + rect.height * .15;
@@ -58457,4 +58473,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-Dk7ZxLgT.js.map
+//# sourceMappingURL=index-wnty6E7i.js.map
