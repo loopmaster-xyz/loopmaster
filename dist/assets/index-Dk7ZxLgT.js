@@ -39062,7 +39062,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-BME5HoQn.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external--SU3AJJk.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -43526,7 +43526,8 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 		});
 	};
 	m(() => {
-		if (!opts.isPlayingThis.value) {
+		if (opts.isScrubbingThis.value || !opts.isPlayingThis.value) {
+			updateLatency();
 			requestAnimationFrame(updateLatency);
 			return;
 		}
@@ -46781,9 +46782,11 @@ const playingDjContexts = c$3(/* @__PURE__ */ new Set());
 async function createProgramContext(ctx$1, opts) {
 	const ref = c$3(null);
 	const isPlayingThis = b(() => ref.value !== null && (playingContext.value === ref.value || playingInlineContext.value === ref.value || playingDjContexts.value.has(ref.value)));
+	const isScrubbingThis = b(() => ref.value !== null && (isScrubbing.value && currentProgramContext.value === ref.value || djIsScrubbingA.value && djProgramA.value === ref.value || djIsScrubbingB.value && djProgramB.value === ref.value));
 	const programCtx = await ctx$1.createDspProgramContext({
 		vmId: vmId++,
 		isPlayingThis,
+		isScrubbingThis,
 		...opts
 	});
 	ref.value = programCtx;
@@ -58454,4 +58457,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-B-byGr1X.js.map
+//# sourceMappingURL=index-Dk7ZxLgT.js.map
