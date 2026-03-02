@@ -136,6 +136,8 @@ const isAncestorOf = (ancestorId: string, descendantId: string, entries: TocEntr
   const ancIdx = entries.findIndex(e => e.id === ancestorId)
   if (ancIdx < 0 || ancIdx >= idx) return false
   const ancLevel = entries[ancIdx].level
+  const descLevel = entries[idx].level
+  if (descLevel <= ancLevel) return false
   for (let i = ancIdx + 1; i < idx; i++) {
     if (entries[i].level <= ancLevel) return false
   }
@@ -352,6 +354,7 @@ const TocItem = ({
   const onClick = () => {
     const el = document.getElementById(node.id)
     if (!el) return
+    history.replaceState(null, '', `${window.location.pathname}#${node.id}`)
     el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
   const hasChildren = node.children.length > 0
@@ -464,11 +467,21 @@ export const TutorialsMain = () => {
 
   useEffect(() => {
     if (!parsed.value || headings.value.length === 0) return
-    const firstId = headings.value[0]?.id
-    if (firstId) activeId.value = firstId
     const root = containerRef.current?.parentElement as HTMLElement | null
     if (!root) return
     const ids = headings.value.map(h => h.id)
+    const hashId = window.location.hash ? window.location.hash.slice(1) : ''
+    if (hashId && ids.includes(hashId)) {
+      const hashEl = document.getElementById(hashId)
+      if (hashEl) {
+        hashEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        activeId.value = hashId
+      }
+    }
+    else {
+      const firstId = headings.value[0]?.id
+      if (firstId) activeId.value = firstId
+    }
     const update = () => {
       const rect = root.getBoundingClientRect()
       const activeLine = rect.top + rect.height * 0.15

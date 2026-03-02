@@ -41,6 +41,8 @@ const keywords = new Set([
   'false',
   'return',
   'default',
+  'while',
+  'do',
 ])
 
 const operators = new Set([
