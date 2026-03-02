@@ -64,6 +64,7 @@ export type DspProgramContextOpts = {
   vmId?: number
   projectId?: string | null
   isPlayingThis: Signal<boolean>
+  isScrubbingThis: Signal<boolean>
   waveBackground?: Signal<string>
 }
 
@@ -177,7 +178,8 @@ async function createDspProgramContextImpl(
   }
 
   effect(() => {
-    if (!opts.isPlayingThis.value) {
+    if (opts.isScrubbingThis.value || !opts.isPlayingThis.value) {
+      updateLatency()
       requestAnimationFrame(updateLatency)
       return
     }

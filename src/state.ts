@@ -382,9 +382,18 @@ async function createProgramContext(ctx: DspContext, opts: Partial<DspProgramCon
       || playingDjContexts.value.has(ref.value)
     )
   )
+  const isScrubbingThis = computed(() =>
+    ref.value !== null
+    && (
+      (isScrubbing.value && currentProgramContext.value === ref.value)
+      || (djIsScrubbingA.value && djProgramA.value === ref.value)
+      || (djIsScrubbingB.value && djProgramB.value === ref.value)
+    )
+  )
   const programCtx = await ctx.createDspProgramContext({
     vmId: vmId++,
     isPlayingThis,
+    isScrubbingThis,
     ...opts,
   })
   ref.value = programCtx
