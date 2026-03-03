@@ -189,8 +189,8 @@ async function createDspProgramContextImpl(
 
   effect(() => {
     historiesRefreshed.value
-    program.refreshHistories()
-    if (isActuallyPlaying.value && opts.isPlayingThis.value && program.histories.length > 0) {
+    const didRefresh = program.refreshHistories()
+    if (isActuallyPlaying.value && opts.isPlayingThis.value && didRefresh && program.histories.length > 0) {
       histories.value = program.histories
       userCallHistories.value = program.userCallHistories
     }
@@ -209,6 +209,7 @@ async function createDspProgramContextImpl(
     doc.code
     const epoch = doc.epoch
     if (epoch === compiledEpoch) return
+    const forceFullResync = fullResync.value
     queueMicrotask(async () => {
       if (epoch !== doc.epoch) return
 
@@ -235,8 +236,15 @@ async function createDspProgramContextImpl(
           await program.setControlCompileSnapshotFast(ccs)
         }
         else {
-          await program.setControlCompileSnapshot(ccs)
+          await program.setControlCompileSnapshot(ccs, {
+            fullResync: forceFullResync,
+            projectId: opts.projectId ?? null,
+          })
         }
+        // Re-map currently cached histories to the new source map immediately.
+        // Without this, user-call widgets can stay mapped to the previous program until transport restart.
+        program.reapplySourceMapping(ccs)
+        if (forceFullResync) fullResync.value = false
         compiledEpoch = doc.epoch
         historiesRefreshed.value++
       }
