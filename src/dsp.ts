@@ -190,10 +190,14 @@ async function createDspProgramContextImpl(
   effect(() => {
     historiesRefreshed.value
     const didRefresh = program.refreshHistories()
-    if (isActuallyPlaying.value && opts.isPlayingThis.value && didRefresh && program.histories.length > 0) {
-      histories.value = program.histories
-      userCallHistories.value = program.userCallHistories
+    if (!isActuallyPlaying.value || !opts.isPlayingThis.value) return
+    if (program.histories.length === 0) return
+    // Keep runtime widgets in sync when play-state flips after the first pack was already consumed.
+    if (!didRefresh && histories.value === program.histories && userCallHistories.value === program.userCallHistories) {
+      return
     }
+    histories.value = program.histories
+    userCallHistories.value = program.userCallHistories
   })
 
   effect(() => {
