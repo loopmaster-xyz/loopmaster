@@ -38003,7 +38003,7 @@ var asconfig_default = {
 		"exportRuntime": true
 	}
 };
-var worklet_default = "/assets/worklet-N29xxTbb.js";
+var worklet_default = "/assets/worklet-CRQcUhLJ.js";
 function getWasmPaths() {
 	const base = isMobile$1() ? "/as/build/index-mobile.wasm" : "/as/build/index.wasm";
 	return {
@@ -39163,7 +39163,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-D3IN300m.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-Cojr2a9Q.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -43660,10 +43660,11 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 	m(() => {
 		historiesRefreshed.value;
 		const didRefresh = program.refreshHistories();
-		if (isActuallyPlaying.value && opts.isPlayingThis.value && didRefresh && program.histories.length > 0) {
-			histories.value = program.histories;
-			userCallHistories.value = program.userCallHistories;
-		}
+		if (!isActuallyPlaying.value || !opts.isPlayingThis.value) return;
+		if (program.histories.length === 0) return;
+		if (!didRefresh && histories.value === program.histories && userCallHistories.value === program.userCallHistories) return;
+		histories.value = program.histories;
+		userCallHistories.value = program.userCallHistories;
 	});
 	m(() => {
 		doc.widgets = createWidgets(widgetContext, histories.value, userCallHistories.value);
@@ -59116,4 +59117,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-DEwkel2O.js.map
+//# sourceMappingURL=index-B2C9NLdX.js.map

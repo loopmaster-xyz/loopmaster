@@ -1150,8 +1150,8 @@
 		const audioL = new Float32Array(runtime.buffer, outputLeftPtr, bufferLength);
 		const audioR = new Float32Array(runtime.buffer, outputRightPtr, bufferLength);
 		for (let i = 0; i < bufferLength; i++) {
-			outputL[i] = (outputL[i] ?? 0) + (audioL[i] ?? 0) * gain;
-			outputR[i] = (outputR[i] ?? 0) + (audioR[i] ?? 0) * gain;
+			outputL[i] = outputL[i] + audioL[i] * gain;
+			outputR[i] = outputR[i] + audioR[i] * gain;
 		}
 	}
 	async function createProcessorState(binary, opts) {
@@ -1198,9 +1198,8 @@
 		};
 		let hadError = false;
 		let wasPlaying = false;
-		let isPlaying = false;
-		let idsNowPlaying = /* @__PURE__ */ new Set();
-		let idsWasPlaying = /* @__PURE__ */ new Set();
+		const idsNowPlaying = /* @__PURE__ */ new Set();
+		const idsWasPlaying = /* @__PURE__ */ new Set();
 		function applyLimiter(buffer, state$1) {
 			const thresholdClamped = Math.max(-80, Math.min(limiterThresholdDb, 0));
 			const releaseClamped = Math.max(1e-4, Math.min(limiterReleaseSeconds, 5));
@@ -1222,7 +1221,7 @@
 			const releaseCoeff = state$1.releaseCoeff;
 			const len = buffer.length;
 			for (let i = 0; i < len; i++) {
-				const input = buffer[i] ?? 0;
+				const input = buffer[i];
 				const inputLevel = Math.abs(input);
 				const targetGain = inputLevel > thresholdLinear ? thresholdLinear / inputLevel : 1;
 				if (currentGain > targetGain) currentGain = targetGain + (currentGain - targetGain) * releaseCoeff;
@@ -1243,22 +1242,25 @@
 			const outputR = outputs[0]?.[1] ?? outputL;
 			if (!outputL || !outputR || bufferLength <= 0) {
 				wasPlaying = false;
-				isPlaying = false;
 				return true;
 			}
 			quantumRef.value = bufferLength;
+			idsNowPlaying.clear();
+			let isPlaying = false;
 			let scheduleRefresh = false;
 			if (memoryBuffer !== core.wasm.memory.buffer) {
 				memoryBuffer = core.wasm.memory.buffer;
 				scheduleRefresh = true;
 			}
-			if (state.transportStopAndSeekToZero !== 0) {
-				state.transportStopAndSeekToZero = 0;
-				state.transportRunning = SharedTransportRunningState.Stop;
-				state.transportActuallyPlaying = SharedTransportRunningState.Stop;
+			const transportStopAndSeekToZero = Atomics.load(transportU32, SharedTransportIndex.StopAndSeekToZero);
+			const stopAndSeekIds = state.scheduleStopAndSeekToZero;
+			if (transportStopAndSeekToZero !== 0) {
+				Atomics.store(transportU32, SharedTransportIndex.StopAndSeekToZero, 0);
+				Atomics.store(transportU32, SharedTransportIndex.Running, SharedTransportRunningState.Stop);
+				Atomics.store(transportU32, SharedTransportIndex.ActuallyPlaying, SharedTransportRunningState.Stop);
 				applyTransportSeek(state, 0);
-				setProgramsState(programsById, DspProgramState.Stop, state.scheduleStopAndSeekToZero);
-				applyProgramSeek(programsById, 0, state.scheduleStopAndSeekToZero);
+				setProgramsState(programsById, DspProgramState.Stop, stopAndSeekIds);
+				applyProgramSeek(programsById, 0, stopAndSeekIds);
 				state.scheduleStopAndSeekToZero = [];
 				core.wasm.__collect();
 				for (const p of programsById.values()) {
@@ -1267,53 +1269,58 @@
 					slot.vm.softReset();
 				}
 				wasPlaying = false;
-				isPlaying = false;
 				return true;
-			} else if (state.scheduleStopAndSeekToZero.length > 0) {
-				setProgramsState(programsById, DspProgramState.Stop, state.scheduleStopAndSeekToZero);
-				applyProgramSeek(programsById, 0, state.scheduleStopAndSeekToZero);
-				for (const p of [...programsById.values()].filter((p$1) => state.scheduleStopAndSeekToZero.includes(p$1.id))) {
+			} else if (stopAndSeekIds.length > 0) {
+				setProgramsState(programsById, DspProgramState.Stop, stopAndSeekIds);
+				applyProgramSeek(programsById, 0, stopAndSeekIds);
+				const stopAndSeekSet = new Set(stopAndSeekIds);
+				for (const p of programsById.values()) {
+					if (!stopAndSeekSet.has(p.id)) continue;
 					const slot = p.slots[p.activeSlot];
 					copyHistoryMetaToProgramShared(runtime, p, slot.vm);
 					slot.vm.softReset();
 				}
 				state.scheduleStopAndSeekToZero = [];
 			}
-			const seekVersion = state.transportSeekVersion;
-			const next = Math.round(state.transportSampleCount);
-			if (seekVersion !== state.transportSeekVersion) {
-				state.transportSeekVersion = seekVersion;
-				state.sampleCount = next;
+			const seekVersion = Atomics.load(transportU32, SharedTransportIndex.SeekVersion);
+			const next = Math.round(transportF32[SharedTransportIndex.SampleCount]);
+			if (seekVersion !== Atomics.load(transportU32, SharedTransportIndex.SeekVersion)) {
+				Atomics.store(transportU32, SharedTransportIndex.SeekVersion, seekVersion);
+				sampleCountRef.value = next;
 				for (const p of programsById.values()) p.sampleCount = next;
 			}
-			if (!(state.transportRunning === SharedTransportRunningState.Start) && !scheduleProgramsSeekChunks) {
-				state.transportActuallyPlaying = state.transportRunning;
-				state.transportSampleCount = state.sampleCount;
+			const transportRunning = Atomics.load(transportU32, SharedTransportIndex.Running);
+			if (!(transportRunning === SharedTransportRunningState.Start) && !scheduleProgramsSeekChunks) {
+				Atomics.store(transportU32, SharedTransportIndex.ActuallyPlaying, transportRunning);
+				transportF32[SharedTransportIndex.SampleCount] = sampleCountRef.value;
 				if (wasPlaying) for (const p of programsById.values()) {
 					const slot = p.slots[p.activeSlot];
 					copyHistoryMetaToProgramShared(runtime, p, slot.vm);
 				}
 				wasPlaying = false;
-				isPlaying = false;
 				return true;
 			}
-			state.transportActuallyPlaying = state.transportRunning;
+			Atomics.store(transportU32, SharedTransportIndex.ActuallyPlaying, transportRunning);
+			const scheduleProgramsSeekSet = scheduleProgramsSeek.length > 0 ? new Set(scheduleProgramsSeek) : null;
+			const advanceSampleCount = scheduleProgramsSeekChunks === 0;
+			const bpmOverrideValue = bpmOverrideValueRef.value;
+			const bpm = bpmRef.value;
+			const { loopBeginSamples, loopEndSamples, projectEndSamples, loopBeginSamplesA, loopEndSamplesA, projectEndSamplesA, loopBeginSamplesB, loopEndSamplesB, projectEndSamplesB, programAId, programBId } = state;
 			try {
 				for (const p of programsById.values()) {
 					const activeSlot = p.slots[p.activeSlot];
-					if ((p.state !== DspProgramState.Start || activeSlot.controlOpsLength <= 0) && !scheduleProgramsSeek.includes(p.id)) {
+					if ((p.state !== DspProgramState.Start || activeSlot.controlOpsLength <= 0) && !scheduleProgramsSeekSet?.has(p.id)) {
 						const slot = p.slots[p.activeSlot];
-						copyHistoryMetaToProgramShared(runtime, p, slot.vm);
 						const pending$1 = pendingProgramApplied.get(p.id);
 						const pendingSlot$1 = pendingProgramAppliedSlot.get(p.id);
 						if (pending$1 && pendingSlot$1 === p.activeSlot) {
+							copyHistoryMetaToProgramShared(runtime, p, slot.vm);
 							pendingProgramApplied.delete(p.id);
 							pendingProgramAppliedSlot.delete(p.id);
 							pending$1.resolve();
 						}
 						continue;
 					}
-					const advanceSampleCount = !scheduleProgramsSeekChunks;
 					const baseSampleCount = advanceSampleCount ? p.sampleCount : p.seekSampleCount;
 					if (p.swapFadeRemaining > 0) {
 						const from = p.swapFadeFrom;
@@ -1321,31 +1328,31 @@
 						const remaining = p.swapFadeRemaining;
 						const total = p.swapFadeTotal || 1;
 						const t$1 = Math.min(1, Math.max(0, (total - remaining) / total));
-						runProgram(runtime, nyquist, piOverNyquist, bpmOverrideValueRef.value, bpmRef.value, p, p.slots[from], bufferLength, baseSampleCount, outputL, outputR, (1 - t$1) * (p.gain || 0), false);
-						runProgram(runtime, nyquist, piOverNyquist, bpmOverrideValueRef.value, bpmRef.value, p, p.slots[to], bufferLength, baseSampleCount, outputL, outputR, t$1 * (p.gain || 0), true);
+						runProgram(runtime, nyquist, piOverNyquist, bpmOverrideValue, bpm, p, p.slots[from], bufferLength, baseSampleCount, outputL, outputR, (1 - t$1) * (p.gain || 0), false);
+						runProgram(runtime, nyquist, piOverNyquist, bpmOverrideValue, bpm, p, p.slots[to], bufferLength, baseSampleCount, outputL, outputR, t$1 * (p.gain || 0), true);
 						p.swapFadeRemaining = Math.max(0, p.swapFadeRemaining - bufferLength);
-					} else runProgram(runtime, nyquist, piOverNyquist, bpmOverrideValueRef.value, bpmRef.value, p, p.slots[p.activeSlot], bufferLength, baseSampleCount, outputL, outputR, p.gain || 0, true);
+					} else runProgram(runtime, nyquist, piOverNyquist, bpmOverrideValue, bpm, p, p.slots[p.activeSlot], bufferLength, baseSampleCount, outputL, outputR, p.gain || 0, true);
 					if (advanceSampleCount) {
 						p.sampleCount = baseSampleCount + bufferLength;
-						if (state.loopBeginSamples >= 0 && state.loopEndSamples > 0) {
-							if (p.sampleCount >= state.loopEndSamples) p.sampleCount = state.loopBeginSamples;
+						if (loopBeginSamples >= 0 && loopEndSamples > 0) {
+							if (p.sampleCount >= loopEndSamples) p.sampleCount = loopBeginSamples;
 						}
-						if (state.projectEndSamples > 0) {
-							if (p.sampleCount >= state.projectEndSamples) p.sampleCount = 0;
+						if (projectEndSamples > 0) {
+							if (p.sampleCount >= projectEndSamples) p.sampleCount = 0;
 						}
-						if (p.id === state.programAId) {
-							if (state.loopBeginSamplesA >= 0 && state.loopEndSamplesA > 0) {
-								if (p.sampleCount >= state.loopEndSamplesA) p.sampleCount = state.loopBeginSamplesA;
+						if (p.id === programAId) {
+							if (loopBeginSamplesA >= 0 && loopEndSamplesA > 0) {
+								if (p.sampleCount >= loopEndSamplesA) p.sampleCount = loopBeginSamplesA;
 							}
-							if (state.projectEndSamplesA > 0) {
-								if (p.sampleCount >= state.projectEndSamplesA) p.sampleCount = 0;
+							if (projectEndSamplesA > 0) {
+								if (p.sampleCount >= projectEndSamplesA) p.sampleCount = 0;
 							}
-						} else if (p.id === state.programBId) {
-							if (state.loopBeginSamplesB >= 0 && state.loopEndSamplesB > 0) {
-								if (p.sampleCount >= state.loopEndSamplesB) p.sampleCount = state.loopBeginSamplesB;
+						} else if (p.id === programBId) {
+							if (loopBeginSamplesB >= 0 && loopEndSamplesB > 0) {
+								if (p.sampleCount >= loopEndSamplesB) p.sampleCount = loopBeginSamplesB;
 							}
-							if (state.projectEndSamplesB > 0) {
-								if (p.sampleCount >= state.projectEndSamplesB) p.sampleCount = 0;
+							if (projectEndSamplesB > 0) {
+								if (p.sampleCount >= projectEndSamplesB) p.sampleCount = 0;
 							}
 						}
 					} else p.seekSampleCount = baseSampleCount + bufferLength;
@@ -1359,8 +1366,10 @@
 					idsNowPlaying.add(p.id);
 					isPlaying = true;
 				}
-				applyLimiter(outputL, limiterL);
-				applyLimiter(outputR, limiterR);
+				if (idsNowPlaying.size > 1) {
+					applyLimiter(outputL, limiterL);
+					applyLimiter(outputR, limiterR);
+				}
 				if (hadError) {
 					hadError = false;
 					dsp?.setWorkletError(null);
@@ -1376,18 +1385,30 @@
 				scheduleProgramsSeek = [];
 				scheduleRefresh = true;
 			}
-			state.sampleCount = state.sampleCount + bufferLength;
-			if (state.loopBeginSamples >= 0 && state.loopEndSamples > 0) {
-				if (state.sampleCount >= state.loopEndSamples) state.sampleCount = state.loopBeginSamples;
+			let sampleCount = sampleCountRef.value + bufferLength;
+			if (loopBeginSamples >= 0 && loopEndSamples > 0) {
+				if (sampleCount >= loopEndSamples) sampleCount = loopBeginSamples;
 			}
-			if (state.projectEndSamples > 0) {
-				if (state.sampleCount >= state.projectEndSamples) state.sampleCount = 0;
+			if (projectEndSamples > 0) {
+				if (sampleCount >= projectEndSamples) sampleCount = 0;
 			}
-			state.transportSampleCount = state.sampleCount;
-			if (idsNowPlaying.symmetricDifference(idsWasPlaying).size !== 0) {
+			sampleCountRef.value = sampleCount;
+			transportF32[SharedTransportIndex.SampleCount] = sampleCount;
+			let playingSetChanged = false;
+			for (const id of idsNowPlaying) if (!idsWasPlaying.has(id)) {
+				playingSetChanged = true;
+				break;
+			}
+			if (!playingSetChanged) {
+				for (const id of idsWasPlaying) if (!idsNowPlaying.has(id)) {
+					playingSetChanged = true;
+					break;
+				}
+			}
+			if (playingSetChanged) {
 				scheduleRefresh = true;
-				idsWasPlaying = new Set(idsNowPlaying);
-				idsNowPlaying.clear();
+				idsWasPlaying.clear();
+				for (const id of idsNowPlaying) idsWasPlaying.add(id);
 			}
 			if (isPlaying && !wasPlaying) {
 				scheduleRefresh = true;
@@ -1886,4 +1907,4 @@
 	registerProcessor("dsp", DspProcessor);
 })();
 
-//# sourceMappingURL=worklet-N29xxTbb.js.map
+//# sourceMappingURL=worklet-CRQcUhLJ.js.map
