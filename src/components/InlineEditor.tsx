@@ -107,7 +107,9 @@ export const InlineEditor = (
     if (doc) code = doc.code ?? ''
     inline.value.doc.code = code ?? ''
     inline.value.fullResync.value = true
-    didInit.value = true
+    setTimeout(() => {
+      didInit.value = true
+    }, 1000)
   }, [code, inline])
 
   useReactiveEffect(() => {

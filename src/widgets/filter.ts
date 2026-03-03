@@ -14,13 +14,6 @@ import { LINE_WIDTH } from './constants.ts'
 import { filterMagDb, getFilterVizType, hzToX } from './filter-viz.ts'
 import { clamp, getFunctionCallLength } from './util.ts'
 
-type FilterState = {
-  cutoff: number
-  q: number
-  gain: number
-  k: number
-}
-
 function getCallNameAt(source: string, line: number, column: number): string | null {
   const lines = source.split('\n')
   if (line < 1 || line > lines.length) return null
