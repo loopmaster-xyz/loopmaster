@@ -39219,7 +39219,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-B-kT4L8H.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DFwZottu.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -53188,7 +53188,29 @@ var ProjectButton = ({ project, onLoadA, onLoadB }) => {
 	}, project.id);
 };
 const DJ = () => {
-	return /* @__PURE__ */ u(SidebarMain, { children: projects.value.map((project) => /* @__PURE__ */ u(ProjectButton, {
+	return /* @__PURE__ */ u(SidebarMain, { children: useAsyncMemo(async () => {
+		if (location.href.includes("hn")) {
+			const projectsList = (await api.fetchBrowseNewest()).map((project) => {
+				const p$7 = createProject({
+					serverId: project.id,
+					userId: project.userId,
+					id: project.id,
+					name: project.name,
+					isPublic: project.isPublic
+				});
+				p$7.doc.code = p$7.scratch.code = project.code;
+				return p$7;
+			});
+			n(() => {
+				djBpm.value = 144;
+				djDocA.value.code = projectsList[0].scratch.code;
+				djDocB.value.code = projectsList[1].scratch.code;
+				djTitleA.value = projectsList[0].name;
+				djTitleB.value = projectsList[1].name;
+			});
+			return projectsList;
+		} else return projects.value;
+	}).value?.map((project) => /* @__PURE__ */ u(ProjectButton, {
 		project,
 		onLoadA: () => {
 			n(() => {
@@ -59200,4 +59222,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-BxViChZg.js.map
+//# sourceMappingURL=index-DDjLEVmR.js.map
