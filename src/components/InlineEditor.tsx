@@ -182,7 +182,7 @@ export const InlineEditor = (
 
   return (
     <div class={`bg-[${bgColor.value}] ${className} relative`}
-      style={code && !didInit.value && { height: estimatedHeight.value + 'px' } || {}}
+      style={code && !didInit.value && autoHeight && { height: estimatedHeight.value + 'px' } || {}}
     >
       {(!header || !isMobile()) && hasOut.value && (
         <div
