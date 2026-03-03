@@ -39233,7 +39233,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-BJoyDoco.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-zPYgU2Vc.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -49607,7 +49607,7 @@ var AdminUsers = () => {
 		class: "px-8 py-4",
 		children: [
 			"Count: ",
-			sortedUsers.value.length - 1,
+			sortedUsers.value.length - 2,
 			/* @__PURE__ */ u("table", {
 				class: "table-auto text-sm w-full text-left",
 				children: [/* @__PURE__ */ u("thead", { children: /* @__PURE__ */ u("tr", { children: [
@@ -59197,4 +59197,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-DJOBP_5B.js.map
+//# sourceMappingURL=index-B5la1u1u.js.map
