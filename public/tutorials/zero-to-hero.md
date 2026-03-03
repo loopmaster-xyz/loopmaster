@@ -394,7 +394,7 @@ switch (floor(t % 4)) {
 
 ## Envelopes
 
-### AD and ADSR
+### ad
 
 So far we've been playing constant tones that don't change over time. They sound droney and boring. To make them more rhythmic and interesting, we need to shape their volume over time. We do that with **envelopes**.
 
@@ -419,6 +419,23 @@ There is also one more parameter that we can use to shape the envelope: `exponen
 ```js
 
 sine(a4) * ad(attack:0.001, decay:0.9, exponent:10, trig:every(1/2)) |> out($)
+```
+
+### adsr
+
+The `adsr` is similar to `ad` but has two more parameters, `sustain` and `release`.
+The `sustain` is the level at which the envelope will sustain, and the `release` is the time it will take to release from the sustain level to 0.
+
+```js
+
+sine(a3) * adsr(
+  attack:0.01,
+  decay:0.1,
+  sustain:.4,
+  release:0.4,
+  trig:sustain(.4,every(1/2))
+
+) |> out($)
 ```
 
 ## Filters
