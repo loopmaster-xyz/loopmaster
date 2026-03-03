@@ -109,6 +109,11 @@ app.get('/api/session', async c => {
   if (!session) {
     return errorResponse(c, 'Not authenticated', 401)
   }
+  const kv = await getKv()
+  const user = await kv.get<User>(k.user(session.userId))
+  if (user.value) {
+    await kv.set(k.user(session.userId), { ...user.value, updatedAt: Date.now() })
+  }
   return c.json(SessionSchema.parse(session), 200)
 })
 
