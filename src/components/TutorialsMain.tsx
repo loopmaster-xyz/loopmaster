@@ -1,5 +1,6 @@
 import { type MarkdownNode, type MarkdownTableRowNode, parseMarkdown } from '@md-parser/parser'
 import {
+  BookOpenIcon,
   ChalkboardTeacherIcon,
   CodeIcon,
   LinkIcon as LinkIconPhosphor,
@@ -121,8 +122,9 @@ const buildTocTree = (entries: TocEntry[]): TocNode[] => {
   const root: TocNode = { id: '', level: 0, text: '', children: [] }
   const stack: TocNode[] = [root]
   for (const e of entries) {
-    while (stack.length > 1 && stack[stack.length - 1].level >= e.level)
+    while (stack.length > 1 && stack[stack.length - 1].level >= e.level) {
       stack.pop()
+    }
     const node: TocNode = { ...e, children: [] }
     stack[stack.length - 1].children.push(node)
     stack.push(node)
@@ -432,9 +434,7 @@ export const TutorialsMain = () => {
   const activeId = useSignal('')
   const containerRef = useRef<HTMLDivElement | null>(null)
 
-  const headings = useComputed(() =>
-    parsed.value ? extractHeadings(parsed.value.slice(1)) : []
-  )
+  const headings = useComputed(() => parsed.value ? extractHeadings(parsed.value.slice(1)) : [])
 
   const tutorialName = useComputed(() => pathname.value.split('/')[2])
 
@@ -524,11 +524,21 @@ export const TutorialsMain = () => {
             <div ref={containerRef} class="flex gap-8 min-h-0">
               <div class="flex-1 min-w-0">
                 {parsed.value.slice(1).map(compile)}
-                <CodeIcon size={20} class="my-6" />
+                <Grid cols={isMobile() ? 1 : 3}>
+                  {tutorials.filter(tutorial => tutorial.href !== pathname.value).map(tutorial => (
+                    <GridItem to={tutorial.href}>
+                      <tutorial.Icon size={24} />
+                      <span class="mt-2">{tutorial.name}</span>
+                      <span class="text-sm text-white/50">{tutorial.description}</span>
+                    </GridItem>
+                  ))}
+                  <GridItem to="/docs">
+                    <BookOpenIcon size={24} />
+                    Docs
+                  </GridItem>
+                </Grid>
               </div>
-              {headings.value.length > 0 && (
-                <Toc headings={headings.value} activeId={activeId.value} />
-              )}
+              {headings.value.length > 0 && <Toc headings={headings.value} activeId={activeId.value} />}
             </div>
           )
           : (
