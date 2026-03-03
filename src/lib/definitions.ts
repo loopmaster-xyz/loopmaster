@@ -435,6 +435,21 @@ export const extra: [string, Definition][] = [
       { name: 'seed', description: ['Seed for deterministic random.'], default: 0 },
     ],
   }],
+  ['Markov', {
+    type: 'function',
+    name: 'Markov',
+    arrayMethod: true,
+    category: 'sequencers',
+    description: ['Markov-chain sequencer over array values. Number of states is implicit from array length.'],
+    return: 'signal',
+    parameters: [
+      { name: 'trig', description: ['Trigger impulse. On rising edge, advance state.'] },
+      { name: 'stay', description: ['Probability to stay on current state.'], default: 0.3, min: 0, max: 1 },
+      { name: 'step', description: ['Probability to move to adjacent state.'], default: 0.5, min: 0, max: 1 },
+      { name: 'bias', description: ['Step direction bias (0=down, 0.5=equal, 1=up).'], default: 0.5, min: 0, max: 1 },
+      { name: 'seed', description: ['Seed for deterministic transitions.'], default: 1 },
+    ],
+  }],
   ['Glide', {
     type: 'function',
     name: 'Glide',
