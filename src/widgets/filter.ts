@@ -21,6 +21,44 @@ type FilterState = {
   k: number
 }
 
+function getCallNameAt(source: string, line: number, column: number): string | null {
+  const lines = source.split('\n')
+  if (line < 1 || line > lines.length) return null
+  const text = lines[line - 1]!
+  let i = Math.max(0, column - 1)
+  while (i < text.length && /\s/.test(text[i]!)) i++
+  const match = /^[A-Za-z_][A-Za-z0-9_]*/.exec(text.slice(i))
+  return match ? match[0]!.toLowerCase() : null
+}
+
+function resolveFilterVariantName(
+  genName: string,
+  variantName: string | undefined,
+  sourceFnName: string | null,
+): string {
+  if (!sourceFnName) return variantName ?? ''
+  if (genName === 'Biquad' && (sourceFnName === 'lp' || sourceFnName === 'hp' || sourceFnName === 'bp'
+    || sourceFnName === 'bs' || sourceFnName === 'ap'))
+  {
+    return sourceFnName
+  }
+  if (genName === 'Biquadshelf' && (sourceFnName === 'ls' || sourceFnName === 'hs' || sourceFnName === 'peak')) {
+    return sourceFnName
+  }
+  if (genName === 'Svf' && (sourceFnName === 'lps' || sourceFnName === 'hps' || sourceFnName === 'bps'
+    || sourceFnName === 'bss' || sourceFnName === 'peaks' || sourceFnName === 'aps'))
+  {
+    return sourceFnName
+  }
+  if (genName === 'Onepole' && (sourceFnName === 'lp1' || sourceFnName === 'hp1')) {
+    return sourceFnName
+  }
+  if (genName === 'Moog' && (sourceFnName === 'lpm' || sourceFnName === 'hpm')) {
+    return sourceFnName
+  }
+  return variantName ?? ''
+}
+
 function clampDb(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n))
 }
@@ -32,16 +70,17 @@ export function createFilterWidget(
   latency: Signal<DspLatency>,
   cache: Map<string, WidgetCacheEntry>,
 ): Widget | null {
-  const vizType = getFilterVizType(filter.genName, filter.variantName)
-  if (vizType === null) return null
-
   const startCol = target.source.column
   const endCol = startCol + getFunctionCallLength(doc.code, target.source.line, target.source.column)
   const line = target.source.line
+  const sourceFnName = getCallNameAt(doc.code, line, startCol)
+  const resolvedVariantName = resolveFilterVariantName(filter.genName, filter.variantName, sourceFnName)
+  const vizType = getFilterVizType(filter.genName, resolvedVariantName)
+  if (vizType === null) return null
 
   const startIndex = locToIndex(doc.code, line, startCol)
   const endIndex = locToIndex(doc.code, line, endCol)
-  const key = makeWidgetCacheKey('Filter', startIndex, endIndex, filter.genName, filter.variantName ?? '')
+  const key = makeWidgetCacheKey('Filter', startIndex, endIndex, filter.genName, resolvedVariantName)
   const cached = cache.get(key) as { doc: Doc; widget: Widget; historyRef: { current: TypedHistory } } | undefined
   if (cached?.doc === doc) {
     cached.historyRef.current = filter
