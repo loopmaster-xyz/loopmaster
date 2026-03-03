@@ -5,7 +5,6 @@ import {
   CaretUpIcon,
   DownloadIcon,
   EnvelopeSimpleIcon,
-  MegaphoneSimpleIcon,
   TrashIcon,
   UploadSimpleIcon,
 } from '@phosphor-icons/react'
@@ -97,7 +96,7 @@ const AdminUsers = () => {
               <td>{timeAgo(new Date(user.createdAt))} - {new Date(user.createdAt).toLocaleString()}</td>
               <td>{timeAgo(new Date(user.updatedAt))} - {new Date(user.updatedAt).toLocaleString()}</td>
               <td class="inline-flex items-center gap-1">
-                {!user.sentWelcomeEmail && (
+                {(!user.sentWelcomeEmail || user.email === 'gstagas@gmail.com') && (
                   <button class="hover:text-white" title="Send welcome email" onMouseDown={() => {
                     api.sendWelcomeEmail(user.id).then(() => {
                       setUsers(us => us.map(u => u.id === user.id ? { ...u, sentWelcomeEmail: true } : u))
@@ -107,18 +106,6 @@ const AdminUsers = () => {
                     })
                   }}>
                     <EnvelopeSimpleIcon size={16} />
-                  </button>
-                )}
-                {(!user.sentBetaEmail || user.email === 'gstagas@gmail.com') && (
-                  <button class="hover:text-white" title="Send beta email" onMouseDown={() => {
-                    api.sendBetaEmail(user.id).then(() => {
-                      setUsers(us => us.map(u => u.id === user.id ? { ...u, sentBetaEmail: true } : u))
-                    }).catch(e => {
-                      console.error(e)
-                      alert(e instanceof Error ? e.message : 'Failed')
-                    })
-                  }}>
-                    <MegaphoneSimpleIcon size={16} />
                   </button>
                 )}
                 <button class="hover:text-white" title="Delete user" onMouseDown={() => {

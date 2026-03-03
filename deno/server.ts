@@ -958,30 +958,20 @@ app.post('/api/admin/send-welcome-email', async c => {
   const userEntry = await kv.get<User>(k.user(parsed.data.userId))
   const user = userEntry.value ?? null
   if (!user) return errorResponse(c, 'User not found', 404)
-  await kv.set(k.user(parsed.data.userId), { ...user, sentWelcomeEmail: true })
-  return c.json(OkResponseSchema.parse({ ok: true }), 200)
-})
-
-app.post('/api/admin/send-beta-email', async c => {
-  const { session } = await requireSession(c)
-  if (!session) return errorResponse(c, 'Not authenticated', 401)
-  if (!session.isAdmin) return errorResponse(c, 'Not authorized', 403)
-  const raw = await c.req.json().catch(() => null)
-  if (raw === null) return errorResponse(c, 'Invalid JSON', 400)
-  const parsed = z.object({ userId: z.string().min(1) }).safeParse(raw)
-  if (!parsed.success) return errorResponse(c, 'User ID is required', 400)
-  const kv = await getKv()
-  const userEntry = await kv.get<User>(k.user(parsed.data.userId))
-  const user = userEntry.value ?? null
-  if (!user) return errorResponse(c, 'User not found', 404)
 
   const text = `Hi ${user.artistName || 'there'}!
 
-loopmaster just got a fresh update and you should check it out! It's been built from the ground up based on feedback from the community.
+My name is Yorgos and I'm the creator of loopmaster. We're thrilled to have you on board! You're one of our very first users, which is pretty awesome!
 
-The link is here >>> https://beta.loopmaster.xyz <<<
+I'd love to hear what you think! What do you like? What's missing? What do you want to see? Let me know here: https://loopmaster.featurebase.app/
 
-I'd love to hear what you think! Leave a comment on the feedback board post https://loopmaster.featurebase.app/p/loopmaster-beta or come say hi on Discord! https://discord.gg/NSWaB9dRYh
+We also have a Discord server which you are very welcome https://discord.gg/NSWaB9dRYh
+
+I'm building this based on what people tell me, so your opinion *truly* matters.
+
+Ready to get started? Check out the tutorials: https://loopmaster.xyz/tutorials
+
+If you have questions or need any help, simply reach out, I'm happy to help!
 
 🎶 Enjoy creating! 🎶
 
@@ -991,7 +981,7 @@ Don't reply to this email. For feedback, use the feedback board or Discord.
 
 © ${new Date().getFullYear()} loopmaster. All rights reserved.`
 
-  await sendEmail(user.email, 'loopmaster got an update! 🎧', undefined, text)
+  await sendEmail(user.email, 'Welcome to loopmaster! 🎧', undefined, text)
   await kv.set(k.user(parsed.data.userId), { ...user, sentBetaEmail: true })
   return c.json(OkResponseSchema.parse({ ok: true }), 200)
 })

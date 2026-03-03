@@ -126,14 +126,6 @@ export class API {
     })
   }
 
-  sendBetaEmail = async (userId: string) => {
-    return await this.requestJson<OkResponse>('/api/admin/send-beta-email', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ userId }),
-    })
-  }
-
   deleteUser = async (userId: string) => {
     return await this.requestJson<OkResponse>(`/api/admin/users/${userId}`, {
       method: 'DELETE',
