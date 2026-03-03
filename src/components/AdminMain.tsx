@@ -66,6 +66,7 @@ const AdminUsers = () => {
   )
   return (
     <Main class="px-8 py-4">
+      Count: {sortedUsers.value.length - 1}
       <table class="table-auto text-sm w-full text-left">
         <thead>
           <tr>
