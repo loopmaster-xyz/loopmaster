@@ -39219,7 +39219,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-CBGtRzb0.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-B-kT4L8H.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -48806,12 +48806,12 @@ var o$6 = D((r$12, t$12) => /* @__PURE__ */ _(p$1, {
 	weights: e$52
 }));
 o$6.displayName = "ArticleIcon";
-var e$3 = D((r$12, t$12) => /* @__PURE__ */ _(p$1, {
+var e = D((r$12, t$12) => /* @__PURE__ */ _(p$1, {
 	ref: t$12,
 	...r$12,
 	weights: e$51
 }));
-e$3.displayName = "BookOpenIcon";
+e.displayName = "BookOpenIcon";
 var e$18 = D((r$12, t$12) => /* @__PURE__ */ _(p$1, {
 	ref: t$12,
 	...r$12,
@@ -48836,12 +48836,12 @@ var o$26 = D((r$12, t$12) => /* @__PURE__ */ _(p$1, {
 	weights: a$29
 }));
 o$26.displayName = "CaretUpIcon";
-var e = D((o$34, r$12) => /* @__PURE__ */ _(p$1, {
+var e$1 = D((o$34, r$12) => /* @__PURE__ */ _(p$1, {
 	ref: r$12,
 	...o$34,
 	weights: e$50
 }));
-e.displayName = "ChalkboardTeacherIcon";
+e$1.displayName = "ChalkboardTeacherIcon";
 var o$9 = D((c$7, r$12) => /* @__PURE__ */ _(p$1, {
 	ref: r$12,
 	...c$7,
@@ -48860,12 +48860,12 @@ var c$2 = D((e$58, r$12) => /* @__PURE__ */ _(p$1, {
 	weights: a$26
 }));
 c$2.displayName = "ClockIcon";
-var e$1 = D((r$12, t$12) => /* @__PURE__ */ _(p$1, {
+var e$6 = D((r$12, t$12) => /* @__PURE__ */ _(p$1, {
 	ref: t$12,
 	...r$12,
 	weights: l$5
 }));
-e$1.displayName = "CodeIcon";
+e$6.displayName = "CodeIcon";
 var r$5 = D((c$7, e$58) => /* @__PURE__ */ _(p$1, {
 	ref: e$58,
 	...c$7,
@@ -48938,12 +48938,12 @@ var t$4 = D((e$58, r$12) => /* @__PURE__ */ _(p$1, {
 	weights: e$44
 }));
 t$4.displayName = "GithubLogoIcon";
-var e$4 = D((r$12, t$12) => /* @__PURE__ */ _(p$1, {
+var e$3 = D((r$12, t$12) => /* @__PURE__ */ _(p$1, {
 	ref: t$12,
 	...r$12,
 	weights: e$43
 }));
-e$4.displayName = "GlobeIcon";
+e$3.displayName = "GlobeIcon";
 var o$1 = D((a$36, r$12) => /* @__PURE__ */ _(p$1, {
 	ref: r$12,
 	...a$36,
@@ -49064,12 +49064,12 @@ var e$9 = D((r$12, s$4) => /* @__PURE__ */ _(p$1, {
 	weights: a$12
 }));
 e$9.displayName = "PlusIcon";
-var e$5 = D((t$12, r$12) => /* @__PURE__ */ _(p$1, {
+var e$4 = D((t$12, r$12) => /* @__PURE__ */ _(p$1, {
 	ref: r$12,
 	...t$12,
 	weights: a$11
 }));
-e$5.displayName = "QuestionIcon";
+e$4.displayName = "QuestionIcon";
 var o$16 = D((t$12, a$36) => /* @__PURE__ */ _(p$1, {
 	ref: a$36,
 	...t$12,
@@ -49184,12 +49184,12 @@ var t$3 = D((a$36, e$58) => /* @__PURE__ */ _(p$1, {
 	weights: a$5
 }));
 t$3.displayName = "WaveSawtoothIcon";
-var e$6 = D((r$12, a$36) => /* @__PURE__ */ _(p$1, {
+var e$5 = D((r$12, a$36) => /* @__PURE__ */ _(p$1, {
 	ref: a$36,
 	...r$12,
 	weights: e$21
 }));
-e$6.displayName = "WaveformIcon";
+e$5.displayName = "WaveformIcon";
 var o$23 = D((a$36, r$12) => /* @__PURE__ */ _(p$1, {
 	ref: r$12,
 	...a$36,
@@ -49493,7 +49493,7 @@ const SidebarMain = ({ children, class: className }) => {
 };
 var adminIcons = {
 	users: o$4,
-	projects: e$6,
+	projects: e$5,
 	actions: c$3
 };
 const AdminIcon = ({ section: section$2, size = 24 }) => {
@@ -51155,7 +51155,7 @@ var icons = {
 	popular: /* @__PURE__ */ u(r$6, { size: 24 }),
 	hottest: /* @__PURE__ */ u(o$25, { size: 24 }),
 	liked: /* @__PURE__ */ u(o$13, { size: 24 }),
-	oneLiners: /* @__PURE__ */ u(e$1, { size: 24 })
+	oneLiners: /* @__PURE__ */ u(e$6, { size: 24 })
 };
 const BrowseMain = () => {
 	const section$2 = useComputed(() => pathname.value.split("/")[2] ?? "");
@@ -51951,7 +51951,7 @@ var DocsGen = ({ name, category }) => {
 					}, e$58))
 				})
 			}),
-			/* @__PURE__ */ u(e$1, {
+			/* @__PURE__ */ u(e$6, {
 				size: 20,
 				class: "mt-10 mb-2"
 			})
@@ -52004,12 +52004,12 @@ const helpItems = [
 	{
 		name: "Docs",
 		url: "/docs",
-		Icon: e$3
+		Icon: e
 	},
 	{
 		name: "Tutorials",
 		url: "/tutorials",
-		Icon: e
+		Icon: e$1
 	},
 	{
 		name: "Discord",
@@ -52152,7 +52152,7 @@ var features = [
 	{
 		title: "Powerful DSP",
 		description: "Built-in synthesizers, effects, filters, and sequencing tools. All running in WebAssembly for maximum performance.",
-		icon: e$6
+		icon: e$5
 	},
 	{
 		title: "Visual Feedback",
@@ -52167,12 +52167,12 @@ var features = [
 	{
 		title: "No Installation",
 		description: "Runs entirely in your browser. No plugins, no downloads. Just open and create.",
-		icon: e$4
+		icon: e$3
 	},
 	{
 		title: "Open Source",
 		description: "Built with modern web technologies. Extensible and transparent.",
-		icon: e$1
+		icon: e$6
 	}
 ];
 var communityFeatures = [
@@ -52254,7 +52254,7 @@ var EnterAppButton = () => {
 	return /* @__PURE__ */ u(ActionButton, {
 		to: "/projects",
 		text: "Enter App",
-		icon: /* @__PURE__ */ u(e$1, {
+		icon: /* @__PURE__ */ u(e$6, {
 			weight: "regular",
 			size: 24
 		})
@@ -52264,14 +52264,14 @@ var BrowseLoopsButton = () => {
 	return isMobile() ? /* @__PURE__ */ u(ActionButton, {
 		to: "/browse/newest",
 		text: "Browse Tracks",
-		icon: /* @__PURE__ */ u(e$4, {
+		icon: /* @__PURE__ */ u(e$3, {
 			weight: "regular",
 			size: 24
 		})
 	}) : /* @__PURE__ */ u(ActionGrayButton, {
 		to: "/browse/newest",
 		text: "Browse Tracks",
-		icon: /* @__PURE__ */ u(e$4, {
+		icon: /* @__PURE__ */ u(e$3, {
 			weight: "regular",
 			size: 24
 		})
@@ -52281,7 +52281,7 @@ var ReadTutorialsButton = () => {
 	return /* @__PURE__ */ u(ActionGrayButton, {
 		to: "/tutorials",
 		text: "Read Tutorials",
-		icon: /* @__PURE__ */ u(e, {
+		icon: /* @__PURE__ */ u(e$1, {
 			weight: "regular",
 			size: 24
 		})
@@ -53138,7 +53138,7 @@ const Browse = () => {
 		}),
 		/* @__PURE__ */ u(SidebarLink, {
 			to: "/browse/one-liners",
-			children: [/* @__PURE__ */ u(e$1, {
+			children: [/* @__PURE__ */ u(e$6, {
 				size: 16,
 				class: "group-hover:text-white"
 			}), /* @__PURE__ */ u("span", { children: "One-Liners" })]
@@ -53685,7 +53685,7 @@ const ExportAudio = () => {
 				children: [startedRendering.value ? /* @__PURE__ */ u(c$1, {
 					size: 16,
 					class: "animate-spin"
-				}) : /* @__PURE__ */ u(e$6, {
+				}) : /* @__PURE__ */ u(e$5, {
 					size: 16,
 					class: "group-hover:text-white"
 				}), startedRendering.value ? /* @__PURE__ */ u("span", { children: "Rendering..." }) : /* @__PURE__ */ u("span", { children: "Render" })]
@@ -57425,7 +57425,7 @@ const Tools = () => {
 		}),
 		/* @__PURE__ */ u(SidebarButton, {
 			onClick: () => sidebarTab.value = "export-audio",
-			children: [/* @__PURE__ */ u(e$6, {
+			children: [/* @__PURE__ */ u(e$5, {
 				size: 16,
 				class: "group-hover:text-white"
 			}), /* @__PURE__ */ u("span", { children: "Export Audio" })]
@@ -57464,7 +57464,7 @@ const tutorials = [
 		name: "Drum One-Liners",
 		description: "Learn how to make drums with one-liners",
 		href: "/tutorials/drum-one-liners",
-		Icon: e$1
+		Icon: e$6
 	},
 	{
 		name: "Making a House Loop",
@@ -57516,7 +57516,7 @@ const Sidebar = () => /* @__PURE__ */ u("div", {
 			class: "flex flex-col items-stretch justify-start h-full overflow-y-scroll overflow-x-hidden",
 			children: [
 				/* @__PURE__ */ u(SidebarTabLink, {
-					icon: /* @__PURE__ */ u(e$6, { size: 16 }),
+					icon: /* @__PURE__ */ u(e$5, { size: 16 }),
 					tab: "projects",
 					title: "Projects"
 				}),
@@ -57536,7 +57536,7 @@ const Sidebar = () => /* @__PURE__ */ u("div", {
 					title: "Settings"
 				}),
 				/* @__PURE__ */ u(SidebarTabLink, {
-					icon: /* @__PURE__ */ u(e$4, { size: 16 }),
+					icon: /* @__PURE__ */ u(e$3, { size: 16 }),
 					tab: "browse/newest",
 					title: "Browse"
 				}),
@@ -57546,17 +57546,17 @@ const Sidebar = () => /* @__PURE__ */ u("div", {
 					title: "Account"
 				}),
 				/* @__PURE__ */ u(SidebarTabLink, {
-					icon: /* @__PURE__ */ u(e$3, { size: 16 }),
+					icon: /* @__PURE__ */ u(e, { size: 16 }),
 					tab: "docs",
 					title: "Docs"
 				}),
 				/* @__PURE__ */ u(SidebarTabLink, {
-					icon: /* @__PURE__ */ u(e, { size: 16 }),
+					icon: /* @__PURE__ */ u(e$1, { size: 16 }),
 					tab: "tutorials",
 					title: "Tutorials"
 				}),
 				/* @__PURE__ */ u(SidebarTabLink, {
-					icon: /* @__PURE__ */ u(e$5, { size: 16 }),
+					icon: /* @__PURE__ */ u(e$4, { size: 16 }),
 					tab: "help",
 					title: "Help"
 				}),
@@ -58605,7 +58605,7 @@ const TutorialsMain = () => {
 		root.addEventListener("scroll", update, { passive: true });
 		return () => root.removeEventListener("scroll", update);
 	}, [parsed.value, headings.value]);
-	return /* @__PURE__ */ u(k, { children: [/* @__PURE__ */ u(Header, { children: parsed.value && tutorial.value && /* @__PURE__ */ u(k, { children: [/* @__PURE__ */ u(tutorial.value.Icon, { size: "24" }), compile(parsed.value[0])] }) || isMobile() && /* @__PURE__ */ u(k, { children: [/* @__PURE__ */ u(e, {
+	return /* @__PURE__ */ u(k, { children: [/* @__PURE__ */ u(Header, { children: parsed.value && tutorial.value && /* @__PURE__ */ u(k, { children: [/* @__PURE__ */ u(tutorial.value.Icon, { size: "24" }), compile(parsed.value[0])] }) || isMobile() && /* @__PURE__ */ u(k, { children: [/* @__PURE__ */ u(e$1, {
 		weight: "regular",
 		size: 24
 	}), "Tutorials"] }) }), /* @__PURE__ */ u(Main, {
@@ -58615,9 +58615,25 @@ const TutorialsMain = () => {
 			class: "flex gap-8 min-h-0",
 			children: [/* @__PURE__ */ u("div", {
 				class: "flex-1 min-w-0",
-				children: [parsed.value.slice(1).map(compile), /* @__PURE__ */ u(e$1, {
-					size: 20,
-					class: "my-6"
+				children: [parsed.value.slice(1).map(compile), /* @__PURE__ */ u(Grid, {
+					cols: isMobile() ? 1 : 3,
+					children: [tutorials.filter((tutorial$1) => tutorial$1.href !== pathname.value).map((tutorial$1) => /* @__PURE__ */ u(GridItem, {
+						to: tutorial$1.href,
+						children: [
+							/* @__PURE__ */ u(tutorial$1.Icon, { size: 24 }),
+							/* @__PURE__ */ u("span", {
+								class: "mt-2",
+								children: tutorial$1.name
+							}),
+							/* @__PURE__ */ u("span", {
+								class: "text-sm text-white/50",
+								children: tutorial$1.description
+							})
+						]
+					})), /* @__PURE__ */ u(GridItem, {
+						to: "/docs",
+						children: [/* @__PURE__ */ u(e, { size: 24 }), "Docs"]
+					})]
 				})]
 			}), headings.value.length > 0 && /* @__PURE__ */ u(Toc, {
 				headings: headings.value,
@@ -59184,4 +59200,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-ldMmOoyp.js.map
+//# sourceMappingURL=index-BxViChZg.js.map

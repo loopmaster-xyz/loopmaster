@@ -688,7 +688,3 @@ drums() |> out($)
 
 mix => compressor($,threshold:-10) |> limiter($)
 ```
-
-...
-
-#### *WIP: More to come...*
