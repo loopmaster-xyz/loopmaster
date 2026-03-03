@@ -987,7 +987,7 @@ Don't reply to this email. For feedback, use the feedback board or Discord.
 © ${new Date().getFullYear()} loopmaster. All rights reserved.`
 
   await sendEmail(user.email, 'Welcome to loopmaster! 🎧', undefined, text)
-  await kv.set(k.user(parsed.data.userId), { ...user, sentBetaEmail: true })
+  await kv.set(k.user(parsed.data.userId), { ...user, sentWelcomeEmail: true } satisfies User)
   return c.json(OkResponseSchema.parse({ ok: true }), 200)
 })
 
