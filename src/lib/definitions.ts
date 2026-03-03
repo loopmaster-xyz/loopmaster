@@ -126,6 +126,30 @@ export const extra: [string, Definition][] = [
       { name: 'initial', description: ['Initial accumulator value.'], default: 0 },
     ],
   }],
+  ['slice', {
+    type: 'function',
+    name: 'slice',
+    arrayMethod: true,
+    category: 'utilities',
+    description: ['Returns a shallow copy from start (inclusive) to end (exclusive). Supports negative indices.'],
+    return: 'array',
+    parameters: [
+      { name: 'start', description: ['Start index (inclusive). Negative values offset from the end.'], default: 0 },
+      { name: 'end', description: ['End index (exclusive). Negative values offset from the end.'],
+        default: 'array.length' },
+    ],
+  }],
+  ['take', {
+    type: 'function',
+    name: 'take',
+    arrayMethod: true,
+    category: 'utilities',
+    description: ['Returns the first n items of an array (implemented via slice(0, n)).'],
+    return: 'array',
+    parameters: [
+      { name: 'n', description: ['Number of items to take from the beginning.'], default: 'array.length' },
+    ],
+  }],
   ['print', {
     type: 'function',
     name: 'print',
