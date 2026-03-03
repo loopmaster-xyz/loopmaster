@@ -34548,6 +34548,42 @@ function compileCall(state, expr) {
 			compileCallWithArgs(state, syntheticCall, syntheticCall.args, -1);
 			return;
 		}
+		if (memberExpr.property === "slice") {
+			const syntheticCall = {
+				type: "call",
+				callee: {
+					type: "identifier",
+					name: "slice",
+					loc: expr.loc
+				},
+				args: [{
+					type: "arg",
+					value: memberExpr.object,
+					loc: memberExpr.object.loc
+				}, ...expr.args],
+				loc: expr.loc
+			};
+			compileCallWithArgs(state, syntheticCall, syntheticCall.args, -1);
+			return;
+		}
+		if (memberExpr.property === "take") {
+			const syntheticCall = {
+				type: "call",
+				callee: {
+					type: "identifier",
+					name: "take",
+					loc: expr.loc
+				},
+				args: [{
+					type: "arg",
+					value: memberExpr.object,
+					loc: memberExpr.object.loc
+				}, ...expr.args],
+				loc: expr.loc
+			};
+			compileCallWithArgs(state, syntheticCall, syntheticCall.args, -1);
+			return;
+		}
 		if (memberExpr.property === "walk") {
 			const syntheticCall = {
 				type: "call",
@@ -36370,7 +36406,7 @@ function compileMember(state, expr) {
 		state.stack.pop();
 		state.stack.push({ expr });
 		return;
-	} else if (expr.property === "avg" || expr.property === "push" || expr.property === "shuffle" || expr.property === "map" || expr.property === "reduce") return;
+	} else if (expr.property === "avg" || expr.property === "push" || expr.property === "shuffle" || expr.property === "map" || expr.property === "reduce" || expr.property === "slice" || expr.property === "take") return;
 	else error(state, `Unknown property: ${expr.property}`, expr.loc);
 }
 function isTopLevelFnAssign(state, stmt) {
@@ -38174,6 +38210,22 @@ reduce=(arr,reducer,initial=0)->{
   }
   acc
 }
+
+slice=(array,start=0,end=array.length)->{
+  n:=array.length
+  s:=floor(start)
+  e:=floor(end)
+  if (s < 0) s=n+s
+  if (e < 0) e=n+e
+  s=clamp(s,0,n)
+  e=clamp(e,0,n)
+  result:=[]
+  if (e <= s) return result
+  for (i in s .. e - 1) result.push(array[i])
+  result
+}
+
+take=(array,n=array.length)->slice(array,0,n)
 
 /**
  * effects
@@ -40946,7 +40998,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DV63yR96.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-IEd87DnM.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -45702,6 +45754,36 @@ const extra = [
 			name: "initial",
 			description: ["Initial accumulator value."],
 			default: 0
+		}]
+	}],
+	["slice", {
+		type: "function",
+		name: "slice",
+		arrayMethod: true,
+		category: "utilities",
+		description: ["Returns a shallow copy from start (inclusive) to end (exclusive). Supports negative indices."],
+		return: "array",
+		parameters: [{
+			name: "start",
+			description: ["Start index (inclusive). Negative values offset from the end."],
+			default: 0
+		}, {
+			name: "end",
+			description: ["End index (exclusive). Negative values offset from the end."],
+			default: "array.length"
+		}]
+	}],
+	["take", {
+		type: "function",
+		name: "take",
+		arrayMethod: true,
+		category: "utilities",
+		description: ["Returns the first n items of an array (implemented via slice(0, n))."],
+		return: "array",
+		parameters: [{
+			name: "n",
+			description: ["Number of items to take from the beginning."],
+			default: "array.length"
 		}]
 	}],
 	["print", {
@@ -60950,4 +61032,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-w3FfL9Gs.js.map
+//# sourceMappingURL=index-CxYSZ3xf.js.map
