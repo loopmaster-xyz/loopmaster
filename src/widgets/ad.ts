@@ -12,7 +12,7 @@ import { primaryColor, primaryDarkColor } from '../state.ts'
 import { makeWidgetCacheKey } from './cache-key.ts'
 import type { WidgetCacheEntry } from './cache.ts'
 import { LINE_WIDTH } from './constants.ts'
-import { applyCurve, getFunctionCallLength } from './util.ts'
+import { applyCurve, clamp01, getFunctionCallLength } from './util.ts'
 
 export function createAdWidget(ad: AdHistory, target: TypedHistory | UserCallHistory, doc: Doc,
   latency: Signal<DspLatency>, cache: Map<string, WidgetCacheEntry>): Widget
@@ -117,15 +117,23 @@ export function createAdWidget(ad: AdHistory, target: TypedHistory | UserCallHis
 
       // if (pl) {
       const phase = stage | 0
-      const t = env
+      const envLevel = clamp01(env)
+      const decayProgress = clamp01(1 - envLevel)
       if (phase === 0) {
         playX = plotX
         playY = plotY + plotH
       }
+      else if (phase === 1) {
+        playX = plotX + envLevel * attackW
+        playY = plotY + plotH - applyCurve(envLevel, exponent) * plotH
+      }
+      else if (phase === 2) {
+        playX = plotX + attackW + decayProgress * decayW
+        playY = plotY + plotH - applyCurve(1 - decayProgress, exponent) * plotH
+      }
       else {
-        playX = (phase === 1) ? (plotX + t * attackW) : (plotX + attackW + (1 - t) * decayW)
-        // const lvl = (phase === 1) ? applyCurve(t, exponent) : applyCurve(1 - t, exponent)
-        playY = plotY + plotH - env * plotH
+        playX = plotX
+        playY = plotY + plotH
       }
       // }
     }

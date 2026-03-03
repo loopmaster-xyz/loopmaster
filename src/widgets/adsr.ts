@@ -81,7 +81,8 @@ export function createAdsrWidget(adsr: AdsrHistory, target: TypedHistory | UserC
     c.beginPath()
 
     const { stage, attack, decay, sustain, release, exponent, env } = reader.state
-    const sustainCurved = applyCurve(clamp01(sustain), exponent)
+    const sustainLevel = clamp01(sustain)
+    const sustainCurved = applyCurve(sustainLevel, exponent)
     const attackMax = Math.max(0, attack)
     const decayMax = Math.max(0, decay)
     const releaseMax = Math.max(0, release)
@@ -149,26 +150,30 @@ export function createAdsrWidget(adsr: AdsrHistory, target: TypedHistory | UserC
       }
 
       const phase = stage | 0
-      const t = clamp01(env)
+      const envLevel = clamp01(env)
+      const decayDenominator = Math.max(1e-6, 1 - sustainLevel)
+      const decayProgress = clamp01((1 - envLevel) / decayDenominator)
+      const releaseDenominator = Math.max(1e-6, sustainLevel)
+      const releaseProgress = clamp01(1 - envLevel / releaseDenominator)
       if (phase === 0) {
         playX = plotX
         playY = plotY + plotH
       }
       else if (phase === 1) {
-        playX = plotX + t * attackW
-        playY = plotY + plotH - applyCurve(t, exponent) * plotH
+        playX = plotX + envLevel * attackW
+        playY = plotY + plotH - applyCurve(envLevel, exponent) * plotH
       }
       else if (phase === 2) {
-        playX = plotX + attackW + t * decayW
-        playY = plotY + plotH - (applyCurve(1 - t, exponent) * (1 - sustainCurved) + sustainCurved) * plotH
+        playX = plotX + attackW + decayProgress * decayW
+        playY = plotY + plotH - (applyCurve(1 - decayProgress, exponent) * (1 - sustainCurved) + sustainCurved) * plotH
       }
       else if (phase === 3) {
-        playX = plotX + attackW + decayW + t * sustainW
+        playX = plotX + attackW + decayW + envLevel * sustainW
         playY = sustainY
       }
       else if (phase === 4) {
-        playX = plotX + sustainEndX + t * releaseW
-        playY = plotY + plotH - (applyCurve(1 - t, exponent) * sustainCurved) * plotH
+        playX = plotX + sustainEndX + releaseProgress * releaseW
+        playY = plotY + plotH - (applyCurve(1 - releaseProgress, exponent) * sustainCurved) * plotH
       }
       else {
         playX = plotX
