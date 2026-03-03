@@ -1,6 +1,9 @@
 import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react'
 import { batch } from '@preact/signals-core'
-import { djDocA, djDocB, djTitleA, djTitleB, type Project, projects } from '../state.ts'
+import { api } from '../api.ts'
+import { useAsyncMemo } from '../hooks/useAsyncMemo.ts'
+import { pathname } from '../router.tsx'
+import { createProject, djBpm, djDocA, djDocB, djTitleA, djTitleB, type Project, projects } from '../state.ts'
 import { SidebarMain } from './SidebarMain.tsx'
 
 const ProjectButton = (
@@ -31,9 +34,35 @@ const ProjectButton = (
 }
 
 export const DJ = () => {
+  const projectsList = useAsyncMemo(async () => {
+    if (location.href.includes('hn')) {
+      const publicProjects = await api.fetchBrowseNewest()
+      const projectsList = publicProjects.map(project => {
+        const p = createProject({
+          serverId: project.id,
+          userId: project.userId,
+          id: project.id,
+          name: project.name,
+          isPublic: project.isPublic,
+        })
+        p.doc.code = p.scratch.code = project.code
+        return p
+      })
+      batch(() => {
+        djBpm.value = 144
+        djDocA.value.code = projectsList[0].scratch.code
+        djDocB.value.code = projectsList[1].scratch.code
+        djTitleA.value = projectsList[0].name
+        djTitleB.value = projectsList[1].name
+      })
+
+      return projectsList
+    }
+    else return projects.value
+  })
   return (
     <SidebarMain>
-      {projects.value.map(project => (
+      {projectsList.value?.map(project => (
         <ProjectButton
           key={project.id}
           project={project}
