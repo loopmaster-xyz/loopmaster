@@ -941,7 +941,7 @@
 		const { kind } = getOpcodeInfo(op);
 		return kind === "param" || kind === "pc-param";
 	}
-	const CONTROL_OPS_CAPACITY = 16384;
+	const CONTROL_OPS_CAPACITY = 32768;
 	const HISTORY_META_SHARED_HEADER = 2;
 	(HISTORY_META_SHARED_HEADER + 512 * HISTORY_META_STRIDE) * 4;
 	let DspProgramState = /* @__PURE__ */ function(DspProgramState$1) {
@@ -1908,4 +1908,4 @@
 	registerProcessor("dsp", DspProcessor);
 })();
 
-//# sourceMappingURL=worklet-BOSQiN7k.js.map
+//# sourceMappingURL=worklet-DxudbltJ.js.map
