@@ -133,8 +133,9 @@ trig:=euclid(5,8,bar:1);[#1,#3,#5,#7,#9].random(trig)*[o1,o2,o3][t]
   'min': '\nntof(30) |> min(sine($),saw($)) |> out($)',
   'flanger': '\nsaw(ntof(30)) |> flanger($) |> out($)',
   'rhodes': 'trig=every(1/16)\n\nrhodes([60,63,65,70][t*2]|>ntof($),.7,trig)*ad(.0001,.36,4,trig) |> out($)',
-  'at':
-    'trig=at(1/16)+at(3/16)+at(4/16,prob:.6)\n\ntri([60,67,62,63][t]|>ntof($)|>$/2+sine($/3)*$/2)*ad(.0003,.11,e:.5,trig)*.3+drums() |> out($)',
+  'at': `trig=at(1/16,1/4)+at(3/16,1/4)+at(4/16,1/4,prob:.6)
+
+tri([60,67,62,63][t]|>ntof($)|>$/2+sine($/3)*$/2)*ad(.0003,.11,e:.5,trig)*.3+drums() |> out($)`,
   'moddelay': '\nsaw(ntof(30)) |> moddelay($,.3,.3,.11,.20) |> out($)',
   'solo': '\nsaw(ntof(30)) |> out($)\n\ntri(ntof(30)) |> solo($)',
   'fold': '\nfold(sine(ntof(30)),-.2,.2) |> out($)',
