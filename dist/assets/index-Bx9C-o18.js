@@ -40040,7 +40040,7 @@ var asconfig_default = {
 		"exportRuntime": true
 	}
 };
-var worklet_default = "/assets/worklet-DImT5QzV.js";
+var worklet_default = "/assets/worklet-Bi0SXTZ2.js";
 function getWasmPaths() {
 	const base = isMobile$1() ? "/as/build/index-mobile.wasm" : "/as/build/index.wasm";
 	return {
@@ -40711,6 +40711,11 @@ async function createDsp(state) {
 			await core.worklet.bpmOverride({ bpm: bpm$1 });
 		});
 	}
+	function setSyncChanges(enabled) {
+		return control(async () => {
+			await core.worklet.setSyncChanges({ enabled });
+		});
+	}
 	function createProgram() {
 		return control(async () => {
 			const historyMetaBuffers = [createHistoryMetaSharedBuffer(), createHistoryMetaSharedBuffer()];
@@ -40784,6 +40789,7 @@ async function createDsp(state) {
 		seekPrograms,
 		setProgramGain,
 		bpmOverride: bpmOverride$1,
+		setSyncChanges,
 		createProgram,
 		playProgram,
 		stopProgram,
@@ -40986,6 +40992,7 @@ function signalify(value) {
 }
 const settings = signalify({
 	audioLatency: isMobile() ? .5 : .01,
+	syncChanges: false,
 	showVisuals: true,
 	showKnobs: true,
 	showDocs: true,
@@ -41200,7 +41207,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-WY9ikKUp.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-D-fPt99u.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -45757,6 +45764,9 @@ async function createDspContext() {
 		historiesRefreshed.value++;
 	};
 	const dsp = await createDsp(dspState);
+	m(() => {
+		dsp.setSyncChanges(settings.syncChanges);
+	});
 	const targetSeconds = c(0);
 	const createWidgets = (ctx$1, histories, userCallHistories) => {
 		busyBounce();
@@ -56081,6 +56091,10 @@ var SettingsMap = {
 		name: "Debug",
 		shortcut: ""
 	},
+	syncChanges: {
+		name: "Sync Changes",
+		shortcut: ""
+	},
 	showVisuals: {
 		name: "Show Visuals",
 		shortcut: "alt+i"
@@ -61263,4 +61277,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-Dcv1q3hS.js.map
+//# sourceMappingURL=index-Bx9C-o18.js.map

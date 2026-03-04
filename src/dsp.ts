@@ -273,6 +273,9 @@ export async function createDspContext() {
     historiesRefreshed.value++
   }
   const dsp = await createDsp(dspState)
+  effect(() => {
+    void dsp.setSyncChanges(settings.syncChanges)
+  })
 
   const targetSeconds = signal(0)
 

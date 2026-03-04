@@ -1115,6 +1115,7 @@
 	function applyTransportSeek(state, newSampleCount) {
 		state.transportSeekVersion = state.transportSeekVersion + 1;
 		state.transportSampleCount = newSampleCount;
+		state.playbackSampleClock = newSampleCount;
 	}
 	function applyProgramSeek(programsById, sampleCount, ids) {
 		for (const id of ids) {
@@ -1172,6 +1173,7 @@
 		const programsById = /* @__PURE__ */ new Map();
 		const runtime = createWasmRuntime(core);
 		const sampleCountRef = { value: 0 };
+		const playbackSampleClockRef = { value: 0 };
 		const bpmRef = { value: 120 };
 		const bpmOverrideValueRef = { value: 0 };
 		const quantumRef = { value: 128 };
@@ -1238,6 +1240,70 @@
 			}
 			state$1.currentGain = currentGain;
 		}
+		function getBarSamples(bpm) {
+			if (bpm <= 0) return 0;
+			return sampleRate * 60 * 4 / bpm;
+		}
+		function getSwapFadeSamples(fadeSamples) {
+			return Math.max(0, Math.round(fadeSamples ?? PROGRAM_SWAP_FADE_SAMPLES)) || PROGRAM_SWAP_FADE_SAMPLES;
+		}
+		function shouldApplyPendingSyncedControlOps(pending, barSamples, playbackSampleClock, quantumSamples) {
+			if (barSamples <= 0) return true;
+			const boundarySample = pending.targetBar * barSamples;
+			if (pending.mode === "set") return playbackSampleClock >= boundarySample;
+			const swapStartSample = Math.max(0, boundarySample - getSwapFadeSamples(pending.fadeSamples));
+			return playbackSampleClock + quantumSamples >= swapStartSample;
+		}
+		function applyControlOps(p, slot, ops) {
+			const target = p.slots[slot];
+			const max = target.vm.controlOpsCapacity >>> 0;
+			const len = Math.min(ops.length, max);
+			const nextPtr = target.localControlOpsActive === 0 ? target.vm.localControlOpsPtr1 : target.vm.localControlOpsPtr0;
+			const nextOps = new Float32Array(runtime.buffer, nextPtr, max);
+			if (len > 0) nextOps.set(ops.subarray(0, len));
+			target.controlOpsLength = len;
+			target.localControlOpsActive = target.localControlOpsActive === 0 ? 1 : 0;
+			if (!bpmOverrideValueRef.value && len > 0) {
+				const nextBpm = scanSetBpm(nextOps, len);
+				if (nextBpm && nextBpm !== bpmRef.value) {
+					bpmRef.value = nextBpm;
+					for (const other of programsById.values()) other.bpm = nextBpm;
+				}
+			}
+		}
+		function applyControlOpsSwap(p, opts$1) {
+			const from = p.activeSlot;
+			const to = from ^ 1;
+			if (opts$1.resetState) {
+				p.slots[to].vm.reset();
+				clearProgramHistoryMeta(p);
+			} else runtime.copyAudioVmState(p.slots[from].vm.id, p.slots[to].vm.id);
+			applyControlOps(p, to, opts$1.ops);
+			if (opts$1.transportPlaying) {
+				const fadeSamples = getSwapFadeSamples(opts$1.fadeSamples);
+				p.swapFadeFrom = from;
+				p.swapFadeTo = to;
+				p.swapFadeRemaining = fadeSamples;
+				p.swapFadeTotal = fadeSamples;
+				p.activeSlot = to;
+				return;
+			}
+			p.swapFadeRemaining = 0;
+			p.swapFadeTotal = 0;
+			p.activeSlot = to;
+		}
+		function applyPendingSyncedControlOps(p, pending, transportPlaying) {
+			if (pending.mode === "set") {
+				applyControlOps(p, p.activeSlot, pending.ops);
+				return;
+			}
+			applyControlOpsSwap(p, {
+				ops: pending.ops,
+				fadeSamples: pending.fadeSamples,
+				resetState: pending.resetState,
+				transportPlaying
+			});
+		}
 		function processBuffer(outputs, dsp) {
 			const bufferLength = outputs[0]?.[0]?.length ?? 0;
 			const outputL = outputs[0]?.[0];
@@ -1261,6 +1327,7 @@
 				Atomics.store(transportU32, SharedTransportIndex.Running, SharedTransportRunningState.Stop);
 				Atomics.store(transportU32, SharedTransportIndex.ActuallyPlaying, SharedTransportRunningState.Stop);
 				applyTransportSeek(state, 0);
+				state.flushPendingSyncedControlOps(false);
 				setProgramsState(programsById, DspProgramState.Stop, stopAndSeekIds);
 				applyProgramSeek(programsById, 0, stopAndSeekIds);
 				state.scheduleStopAndSeekToZero = [];
@@ -1289,10 +1356,13 @@
 			if (seekVersion !== Atomics.load(transportU32, SharedTransportIndex.SeekVersion)) {
 				Atomics.store(transportU32, SharedTransportIndex.SeekVersion, seekVersion);
 				sampleCountRef.value = next;
+				playbackSampleClockRef.value = next;
 				for (const p of programsById.values()) p.sampleCount = next;
 			}
 			const transportRunning = Atomics.load(transportU32, SharedTransportIndex.Running);
-			if (!(transportRunning === SharedTransportRunningState.Start) && !scheduleProgramsSeekChunks) {
+			const running = transportRunning === SharedTransportRunningState.Start;
+			if (!running && !scheduleProgramsSeekChunks) {
+				state.flushPendingSyncedControlOps(false);
 				Atomics.store(transportU32, SharedTransportIndex.ActuallyPlaying, transportRunning);
 				transportF32[SharedTransportIndex.SampleCount] = sampleCountRef.value;
 				if (wasPlaying) for (const p of programsById.values()) {
@@ -1307,9 +1377,18 @@
 			const advanceSampleCount = scheduleProgramsSeekChunks === 0;
 			const bpmOverrideValue = bpmOverrideValueRef.value;
 			const bpm = bpmRef.value;
+			const barSamples = getBarSamples(bpm);
 			const { loopBeginSamples, loopEndSamples, projectEndSamples, loopBeginSamplesA, loopEndSamplesA, projectEndSamplesA, loopBeginSamplesB, loopEndSamplesB, projectEndSamplesB, programAId, programBId } = state;
 			try {
 				for (const p of programsById.values()) {
+					if (running && state.syncChanges) {
+						const pendingSynced = state.pendingSyncedControlOps.get(p.id);
+						if (pendingSynced && shouldApplyPendingSyncedControlOps(pendingSynced, barSamples, playbackSampleClockRef.value, bufferLength)) {
+							applyPendingSyncedControlOps(p, pendingSynced, true);
+							state.pendingSyncedControlOps.delete(p.id);
+							scheduleRefresh = true;
+						}
+					}
 					const activeSlot = p.slots[p.activeSlot];
 					if ((p.state !== DspProgramState.Start || activeSlot.controlOpsLength <= 0) && !scheduleProgramsSeekSet?.has(p.id)) {
 						const slot = p.slots[p.activeSlot];
@@ -1395,6 +1474,7 @@
 				if (sampleCount >= projectEndSamples) sampleCount = 0;
 			}
 			sampleCountRef.value = sampleCount;
+			if (running) playbackSampleClockRef.value += bufferLength;
 			transportF32[SharedTransportIndex.SampleCount] = sampleCount;
 			let playingSetChanged = false;
 			for (const id of idsNowPlaying) if (!idsWasPlaying.has(id)) {
@@ -1432,6 +1512,7 @@
 		}
 		const pendingProgramApplied = /* @__PURE__ */ new Map();
 		const pendingProgramAppliedSlot = /* @__PURE__ */ new Map();
+		const pendingSyncedControlOps = /* @__PURE__ */ new Map();
 		const state = {
 			dispose,
 			runtime,
@@ -1439,6 +1520,7 @@
 			programsById,
 			pendingProgramApplied,
 			pendingProgramAppliedSlot,
+			pendingSyncedControlOps,
 			nextProgramId: 0,
 			nextId: 0,
 			freeProgramIds: [],
@@ -1449,6 +1531,7 @@
 			programAId: -1,
 			programBId: -1,
 			scheduleStopAndSeekToZero: [],
+			syncChanges: false,
 			get transportSampleCount() {
 				return transportF32[SharedTransportIndex.SampleCount];
 			},
@@ -1512,6 +1595,12 @@
 			set sampleCount(v) {
 				sampleCountRef.value = v;
 			},
+			get playbackSampleClock() {
+				return playbackSampleClockRef.value;
+			},
+			set playbackSampleClock(v) {
+				playbackSampleClockRef.value = v;
+			},
 			get bpm() {
 				return bpmRef.value;
 			},
@@ -1530,28 +1619,33 @@
 			set bpmOverrideValue(v) {
 				bpmOverrideValueRef.value = v;
 			},
+			get barSamples() {
+				return getBarSamples(bpmRef.value);
+			},
+			get currentBar() {
+				const barSamples = getBarSamples(bpmRef.value);
+				return barSamples > 0 ? Math.floor(playbackSampleClockRef.value / barSamples) : 0;
+			},
 			getProgramById(id) {
 				return getProgramById(programsById, id);
 			},
 			applyControlOps(p, slot, ops) {
-				const target = p.slots[slot];
-				const max = target.vm.controlOpsCapacity >>> 0;
-				const len = Math.min(ops.length, max);
-				const nextPtr = target.localControlOpsActive === 0 ? target.vm.localControlOpsPtr1 : target.vm.localControlOpsPtr0;
-				const nextOps = new Float32Array(runtime.buffer, nextPtr, max);
-				if (len > 0) nextOps.set(ops.subarray(0, len));
-				target.controlOpsLength = len;
-				target.localControlOpsActive = target.localControlOpsActive === 0 ? 1 : 0;
-				if (!bpmOverrideValueRef.value && len > 0) {
-					const nextBpm = scanSetBpm(nextOps, len);
-					if (nextBpm && nextBpm !== bpmRef.value) {
-						bpmRef.value = nextBpm;
-						for (const other of programsById.values()) other.bpm = nextBpm;
-					}
-				}
+				applyControlOps(p, slot, ops);
+			},
+			applyControlOpsSwap(p, opts$1) {
+				applyControlOpsSwap(p, opts$1);
 			},
 			setProgramsState(state$1, ids) {
 				setProgramsState(programsById, state$1, ids);
+			},
+			flushPendingSyncedControlOps(transportPlaying) {
+				if (pendingSyncedControlOps.size === 0) return;
+				for (const [programId, pending] of pendingSyncedControlOps) {
+					const p = programsById.get(programId);
+					if (!p) continue;
+					applyPendingSyncedControlOps(p, pending, transportPlaying);
+				}
+				pendingSyncedControlOps.clear();
 			},
 			applyTransportSeek(sampleCount) {
 				applyTransportSeek(state, sampleCount);
@@ -1699,11 +1793,23 @@
 			s.programsByVmId.delete(p.slots[0].vm.id);
 			s.programsByVmId.delete(p.slots[1].vm.id);
 			s.programsById.delete(p.id);
+			s.pendingProgramApplied.delete(p.id);
+			s.pendingProgramAppliedSlot.delete(p.id);
+			s.pendingSyncedControlOps.delete(p.id);
 			p.dispose();
 			s.freeProgramIds.push(p.slots[0].vm.id);
 			s.freeProgramIds.push(p.slots[1].vm.id);
 		}
 		async setProgramSync(_opts) {}
+		async setSyncChanges(opts) {
+			const s = this.state;
+			if (!s) return;
+			s.syncChanges = !!opts.enabled;
+			if (!s.syncChanges) {
+				const transportPlaying = s.transportRunning === SharedTransportRunningState.Start;
+				s.flushPendingSyncedControlOps(transportPlaying);
+			}
+		}
 		async getProgramShared(opts) {
 			const s = this.state;
 			if (!s) throw new Error("No state");
@@ -1716,8 +1822,16 @@
 			if (!s) throw new Error("No state");
 			const p = s.getProgramById(opts.programId);
 			if (!p) throw new Error("Program not found with id: " + opts.programId);
-			s.applyControlOps(p, p.activeSlot, opts.ops);
 			const transportPlaying = s.transportRunning === SharedTransportRunningState.Start;
+			if (s.syncChanges && p.state === DspProgramState.Start && transportPlaying) {
+				s.pendingSyncedControlOps.set(p.id, {
+					mode: "set",
+					ops: new Float32Array(opts.ops),
+					targetBar: s.currentBar + 1
+				});
+				return;
+			}
+			s.applyControlOps(p, p.activeSlot, opts.ops);
 			if (p.state !== DspProgramState.Start || !transportPlaying) return;
 			const deferred = Deferred();
 			s.pendingProgramApplied.set(p.id, deferred);
@@ -1729,26 +1843,23 @@
 			if (!s) throw new Error("No state");
 			const p = s.getProgramById(opts.programId);
 			if (!p) throw new Error("Program not found with id: " + opts.programId);
-			const from = p.activeSlot;
-			const to = from ^ 1;
-			if (opts.resetState) {
-				p.slots[to].vm.reset();
-				clearProgramHistoryMeta(p);
-			} else s.runtime.copyAudioVmState(p.slots[from].vm.id, p.slots[to].vm.id);
-			s.applyControlOps(p, to, opts.ops);
 			const transportPlaying = s.transportRunning === SharedTransportRunningState.Start;
-			if (p.state === DspProgramState.Start && transportPlaying) {
-				const fadeSamples = Math.max(0, Math.round(opts.fadeSamples ?? PROGRAM_SWAP_FADE_SAMPLES)) || PROGRAM_SWAP_FADE_SAMPLES;
-				p.swapFadeFrom = from;
-				p.swapFadeTo = to;
-				p.swapFadeRemaining = fadeSamples;
-				p.swapFadeTotal = fadeSamples;
-				p.activeSlot = to;
-			} else {
-				p.swapFadeRemaining = 0;
-				p.swapFadeTotal = 0;
-				p.activeSlot = to;
+			if (s.syncChanges && p.state === DspProgramState.Start && transportPlaying) {
+				s.pendingSyncedControlOps.set(p.id, {
+					mode: "swap",
+					ops: new Float32Array(opts.ops),
+					targetBar: s.currentBar + 1,
+					fadeSamples: opts.fadeSamples,
+					resetState: opts.resetState
+				});
+				return;
 			}
+			s.applyControlOpsSwap(p, {
+				ops: opts.ops,
+				fadeSamples: opts.fadeSamples,
+				resetState: opts.resetState,
+				transportPlaying: p.state === DspProgramState.Start && transportPlaying
+			});
 			if (p.state !== DspProgramState.Start || !transportPlaying) return;
 			const deferred = Deferred();
 			s.pendingProgramApplied.set(p.id, deferred);
@@ -1909,4 +2020,4 @@
 	registerProcessor("dsp", DspProcessor);
 })();
 
-//# sourceMappingURL=worklet-DImT5QzV.js.map
+//# sourceMappingURL=worklet-Bi0SXTZ2.js.map
