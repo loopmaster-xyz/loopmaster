@@ -191,6 +191,7 @@ sqrt(x) -> signal: Square root.
 square(x) -> signal: x squared.
 step(edge, x) -> signal: 0 if x < edge else 1.
 [].step(trig) -> signal: Step through array on each trigger.
+[].fit(bars, swing, offset) -> signal: Tempo-synced walk over an array fitted into a total bar length.
 supersaw(hz, voices?, spread?) -> signal: Supersaw oscillator with detuned voices.
 swing(x, y) -> signal: Swing amount.
 t: BPM adjusted time elapsed: 1 t = 1 bar.

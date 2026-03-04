@@ -59,6 +59,7 @@ trig:=euclid(5,8,bar:1);[#1,#3,#5,#7,#9].random(trig)*[o1,o2,o3][t]
   'isfunction': '\nisfunction(() -> {}) |> print($)\n\nisfunction(1) |> print($)',
   'hs': '\nwhite() |> hs($,100+10k*lfosine(1),1,-30) |> out($)',
   '[].walk': '\n[60,63,65].walk(1/8,.25) |> ntof($) |> saw($) |> out($)',
+  '[].fit': '\n[60,63,65].fit(1) |> ntof($) |> saw($) |> out($)',
   'asin': '\nasin(sine(ntof(30))) |> out($)',
   'max': '\nntof(30) |> max(sine($),saw($)) |> out($)',
   'pink': '\npink() |> out($)',
@@ -122,6 +123,7 @@ trig:=euclid(5,8,bar:1);[#1,#3,#5,#7,#9].random(trig)*[o1,o2,o3][t]
   'alloc':
     'flanger=(in,seconds=0.5)->{\n  buf=alloc(1)\n  sample=read(buf,seconds)\n  write(in+sample*.95,buf)\n  sample\n}\n\ntri(ntof(60))*ad(trig:every(1/2)) |> $+flanger($*.41,.0036+0.004*lfosine(4)) |> out($)\n',
   '[].Walk': 'a',
+  '[].Fit': 'a',
   'bps': '\nwhite() |> bps($,100+10k*lfosine(1),.50) |> out($)',
   'sout': '\nsaw(ntof(30)) |> out($)\n\ntri(ntof(30)) |> sout($)',
   'sah': '\nrandom() |> sah($,every(1/4)) |> ntof(60+floor($*12)) |> saw($) |> out($)',

@@ -436,6 +436,19 @@ export const extra: [string, Definition][] = [
       { name: 'offset', description: ['Optional phase offset.'] },
     ],
   }],
+  ['Fit', {
+    type: 'function',
+    name: 'Fit',
+    arrayMethod: true,
+    category: 'sequencers',
+    description: ['Tempo-synced walk over an array, fitted into a total bar length.'],
+    parameters: [
+      { name: 'array', description: ['Array to walk.'] },
+      { name: 'bars', description: ['Total bars to fit the entire array into.'] },
+      { name: 'swing', description: ['Optional swing amount.'] },
+      { name: 'offset', description: ['Optional phase offset.'] },
+    ],
+  }],
   ['Step', {
     type: 'function',
     name: 'Step',
