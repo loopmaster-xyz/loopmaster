@@ -40993,6 +40993,7 @@ function signalify(value) {
 const settings = signalify({
 	audioLatency: isMobile() ? .5 : .01,
 	syncChanges: false,
+	useCtrlEnter: false,
 	showVisuals: true,
 	showKnobs: true,
 	showDocs: true,
@@ -41207,7 +41208,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-D-fPt99u.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-OqPEV16k.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -45616,13 +45617,15 @@ function createWaveWidget(history$1, target, doc, type, buffers, animatedHeights
 async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRefreshed) {
 	const program = await dsp.createProgram();
 	const doc = opts.doc ?? createDoc(tokenize);
-	let compiledEpoch = -1;
+	let compiledSubmitVersion = -1;
+	let submittedCode = doc.code;
 	const result = c(null);
 	const latency = c(program.latency);
 	const timeSeconds = c(0);
 	const histories = c([]);
 	const userCallHistories = c([]);
 	const fullResync = c(true);
+	const submitVersion = c(0);
 	const waveformBuffers = /* @__PURE__ */ new Map();
 	const animatedHeightsArrMap = /* @__PURE__ */ new Map();
 	const ampCanvasArrMap = /* @__PURE__ */ new Map();
@@ -45675,6 +45678,10 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 		unsubscribeDocChanges();
 		dsp.stop([program]);
 	};
+	const submitChanges = () => {
+		submittedCode = doc.code;
+		submitVersion.value = submitVersion.peek() + 1;
+	};
 	const p$7 = {
 		opts,
 		program,
@@ -45687,6 +45694,7 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 		widgetContext,
 		tooltipWidgetContext,
 		fullResync,
+		submitChanges,
 		dispose
 	};
 	const updateLatency = () => {
@@ -45718,18 +45726,24 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 		doc.widgets = createWidgets(widgetContext, histories.value, userCallHistories.value);
 	});
 	m(() => {
-		if (shouldSkipSyncPreview.value && shouldSkipSyncPreview.value !== doc) return;
+		if (settings.useCtrlEnter) return;
 		doc.code;
-		const epoch = doc.epoch;
-		if (epoch === compiledEpoch) return;
+		submitChanges();
+	});
+	m(() => {
+		if (shouldSkipSyncPreview.value && shouldSkipSyncPreview.value !== doc) return;
+		const version = submitVersion.value;
+		if (version === compiledSubmitVersion) return;
+		const code = submittedCode;
 		const forceFullResync = fullResync.value;
 		queueMicrotask(async () => {
-			if (epoch !== doc.epoch) return;
+			if (version !== submitVersion.value) return;
 			try {
-				const ccs = controlPipeline.compileSource(doc.code, { projectId: opts.projectId ?? void 0 });
+				const ccs = controlPipeline.compileSource(code, { projectId: opts.projectId ?? void 0 });
 				result.value = ccs;
 				if (ccs.errors.length > 0) {
 					doc.errors = computeDocErrors(ccs);
+					compiledSubmitVersion = version;
 					return;
 				} else doc.errors = [];
 				if (!shouldSkipSyncPreview.value) {
@@ -45747,10 +45761,11 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 				});
 				program.reapplySourceMapping(ccs);
 				if (forceFullResync) fullResync.value = false;
-				compiledEpoch = doc.epoch;
+				compiledSubmitVersion = version;
 				historiesRefreshed.value++;
 			} catch (error$1) {
 				doc.errors = computeDocErrors(null, (error$1 instanceof Error ? error$1.message : String(error$1)).split(" in ")[0]);
+				compiledSubmitVersion = version;
 			}
 		});
 	});
@@ -49455,6 +49470,10 @@ m(() => {
 });
 m(() => {
 	const handleKeyDown = (e$58) => {
+		if (settings.useCtrlEnter && (e$58.ctrlKey || e$58.metaKey) && e$58.key === "Enter") {
+			submitCurrentProgramChanges();
+			return true;
+		}
 		if (autocompleteState.visible) {
 			const { matches, selectedIndex, replaceStart, replaceEnd, doc } = autocompleteState;
 			if (e$58.key === "Tab") {
@@ -49505,6 +49524,12 @@ m(() => {
 			} else if (e$58.key === "l") {
 				toggleAnalyserType();
 				return true;
+			} else if (e$58.key === "y") {
+				settings.syncChanges = !settings.syncChanges;
+				return true;
+			} else if (e$58.key === "e") {
+				settings.useCtrlEnter = !settings.useCtrlEnter;
+				return true;
 			}
 		}
 		if ((e$58.ctrlKey || e$58.metaKey) && e$58.key === " ") {
@@ -49537,6 +49562,9 @@ fft.init().then(() => {
 });
 function toggleAnalyserType() {
 	settings.analyserType = settings.analyserType === "waveform" ? "spectrum" : settings.analyserType === "spectrum" ? "amplitude" : "waveform";
+}
+function submitCurrentProgramChanges() {
+	currentProgramContext.value?.submitChanges();
 }
 const showIntro = c(true);
 const bpm = b(() => currentProgramContext.value?.result.value?.compile.bpm ?? 120);
@@ -56093,7 +56121,11 @@ var SettingsMap = {
 	},
 	syncChanges: {
 		name: "Sync Changes",
-		shortcut: ""
+		shortcut: "alt+y"
+	},
+	useCtrlEnter: {
+		name: "Use Ctrl+Enter",
+		shortcut: "alt+e"
 	},
 	showVisuals: {
 		name: "Show Visuals",
@@ -61277,4 +61309,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-Bx9C-o18.js.map
+//# sourceMappingURL=index-Ba8tnDv5.js.map

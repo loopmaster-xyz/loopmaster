@@ -808,6 +808,10 @@ effect(() => {
 
 effect(() => {
   const handleKeyDown = (e: KeyboardEvent): boolean => {
+    if (settings.useCtrlEnter && (e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      submitCurrentProgramChanges()
+      return true
+    }
     if (autocompleteState.visible) {
       const { matches, selectedIndex, replaceStart, replaceEnd, doc } = autocompleteState
       if (e.key === 'Tab') {
@@ -863,6 +867,14 @@ effect(() => {
         toggleAnalyserType()
         return true
       }
+      else if (e.key === 'y') {
+        settings.syncChanges = !settings.syncChanges
+        return true
+      }
+      else if (e.key === 'e') {
+        settings.useCtrlEnter = !settings.useCtrlEnter
+        return true
+      }
     }
     if ((e.ctrlKey || e.metaKey) && e.key === ' ') {
       if (e.altKey) {
@@ -916,6 +928,10 @@ export function toggleAnalyserType() {
     : settings.analyserType === 'spectrum'
     ? 'amplitude'
     : 'waveform'
+}
+
+export function submitCurrentProgramChanges() {
+  currentProgramContext.value?.submitChanges()
 }
 
 export const showIntro = signal(true)

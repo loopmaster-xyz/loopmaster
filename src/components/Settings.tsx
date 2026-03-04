@@ -8,7 +8,8 @@ import Switch from './Switch.tsx'
 
 const SettingsMap = {
   debug: { name: 'Debug', shortcut: '' },
-  syncChanges: { name: 'Sync Changes', shortcut: '' },
+  syncChanges: { name: 'Sync Changes', shortcut: 'alt+y' },
+  useCtrlEnter: { name: 'Use Ctrl+Enter', shortcut: 'alt+e' },
   showVisuals: { name: 'Show Visuals', shortcut: 'alt+i' },
   showKnobs: { name: 'Show Knobs', shortcut: 'alt+k' },
   showDocs: { name: 'Show Docs', shortcut: 'alt+o' },

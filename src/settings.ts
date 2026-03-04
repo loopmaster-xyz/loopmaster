@@ -4,6 +4,7 @@ import { signalify } from './lib/signalify.ts'
 export const settings = signalify({
   audioLatency: isMobile() ? 0.5 : 0.01,
   syncChanges: false,
+  useCtrlEnter: false,
   showVisuals: true,
   showKnobs: true,
   showDocs: true,

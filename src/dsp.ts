@@ -82,7 +82,8 @@ async function createDspProgramContextImpl(
 ) {
   const program = await dsp.createProgram()
   const doc = opts.doc ?? createDoc(tokenize)
-  let compiledEpoch = -1
+  let compiledSubmitVersion = -1
+  let submittedCode = doc.code
 
   const result = signal<ControlCompileSnapshot | null>(null)
   const latency = signal<DspLatency>(program.latency)
@@ -90,6 +91,7 @@ async function createDspProgramContextImpl(
   const histories = signal<TypedHistory[]>([])
   const userCallHistories = signal<UserCallHistory[]>([])
   const fullResync = signal(true)
+  const submitVersion = signal(0)
 
   const waveformBuffers = new Map<number, WaveformBuffer>()
   const animatedHeightsArrMap = new Map<number, Array<Float32Array | undefined>>()
@@ -154,6 +156,11 @@ async function createDspProgramContextImpl(
     dsp.stop([program])
   }
 
+  const submitChanges = () => {
+    submittedCode = doc.code
+    submitVersion.value = submitVersion.peek() + 1
+  }
+
   const p = {
     opts,
     program,
@@ -166,6 +173,7 @@ async function createDspProgramContextImpl(
     widgetContext,
     tooltipWidgetContext,
     fullResync,
+    submitChanges,
     dispose,
   }
 
@@ -209,19 +217,26 @@ async function createDspProgramContextImpl(
   })
 
   effect(() => {
-    if (shouldSkipSyncPreview.value && shouldSkipSyncPreview.value !== doc) return
+    if (settings.useCtrlEnter) return
     doc.code
-    const epoch = doc.epoch
-    if (epoch === compiledEpoch) return
+    submitChanges()
+  })
+
+  effect(() => {
+    if (shouldSkipSyncPreview.value && shouldSkipSyncPreview.value !== doc) return
+    const version = submitVersion.value
+    if (version === compiledSubmitVersion) return
+    const code = submittedCode
     const forceFullResync = fullResync.value
     queueMicrotask(async () => {
-      if (epoch !== doc.epoch) return
+      if (version !== submitVersion.value) return
 
       try {
-        const ccs = controlPipeline.compileSource(doc.code, { projectId: opts.projectId ?? undefined })
+        const ccs = controlPipeline.compileSource(code, { projectId: opts.projectId ?? undefined })
         result.value = ccs
         if (ccs.errors.length > 0) {
           doc.errors = computeDocErrors(ccs)
+          compiledSubmitVersion = version
           return
         }
         else {
@@ -249,11 +264,12 @@ async function createDspProgramContextImpl(
         // Without this, user-call widgets can stay mapped to the previous program until transport restart.
         program.reapplySourceMapping(ccs)
         if (forceFullResync) fullResync.value = false
-        compiledEpoch = doc.epoch
+        compiledSubmitVersion = version
         historiesRefreshed.value++
       }
       catch (error) {
         doc.errors = computeDocErrors(null, (error instanceof Error ? error.message : String(error)).split(' in ')[0])
+        compiledSubmitVersion = version
       }
     })
   })
