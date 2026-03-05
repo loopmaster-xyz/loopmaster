@@ -690,6 +690,15 @@ export const extra: [string, Definition][] = [
     description: ['Average of array elements.'],
     parameters: [{ name: 'array', description: ['Array of numbers.'] }],
   }],
+  ['sum', {
+    type: 'function',
+    name: 'sum',
+    arrayMethod: true,
+    category: 'utilities',
+    description: ['Sum of array elements.'],
+    return: 'number',
+    parameters: [],
+  }],
   ['delay', {
     type: 'function',
     name: 'delay',
