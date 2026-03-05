@@ -37,8 +37,21 @@ fm=>sine($+sine($/2)*$*4)*ad(trig:every(1/8))
 
   |> lps($,cutoff:500+1000*ad(trig:every(1/8))**70,q:.9)*.3
 
-melody=[62,69,65] fm(melody[t*4]|>ntof($))+drums() |> out($)
-`
+melody=[62,69,65] fm(melody[t*4]|>ntof($))+drums() |> out($)`
+
+const exampleCode2 = `scale='mixolydian' chord=[#i,#iii,#v,#vi][t] trig=euclid(3,8,5)
+
+hz=chord.markov(trig)*o4 karplus(hz,seed:14,damp:0.002,feedback:.992,trig) |> out($)
+
+chord.map((hz,i)->karplus(hz*o4,seed:12587,attack:.03,decay:.2,trig)).avg() |> out($)
+
+chord.map((hz,i)->marimba(hz*o3,trig)).avg() |> out($)
+
+chord.walk(1/4,offset:2/16)*o5 |> piano($,trig:every(1/4,2/16)) |> out($*.5)
+
+chord.map((hz,i)->piano(hz*o3,trig)).avg() |> out($)
+
+drums() |> out($)`
 
 const selectedExamples = [
   'delay',
@@ -52,6 +65,7 @@ const selectedExamples = [
 ].sort(() => Math.random() - 0.5).map(example => docs[example as keyof typeof docs] ?? '')
 
 selectedExamples.unshift(exampleCode)
+selectedExamples.unshift(exampleCode2)
 
 const features = [
   {
