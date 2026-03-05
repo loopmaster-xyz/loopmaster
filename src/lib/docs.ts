@@ -110,7 +110,7 @@ trig:=euclid(5,8,bar:1);[#1,#3,#5,#7,#9].random(trig)*[o1,o2,o3][t]
   'snap': '\nsnap(lfosine(1),.2) |> ntof(48+$*12) |> saw($) |> out($)',
   'tube': '\nsaw(ntof(30)) |> tube($,3,.2) |> out($)',
   'freeverb':
-    '\ndrums() |> out($)\n\ntrig=tram(\'x-x-x-[xxx]-\',1/2) \n\ntri(95+[158,100][t*8]*ad(.001,.77,trig)**2)*ad(.00001,.24,trig)**3*.4\n\n\n\n|> $+freeverb($,.55,.6)*1 |> out($)\n\n;[47,50,51][t*4]|>ntof($)*1 |> rhodes70($,trig:every(1/16))*.08 |> out($)\n\n;[51,54,55][t*4]|>ntof($)*2 |> rhodes70($,trig:every(1/16))*.03 |> out($)',
+    '\ndrums() |> out($)\n\ntrig=tram(\'x-x-x-[xxx]-\',1/2) \n\ntri(95+[158,100][t*8]*ad(.001,.77,trig)**2)*ad(.00001,.24,trig)**3*.4\n\n\n\n|> $+freeverb($,.55,.6)*1 |> out($)\n\n;[47,50,51][t*4]|>ntof($)*1 |> rhodes($,trig:every(1/16))*.08 |> out($)\n\n;[51,54,55][t*4]|>ntof($)*2 |> rhodes($,trig:every(1/16))*.03 |> out($)',
   'step': '\nstep(lfosine(1),sine(ntof(30))) |> dc($) |> out($)',
   'tune': 'scale=\'dorian\' tune=1.50\n\n;(#scale*o2).walk(1/4) |> saw($) |> out($)',
   'lfotri': '\npink()*lfotri(1) |> out($)',
@@ -129,7 +129,6 @@ trig:=euclid(5,8,bar:1);[#1,#3,#5,#7,#9].random(trig)*[o1,o2,o3][t]
   'sah': '\nrandom() |> sah($,every(1/4)) |> ntof(60+floor($*12)) |> saw($) |> out($)',
   'sqrt': '\nsqrt(sine(ntof(30))) |> out($)',
   'peak': '\nwhite() |> peak($,100+10k*lfosine(1),1,10) |> out($)',
-  'rhodes70': 'a',
   'exp': '\nexp(sine(ntof(30))) |> dc($) |> out($)',
   'floor': '\nfloor(sine(ntof(30))) |> dc($) |> out($)',
   'min': '\nntof(30) |> min(sine($),saw($)) |> out($)',

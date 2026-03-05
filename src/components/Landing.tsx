@@ -55,7 +55,6 @@ drums() |> out($)`
 
 const selectedExamples = [
   'delay',
-  'freeverb',
   'velvet',
   'fdn',
   'dattorro',

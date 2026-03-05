@@ -786,21 +786,9 @@ export const extra: [string, Definition][] = [
     type: 'function',
     name: 'rhodes',
     category: 'synths',
-    description: ['Rhodes-style electric piano. Tine FM, tone-bar resonances, chorus.'],
+    description: ['Rhodes-style electric piano.'],
     parameters: [
       { name: 'hz', description: ['Frequency.'] },
-      { name: 'vel', description: ['Velocity 0–1.'], default: 1 },
-      { name: 'trig', description: ['Trigger.'] },
-    ],
-  }],
-  ['rhodes70', {
-    type: 'function',
-    name: 'rhodes70',
-    category: 'synths',
-    description: ['Vintage Rhodes-style (70s): purer fundamental, tone-bar resonances, subtle chorus.'],
-    parameters: [
-      { name: 'hz', description: ['Frequency.'] },
-      { name: 'vel', description: ['Velocity 0–1.'], default: 1 },
       { name: 'trig', description: ['Trigger.'] },
     ],
   }],

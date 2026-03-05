@@ -679,7 +679,7 @@ fm = (in,trig) -> in |> sine($+sine($/2)*$)*ad(trig) |> lp($,cutoff:300+10000*ad
 
 fm(chord[t*2]*o4, euclid(3, 8, bar:1/2)) |> out($*.5)
 
-;(chord*o4).map(rhodes70).avg()*.8 |> out($*.5)
+;(chord*o4).map(hz->rhodes(hz,trig:euclid(3, 8, bar:1/2))).avg()*.8 |> out($*.5)
 
 saw(chord[0]*o2) |> lp($,chord[0]*o2,1.5)*.2 |> out($)
 

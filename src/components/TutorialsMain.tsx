@@ -433,6 +433,16 @@ const Toc = ({
   )
 }
 
+const aliasedName = (path: string) => {
+  if (path === 'how-to-synthesize-a-house-loop') return 'making-a-house-loop'
+  return path
+}
+
+const aliasedHref = (href: string) => {
+  if (href === '/tutorials/how-to-synthesize-a-house-loop') return '/tutorials/making-a-house-loop'
+  return href
+}
+
 export const TutorialsMain = () => {
   widgetOptions.showVisuals = true
   widgetOptions.showKnobs = true
@@ -445,7 +455,7 @@ export const TutorialsMain = () => {
 
   const headings = useComputed(() => parsed.value ? extractHeadings(parsed.value.slice(1)) : [])
 
-  const tutorialName = useComputed(() => pathname.value.split('/')[2])
+  const tutorialName = useComputed(() => aliasedName(pathname.value.split('/')[2]))
 
   const tutorialMarkdown = useAsyncMemo(() =>
     tutorialName.value?.length
@@ -453,7 +463,7 @@ export const TutorialsMain = () => {
       : Promise.resolve(null)
   )
 
-  const tutorial = useComputed(() => tutorials.find(tutorial => tutorial.href === pathname.value) ?? null)
+  const tutorial = useComputed(() => tutorials.find(tutorial => tutorial.href === aliasedHref(pathname.value)) ?? null)
 
   useReactiveEffect(() => {
     subsection.value = tutorial.value?.name ?? null
