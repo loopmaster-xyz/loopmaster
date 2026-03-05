@@ -222,7 +222,7 @@ export function Landing() {
   widgetOptions.showKnobs = true
   widgetOptions.noHeader = true
 
-  const code = useSignal(exampleCode)
+  const code = useSignal(exampleCode2)
 
   const selectedExampleIndex = useSignal<number>(0)
 
