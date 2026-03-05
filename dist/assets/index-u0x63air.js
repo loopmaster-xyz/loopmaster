@@ -38715,87 +38715,17 @@ karplus=(hz,pluck=pink,seed=123,attack=.01,decay=.1,exponent=50,damping=.5,feedb
   })
 }
 
-rhodes=(hz,vel=1,trig)->{
-  v = clamp(vel,0,1)
-
-  // Tine FM (velocity controls metallic bite)
-  fmIndex = hz * (.2 + 2.8*v)
-  fm = sine(hz*2.01) * fmIndex
-  tine = sine(hz + fm, 0, trig)
-
-  // Dual tone-bar resonances (slightly inharmonic)
-  resonances = [
-    bp(tine, hz*3.8, 7),
-    bp(tine, hz*7.1, 9)
-  ].avg()
-
-  // Pickup / hammer click
-  click = hp(tine, 2500, 0.7)
-        * ad(.0004,.025,14,trig)
-        * (.3 + .7*v)
-
-  // Raw mix
-  s = tine*.55 + resonances*.9 + click*.35
-
-  // Envelope + velocity scaling
-  s *= (.15 + .85*v)
-
-  // Gentle saturation + DC cleanup
-  s = tube(s, drive:2.0 + v, bias:.04)
-
-  // Pickup EQ tilt (brighter with velocity)
-  s = ls(s, 250, -2*(1-v))
-    + hs(s, 3200, 3*v)
-
-  // Classic Rhodes chorus
-  s = chorus(s, voices:3, rate:.22, depth:.005, spread:.6)
-
-  s*.5
-}
-
-rhodes70=(hz,vel=1,trig)->{
-  v = clamp(vel,0,1)
-
-  // Fundamental (very pure)
-  core = sine(hz, trig)
-
-  // Hammer / tine attack (noise, not FM)
-  hammer =
-    bp(pink(1234,trig), hz*2.5, 6)
-    * ad(.0006,.04,10,trig)
-    * (.25 + .6*v)
-
-  // Tone-bar resonances (dominant character)
-  resonances = [
-    bp(core, hz*3.2, 8),
-    bp(core, hz*6.4, 10)
-  ].avg()
-
-  // Slight beating via slow detune (control-rate, not audio-rate)
-  det = 1 + (.002 + .004*v) * lfosine(.6)
-  body = sine(hz*det) * .3
-
-  // Mix (bars > fundamental)
-  s =
-    core*.35 +
-    resonances*1.0 +
-    body +
-    hammer
-
-  // Apply envelope + velocity
-  s *= (.2 + .8*v)
-
-  // Very gentle saturation (mostly for compression feel)
-  s = tanh(s * (1.2 + .8*v))
-
-  // Pickup EQ: dark, rounded top
-  s = ls(s, 220, -1.5)
-    |> hs($, 2800, 1.2*v)
-
-  // Subtle chorus (slow + shallow)
-  s = chorus(s, voices:2, rate:.15, depth:.003, spread:.4)
-
-  s
+rhodes=(hz,trig)->{
+  env=adsr(.00001,1.4,.92,8,e:6,trig)
+  oversample(4,()->{
+    sine(hz+sine(hz*1.013,trig)*hz*7.25,trig)*ad(.00001,1.2,e:6,trig)*.12
+    +sine(hz+sine(hz*2.752,trig)*hz*2.15,trig)*env*.4
+    +tri(hz)*env
+    |> $+chorus($,3,.0082,.0015,2.22,12.8)*.25
+    |> lpm($,400+3200*ad(.03,3.85,trig),.4)
+    |> atan($*.15)
+  })
+  |> dc($)
 }
 
 // Supersaw oscillator with detuned voices
@@ -41317,7 +41247,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-BS0Px0W5.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DthqypBw.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -46959,43 +46889,14 @@ const extra = [
 		type: "function",
 		name: "rhodes",
 		category: "synths",
-		description: ["Rhodes-style electric piano. Tine FM, tone-bar resonances, chorus."],
-		parameters: [
-			{
-				name: "hz",
-				description: ["Frequency."]
-			},
-			{
-				name: "vel",
-				description: ["Velocity 0–1."],
-				default: 1
-			},
-			{
-				name: "trig",
-				description: ["Trigger."]
-			}
-		]
-	}],
-	["rhodes70", {
-		type: "function",
-		name: "rhodes70",
-		category: "synths",
-		description: ["Vintage Rhodes-style (70s): purer fundamental, tone-bar resonances, subtle chorus."],
-		parameters: [
-			{
-				name: "hz",
-				description: ["Frequency."]
-			},
-			{
-				name: "vel",
-				description: ["Velocity 0–1."],
-				default: 1
-			},
-			{
-				name: "trig",
-				description: ["Trigger."]
-			}
-		]
+		description: ["Rhodes-style electric piano."],
+		parameters: [{
+			name: "hz",
+			description: ["Frequency."]
+		}, {
+			name: "trig",
+			description: ["Trigger."]
+		}]
 	}],
 	["supersaw", {
 		type: "function",
@@ -53803,7 +53704,7 @@ trig:=euclid(5,8,bar:1);[#1,#3,#5,#7,#9].random(trig)*[o1,o2,o3][t]
 	"emit": "a",
 	"snap": "\nsnap(lfosine(1),.2) |> ntof(48+$*12) |> saw($) |> out($)",
 	"tube": "\nsaw(ntof(30)) |> tube($,3,.2) |> out($)",
-	"freeverb": "\ndrums() |> out($)\n\ntrig=tram('x-x-x-[xxx]-',1/2) \n\ntri(95+[158,100][t*8]*ad(.001,.77,trig)**2)*ad(.00001,.24,trig)**3*.4\n\n\n\n|> $+freeverb($,.55,.6)*1 |> out($)\n\n;[47,50,51][t*4]|>ntof($)*1 |> rhodes70($,trig:every(1/16))*.08 |> out($)\n\n;[51,54,55][t*4]|>ntof($)*2 |> rhodes70($,trig:every(1/16))*.03 |> out($)",
+	"freeverb": "\ndrums() |> out($)\n\ntrig=tram('x-x-x-[xxx]-',1/2) \n\ntri(95+[158,100][t*8]*ad(.001,.77,trig)**2)*ad(.00001,.24,trig)**3*.4\n\n\n\n|> $+freeverb($,.55,.6)*1 |> out($)\n\n;[47,50,51][t*4]|>ntof($)*1 |> rhodes($,trig:every(1/16))*.08 |> out($)\n\n;[51,54,55][t*4]|>ntof($)*2 |> rhodes($,trig:every(1/16))*.03 |> out($)",
 	"step": "\nstep(lfosine(1),sine(ntof(30))) |> dc($) |> out($)",
 	"tune": "scale='dorian' tune=1.50\n\n;(#scale*o2).walk(1/4) |> saw($) |> out($)",
 	"lfotri": "\npink()*lfotri(1) |> out($)",
@@ -53821,7 +53722,6 @@ trig:=euclid(5,8,bar:1);[#1,#3,#5,#7,#9].random(trig)*[o1,o2,o3][t]
 	"sah": "\nrandom() |> sah($,every(1/4)) |> ntof(60+floor($*12)) |> saw($) |> out($)",
 	"sqrt": "\nsqrt(sine(ntof(30))) |> out($)",
 	"peak": "\nwhite() |> peak($,100+10k*lfosine(1),1,10) |> out($)",
-	"rhodes70": "a",
 	"exp": "\nexp(sine(ntof(30))) |> dc($) |> out($)",
 	"floor": "\nfloor(sine(ntof(30))) |> dc($) |> out($)",
 	"min": "\nntof(30) |> min(sine($),saw($)) |> out($)",
@@ -54343,7 +54243,6 @@ chord.map((hz,i)->piano(hz*o3,trig)).avg() |> out($)
 drums() |> out($)`;
 var selectedExamples = [
 	"delay",
-	"freeverb",
 	"velvet",
 	"fdn",
 	"dattorro",
@@ -60800,6 +60699,14 @@ var Toc = ({ headings, activeId }) => {
 		})
 	});
 };
+var aliasedName = (path) => {
+	if (path === "how-to-synthesize-a-house-loop") return "making-a-house-loop";
+	return path;
+};
+var aliasedHref = (href) => {
+	if (href === "/tutorials/how-to-synthesize-a-house-loop") return "/tutorials/making-a-house-loop";
+	return href;
+};
 const TutorialsMain = () => {
 	widgetOptions.showVisuals = true;
 	widgetOptions.showKnobs = true;
@@ -60809,9 +60716,9 @@ const TutorialsMain = () => {
 	const activeId = useSignal("");
 	const containerRef = A(null);
 	const headings = useComputed(() => parsed.value ? extractHeadings(parsed.value.slice(1)) : []);
-	const tutorialName = useComputed(() => pathname.value.split("/")[2]);
+	const tutorialName = useComputed(() => aliasedName(pathname.value.split("/")[2]));
 	const tutorialMarkdown = useAsyncMemo(() => tutorialName.value?.length ? fetch(`/tutorials/${tutorialName.value}.md`).then((res) => res.text()) : Promise.resolve(null));
-	const tutorial = useComputed(() => tutorials.find((tutorial$1) => tutorial$1.href === pathname.value) ?? null);
+	const tutorial = useComputed(() => tutorials.find((tutorial$1) => tutorial$1.href === aliasedHref(pathname.value)) ?? null);
 	useReactiveEffect(() => {
 		subsection.value = tutorial.value?.name ?? null;
 	});
@@ -61460,4 +61367,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-Cmofwk2-.js.map
+//# sourceMappingURL=index-u0x63air.js.map
