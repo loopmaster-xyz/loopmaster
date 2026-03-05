@@ -293,16 +293,21 @@ const Comment = ({ value }: { value: string }) => {
 
 const Table = ({ header, rows }: { header: MarkdownTableRowNode; rows: MarkdownTableRowNode[] }) => {
   const headerCh = header.children.map(compile)
-  const rowsCh = rows.map(row => row.children.map(compile))
   return (
-    <table>
-      <thead>
-        <tr>
-          {headerCh}
-        </tr>
-      </thead>
-      <tbody>{rowsCh}</tbody>
-    </table>
+    <div class="my-6 overflow-x-auto">
+      <table class="w-full min-w-[36rem] border-collapse text-sm text-white/90">
+        <thead class="bg-white/5">
+          <tr>
+            {headerCh}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <TableRow key={`${index}-${row.children.length}`} index={index} children={row.children} />
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
@@ -321,19 +326,23 @@ const BlockQuote = ({ children }: { children: MarkdownNode[] }) => {
   return <blockquote>{ch}</blockquote>
 }
 
-const TableRow = ({ children }: { children: MarkdownNode[] }) => {
+const TableRow = ({ children, index = 0 }: { children: MarkdownNode[]; index?: number }) => {
   const ch = children.map(compile)
-  return <tr>{ch}</tr>
+  return <tr class={index % 2 === 0 ? 'bg-white/[0.015]' : ''}>{ch}</tr>
 }
 
 const TableHeader = ({ children }: { children: MarkdownNode[] }) => {
   const ch = children.map(compile)
-  return <th>{ch}</th>
+  return (
+    <th class="px-4 py-2.5 text-left text-xs sm:text-sm font-semibold text-white border-b border-white/15 whitespace-nowrap">
+      {ch}
+    </th>
+  )
 }
 
 const TableData = ({ children }: { children: MarkdownNode[] }) => {
   const ch = children.map(compile)
-  return <td>{ch}</td>
+  return <td class="px-4 py-2.5 border-b border-white/10 align-top">{ch}</td>
 }
 
 const LineBreak = () => {
