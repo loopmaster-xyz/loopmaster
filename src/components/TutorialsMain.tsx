@@ -475,7 +475,7 @@ export const TutorialsMain = () => {
       requestAnimationFrame(() => {
         if (tutorialMarkdown.value) {
           teardown.value = false
-          parsed.value = parseMarkdown(tutorialMarkdown.value)
+          parsed.value = parseMarkdown(tutorialMarkdown.value + '\n## What\'s next?')
         }
       })
     }
@@ -544,7 +544,10 @@ export const TutorialsMain = () => {
               <div class="flex-1 min-w-0">
                 {parsed.value.slice(1).map(compile)}
                 <Grid cols={isMobile() ? 1 : 3}>
-                  {tutorials.filter(tutorial => tutorial.href !== pathname.value).map(tutorial => (
+                  {tutorials.filter(tutorial => tutorial.href !== pathname.value).sort(() => Math.random() - 0.5).slice(
+                    0,
+                    2,
+                  ).map(tutorial => (
                     <GridItem to={tutorial.href}>
                       <tutorial.Icon size={24} />
                       <span class="mt-2">{tutorial.name}</span>

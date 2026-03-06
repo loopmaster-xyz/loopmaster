@@ -24,12 +24,12 @@ export const tutorials: { name: string; description: string; href: string; Icon:
     href: '/tutorials/making-a-house-loop',
     Icon: HouseIcon,
   },
-  // {
-  //   name: 'Sound Synthesis 101',
-  //   description: 'Learn how to synthesize sounds',
-  //   href: '/tutorials/sound-synthesis-101',
-  //   Icon: LightbulbFilamentIcon,
-  // },
+  {
+    name: 'Sound Synthesis 101',
+    description: 'Learn how to synthesize sounds',
+    href: '/tutorials/sound-synthesis-101',
+    Icon: LightbulbFilamentIcon,
+  },
 ]
 
 export const Tutorials = () => {
