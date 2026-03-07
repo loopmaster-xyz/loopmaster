@@ -42096,8 +42096,8 @@ function createDspPreview(runtime) {
 			if (DEBUG_PREVIEW_TIMING$1) console.log("[preview] runMiniPreview", (performance.now() - t0).toFixed(2), "ms");
 			return entries$1;
 		},
-		*renderToAudio(code, bars, beatsPerBar = 4, vmId$1 = 999) {
-			const ccs = controlPipeline.compileSource(code);
+		*renderToAudio(code, bars, beatsPerBar = 4, vmId$1 = 999, opts) {
+			const ccs = controlPipeline.compileSource(code, opts?.projectId !== void 0 ? { projectId: opts.projectId } : void 0);
 			this.setControlCompileSnapshot(ccs);
 			if (ccs.errors.length > 0) throw new Error(`Compilation failed:\n${ccs.errors.join("\n")}`);
 			if (!state.bytecode) throw new Error("No bytecode generated");
@@ -42764,7 +42764,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-CHC60Q7T.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-CU9GaxNZ.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -57364,9 +57364,16 @@ const ExportAudio = () => {
 		await new Promise((resolve) => requestAnimationFrame(resolve));
 		const { dsp } = ctx.value;
 		const doc = currentProgramContext.value.doc;
-		const gen = dsp.core.preview.renderToAudio(doc.code, numberOfBars.value, 4);
+		const projectId = currentProject.value?.id ?? null;
 		let step;
 		try {
+			const ccs = controlPipeline.compileSource(doc.code, { projectId });
+			if (ccs.errors.length > 0) throw new Error(`Compilation failed:\n${ccs.errors.join("\n")}`);
+			await currentProgramContext.value.program.setControlCompileSnapshot(ccs, {
+				projectId,
+				fullResync: false
+			});
+			const gen = dsp.core.preview.renderToAudio(doc.code, numberOfBars.value, 4, 999, { projectId });
 			while (!(step = gen.next()).done) {
 				if (stopRendering.value) throw new Error("Rendering stopped");
 				progress.value = step.value;
@@ -62990,4 +62997,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-D6bDCBzQ.js.map
+//# sourceMappingURL=index-DLmnh2vM.js.map

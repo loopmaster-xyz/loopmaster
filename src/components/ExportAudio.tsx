@@ -1,5 +1,6 @@
 import { CircleNotchIcon, DownloadSimpleIcon, StopCircleIcon, WaveformIcon } from '@phosphor-icons/react'
 import { useComputed, useSignal } from '@preact/signals'
+import { controlPipeline } from 'engine/src/live/pipeline.ts'
 import { useEffect, useRef } from 'preact/hooks'
 import WavEncoder from 'wav-encoder'
 import { useAsyncMemo } from '../hooks/useAsyncMemo.ts'
@@ -285,9 +286,28 @@ export const ExportAudio = () => {
     await new Promise(resolve => requestAnimationFrame(resolve))
     const { dsp } = ctx.value
     const doc = currentProgramContext.value.doc
-    const gen = dsp.core.preview.renderToAudio(doc.code, numberOfBars.value, BEATS_PER_BAR)
+    const projectId = currentProject.value?.id ?? null
     let step
     try {
+      const ccs = controlPipeline.compileSource(doc.code, { projectId })
+      if (ccs.errors.length > 0) {
+        throw new Error(`Compilation failed:\n${ccs.errors.join('\n')}`)
+      }
+
+      // Force sample registration/recording to complete before offline export render starts.
+      await currentProgramContext.value.program.setControlCompileSnapshot(ccs, {
+        projectId,
+        fullResync: false,
+      })
+
+      const gen = dsp.core.preview.renderToAudio(
+        doc.code,
+        numberOfBars.value,
+        BEATS_PER_BAR,
+        999,
+        { projectId },
+      )
+
       while (!(step = gen.next()).done) {
         if (stopRendering.value) {
           throw new Error('Rendering stopped')
