@@ -72,6 +72,8 @@ export function createAdsrWidget(adsr: AdsrHistory, target: TypedHistory | UserC
     c.save()
     c.translate(x, y)
 
+    w = Math.min(w, 70)
+
     c.lineCap = 'round'
     c.lineJoin = 'round'
 
@@ -96,16 +98,13 @@ export function createAdsrWidget(adsr: AdsrHistory, target: TypedHistory | UserC
     let playY = 0
 
     if (adTotal > 0 || releaseMax > 0) {
-      const totalTime = attackMax + decayMax + 0.5 + releaseMax
-      const attackRatio = attackMax / totalTime
-      const decayRatio = decayMax / totalTime
-      const sustainRatio = 0.5 / totalTime
-      const releaseRatio = releaseMax / totalTime
+      const sustainW = Math.min(10, plotW)
+      const dynamicW = Math.max(0, plotW - sustainW)
+      const adrTotal = attackMax + decayMax + releaseMax
 
-      const attackW = attackRatio * plotW
-      const decayW = decayRatio * plotW
-      const sustainW = sustainRatio * plotW
-      const releaseW = releaseRatio * plotW
+      const attackW = adrTotal > 0 ? (attackMax / adrTotal) * dynamicW : 0
+      const decayW = adrTotal > 0 ? (decayMax / adrTotal) * dynamicW : 0
+      const releaseW = adrTotal > 0 ? (releaseMax / adrTotal) * dynamicW : 0
 
       const decayX = attackW + decayW
       const sustainEndX = decayX + sustainW

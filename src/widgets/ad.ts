@@ -72,7 +72,7 @@ export function createAdWidget(ad: AdHistory, target: TypedHistory | UserCallHis
     c.save()
     c.translate(x, y)
 
-    // w = Math.min(w, 70)
+    w = Math.min(w, 70)
 
     c.lineCap = 'round'
     c.lineJoin = 'round'
