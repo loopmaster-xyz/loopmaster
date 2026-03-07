@@ -15,11 +15,12 @@ import { primaryColor, secondaryColor } from '../state.ts'
 import { makeWidgetCacheKey } from './cache-key.ts'
 import type { WidgetCacheEntry } from './cache.ts'
 import { BEATS_PER_BAR, FUTURE_BARS, HEADER_PADDING_LEFT, PAST_BARS } from './constants.ts'
-import { computePianoRange, drawPianoViz } from './piano-viz.ts'
+import { computePianoRange, countWhiteKeys, drawPianoViz } from './piano-viz.ts'
 import { getFunctionCallLength, impulse } from './util.ts'
 
 const DEBUG_PREVIEW_TIMING = typeof window !== 'undefined'
   && (window as { __DEBUG_PREVIEW_TIMING__?: boolean }).__DEBUG_PREVIEW_TIMING__
+const MAX_MINI_PIANO_KEY_WIDTH = 8
 
 function hzToNote(hz: number): number {
   return Math.round(Math.log2(hz / 440) * 12 + 69)
@@ -113,10 +114,9 @@ export function createMiniWidgets(
     currentNotes: new Set<number>(),
   }
 
-  type MiniPreviewCache = { key: string;
-    entries: Array<
-      { opIndex: number; voiceIndex: number; value: number; velocity: number; startSeconds: number; endSeconds: number }
-    > }
+  type MiniPreviewCache = { key: string; entries: Array<
+    { opIndex: number; voiceIndex: number; value: number; velocity: number; startSeconds: number; endSeconds: number }
+  > }
 
   let pianoroll: Widget
   if (cachedFull?.doc === doc) {
@@ -185,11 +185,19 @@ export function createMiniWidgets(
           miniPreviewCache.entries = entries
         }
 
+        const pitchedEntries = entries.filter(entry =>
+          entry.voiceIndex >= 0
+          && Number.isFinite(entry.value)
+          && entry.value > 0
+          && Number.isFinite(entry.startSeconds)
+          && Number.isFinite(entry.endSeconds)
+          && entry.endSeconds > entry.startSeconds
+        )
+
         const entryToNote = new Map<typeof entries[0], number>()
         let noteMin = 128
         let noteMax = 0
-        for (const entry of entries) {
-          if (entry.voiceIndex < 0) continue
+        for (const entry of pitchedEntries) {
           const note = hzToNote(entry.value)
           entryToNote.set(entry, note)
           if (note < noteMin) noteMin = note
@@ -203,30 +211,29 @@ export function createMiniWidgets(
         pianoAboveState.noteMin = noteMin
         pianoAboveState.noteMax = noteMax
         pianoAboveState.currentNotes.clear()
-        for (const entry of entries) {
-          if (entry.voiceIndex < 0) continue
+        for (const entry of pitchedEntries) {
           const isPast = entry.startSeconds <= timeSeconds.value
           const isNow = isPast && entry.endSeconds >= timeSeconds.value - 0.01
           if (isNow) pianoAboveState.currentNotes.add(entryToNote.get(entry)!)
         }
 
-        const scale = noteMax - noteMin
-        const nh = h / (scale + 1)
-        h -= nh
+        const noteSpan = Math.max(1, noteMax - noteMin + 1)
+        const verticalPadding = 1
+        const drawHeight = Math.max(0, h - verticalPadding * 2)
+        const noteHeight = drawHeight / noteSpan
         activeOps.clear()
-        for (const entry of entries) {
-          if (entry.voiceIndex < 0) continue
+        for (const entry of pitchedEntries) {
           const note = entryToNote.get(entry)!
-          const y = (noteMax - note) / scale
+          const y = verticalPadding + (noteMax - note) * noteHeight
           const isPast = entry.startSeconds <= timeSeconds.value
           const isNow = isPast && entry.endSeconds >= timeSeconds.value - 0.01
           if (isNow) activeOps.add(entry.opIndex)
           c.fillStyle = isPast ? secondaryColor.value : primaryColor.value
           c.fillRect(
             (entry.startSeconds - windowStart) * pxPerSecond,
-            y * h,
+            y,
             (entry.endSeconds - entry.startSeconds) * pxPerSecond,
-            nh,
+            Math.max(1, noteHeight),
           )
         }
 
@@ -258,7 +265,11 @@ export function createMiniWidgets(
           pianoAboveState.noteMax,
           pianoAboveState.noteMin,
         )
-        drawPianoViz(c, x, y, w, h, low, high, pianoAboveState.currentNotes)
+        const whiteCount = countWhiteKeys(low, high)
+        const maxByKeyWidth = whiteCount * MAX_MINI_PIANO_KEY_WIDTH
+        const drawW = Math.max(0, Math.min(w, maxByKeyWidth))
+        if (drawW <= 0) return
+        drawPianoViz(c, x, y, drawW, h, low, high, pianoAboveState.currentNotes)
       },
     }
     cache.set(pianoAboveKey, { doc, widget: pianoAbove, historyRef })

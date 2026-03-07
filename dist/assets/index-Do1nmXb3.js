@@ -42587,7 +42587,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-BvQironz.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DNR4O12A.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -45896,11 +45896,11 @@ function createMiniWidgets(mini, target, dsp, doc, currentResult, latency, timeS
 					miniPreviewCache.key = cacheKey;
 					miniPreviewCache.entries = entries$1;
 				}
+				const pitchedEntries = entries$1.filter((entry) => entry.voiceIndex >= 0 && Number.isFinite(entry.value) && entry.value > 0 && Number.isFinite(entry.startSeconds) && Number.isFinite(entry.endSeconds) && entry.endSeconds > entry.startSeconds);
 				const entryToNote = /* @__PURE__ */ new Map();
 				let noteMin = 128;
 				let noteMax = 0;
-				for (const entry of entries$1) {
-					if (entry.voiceIndex < 0) continue;
+				for (const entry of pitchedEntries) {
 					const note = hzToNote(entry.value);
 					entryToNote.set(entry, note);
 					if (note < noteMin) noteMin = note;
@@ -45913,22 +45913,16 @@ function createMiniWidgets(mini, target, dsp, doc, currentResult, latency, timeS
 				pianoAboveState.noteMin = noteMin;
 				pianoAboveState.noteMax = noteMax;
 				pianoAboveState.currentNotes.clear();
-				for (const entry of entries$1) {
-					if (entry.voiceIndex < 0) continue;
-					if (entry.startSeconds <= timeSeconds.value && entry.endSeconds >= timeSeconds.value - .01) pianoAboveState.currentNotes.add(entryToNote.get(entry));
-				}
-				const scale = noteMax - noteMin;
-				const nh = h$5 / (scale + 1);
-				h$5 -= nh;
+				for (const entry of pitchedEntries) if (entry.startSeconds <= timeSeconds.value && entry.endSeconds >= timeSeconds.value - .01) pianoAboveState.currentNotes.add(entryToNote.get(entry));
+				const noteHeight = h$5 / Math.max(1, noteMax - noteMin + 1);
 				activeOps.clear();
-				for (const entry of entries$1) {
-					if (entry.voiceIndex < 0) continue;
+				for (const entry of pitchedEntries) {
 					const note = entryToNote.get(entry);
-					const y$6 = (noteMax - note) / scale;
+					const y$6 = (noteMax - note) * noteHeight;
 					const isPast = entry.startSeconds <= timeSeconds.value;
 					if (isPast && entry.endSeconds >= timeSeconds.value - .01) activeOps.add(entry.opIndex);
 					c$7.fillStyle = isPast ? secondaryColor.value : primaryColor.value;
-					c$7.fillRect((entry.startSeconds - windowStart) * pxPerSecond, y$6 * h$5, (entry.endSeconds - entry.startSeconds) * pxPerSecond, nh);
+					c$7.fillRect((entry.startSeconds - windowStart) * pxPerSecond, y$6, (entry.endSeconds - entry.startSeconds) * pxPerSecond, Math.max(1, noteHeight));
 				}
 				c$7.restore();
 			}
@@ -62753,4 +62747,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-CI2jfrec.js.map
+//# sourceMappingURL=index-Do1nmXb3.js.map
