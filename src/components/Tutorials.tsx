@@ -1,4 +1,4 @@
-import { CodeIcon, HouseIcon, LightbulbFilamentIcon, LightningIcon } from '@phosphor-icons/react'
+import { CodeIcon, HouseIcon, LightbulbFilamentIcon, LightningIcon, WaveSawtoothIcon } from '@phosphor-icons/react'
 import { useComputed } from '@preact/signals'
 import { cn } from '../lib/cn.ts'
 import { pathname } from '../router.tsx'
@@ -29,6 +29,12 @@ export const tutorials: { name: string; description: string; href: string; Icon:
     description: 'Learn how to synthesize sounds',
     href: '/tutorials/sound-synthesis-101',
     Icon: LightbulbFilamentIcon,
+  },
+  {
+    name: 'TB-303 from Scratch',
+    description: 'Building a TB-303 from scratch',
+    href: '/tutorials/tb303-from-scratch',
+    Icon: WaveSawtoothIcon,
   },
 ]
 
