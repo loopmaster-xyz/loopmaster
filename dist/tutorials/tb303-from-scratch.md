@@ -1,6 +1,6 @@
 # TB-303 from Scratch
 
-The TB-303 is a classic synth that was released in 1982 by the company Roland. It is known for its unique sound and has been used by many artists to create some of the most iconic sounds in electronic music. If you've ever heard the word "acid" in a song, it's probably a reference to the sound of the TB-303 and it has been responsible for entire genres of music and the lift-off of the electronic dance music scene.
+The TB-303 is a classic synth that was released in 1981 by the company Roland. It is known for its unique sound and has been used by many artists to create some of the most iconic sounds in electronic music. If you've ever heard the word "acid" in a song, it's probably a reference to the sound of the TB-303 and it has been responsible for entire genres of music and the lift-off of the electronic dance music scene.
 
 Here we will build a TB-303 from scratch using loopmaster. We will start with the basics and build up to its full sound.
 
