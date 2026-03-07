@@ -142,16 +142,34 @@ tri([60,67,62,63][t]|>ntof($)|>$/2+sine($/3)*$/2)*ad(.0003,.11,e:.5,trig)*.3+dru
   'fold': '\nfold(sine(ntof(30)),-.2,.2) |> out($)',
   'isundefined': '\nisundefined(undefined) |> print($)\n\nisundefined(1) |> print($)',
   'log2': '\nlog2(abs(sine(ntof(30)))+.01) |> dc($) |> out($)',
-  'adsr':
-    '\ndrums() |> out($)\n\nplay(mini(\'<octave -1 octave 1>/2\n  scale pent [1;2 4 [4 2] 5];.4/2\'),({hz,trig})->\n\n  (saw(hz/3)+sqr(hz))*adsr(.001,.03,.6,.04,2,trig)*.25 \n  \n  |> lps($,100+15k*ad(.001,.5,8,trig),.8)\n\n) |> out($)',
+  'adsr': `
+drums() |> out($)
+
+play(mini('o5 <octave -1 octave 0>/2
+  scale pent [1;2 4 [4 2] 5];.4/2'),({hz,trig})->
+
+  (saw(hz/3)+sqr(hz))*adsr(.001,.03,.6,.04,2,trig)*.25
+
+  |> lps($,100+15k*ad(.001,.5,8,trig),.8)
+
+) |> out($)`,
   'hpm': '\nwhite() |> hpm($,100+10k*lfosine(1),.5) |> out($)',
   'read':
     'flanger=(in,seconds=0.5)->{\n  buf=alloc(1)\n  sample=read(buf,seconds)\n  write(in+sample*.95,buf)\n  sample\n}\n\ntri(ntof(60))*ad(trig:every(1/2)) |> $+flanger($*.41,.0036+0.004*lfosine(4)) |> out($)\n',
   'ad': '\ntri([c4,a4,f4,e4][t])*ad(a:.03,d:.15,e:5,trig:every(1/8)) |> out($)',
   'velvet':
     '\ndrums() |> out($)\n\nsupersaw([62,63,65,68][t]|>ntof($)*[1,.5][t/4])*ad(trig:every(1/16))\n\n|> lp($,1k+8k*ad(e:5,trig:every(1/16)))*.35\n\n\n\n|> $+velvet($,room:.8) |> out($)',
-  'mini':
-    '\ndrums() |> out($)\n\nplay(mini(\'<octave -1 octave 1>/2\n  scale pent [1;2 4 [4 2] 5];.4/2\'),({hz,trig})->\n\n  (saw(hz/3)+sqr(hz))*adsr(.001,.03,.6,.04,2,trig)*.25 \n  \n  |> lps($,100+15k*ad(.001,.5,8,trig),.8)\n\n) |> out($)',
+  'mini': `
+drums() |> out($)
+
+play(mini('o5 <octave -1 octave 0>/2
+  scale pent [1;2 4 [4 2] 5];.4/2'),({hz,trig})->
+
+  (saw(hz/3)+sqr(hz))*adsr(.001,.03,.6,.04,2,trig)*.25
+
+  |> lps($,100+15k*ad(.001,.5,8,trig),.8)
+
+) |> out($)`,
   'map': '',
   'tanh': '\ntanh(sine(ntof(30))*5) |> out($)',
   'drums': '\ndrums() |> out($)',
