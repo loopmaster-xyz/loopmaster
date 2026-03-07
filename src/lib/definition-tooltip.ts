@@ -375,6 +375,19 @@ function hasTooltipBody(
   return resolved.target !== undefined
 }
 
+function getCallLineBounds(callBlock: Token[]): { minLine: number; maxLine: number } | null {
+  let minLine = Number.POSITIVE_INFINITY
+  let maxLine = Number.NEGATIVE_INFINITY
+  for (const t of callBlock) {
+    if (t.line == null) continue
+    const line = t.line - 1
+    if (line < minLine) minLine = line
+    if (line > maxLine) maxLine = line
+  }
+  if (!Number.isFinite(minLine) || !Number.isFinite(maxLine)) return null
+  return { minLine, maxLine }
+}
+
 export function drawDefinitionTooltip(
   overlayCanvas: OverlayCanvas,
   editor: EditorType,
@@ -546,11 +559,26 @@ export function drawDefinitionTooltip(
     ? contentY + PADDING
     : contentY - PARAGRAPH_SPACING + PADDING
 
-  const tooltipYAbove = yLocal - tooltipHeight - ARROW_SIZE - TOOLTIP_GAP
-  const tooltipYBelow = yLocal + settings.lineHeight + ARROW_SIZE + TOOLTIP_GAP
+  let tooltipYAbove = yLocal - tooltipHeight - ARROW_SIZE - TOOLTIP_GAP
+  let tooltipYBelow = yLocal + settings.lineHeight + ARROW_SIZE + TOOLTIP_GAP
 
   const viewportTopWithMargin = viewportTop + MARGIN
   const viewportBottomWithMargin = viewportTop + viewportHeight - MARGIN
+
+  const callLineBounds = callBlock?.length ? getCallLineBounds(callBlock) : null
+  const tokenLine = (token.line ?? 1) - 1
+  const caretInsideWrappedCall = callLineBounds != null
+    && callLineBounds.maxLine > callLineBounds.minLine
+    && caretLine != null
+    && caretLine > callLineBounds.minLine
+    && caretLine <= callLineBounds.maxLine
+
+  if (caretInsideWrappedCall) {
+    const callTopY = yLocal + (callLineBounds.minLine - tokenLine) * settings.lineHeight
+    const callBottomY = yLocal + (callLineBounds.maxLine - tokenLine) * settings.lineHeight
+    tooltipYAbove = callTopY - tooltipHeight - ARROW_SIZE - TOOLTIP_GAP
+    tooltipYBelow = callBottomY + settings.lineHeight + ARROW_SIZE + TOOLTIP_GAP
+  }
 
   const fitsAbove = tooltipYAbove >= viewportTopWithMargin && tooltipYAbove + tooltipHeight <= viewportBottomWithMargin
   const fitsBelow = tooltipYBelow >= viewportTopWithMargin && tooltipYBelow + tooltipHeight <= viewportBottomWithMargin

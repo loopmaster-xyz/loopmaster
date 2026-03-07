@@ -636,7 +636,7 @@ Mini notation is another way to create melodies and rhythms. It is borrowed from
 
 ```js
 
-play(mini('c4 f4 a4/2 e4'),(hz,vel,trig)->saw(hz)*ad(trig)|>lp($,100+10k*ad(e:8,trig),1)) |> out($)
+play(mini('c4 f4 a4/2 e4'),({hz,trig})->saw(hz)*ad(trig)|>lp($,100+10k*ad(e:8,trig),1)) |> out($)
 ```
 
 ## Mixing
