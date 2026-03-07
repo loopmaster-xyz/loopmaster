@@ -651,22 +651,54 @@ export const transport = {
   },
 }
 
+async function waitForActuallyPlaying(dsp: DspContext['dsp'], maxTries = 60) {
+  for (let i = 0; i < maxTries; i++) {
+    if (dsp.isActuallyPlaying) return true
+    await new Promise<void>(resolve => i % 2 === 0 ? requestAnimationFrame(() => resolve()) : setTimeout(resolve, 0))
+  }
+  return dsp.isActuallyPlaying
+}
+
+async function startInlineProgram(dsp: DspContext['dsp'], inline: DspProgramContext) {
+  await dsp.start([inline.program])
+  const historiesReady = await dsp.refreshUntilHistories(inline.program, { maxTries: 60 })
+  const actuallyPlaying = await waitForActuallyPlaying(dsp, 60)
+  return historiesReady || actuallyPlaying
+}
+
+let inlineStartInFlight = false
+
 export const inlineTransport = {
   start: async (inline: DspProgramContext) => {
-    if (!ctx.value) return
-    const dsp = ctx.value.dsp
-    await dsp.state.audioContext.resume()
-    if (playingContext.value) {
-      await transport.stop()
+    if (inlineStartInFlight) return
+    inlineStartInFlight = true
+    try {
+      if (!ctx.value) return
+      const dsp = ctx.value.dsp
+      await dsp.state.audioContext.resume()
+      if (playingContext.value) {
+        await transport.stop()
+      }
+      if (playingInlineContext.value) {
+        await inlineTransport.stop()
+        await new Promise(resolve => setTimeout(resolve, 100))
+      }
+      let started = await startInlineProgram(dsp, inline)
+      if (!started) {
+        await dsp.stop([inline.program])
+        await new Promise(resolve => setTimeout(resolve, 100))
+        started = await startInlineProgram(dsp, inline)
+      }
+      if (!started) {
+        await dsp.stop([inline.program])
+        return
+      }
+      playingInlineContext.value = inline
+      deferDraw.value = true
     }
-    if (playingInlineContext.value) {
-      await inlineTransport.stop()
-      await new Promise(resolve => setTimeout(resolve, 100))
+    finally {
+      inlineStartInFlight = false
     }
-    playingInlineContext.value = inline
-    await dsp.start([inline.program])
-    await dsp.refreshUntilHistories(inline.program, { maxTries: 60 })
-    deferDraw.value = true
   },
   stop: async () => {
     if (!playingInlineContext.value) return
