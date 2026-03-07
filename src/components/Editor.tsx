@@ -11,7 +11,8 @@ import { settings } from '../settings.ts'
 import { editor as stateEditor, theme, widgetOptions } from '../state.ts'
 
 export const Editor = (
-  { doc, header, autoHeight = false }: { doc: Signal<Doc | null>; header: Header | null; autoHeight?: boolean },
+  { doc, header, gutter = true, autoHeight = false, transparent = false }: { doc: Signal<Doc | null>;
+    header: Header | null; gutter?: boolean; autoHeight?: boolean; transparent?: boolean },
 ) => {
   widgetOptions.showVisuals = settings.showVisuals
   widgetOptions.showKnobs = settings.showKnobs
@@ -23,11 +24,12 @@ export const Editor = (
     createEditor({
       wordWrap: true,
       autoHeight,
-      paddingLeft: 5,
-      paddingTop: !header ? 15.5 : 17,
-      paddingRight: 12,
-      paddingBottom: !header ? 15.5 : 17,
+      paddingLeft: !gutter ? 15 : 5,
+      paddingTop: !header ? !gutter ? 15 : 15.5 : 17,
+      paddingRight: !gutter ? 15 : 12,
+      paddingBottom: !header ? !gutter ? 15 : 15.5 : 17,
       ...editorSettings,
+      showGutter: gutter,
     }), [])
 
   useEffect(() => {
@@ -48,6 +50,9 @@ export const Editor = (
 
   useReactiveEffect(() => {
     Object.assign(editor.settings.colors, theme.value)
+    if (transparent) {
+      editor.settings.colors.black = 'transparent'
+    }
   }, [editor])
 
   useReactiveEffect(() => {

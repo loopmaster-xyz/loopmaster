@@ -10,5 +10,6 @@ export const settings = signalify({
   showDocs: true,
   wordWrap: true,
   analyserType: 'waveform' as 'waveform' | 'spectrum' | 'amplitude',
+  fullSize: false,
   debug: false,
 })

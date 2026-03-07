@@ -1,3 +1,4 @@
+import { CornersOutIcon } from '@phosphor-icons/react'
 import { computed, useSignal } from '@preact/signals'
 import { draw, type Header } from 'editor'
 import { memoryDebug } from 'engine'
@@ -131,57 +132,82 @@ export const App = () => {
           background-color: ${theme.value.blue + '42'};
         }
     ` }} />
-      {mainPage.value === null ? <Landing /> : mainPage.value === 'wall-of-sounds' ? <WallOfSounds /> : (
-        <>
-          <div class="flex flex-row w-screen h-screen max-w-full max-h-full"
-            style={{ backgroundColor: theme.value.black }}
-          >
-            {!isMobile() && (
-              <div class="flex w-auto h-full flex-shrink-0">
-                <Sidebar />
-              </div>
-            )}
-            <div class="flex flex-col flex-1 min-w-0 h-full">
-              {mainPage.value === 'docs'
-                ? <DocsMain />
-                : mainPage.value === 'tutorials'
-                ? <TutorialsMain />
-                : mainPage.value === 'browse'
-                ? <BrowseMain />
-                : mainPage.value === 'admin'
-                ? <AdminMain />
-                : mainPage.value === 'artist'
-                ? <ArtistMain />
-                : mainPage.value === 'project'
-                ? <ProjectMain />
-                : mainPage.value === 'help'
-                ? <HelpMain />
-                : mainPage.value === 'about'
-                ? <AboutMain />
-                : mainPage.value === 'dj'
-                ? <DJMain />
-                : mainPage.value === 'editor'
-                ? (
-                  <>
-                    <div class="relative">
-                      <Nav />
-                    </div>
-                    {currentProgramContext.value?.doc && (
-                      <div class="flex-1 min-w-0 h-full overflow-hidden">
-                        <Editor
-                          doc={computed(() => currentProgramContext.value?.doc ?? null)}
-                          header={header.value}
-                        />
-                      </div>
-                    )}
-                  </>
-                )
-                : null}
-            </div>
-            {showIntro.value && <Intro />}
+      {mainPage.value === null
+        ? <Landing />
+        : mainPage.value === 'wall-of-sounds'
+        ? <WallOfSounds />
+        : settings.fullSize
+        ? (
+          <div class="w-screen h-screen max-w-full max-h-full bg-black">
+            <Editor
+              doc={computed(() => currentProgramContext.value?.doc ?? null)}
+              header={null}
+              gutter={false}
+              transparent={true}
+            />
+            <button onClick={() => settings.fullSize = !settings.fullSize}
+              class="absolute top-2 right-5 text-white/40 hover:text-white"
+            >
+              <CornersOutIcon />
+            </button>
           </div>
-        </>
-      )}
+        )
+        : (
+          <>
+            <div class="flex flex-row w-screen h-screen max-w-full max-h-full"
+              style={{ backgroundColor: theme.value.black }}
+            >
+              {!isMobile() && (
+                <div class="flex w-auto h-full flex-shrink-0">
+                  <Sidebar />
+                </div>
+              )}
+              <div class="flex flex-col flex-1 min-w-0 h-full">
+                {mainPage.value === 'docs'
+                  ? <DocsMain />
+                  : mainPage.value === 'tutorials'
+                  ? <TutorialsMain />
+                  : mainPage.value === 'browse'
+                  ? <BrowseMain />
+                  : mainPage.value === 'admin'
+                  ? <AdminMain />
+                  : mainPage.value === 'artist'
+                  ? <ArtistMain />
+                  : mainPage.value === 'project'
+                  ? <ProjectMain />
+                  : mainPage.value === 'help'
+                  ? <HelpMain />
+                  : mainPage.value === 'about'
+                  ? <AboutMain />
+                  : mainPage.value === 'dj'
+                  ? <DJMain />
+                  : mainPage.value === 'editor'
+                  ? (
+                    <>
+                      <div class="relative">
+                        <Nav />
+                      </div>
+                      {currentProgramContext.value?.doc && (
+                        <div class="flex-1 min-w-0 h-full overflow-hidden">
+                          <Editor
+                            doc={computed(() => currentProgramContext.value?.doc ?? null)}
+                            header={header.value}
+                          />
+                          <button onClick={() => settings.fullSize = !settings.fullSize}
+                            class="absolute top-14 right-5 text-white/40 hover:text-white"
+                          >
+                            <CornersOutIcon />
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )
+                  : null}
+              </div>
+              {showIntro.value && <Intro />}
+            </div>
+          </>
+        )}
       {((wasmMemoryUsage.value != null) || memoryDebugInfo.value) && settings.debug && (
         <div class="fixed bottom-3 right-3 text-xs font-mono px-2 py-1 rounded z-50 text-white bg-black/70">
           {wasmMemoryUsage.value != null && <div>WASM worklet: {wasmMemoryUsage.value.toFixed(2)} MB</div>}
