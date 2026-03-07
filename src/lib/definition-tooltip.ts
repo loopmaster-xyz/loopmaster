@@ -131,6 +131,7 @@ let tooltipWidgetCache: {
   key: string
   ref: TypedHistory | UserCallHistory
   widgets: Widget[]
+  innerSignature?: string
 } | null = null
 
 function wrapText(
@@ -432,10 +433,30 @@ export function drawDefinitionTooltip(
         const { history, target, isUserCallSite } = resolved
         if (target !== undefined) {
           const key = `${line}:${column}`
+          let innerSignature: string | undefined
           const widgets = isUserCallSite && 'inner' in target
-            ? (target as UserCallHistory).inner
-              .map(h => dspContext.createTooltipWidget(h, target!, widgetContext))
-              .filter((w): w is Widget => w != null)
+            ? (() => {
+              const inner = (target as UserCallHistory).inner
+              innerSignature = inner.map(h => `${h.genName}:${h.index}`).join('|')
+              const canReuseInnerWidgets = tooltipWidgetCache?.key === key
+                && tooltipWidgetCache?.ref === target
+                && tooltipWidgetCache?.innerSignature === innerSignature
+                && tooltipWidgetCache.widgets.length === inner.length
+              if (canReuseInnerWidgets) {
+                return tooltipWidgetCache.widgets
+              }
+              return inner
+                .map((h) => {
+                  // User-call tooltip widgets share the same source span, so isolate caches per history
+                  // to avoid same-key collisions collapsing different inner histories into one widget.
+                  const isolatedWidgetContext: DspWidgetContext = {
+                    ...widgetContext,
+                    widgetsCache: new Map(),
+                  }
+                  return dspContext.createTooltipWidget(h, target, isolatedWidgetContext)
+                })
+                .filter((w): w is Widget => w != null)
+            })()
             : (() => {
               const w = dspContext.createTooltipWidget(history!, target ?? history!, widgetContext)
               return w ? [w] : []
@@ -444,8 +465,9 @@ export function drawDefinitionTooltip(
             tooltipWidgetCache?.key !== key
             || tooltipWidgetCache?.ref !== target
             || tooltipWidgetCache?.widgets.length !== widgets.length
+            || tooltipWidgetCache?.innerSignature !== innerSignature
           ) {
-            tooltipWidgetCache = widgets.length ? { key, ref: target, widgets } : null
+            tooltipWidgetCache = widgets.length ? { key, ref: target, widgets, innerSignature } : null
           }
           tooltipWidgets = tooltipWidgetCache?.widgets ?? []
         }
