@@ -95,7 +95,7 @@ const DocsGen = (
         )}
         <div class="flex flex-col mt-6 gap-4">
           <div class="flex flex-col gap-4">
-            {[...(examples[def.name as keyof typeof examples] ?? ['a'])].map(e => (
+            {[...(examples[def.name as keyof typeof examples] ?? [''])].map(e => (
               <InlineEditor
                 key={e}
                 id={`docs-${getDocPath(def)}-${e}`}
@@ -130,7 +130,9 @@ const DocsCategory = ({ category }: { category: string }) => {
               <SignatureView code={definitionToCode(def, false)} class="text-md font-[Liga_Space_Mono]"
                 style={{ textAlign: 'justify', textAlignLast: 'right' }} />
               <span class="flex-1" />
-              <span class="text-sm text-white/50 justify-self-end">{withPeriod(def.description.join(' '))}</span>
+              <span class="text-sm text-white/50 justify-self-end overflow-hidden text-ellipsis">
+                {withPeriod(def.description.join(' '))}
+              </span>
             </GridItem>
           ))}
         </Grid>

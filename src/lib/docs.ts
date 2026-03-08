@@ -212,4 +212,7 @@ play(mini('o5 <octave -1 octave 0>/2
 sampler(sam('hello world'),trig:every(1)) |> out($)`,
   'espeak': `
 sampler(espeak('hello world'),trig:every(1)) |> out($)`,
+  'bongo': `trig=(euclid(3,8,0,1/2)+euclid(3,4,4,1))**.3
+
+poly(4,trig,trig->(#scale*[o2,o3,o4].random(trig)).markov(trig),bongo) |> atan($*2) |> out($)`,
 }
