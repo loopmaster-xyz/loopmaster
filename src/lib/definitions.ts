@@ -1,5 +1,6 @@
 import type { GenDescriptor } from 'engine'
 import { gens, SCALE_INTERVALS } from 'engine'
+import { POST_SHADER_PRESETS, SHADER_INPUTS, SHADER_PRESETS } from './shader-presets.ts'
 
 type DefinitionType = 'variable' | 'keyword' | 'function'
 
@@ -252,6 +253,41 @@ export const extra: [string, Definition][] = [
     name: 'tune',
     category: 'utilities',
     description: ['Multiply frequencies (e.g. tune=2 = octave up). Default: 1.'],
+  }],
+  ['shader', {
+    type: 'variable',
+    name: 'shader',
+    category: 'utilities',
+    description: [
+      'Compile-time only shader preset selector for background visuals: shader=\'lissajous\'.\n\nAvailable:\n\n'
+      + SHADER_PRESETS.join(', ') + '.',
+    ],
+  }],
+  ['shaderinput', {
+    type: 'variable',
+    name: 'shaderinput',
+    category: 'utilities',
+    description: [
+      'Compile-time only post-processing input source selector: shaderinput=\'audio\'.\n\nAvailable:\n\n'
+      + SHADER_INPUTS.join(', ') + '.',
+    ],
+  }],
+  ['postshader', {
+    type: 'variable',
+    name: 'postshader',
+    category: 'utilities',
+    description: [
+      'Compile-time only post-processing preset selector for shader visuals: postshader=\'crt\'.\n\nAvailable:\n\n'
+      + POST_SHADER_PRESETS.join(', ') + '.',
+    ],
+  }],
+  ['postfragment', {
+    type: 'variable',
+    name: 'postfragment',
+    category: 'utilities',
+    description: [
+      'Compile-time only custom post-processing fragment shader source. Runs as pass 2 over u_scene. Uniforms: u_scene, u_feedback, u_audio, u_time, u_resolution, u_primaryColor.',
+    ],
   }],
   ['out', {
     type: 'function',

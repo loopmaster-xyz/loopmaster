@@ -12,6 +12,7 @@ const SettingsMap = {
   useCtrlEnter: { name: 'Use Ctrl+Enter', shortcut: 'alt+e' },
   showVisuals: { name: 'Show Visuals', shortcut: 'alt+i' },
   showKnobs: { name: 'Show Knobs', shortcut: 'alt+k' },
+  // showShaders: { name: 'Show Shaders', shortcut: '' },
   showDocs: { name: 'Show Docs', shortcut: 'alt+o' },
   wordWrap: { name: 'Word Wrap', shortcut: 'alt+p' },
 } as const
@@ -23,6 +24,14 @@ const SettingsButton = ({ onClick, children }: { onClick: () => void; children: 
 )
 
 export const Settings = () => {
+  const cycleEffect = () => {
+    settings.effect = settings.effect === 'none'
+      ? 'shake'
+      : settings.effect === 'shake'
+      ? 'glitch'
+      : 'none'
+  }
+
   return (
     <SidebarMain>
       <div class="px-2 flex flex-row items-center justify-between">
@@ -75,6 +84,12 @@ export const Settings = () => {
           </div>
         ))}
       </div>
+      {
+        /* <SettingsButton onClick={cycleEffect}>
+        <span>Effect</span>
+        <span class="group-hover:text-white capitalize">{settings.effect}</span>
+      </SettingsButton> */
+      }
       <SettingsButton onClick={toggleAnalyserType}>
         <span class="whitespace-nowrap">Analyser</span>
         <div class="flex flex-row items-center gap-2">

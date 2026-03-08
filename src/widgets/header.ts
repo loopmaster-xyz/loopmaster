@@ -14,6 +14,7 @@ import {
   theme,
   transport,
 } from '../state.ts'
+import { settings } from '../settings.ts'
 import {
   BEATS_PER_BAR,
   DEFAULT_BARS,
@@ -158,8 +159,10 @@ export const createHeader = (
     draw: (c, x, y, w, h) => {
       c.save()
       c.translate(x, y)
-      c.fillStyle = theme.value.black + 'dd'
-      c.fillRect(x, y, w, h)
+      if (!settings.showShaders && settings.effect !== 'glitch') {
+        c.fillStyle = theme.value.black + 'dd'
+        c.fillRect(x, y, w, h)
+      }
       c.restore()
       if (!programCtx?.result?.value) return
 

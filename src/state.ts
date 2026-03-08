@@ -477,9 +477,14 @@ effect(() => {
   const workletError = ctx.value?.dsp.state.workletError
   if (!programCtx?.doc) return
   const result = programCtx.result.value
+  const shaderErrors = [...programCtx.shaderDirectiveDiagnostics.value]
+  const shaderRuntimeError = programCtx.shaderRuntimeDiagnostic.value
+  if (shaderRuntimeError) shaderErrors.push(shaderRuntimeError)
+  const resultForErrors = programCtx.shaderDirectiveDiagnostics.value.length ? null : result
   programCtx.doc.errors = computeDocErrors(
-    result,
+    resultForErrors,
     workletError ?? null,
+    shaderErrors,
   )
 })
 

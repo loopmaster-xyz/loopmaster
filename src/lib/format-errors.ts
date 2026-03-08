@@ -19,6 +19,7 @@ export function formatErrors(errors: { message: string; loc: Loc }[]): DocError[
 export function computeDocErrors(
   result: ControlCompileSnapshot | null,
   runtimeError?: string | null | undefined,
+  extraErrors?: Array<{ message: string; loc: Loc }>,
 ): DocError[] {
   const compileErrors = result?.errors.length
     ? formatErrors([
@@ -27,6 +28,10 @@ export function computeDocErrors(
       ...result.compile.errors,
     ])
     : []
+
+  if (extraErrors?.length) {
+    compileErrors.push(...formatErrors(extraErrors))
+  }
 
   if (runtimeError != null) {
     const caret = activeEditor.value?.caret

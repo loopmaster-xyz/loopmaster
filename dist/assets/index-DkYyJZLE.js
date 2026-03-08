@@ -43980,6 +43980,8 @@ const settings = signalify({
 	useCtrlEnter: false,
 	showVisuals: true,
 	showKnobs: true,
+	showShaders: false,
+	effect: "none",
 	showDocs: true,
 	wordWrap: true,
 	analyserType: "waveform",
@@ -44193,7 +44195,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-C0PAcgUP.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-FJ0fv4OF.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -45486,12 +45488,13 @@ function formatErrors(errors) {
 		};
 	});
 }
-function computeDocErrors(result, runtimeError) {
+function computeDocErrors(result, runtimeError, extraErrors) {
 	const compileErrors = result?.errors.length ? formatErrors([
 		...result.lex.errors,
 		...result.parse.errors,
 		...result.compile.errors
 	]) : [];
+	if (extraErrors?.length) compileErrors.push(...formatErrors(extraErrors));
 	if (runtimeError != null) {
 		const caret = activeEditor.value?.caret;
 		if (caret) {
@@ -45508,6 +45511,118 @@ function computeDocErrors(result, runtimeError) {
 		}
 	}
 	return compileErrors;
+}
+const SHADER_PRESETS = [
+	"lissajous",
+	"scope",
+	"orbit",
+	"ribbon",
+	"plasma",
+	"tunnel",
+	"rotozoom"
+];
+const SHADER_INPUTS = ["audio", "editor"];
+const POST_SHADER_PRESETS = [
+	"none",
+	"crt",
+	"bloom",
+	"displace",
+	"duotone",
+	"swirl",
+	"trail",
+	"warp",
+	"kaleido"
+];
+var shaderPresets = new Set(SHADER_PRESETS);
+var shaderInputs = new Set(SHADER_INPUTS);
+var postShaderPresets = new Set(POST_SHADER_PRESETS);
+function maskSourceRanges(source, ranges) {
+	if (ranges.length === 0) return source;
+	const out = source.split("");
+	for (const range of ranges) {
+		const start = Math.max(0, Math.min(out.length, range.start));
+		const end = Math.max(start, Math.min(out.length, range.end));
+		for (let i$6 = start; i$6 < end; i$6++) {
+			const ch = out[i$6];
+			if (ch !== "\n" && ch !== "\r") out[i$6] = " ";
+		}
+	}
+	return out.join("");
+}
+function getTopLevelDirective(stmt) {
+	if (stmt.type !== "expr") return null;
+	const expr = stmt.expr;
+	if (expr.type !== "assign") return null;
+	if (expr.left.type !== "identifier") return null;
+	const name = expr.left.name;
+	if (name !== "vertex" && name !== "fragment" && name !== "shader" && name !== "shaderinput" && name !== "postfragment" && name !== "postshader") return null;
+	return {
+		name,
+		right: expr.right,
+		loc: stmt.loc
+	};
+}
+function prepareShaderDirectives(source) {
+	const shaderSources = {
+		vertex: null,
+		fragment: null,
+		shader: null,
+		shaderinput: null,
+		postfragment: null,
+		postshader: null
+	};
+	const shaderLocations = {
+		vertex: null,
+		fragment: null,
+		shader: null,
+		shaderinput: null,
+		postfragment: null,
+		postshader: null
+	};
+	const shaderDiagnostics = [];
+	const rangesToMask = [];
+	const parsed = parseTokens(source, tokenize$1(source).tokens);
+	if (parsed.program?.body?.length) for (const stmt of parsed.program.body) {
+		const directive = getTopLevelDirective(stmt);
+		if (!directive) continue;
+		rangesToMask.push(directive.loc);
+		if (directive.right.type !== "string") {
+			shaderDiagnostics.push({
+				message: `${directive.name} must be a string literal`,
+				loc: directive.loc
+			});
+			continue;
+		}
+		if (directive.name === "shader" && !shaderPresets.has(directive.right.value)) {
+			shaderDiagnostics.push({
+				message: `shader must be one of: ${SHADER_PRESETS.join(", ")}`,
+				loc: directive.loc
+			});
+			continue;
+		}
+		if (directive.name === "shaderinput" && !shaderInputs.has(directive.right.value)) {
+			shaderDiagnostics.push({
+				message: `shaderinput must be one of: ${SHADER_INPUTS.join(", ")}`,
+				loc: directive.loc
+			});
+			continue;
+		}
+		if (directive.name === "postshader" && !postShaderPresets.has(directive.right.value)) {
+			shaderDiagnostics.push({
+				message: `postshader must be one of: ${POST_SHADER_PRESETS.join(", ")}`,
+				loc: directive.loc
+			});
+			continue;
+		}
+		shaderSources[directive.name] = directive.right.value;
+		shaderLocations[directive.name] = directive.loc;
+	}
+	return {
+		sanitizedSource: maskSourceRanges(source, rangesToMask),
+		shaderSources,
+		shaderLocations,
+		shaderDiagnostics
+	};
 }
 function indexToLoc(source, index) {
 	let line = 1;
@@ -45631,7 +45746,7 @@ function clamp(value, min, max) {
 function clamp01(value) {
 	return clamp(value, 0, 1);
 }
-function clamp11(value) {
+function clamp11$1(value) {
 	return clamp(value, -1, 1);
 }
 function applyCurve(t$12, curve) {
@@ -47787,7 +47902,7 @@ function drawWaveformToCache(ctx$1, w$5, h$5, dpr, channels, color) {
 	ctx$1.beginPath();
 	const step = w$5 > 100 ? .1 : .05;
 	for (let i$6 = 0; i$6 < w$5; i$6 += step) {
-		const sy = mid - clamp11(ch0[Math.floor(i$6 / w$5 * len)] ?? 0) * amp;
+		const sy = mid - clamp11$1(ch0[Math.floor(i$6 / w$5 * len)] ?? 0) * amp;
 		if (i$6 === 0) ctx$1.moveTo(i$6, sy);
 		else ctx$1.lineTo(i$6, sy);
 	}
@@ -48318,7 +48433,7 @@ function drawWaveform(c$7, x$4, y$5, w$5, h$5, multiplier, floats, isPlayingThis
 	c$7.lineJoin = "round";
 	c$7.beginPath();
 	for (let i$6 = 0; i$6 < w$5; i$6++) {
-		const sy = mid - clamp11((floats[Math.floor(i$6 / w$5 * len)] ?? 0) * multiplier) * amp;
+		const sy = mid - clamp11$1((floats[Math.floor(i$6 / w$5 * len)] ?? 0) * multiplier) * amp;
 		if (i$6 === 0) c$7.moveTo(x$4 + i$6, sy);
 		else c$7.lineTo(x$4 + i$6, sy);
 	}
@@ -48604,6 +48719,24 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 	let compiledSubmitVersion = -1;
 	let submittedCode = doc.code;
 	const result = c(null);
+	const shaderSources = c({
+		vertex: null,
+		fragment: null,
+		shader: null,
+		shaderinput: null,
+		postfragment: null,
+		postshader: null
+	});
+	const shaderLocations = c({
+		vertex: null,
+		fragment: null,
+		shader: null,
+		shaderinput: null,
+		postfragment: null,
+		postshader: null
+	});
+	const shaderDirectiveDiagnostics = c([]);
+	const shaderRuntimeDiagnostic = c(null);
 	const latency = c(program.latency);
 	const timeSeconds = c(0);
 	const histories = c([]);
@@ -48671,6 +48804,10 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 		program,
 		doc,
 		result,
+		shaderSources,
+		shaderLocations,
+		shaderDirectiveDiagnostics,
+		shaderRuntimeDiagnostic,
 		latency,
 		timeSeconds,
 		histories,
@@ -48722,14 +48859,27 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 		const forceFullResync = fullResync.value;
 		queueMicrotask(async () => {
 			if (version !== submitVersion.value) return;
+			const prepared = prepareShaderDirectives(code);
+			n(() => {
+				shaderSources.value = prepared.shaderSources;
+				shaderLocations.value = prepared.shaderLocations;
+				shaderDirectiveDiagnostics.value = prepared.shaderDiagnostics;
+				shaderRuntimeDiagnostic.value = null;
+			});
+			const extraDiagnostics = [...prepared.shaderDiagnostics, ...shaderRuntimeDiagnostic.peek() ? [shaderRuntimeDiagnostic.peek()] : []];
 			try {
-				const ccs = controlPipeline.compileSource(code, { projectId: opts.projectId ?? void 0 });
-				result.value = ccs;
-				if (ccs.errors.length > 0) {
-					doc.errors = computeDocErrors(ccs);
+				if (prepared.shaderDiagnostics.length > 0) {
+					doc.errors = computeDocErrors(null, void 0, extraDiagnostics);
 					compiledSubmitVersion = version;
 					return;
-				} else doc.errors = [];
+				}
+				const ccs = controlPipeline.compileSource(prepared.sanitizedSource, { projectId: opts.projectId ?? void 0 });
+				result.value = ccs;
+				if (ccs.errors.length > 0) {
+					doc.errors = computeDocErrors(ccs, void 0, extraDiagnostics);
+					compiledSubmitVersion = version;
+					return;
+				} else doc.errors = computeDocErrors(ccs, void 0, extraDiagnostics);
 				if (!shouldSkipSyncPreview.value) {
 					dsp.core.preview.setControlCompileSnapshot(ccs);
 					const previewResult = dsp.core.preview.runPreview(opts.vmId);
@@ -48748,7 +48898,7 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 				compiledSubmitVersion = version;
 				historiesRefreshed.value++;
 			} catch (error$1) {
-				doc.errors = computeDocErrors(null, (error$1 instanceof Error ? error$1.message : String(error$1)).split(" in ")[0]);
+				doc.errors = computeDocErrors(null, (error$1 instanceof Error ? error$1.message : String(error$1)).split(" in ")[0], extraDiagnostics);
 				compiledSubmitVersion = version;
 			}
 		});
@@ -49107,6 +49257,30 @@ const extra = [
 		name: "tune",
 		category: "utilities",
 		description: ["Multiply frequencies (e.g. tune=2 = octave up). Default: 1."]
+	}],
+	["shader", {
+		type: "variable",
+		name: "shader",
+		category: "utilities",
+		description: ["Compile-time only shader preset selector for background visuals: shader='lissajous'.\n\nAvailable:\n\n" + SHADER_PRESETS.join(", ") + "."]
+	}],
+	["shaderinput", {
+		type: "variable",
+		name: "shaderinput",
+		category: "utilities",
+		description: ["Compile-time only post-processing input source selector: shaderinput='audio'.\n\nAvailable:\n\n" + SHADER_INPUTS.join(", ") + "."]
+	}],
+	["postshader", {
+		type: "variable",
+		name: "postshader",
+		category: "utilities",
+		description: ["Compile-time only post-processing preset selector for shader visuals: postshader='crt'.\n\nAvailable:\n\n" + POST_SHADER_PRESETS.join(", ") + "."]
+	}],
+	["postfragment", {
+		type: "variable",
+		name: "postfragment",
+		category: "utilities",
+		description: ["Compile-time only custom post-processing fragment shader source. Runs as pass 2 over u_scene. Uniforms: u_scene, u_feedback, u_audio, u_time, u_resolution, u_primaryColor."]
 	}],
 	["out", {
 		type: "function",
@@ -51607,8 +51781,10 @@ const createHeader = (rootCtx, programCtx, opts = {}) => {
 		draw: (c$7, x$4, y$5, w$5, h$5) => {
 			c$7.save();
 			c$7.translate(x$4, y$5);
-			c$7.fillStyle = theme.value.black + "dd";
-			c$7.fillRect(x$4, y$5, w$5, h$5);
+			if (!settings.showShaders) {
+				c$7.fillStyle = theme.value.black + "dd";
+				c$7.fillRect(x$4, y$5, w$5, h$5);
+			}
 			c$7.restore();
 			if (!programCtx?.result?.value) return;
 			x$4 += paddingLeft;
@@ -52200,7 +52376,11 @@ m(() => {
 	const workletError = ctx.value?.dsp.state.workletError;
 	if (!programCtx?.doc) return;
 	const result = programCtx.result.value;
-	programCtx.doc.errors = computeDocErrors(result, workletError ?? null);
+	const shaderErrors = [...programCtx.shaderDirectiveDiagnostics.value];
+	const shaderRuntimeError = programCtx.shaderRuntimeDiagnostic.value;
+	if (shaderRuntimeError) shaderErrors.push(shaderRuntimeError);
+	const resultForErrors = programCtx.shaderDirectiveDiagnostics.value.length ? null : result;
+	programCtx.doc.errors = computeDocErrors(resultForErrors, workletError ?? null, shaderErrors);
 });
 m(() => {
 	const result = currentProgramContext.value?.result.value;
@@ -54931,7 +55111,7 @@ const Editor = ({ doc, header, gutter = true, autoHeight = false, transparent = 
 	useReactiveEffect(() => {
 		Object.assign(editor$1.settings.colors, theme.value);
 		if (transparent) editor$1.settings.colors.black = "transparent";
-	}, [editor$1]);
+	}, [editor$1, transparent]);
 	useReactiveEffect(() => {
 		createEditorOnHover(editor$1);
 	}, [editor$1]);
@@ -55741,6 +55921,339 @@ const DocsMain = () => {
 			children: [/* @__PURE__ */ u(DocsIcon, { category }), toPascalCase(category)]
 		})) })
 	})] });
+};
+var AUDIO_TEXTURE_WIDTH$1 = 2048;
+var ANALYSER_FFT_SIZE$1 = 4096;
+var SHAKE_VERTEX_SHADER = `#version 300 es
+precision highp float;
+
+const vec2 POSITIONS[6] = vec2[6](
+  vec2(-1.0, -1.0),
+  vec2( 1.0, -1.0),
+  vec2(-1.0,  1.0),
+  vec2(-1.0,  1.0),
+  vec2( 1.0, -1.0),
+  vec2( 1.0,  1.0)
+);
+
+out vec2 vUv;
+
+void main() {
+  vec2 p = POSITIONS[gl_VertexID];
+  vUv = p * 0.5 + 0.5;
+  gl_Position = vec4(p, 0.0, 1.0);
+}
+`;
+var SHAKE_FRAGMENT_DISPLACE_SHADER = `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_source;
+uniform sampler2D u_audio;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec3 u_primaryColor;
+out vec4 fragColor;
+
+void main() {
+  float t = fract(vUv.x + u_time * 0.12);
+  vec2 a = texture(u_audio, vec2(t, 0.5)).rg;
+  vec2 disp = vec2(a.y - a.x, a.x + a.y) * 0.007;
+  vec3 c = texture(u_source, clamp(vUv + disp, vec2(0.0), vec2(1.0))).rgb;
+  c = mix(c, c.bgr, 0.12 + 0.12 * sin(u_time + vUv.y * 20.0));
+  c += u_primaryColor * 0.08 * length(disp) * 18.0;
+  fragColor = vec4(c, 1.0);
+}
+`;
+var SHAKE_FRAGMENT_GLITCH_SHADER = `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_source;
+uniform sampler2D u_audio;
+uniform float u_time;
+uniform vec2 u_resolution;
+out vec4 fragColor;
+
+void main() {
+  vec2 uv = vUv;
+  vec2 a = texture(u_audio, vec2(fract(uv.x * 0.85 + u_time * 0.12), 0.5)).rg;
+  float amp = clamp(length(a) * 1.7, 0.0, 1.0);
+
+  float scan = sin((uv.y + u_time * 0.7) * 130.0);
+  float jitter = sin(uv.y * 420.0 + u_time * 22.0) * (0.0015 + amp * 0.0025);
+  vec2 disp = vec2(
+    jitter + (a.x - a.y) * (0.012 + amp * 0.032),
+    scan * (0.001 + amp * 0.008) + (a.x + a.y) * (0.004 + amp * 0.004)
+  );
+
+  vec2 uvR = clamp(uv + disp * 1.45, vec2(0.0), vec2(1.0));
+  vec2 uvG = clamp(uv + disp * 0.8, vec2(0.0), vec2(1.0));
+  vec2 uvB = clamp(uv - disp * 1.2, vec2(0.0), vec2(1.0));
+  vec3 rgb = vec3(
+    texture(u_source, uvR).r,
+    texture(u_source, uvG).g,
+    texture(u_source, uvB).b
+  );
+
+  vec3 ghost = texture(u_source, clamp(uv - disp * 2.4, vec2(0.0), vec2(1.0))).rgb;
+  rgb = mix(rgb, ghost, 0.12 + amp * 0.18);
+  fragColor = vec4(rgb, 1.0);
+}
+`;
+var StereoAudioTap$1 = class {
+	processor = null;
+	splitter = null;
+	leftAnalyser = null;
+	rightAnalyser = null;
+	leftData = new Float32Array(ANALYSER_FFT_SIZE$1);
+	rightData = new Float32Array(ANALYSER_FFT_SIZE$1);
+	connect() {
+		const dspCtx = ctx.value;
+		const processor = dspCtx?.dsp.state.processor ?? null;
+		if (processor === this.processor) return;
+		this.disconnect();
+		if (!dspCtx || !processor) return;
+		const ac = dspCtx.dsp.state.audioContext;
+		const splitter = ac.createChannelSplitter(2);
+		const left = ac.createAnalyser();
+		const right = ac.createAnalyser();
+		left.fftSize = ANALYSER_FFT_SIZE$1;
+		right.fftSize = ANALYSER_FFT_SIZE$1;
+		left.smoothingTimeConstant = 0;
+		right.smoothingTimeConstant = 0;
+		processor.connect(splitter);
+		splitter.connect(left, 0);
+		splitter.connect(right, 1);
+		this.processor = processor;
+		this.splitter = splitter;
+		this.leftAnalyser = left;
+		this.rightAnalyser = right;
+	}
+	disconnect() {
+		if (this.splitter && this.leftAnalyser) try {
+			this.splitter.disconnect(this.leftAnalyser);
+		} catch {}
+		if (this.splitter && this.rightAnalyser) try {
+			this.splitter.disconnect(this.rightAnalyser);
+		} catch {}
+		if (this.processor && this.splitter) try {
+			this.processor.disconnect(this.splitter);
+		} catch {}
+		this.leftAnalyser = null;
+		this.rightAnalyser = null;
+		this.splitter = null;
+		this.processor = null;
+	}
+	fillAudio(target) {
+		const left = this.leftAnalyser;
+		const right = this.rightAnalyser;
+		if (!left || !right) {
+			target.fill(0);
+			return;
+		}
+		left.getFloatTimeDomainData(this.leftData);
+		right.getFloatTimeDomainData(this.rightData);
+		const start = ANALYSER_FFT_SIZE$1 - AUDIO_TEXTURE_WIDTH$1;
+		for (let i$6 = 0; i$6 < AUDIO_TEXTURE_WIDTH$1; i$6++) {
+			target[i$6 * 2] = this.leftData[start + i$6] ?? 0;
+			target[i$6 * 2 + 1] = this.rightData[start + i$6] ?? 0;
+		}
+	}
+};
+var ShakeRenderer = class {
+	gl = null;
+	program = null;
+	sourceLocation = null;
+	audioLocation = null;
+	timeLocation = null;
+	resolutionLocation = null;
+	primaryColorLocation = null;
+	sourceTexture = null;
+	audioTexture = null;
+	sourceWidth = 0;
+	sourceHeight = 0;
+	primary = [
+		.18,
+		.95,
+		.62
+	];
+	init(canvas, mode) {
+		const gl = canvas.getContext("webgl2", {
+			alpha: true,
+			antialias: true,
+			depth: false,
+			stencil: false,
+			premultipliedAlpha: false,
+			preserveDrawingBuffer: false
+		});
+		if (!gl) return false;
+		this.gl = gl;
+		gl.disable(gl.DEPTH_TEST);
+		gl.disable(gl.STENCIL_TEST);
+		gl.disable(gl.CULL_FACE);
+		gl.disable(gl.BLEND);
+		const fragment = mode === "glitch" ? SHAKE_FRAGMENT_GLITCH_SHADER : SHAKE_FRAGMENT_DISPLACE_SHADER;
+		const linked = this.linkProgram(SHAKE_VERTEX_SHADER, fragment);
+		if (!linked) return false;
+		this.program = linked;
+		this.sourceLocation = gl.getUniformLocation(linked, "u_source");
+		this.audioLocation = gl.getUniformLocation(linked, "u_audio");
+		this.timeLocation = gl.getUniformLocation(linked, "u_time");
+		this.resolutionLocation = gl.getUniformLocation(linked, "u_resolution");
+		this.primaryColorLocation = gl.getUniformLocation(linked, "u_primaryColor");
+		this.sourceTexture = gl.createTexture();
+		this.audioTexture = gl.createTexture();
+		if (!this.sourceTexture || !this.audioTexture) return false;
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, this.sourceTexture);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.activeTexture(gl.TEXTURE1);
+		gl.bindTexture(gl.TEXTURE_2D, this.audioTexture);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RG32F, AUDIO_TEXTURE_WIDTH$1, 1, 0, gl.RG, gl.FLOAT, null);
+		return true;
+	}
+	dispose() {
+		const gl = this.gl;
+		if (!gl) return;
+		if (this.program) gl.deleteProgram(this.program);
+		if (this.sourceTexture) gl.deleteTexture(this.sourceTexture);
+		if (this.audioTexture) gl.deleteTexture(this.audioTexture);
+		this.program = null;
+		this.sourceTexture = null;
+		this.audioTexture = null;
+		this.gl = null;
+		this.sourceWidth = 0;
+		this.sourceHeight = 0;
+	}
+	setPrimaryColor(hex) {
+		this.primary = hexToRgb01$1(hex, this.primary);
+	}
+	draw(output, source, timeSeconds, audioData) {
+		const gl = this.gl;
+		if (!gl || !this.program || !this.sourceTexture || !this.audioTexture) return;
+		const dpr = Math.max(1, window.devicePixelRatio || 1);
+		const width = Math.max(1, Math.floor(output.clientWidth * dpr));
+		const height = Math.max(1, Math.floor(output.clientHeight * dpr));
+		if (output.width !== width || output.height !== height) {
+			output.width = width;
+			output.height = height;
+		}
+		gl.viewport(0, 0, width, height);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, this.sourceTexture);
+		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+		if (this.sourceWidth !== source.width || this.sourceHeight !== source.height) {
+			this.sourceWidth = source.width;
+			this.sourceHeight = source.height;
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+		} else gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGBA, gl.UNSIGNED_BYTE, source);
+		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+		gl.activeTexture(gl.TEXTURE1);
+		gl.bindTexture(gl.TEXTURE_2D, this.audioTexture);
+		gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, AUDIO_TEXTURE_WIDTH$1, 1, gl.RG, gl.FLOAT, audioData);
+		gl.useProgram(this.program);
+		if (this.sourceLocation) gl.uniform1i(this.sourceLocation, 0);
+		if (this.audioLocation) gl.uniform1i(this.audioLocation, 1);
+		if (this.timeLocation) gl.uniform1f(this.timeLocation, timeSeconds);
+		if (this.resolutionLocation) gl.uniform2f(this.resolutionLocation, width, height);
+		if (this.primaryColorLocation) gl.uniform3f(this.primaryColorLocation, this.primary[0], this.primary[1], this.primary[2]);
+		gl.drawArrays(gl.TRIANGLES, 0, 6);
+	}
+	linkProgram(vertexSource, fragmentSource) {
+		const gl = this.gl;
+		if (!gl) return null;
+		const vertex = this.createShader(gl.VERTEX_SHADER, vertexSource);
+		const fragment = this.createShader(gl.FRAGMENT_SHADER, fragmentSource);
+		if (!vertex || !fragment) {
+			if (vertex) gl.deleteShader(vertex);
+			if (fragment) gl.deleteShader(fragment);
+			return null;
+		}
+		const program = gl.createProgram();
+		if (!program) return null;
+		gl.attachShader(program, vertex);
+		gl.attachShader(program, fragment);
+		gl.linkProgram(program);
+		gl.deleteShader(vertex);
+		gl.deleteShader(fragment);
+		if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+			console.error(gl.getProgramInfoLog(program) || "Failed to link shake shader program");
+			gl.deleteProgram(program);
+			return null;
+		}
+		return program;
+	}
+	createShader(type, source) {
+		const gl = this.gl;
+		if (!gl) return null;
+		const shader = gl.createShader(type);
+		if (!shader) return null;
+		gl.shaderSource(shader, source);
+		gl.compileShader(shader);
+		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+			console.error(gl.getShaderInfoLog(shader) || "Failed to compile shake shader");
+			gl.deleteShader(shader);
+			return null;
+		}
+		return shader;
+	}
+};
+function hexToRgb01$1(hex, fallback) {
+	const normalized = hex.trim().replace(/^#/, "");
+	const six = normalized.length === 3 ? normalized.split("").map((c$7) => c$7 + c$7).join("") : normalized.length === 6 ? normalized : null;
+	if (!six || !/^[0-9a-fA-F]{6}$/.test(six)) return fallback;
+	return [
+		parseInt(six.slice(0, 2), 16) / 255,
+		parseInt(six.slice(2, 4), 16) / 255,
+		parseInt(six.slice(4, 6), 16) / 255
+	];
+}
+const EditorShakeCanvas = ({ mode }) => {
+	const ref = A(null);
+	const tapRef = A(new StereoAudioTap$1());
+	const rendererRef = A(null);
+	const audioDataRef = A(new Float32Array(AUDIO_TEXTURE_WIDTH$1 * 2));
+	const rafIdRef = A(null);
+	y(() => {
+		const canvas = ref.current;
+		if (!canvas) return;
+		const renderer = new ShakeRenderer();
+		if (!renderer.init(canvas, mode)) return;
+		rendererRef.current = renderer;
+		const frame = () => {
+			const source = editor.value?.canvas;
+			const output = ref.current;
+			const r$13 = rendererRef.current;
+			if (source && output && source.width > 0 && source.height > 0 && r$13) {
+				r$13.setPrimaryColor(primaryColor.value);
+				tapRef.current.connect();
+				tapRef.current.fillAudio(audioDataRef.current);
+				r$13.draw(output, source, currentProgramContext.value?.timeSeconds.value ?? 0, audioDataRef.current);
+			}
+			rafIdRef.current = requestAnimationFrame(frame);
+		};
+		frame();
+		return () => {
+			if (rafIdRef.current != null) cancelAnimationFrame(rafIdRef.current);
+			rafIdRef.current = null;
+			tapRef.current.disconnect();
+			renderer.dispose();
+			rendererRef.current = null;
+		};
+	}, [mode]);
+	return /* @__PURE__ */ u("canvas", {
+		ref,
+		class: "absolute inset-0 w-full h-full pointer-events-none"
+	});
 };
 const helpItems = [
 	{
@@ -57393,15 +57906,17 @@ const ExportAudio = () => {
 		const { dsp } = ctx.value;
 		const doc = currentProgramContext.value.doc;
 		const projectId = currentProject.value?.id ?? null;
+		const prepared = prepareShaderDirectives(doc.code);
 		let step;
 		try {
-			const ccs = controlPipeline.compileSource(doc.code, { projectId });
+			if (prepared.shaderDiagnostics.length > 0) throw new Error(`Shader directives failed:\n${prepared.shaderDiagnostics.map((d$5) => d$5.message).join("\n")}`);
+			const ccs = controlPipeline.compileSource(prepared.sanitizedSource, { projectId });
 			if (ccs.errors.length > 0) throw new Error(`Compilation failed:\n${ccs.errors.join("\n")}`);
 			await currentProgramContext.value.program.setControlCompileSnapshot(ccs, {
 				projectId,
 				fullResync: false
 			});
-			const gen = dsp.core.preview.renderToAudio(doc.code, numberOfBars.value, 4, 999, { projectId });
+			const gen = dsp.core.preview.renderToAudio(prepared.sanitizedSource, numberOfBars.value, 4, 999, { projectId });
 			while (!(step = gen.next()).done) {
 				if (stopRendering.value) throw new Error("Rendering stopped");
 				progress.value = step.value;
@@ -57817,6 +58332,10 @@ var SettingsMap = {
 		name: "Show Knobs",
 		shortcut: "alt+k"
 	},
+	showShaders: {
+		name: "Show Shaders",
+		shortcut: ""
+	},
 	showDocs: {
 		name: "Show Docs",
 		shortcut: "alt+o"
@@ -57832,6 +58351,9 @@ var SettingsButton = ({ onClick, children }) => /* @__PURE__ */ u(SidebarButton,
 	children
 });
 const Settings = () => {
+	const cycleEffect = () => {
+		settings.effect = settings.effect === "none" ? "shake" : settings.effect === "shake" ? "glitch" : "none";
+	};
 	return /* @__PURE__ */ u(SidebarMain, { children: [
 		/* @__PURE__ */ u("div", {
 			class: "px-2 flex flex-row items-center justify-between",
@@ -57896,6 +58418,13 @@ const Settings = () => {
 					})]
 				})]
 			}, key))
+		}),
+		/* @__PURE__ */ u(SettingsButton, {
+			onClick: cycleEffect,
+			children: [/* @__PURE__ */ u("span", { children: "Effect" }), /* @__PURE__ */ u("span", {
+				class: "group-hover:text-white capitalize",
+				children: settings.effect
+			})]
 		}),
 		/* @__PURE__ */ u(SettingsButton, {
 			onClick: toggleAnalyserType,
@@ -61456,6 +61985,1086 @@ const Sidebar = () => /* @__PURE__ */ u("div", {
 		})]
 	})]
 });
+var AUDIO_TEXTURE_WIDTH = 2048;
+var ANALYSER_FFT_SIZE = 4096;
+var TWO_PI = Math.PI * 2;
+var FULLSCREEN_PASS_VERTEX_SHADER = `#version 300 es
+precision highp float;
+
+const vec2 POSITIONS[6] = vec2[6](
+  vec2(-1.0, -1.0),
+  vec2( 1.0, -1.0),
+  vec2(-1.0,  1.0),
+  vec2(-1.0,  1.0),
+  vec2( 1.0, -1.0),
+  vec2( 1.0,  1.0)
+);
+
+out vec2 vUv;
+
+void main() {
+  vec2 p = POSITIONS[gl_VertexID];
+  vUv = p * 0.5 + 0.5;
+  gl_Position = vec4(p, 0.0, 1.0);
+}
+`;
+var CUSTOM_FALLBACK_VERTEX_SHADER = FULLSCREEN_PASS_VERTEX_SHADER;
+var CUSTOM_FALLBACK_FRAGMENT_SHADER = `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_audio;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec3 u_primaryColor;
+out vec4 fragColor;
+
+void main() {
+  vec2 uv = gl_FragCoord.xy / max(u_resolution, vec2(1.0));
+  vec2 p = uv * 2.0 - 1.0;
+  float aspect = u_resolution.x / max(1.0, u_resolution.y);
+  p.x *= aspect;
+
+  float glow = 0.0;
+  for (int i = 0; i < 64; i++) {
+    float t = float(i) / 63.0;
+    vec2 a = texture(u_audio, vec2(t, 0.5)).rg;
+    a.x *= aspect;
+    float d = length(p - a);
+    glow += 0.011 / (0.002 + d * d * 24.0);
+  }
+
+  float pulse = 0.72 + 0.28 * sin(u_time * 2.5);
+  vec3 bg = vec3(0.01, 0.01, 0.015);
+  vec3 curve = u_primaryColor * glow * pulse;
+  fragColor = vec4(bg + curve, 1.0);
+}
+`;
+var DEFAULT_POST_FRAGMENT_SHADER = `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_scene;
+uniform sampler2D u_feedback;
+uniform sampler2D u_audio;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec3 u_primaryColor;
+out vec4 fragColor;
+
+void main() {
+  vec3 c = texture(u_scene, vUv).rgb;
+  fragColor = vec4(c, 1.0);
+}
+`;
+var POST_SHADER_FRAGMENTS = {
+	none: DEFAULT_POST_FRAGMENT_SHADER,
+	crt: `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_scene;
+uniform sampler2D u_feedback;
+uniform sampler2D u_audio;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec3 u_primaryColor;
+out vec4 fragColor;
+
+void main() {
+  vec2 uv = vUv;
+  vec2 px = 1.0 / max(u_resolution, vec2(1.0));
+  float wave = sin(uv.y * 320.0 + u_time * 5.0) * 0.0015;
+  uv.x += wave;
+  vec3 c;
+  c.r = texture(u_scene, uv + vec2(px.x * 1.2, 0.0)).r;
+  c.g = texture(u_scene, uv).g;
+  c.b = texture(u_scene, uv - vec2(px.x * 1.2, 0.0)).b;
+  float scan = 0.92 + 0.08 * sin((uv.y + u_time * 0.04) * u_resolution.y * 1.2);
+  float vignette = smoothstep(1.25, 0.2, length((vUv - 0.5) * vec2(u_resolution.x / max(u_resolution.y, 1.0), 1.0)));
+  c *= scan * vignette;
+  c += u_primaryColor * 0.06;
+  fragColor = vec4(c, 1.0);
+}
+`,
+	bloom: `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_scene;
+uniform sampler2D u_feedback;
+uniform sampler2D u_audio;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec3 u_primaryColor;
+out vec4 fragColor;
+
+void main() {
+  vec2 px = 1.0 / max(u_resolution, vec2(1.0));
+  vec3 base = texture(u_scene, vUv).rgb;
+  vec3 blur = texture(u_scene, vUv + vec2(px.x * 2.0, 0.0)).rgb * 0.16
+    + texture(u_scene, vUv - vec2(px.x * 2.0, 0.0)).rgb * 0.16
+    + texture(u_scene, vUv + vec2(0.0, px.y * 2.0)).rgb * 0.16
+    + texture(u_scene, vUv - vec2(0.0, px.y * 2.0)).rgb * 0.16
+    + texture(u_scene, vUv).rgb * 0.36;
+  float glow = dot(blur, vec3(0.333));
+  vec3 c = base * 0.72 + blur * 0.55 + u_primaryColor * glow * 0.18;
+  fragColor = vec4(c, 1.0);
+}
+`,
+	displace: `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_scene;
+uniform sampler2D u_feedback;
+uniform sampler2D u_audio;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec3 u_primaryColor;
+out vec4 fragColor;
+
+void main() {
+  float t = fract(vUv.x + u_time * 0.12);
+  vec2 a = texture(u_audio, vec2(t, 0.5)).rg;
+  vec2 disp = vec2(a.y - a.x, a.x + a.y) * 0.015;
+  vec3 c = texture(u_scene, vUv + disp).rgb;
+  c = mix(c, c.bgr, 0.12 + 0.12 * sin(u_time + vUv.y * 20.0));
+  c += u_primaryColor * 0.08 * length(disp) * 18.0;
+  fragColor = vec4(c, 1.0);
+}
+`,
+	duotone: `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_scene;
+uniform sampler2D u_feedback;
+uniform sampler2D u_audio;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec3 u_primaryColor;
+out vec4 fragColor;
+
+void main() {
+  vec3 c = texture(u_scene, vUv).rgb;
+  float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
+  vec3 dark = vec3(0.03, 0.04, 0.07);
+  vec3 hi = normalize(max(u_primaryColor, vec3(0.001)));
+  vec3 duo = mix(dark, hi, smoothstep(0.04, 0.9, l));
+  float grain = fract(sin(dot(vUv * u_resolution + u_time, vec2(12.9898, 78.233))) * 43758.5453);
+  duo += (grain - 0.5) * 0.02;
+  fragColor = vec4(duo, 1.0);
+}
+`,
+	swirl: `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_scene;
+uniform sampler2D u_feedback;
+uniform sampler2D u_audio;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec3 u_primaryColor;
+out vec4 fragColor;
+
+void main() {
+  vec2 px = 1.0 / max(u_resolution, vec2(1.0));
+  vec3 scene = texture(u_scene, vUv).rgb;
+  vec2 a = texture(u_audio, vec2(fract(vUv.x * 0.6 + u_time * 0.09), 0.5)).rg;
+  float amp = clamp(length(a) * 1.8, 0.0, 1.0);
+
+  vec2 swirl = vec2(
+    sin(vUv.y * 18.0 + u_time * 1.6),
+    cos(vUv.x * 16.0 - u_time * 1.3)
+  ) * (0.0018 + amp * 0.018);
+  vec2 drift = vec2(-0.0008, 0.0012) + (a - 0.5 * (a.x + a.y)) * 0.028;
+  vec2 uv = clamp(vUv + drift + swirl, vec2(0.0), vec2(1.0));
+
+  vec3 prev0 = texture(u_feedback, uv).rgb;
+  vec3 prev1 = texture(u_feedback, clamp(uv + vec2(px.x * 2.0, 0.0), vec2(0.0), vec2(1.0))).rgb;
+  vec3 prev2 = texture(u_feedback, clamp(uv - vec2(0.0, px.y * 2.0), vec2(0.0), vec2(1.0))).rgb;
+  vec3 trail = (prev0 * 0.62 + prev1 * 0.24 + prev2 * 0.14);
+  trail = vec3(trail.r * 1.04, trail.g * 1.01, trail.b * 1.08);
+
+  float gate = 0.06 + amp * 0.26;
+  vec3 neon = mix(vec3(0.03, 0.05, 0.09), normalize(max(u_primaryColor, vec3(0.001))), 0.78);
+  vec3 c = mix(trail * (0.982 + amp * 0.01), scene + neon * amp * 0.24, gate);
+
+  // add a subtle phosphor bloom from feedback luminance
+  float l = dot(trail, vec3(0.2126, 0.7152, 0.0722));
+  c += neon * l * (0.08 + amp * 0.15);
+  fragColor = vec4(c, 1.0);
+}
+`,
+	trail: `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_scene;
+uniform sampler2D u_feedback;
+uniform sampler2D u_audio;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec3 u_primaryColor;
+out vec4 fragColor;
+
+void main() {
+  vec2 px = 1.0 / max(u_resolution, vec2(1.0));
+  vec3 scene = texture(u_scene, vUv).rgb;
+  vec2 a = texture(u_audio, vec2(fract(vUv.x * 0.8 + u_time * 0.05), 0.5)).rg;
+  float amp = clamp((abs(a.x) + abs(a.y)) * 2.0, 0.0, 1.0);
+
+  vec2 drift = vec2(-0.0028, 0.0014) + (a - 0.5 * (a.x + a.y)) * 0.05;
+  vec2 uv = clamp(vUv + drift, vec2(0.0), vec2(1.0));
+
+  vec3 p0 = texture(u_feedback, uv).rgb;
+  vec3 p1 = texture(u_feedback, clamp(uv + vec2(px.x * 12.0, 0.0), vec2(0.0), vec2(1.0))).rgb;
+  vec3 p2 = texture(u_feedback, clamp(uv - vec2(px.x * 8.0, px.y * 6.0), vec2(0.0), vec2(1.0))).rgb;
+  vec3 p3 = texture(u_feedback, clamp(uv + vec2(0.0, px.y * 11.0), vec2(0.0), vec2(1.0))).rgb;
+  vec3 p4 = texture(u_feedback, clamp(uv + vec2(px.x * 7.0, -px.y * 12.0), vec2(0.0), vec2(1.0))).rgb;
+  vec3 p5 = texture(u_feedback, clamp(uv - vec2(px.x * 14.0, 0.0), vec2(0.0), vec2(1.0))).rgb;
+  vec3 trail = p0 * 0.38 + p1 * 0.2 + p2 * 0.16 + p3 * 0.11 + p4 * 0.09 + p5 * 0.06;
+
+  vec3 tint = normalize(max(u_primaryColor, vec3(0.001)));
+  trail = mix(trail, trail * tint.bgr, 0.45 + amp * 0.28);
+  vec3 ghost = max(trail - scene * 0.22, vec3(0.0));
+  vec3 c = scene * 0.42 + trail * (0.62 + amp * 0.22) + ghost * (0.45 + amp * 0.3);
+  c += tint * dot(ghost, vec3(0.333)) * (0.22 + amp * 0.22);
+  c = mix(c, c.rbg, 0.05 + amp * 0.14);
+  fragColor = vec4(c, 1.0);
+}
+`,
+	warp: `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_scene;
+uniform sampler2D u_feedback;
+uniform sampler2D u_audio;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec3 u_primaryColor;
+out vec4 fragColor;
+
+void main() {
+  vec3 scene = texture(u_scene, vUv).rgb;
+  vec2 a = texture(u_audio, vec2(fract(vUv.y * 0.7 + u_time * 0.11), 0.5)).rg;
+  float amp = clamp(length(a) * 2.25, 0.0, 1.0);
+
+  vec2 p = vUv * 2.0 - 1.0;
+  p.x *= u_resolution.x / max(u_resolution.y, 1.0);
+  float r = length(p);
+  float ang = atan(p.y, p.x);
+  ang += 0.08 * sin(r * 16.0 - u_time * 1.9) + amp * 0.2;
+  r *= 1.0 + 0.11 * sin(u_time * 1.2 + r * 22.0) + amp * 0.19;
+  vec2 uv = vec2(cos(ang), sin(ang)) * r;
+  uv.x /= u_resolution.x / max(u_resolution.y, 1.0);
+  uv = clamp(uv * 0.5 + 0.5 + (a - 0.5 * (a.x + a.y)) * 0.032, vec2(0.0), vec2(1.0));
+
+  vec3 prev = texture(u_feedback, uv).rgb;
+  vec3 prev2 = texture(u_feedback, clamp(mix(vUv, uv, 0.78), vec2(0.0), vec2(1.0))).rgb;
+  vec3 prev3 = texture(u_feedback, clamp(uv + vec2(0.004, -0.003), vec2(0.0), vec2(1.0))).rgb;
+  vec3 trail = prev * 0.58 + prev2 * 0.27 + prev3 * 0.15;
+  vec3 tint = normalize(max(u_primaryColor, vec3(0.001)));
+  vec3 c = mix(trail * (0.992 + amp * 0.004), scene + tint * 0.28 * amp, 0.07 + amp * 0.13);
+  c = mix(c, c.gbr, 0.2 + 0.28 * sin(u_time * 1.1 + vUv.x * 13.0));
+  fragColor = vec4(c, 1.0);
+}
+`,
+	kaleido: `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_scene;
+uniform sampler2D u_feedback;
+uniform sampler2D u_audio;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec3 u_primaryColor;
+out vec4 fragColor;
+
+vec2 kaleido(vec2 uv, float n) {
+  vec2 p = uv * 2.0 - 1.0;
+  float a = atan(p.y, p.x);
+  float r = length(p);
+  float seg = 6.28318530718 / n;
+  a = mod(a, seg);
+  a = abs(a - seg * 0.5);
+  vec2 q = vec2(cos(a), sin(a)) * r;
+  return q * 0.5 + 0.5;
+}
+
+void main() {
+  vec3 scene = texture(u_scene, vUv).rgb;
+  vec2 a = texture(u_audio, vec2(fract(vUv.x * 0.5 + u_time * 0.06), 0.5)).rg;
+  float amp = clamp(length(a) * 1.55, 0.0, 1.0);
+  float sides = 5.0 + floor(amp * 6.0);
+  vec2 k = kaleido(vUv + (a - 0.5 * (a.x + a.y)) * 0.02, sides);
+
+  vec3 prev = texture(u_feedback, k).rgb;
+  vec3 prev2 = texture(u_feedback, kaleido(k + vec2(0.005, -0.003), sides + 1.0)).rgb;
+  vec3 prev3 = texture(u_feedback, kaleido(k + vec2(-0.006, 0.004), sides + 2.0)).rgb;
+  vec3 trail = prev * 0.56 + prev2 * 0.27 + prev3 * 0.17;
+  vec3 tint = normalize(max(u_primaryColor, vec3(0.001)));
+  vec3 c = mix(trail * (0.992 + amp * 0.004), scene, 0.17 + amp * 0.16);
+  c += tint * dot(trail, vec3(0.333)) * (0.08 + amp * 0.12);
+  c = mix(c, c.bgr, 0.08 + amp * 0.1);
+  fragColor = vec4(c, 1.0);
+}
+`
+};
+var BLIT_FRAGMENT_SHADER = `#version 300 es
+precision highp float;
+
+in vec2 vUv;
+uniform sampler2D u_source;
+out vec4 fragColor;
+
+void main() {
+  fragColor = texture(u_source, vUv);
+}
+`;
+var FAST_LINE_VERTEX_SHADER = `#version 300 es
+precision highp float;
+layout(location = 0) in vec2 a_position;
+uniform float u_aspect;
+
+void main() {
+  gl_Position = vec4(a_position.x * u_aspect, a_position.y, 0.0, 1.0);
+}
+`;
+var FAST_LINE_FRAGMENT_SHADER = `#version 300 es
+precision highp float;
+uniform float u_intensity;
+uniform vec3 u_primaryColor;
+out vec4 fragColor;
+
+void main() {
+  vec3 color = u_primaryColor * u_intensity;
+  fragColor = vec4(color, 1.0);
+}
+`;
+var StereoAudioTap = class {
+	processor = null;
+	splitter = null;
+	leftAnalyser = null;
+	rightAnalyser = null;
+	leftData = new Float32Array(ANALYSER_FFT_SIZE);
+	rightData = new Float32Array(ANALYSER_FFT_SIZE);
+	connect() {
+		const dspCtx = ctx.value;
+		const processor = dspCtx?.dsp.state.processor ?? null;
+		if (processor === this.processor) return;
+		this.disconnect();
+		if (!dspCtx || !processor) return;
+		const ac = dspCtx.dsp.state.audioContext;
+		const splitter = ac.createChannelSplitter(2);
+		const left = ac.createAnalyser();
+		const right = ac.createAnalyser();
+		left.fftSize = ANALYSER_FFT_SIZE;
+		right.fftSize = ANALYSER_FFT_SIZE;
+		left.smoothingTimeConstant = 0;
+		right.smoothingTimeConstant = 0;
+		processor.connect(splitter);
+		splitter.connect(left, 0);
+		splitter.connect(right, 1);
+		this.processor = processor;
+		this.splitter = splitter;
+		this.leftAnalyser = left;
+		this.rightAnalyser = right;
+	}
+	disconnect() {
+		if (this.splitter && this.leftAnalyser) try {
+			this.splitter.disconnect(this.leftAnalyser);
+		} catch {}
+		if (this.splitter && this.rightAnalyser) try {
+			this.splitter.disconnect(this.rightAnalyser);
+		} catch {}
+		if (this.processor && this.splitter) try {
+			this.processor.disconnect(this.splitter);
+		} catch {}
+		this.leftAnalyser = null;
+		this.rightAnalyser = null;
+		this.splitter = null;
+		this.processor = null;
+	}
+	fillAudio(target) {
+		const left = this.leftAnalyser;
+		const right = this.rightAnalyser;
+		if (!left || !right) {
+			target.fill(0);
+			return;
+		}
+		left.getFloatTimeDomainData(this.leftData);
+		right.getFloatTimeDomainData(this.rightData);
+		const start = ANALYSER_FFT_SIZE - AUDIO_TEXTURE_WIDTH;
+		for (let i$6 = 0; i$6 < AUDIO_TEXTURE_WIDTH; i$6++) {
+			target[i$6 * 2] = this.leftData[start + i$6] ?? 0;
+			target[i$6 * 2 + 1] = this.rightData[start + i$6] ?? 0;
+		}
+	}
+};
+var ShaderRenderer = class {
+	gl = null;
+	mode = "default";
+	activeShaderKey = "";
+	preset = "lissajous";
+	shaderInput = "audio";
+	activePostShaderKey = "";
+	presetData = new Float32Array(AUDIO_TEXTURE_WIDTH * 2);
+	primaryColor = [
+		.18,
+		.95,
+		.62
+	];
+	lineProgram = null;
+	lineBuffer = null;
+	texture = null;
+	editorTexture = null;
+	editorWidth = 0;
+	editorHeight = 0;
+	sceneTexture = null;
+	sceneFramebuffer = null;
+	feedbackTextures = [null, null];
+	feedbackFramebuffers = [null, null];
+	feedbackReadIndex = 0;
+	sceneWidth = 0;
+	sceneHeight = 0;
+	feedbackWidth = 0;
+	feedbackHeight = 0;
+	feedbackNeedsClear = true;
+	customProgram = null;
+	postProgram = null;
+	blitProgram = null;
+	init(canvas) {
+		const gl = canvas.getContext("webgl2", {
+			alpha: false,
+			antialias: true,
+			depth: false,
+			stencil: false,
+			premultipliedAlpha: false,
+			preserveDrawingBuffer: false
+		});
+		if (!gl) return false;
+		this.gl = gl;
+		gl.disable(gl.DEPTH_TEST);
+		gl.disable(gl.STENCIL_TEST);
+		gl.disable(gl.CULL_FACE);
+		gl.disable(gl.BLEND);
+		const lineProgram = this.createFastLineProgram();
+		if ("error" in lineProgram) return false;
+		this.lineProgram = lineProgram;
+		const lineBuffer = gl.createBuffer();
+		if (!lineBuffer) return false;
+		this.lineBuffer = lineBuffer;
+		gl.bindBuffer(gl.ARRAY_BUFFER, lineBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, AUDIO_TEXTURE_WIDTH * 2 * 4, gl.DYNAMIC_DRAW);
+		const texture = gl.createTexture();
+		if (!texture) return false;
+		this.texture = texture;
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RG32F, AUDIO_TEXTURE_WIDTH, 1, 0, gl.RG, gl.FLOAT, null);
+		const editorTexture = gl.createTexture();
+		if (!editorTexture) return false;
+		this.editorTexture = editorTexture;
+		gl.bindTexture(gl.TEXTURE_2D, editorTexture);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		const sceneTexture = gl.createTexture();
+		if (!sceneTexture) return false;
+		this.sceneTexture = sceneTexture;
+		gl.bindTexture(gl.TEXTURE_2D, sceneTexture);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		const sceneFramebuffer = gl.createFramebuffer();
+		if (!sceneFramebuffer) return false;
+		this.sceneFramebuffer = sceneFramebuffer;
+		for (let i$6 = 0; i$6 < 2; i$6++) {
+			const fbTex = gl.createTexture();
+			const fb = gl.createFramebuffer();
+			if (!fbTex || !fb) return false;
+			this.feedbackTextures[i$6] = fbTex;
+			this.feedbackFramebuffers[i$6] = fb;
+			gl.bindTexture(gl.TEXTURE_2D, fbTex);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		}
+		const postProgram = this.createPostProgram(DEFAULT_POST_FRAGMENT_SHADER);
+		if ("error" in postProgram) return false;
+		this.postProgram = postProgram;
+		this.activePostShaderKey = DEFAULT_POST_FRAGMENT_SHADER;
+		const blitProgram = this.createBlitProgram();
+		if ("error" in blitProgram) return false;
+		this.blitProgram = blitProgram;
+		return true;
+	}
+	dispose() {
+		const gl = this.gl;
+		if (!gl) return;
+		if (this.customProgram) gl.deleteProgram(this.customProgram.program);
+		if (this.postProgram) gl.deleteProgram(this.postProgram.program);
+		if (this.blitProgram) gl.deleteProgram(this.blitProgram.program);
+		if (this.lineProgram) gl.deleteProgram(this.lineProgram.program);
+		if (this.texture) gl.deleteTexture(this.texture);
+		if (this.editorTexture) gl.deleteTexture(this.editorTexture);
+		if (this.sceneTexture) gl.deleteTexture(this.sceneTexture);
+		if (this.sceneFramebuffer) gl.deleteFramebuffer(this.sceneFramebuffer);
+		for (const tex of this.feedbackTextures) if (tex) gl.deleteTexture(tex);
+		for (const fb of this.feedbackFramebuffers) if (fb) gl.deleteFramebuffer(fb);
+		if (this.lineBuffer) gl.deleteBuffer(this.lineBuffer);
+		this.customProgram = null;
+		this.postProgram = null;
+		this.blitProgram = null;
+		this.lineProgram = null;
+		this.texture = null;
+		this.editorTexture = null;
+		this.editorWidth = 0;
+		this.editorHeight = 0;
+		this.sceneTexture = null;
+		this.sceneFramebuffer = null;
+		this.feedbackTextures = [null, null];
+		this.feedbackFramebuffers = [null, null];
+		this.feedbackReadIndex = 0;
+		this.lineBuffer = null;
+		this.sceneWidth = 0;
+		this.sceneHeight = 0;
+		this.feedbackWidth = 0;
+		this.feedbackHeight = 0;
+		this.feedbackNeedsClear = true;
+		this.gl = null;
+		this.mode = "default";
+		this.activeShaderKey = "";
+		this.shaderInput = "audio";
+		this.activePostShaderKey = "";
+	}
+	setShaders(vertexSource, fragmentSource, preset, shaderInput, postFragmentSource, postPreset) {
+		const hasVertex = !!vertexSource?.trim();
+		const hasFragment = !!fragmentSource?.trim();
+		const hasPostFragment = !!postFragmentSource?.trim();
+		const nextPreset = SHADER_PRESETS.includes(preset ?? "") ? preset : "lissajous";
+		const nextShaderInput = SHADER_INPUTS.includes(shaderInput ?? "") ? shaderInput : "audio";
+		const nextPostPreset = POST_SHADER_PRESETS.includes(postPreset ?? "") ? postPreset : "none";
+		if (nextShaderInput !== this.shaderInput) {
+			this.shaderInput = nextShaderInput;
+			this.feedbackNeedsClear = true;
+		}
+		const postFragment = hasPostFragment ? postFragmentSource : POST_SHADER_FRAGMENTS[nextPostPreset];
+		if (!postFragment) return {
+			stage: "postfragment",
+			message: "Missing post-processing fragment source"
+		};
+		if (this.activePostShaderKey !== postFragment || !this.postProgram) {
+			const nextPostProgram = this.createPostProgram(postFragment);
+			if ("error" in nextPostProgram) return nextPostProgram.error;
+			if (this.gl && this.postProgram) this.gl.deleteProgram(this.postProgram.program);
+			this.postProgram = nextPostProgram;
+			this.activePostShaderKey = postFragment;
+			this.feedbackNeedsClear = true;
+		}
+		if (!hasVertex && !hasFragment) {
+			this.mode = "default";
+			this.activeShaderKey = "";
+			this.preset = nextPreset;
+			return null;
+		}
+		const vertex = hasVertex ? vertexSource : CUSTOM_FALLBACK_VERTEX_SHADER;
+		const fragment = hasFragment ? fragmentSource : CUSTOM_FALLBACK_FRAGMENT_SHADER;
+		const key = `${vertex}:::${fragment}`;
+		if (this.mode === "custom" && key === this.activeShaderKey) return null;
+		const next = this.createCustomProgram(vertex, fragment);
+		if ("error" in next) return next.error;
+		if (this.gl && this.customProgram) this.gl.deleteProgram(this.customProgram.program);
+		this.customProgram = next;
+		this.mode = "custom";
+		this.activeShaderKey = key;
+		return null;
+	}
+	setPrimaryColor(hex) {
+		this.primaryColor = hexToRgb01(hex, this.primaryColor);
+	}
+	draw(canvas, timeSeconds, audioData) {
+		const gl = this.gl;
+		if (!gl) return;
+		const dpr = Math.max(1, window.devicePixelRatio || 1);
+		const width = Math.max(1, Math.floor(canvas.clientWidth * dpr));
+		const height = Math.max(1, Math.floor(canvas.clientHeight * dpr));
+		if (canvas.width !== width || canvas.height !== height) {
+			canvas.width = width;
+			canvas.height = height;
+		}
+		this.uploadAudioTexture(audioData);
+		let sourceTexture = null;
+		if (this.shaderInput === "editor") sourceTexture = this.uploadEditorTexture();
+		if (!sourceTexture) {
+			if (!this.ensureSceneTarget(width, height)) return;
+			gl.bindFramebuffer(gl.FRAMEBUFFER, this.sceneFramebuffer);
+			gl.viewport(0, 0, width, height);
+			gl.clearColor(.01, .01, .015, 1);
+			gl.clear(gl.COLOR_BUFFER_BIT);
+			if (this.mode === "custom" && this.customProgram) this.drawCustom(timeSeconds, width, height);
+			else this.drawFastDefault(timeSeconds, width, height, audioData);
+			sourceTexture = this.sceneTexture;
+		}
+		if (!this.ensureFeedbackTargets(width, height)) return;
+		const readIndex = this.feedbackReadIndex;
+		const writeIndex = readIndex + 1 & 1;
+		const readTexture = this.feedbackTextures[readIndex];
+		const writeTexture = this.feedbackTextures[writeIndex];
+		const writeFramebuffer = this.feedbackFramebuffers[writeIndex];
+		if (!readTexture || !writeTexture || !writeFramebuffer || !sourceTexture) return;
+		gl.bindFramebuffer(gl.FRAMEBUFFER, writeFramebuffer);
+		gl.viewport(0, 0, width, height);
+		this.drawPost(timeSeconds, width, height, sourceTexture, readTexture);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		gl.viewport(0, 0, width, height);
+		this.drawBlit(writeTexture);
+		this.feedbackReadIndex = writeIndex;
+	}
+	uploadAudioTexture(audioData) {
+		const gl = this.gl;
+		const texture = this.texture;
+		if (!gl || !texture) return;
+		gl.activeTexture(gl.TEXTURE1);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, AUDIO_TEXTURE_WIDTH, 1, gl.RG, gl.FLOAT, audioData);
+	}
+	uploadEditorTexture() {
+		const gl = this.gl;
+		const texture = this.editorTexture;
+		const editorCanvas = editor.value?.canvas;
+		if (!gl || !texture || !editorCanvas) return null;
+		if (editorCanvas.width < 1 || editorCanvas.height < 1) return null;
+		gl.activeTexture(gl.TEXTURE3);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+		if (this.editorWidth !== editorCanvas.width || this.editorHeight !== editorCanvas.height) {
+			this.editorWidth = editorCanvas.width;
+			this.editorHeight = editorCanvas.height;
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, editorCanvas);
+		} else gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGBA, gl.UNSIGNED_BYTE, editorCanvas);
+		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+		return texture;
+	}
+	ensureSceneTarget(width, height) {
+		const gl = this.gl;
+		const sceneTexture = this.sceneTexture;
+		const sceneFramebuffer = this.sceneFramebuffer;
+		if (!gl || !sceneTexture || !sceneFramebuffer) return false;
+		if (this.sceneWidth === width && this.sceneHeight === height) return true;
+		gl.bindTexture(gl.TEXTURE_2D, sceneTexture);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, sceneFramebuffer);
+		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, sceneTexture, 0);
+		const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		if (status !== gl.FRAMEBUFFER_COMPLETE) return false;
+		this.sceneWidth = width;
+		this.sceneHeight = height;
+		return true;
+	}
+	ensureFeedbackTargets(width, height) {
+		const gl = this.gl;
+		if (!gl) return false;
+		if (this.feedbackWidth === width && this.feedbackHeight === height && !this.feedbackNeedsClear) return true;
+		for (let i$6 = 0; i$6 < 2; i$6++) {
+			const tex = this.feedbackTextures[i$6];
+			const fb = this.feedbackFramebuffers[i$6];
+			if (!tex || !fb) return false;
+			gl.bindTexture(gl.TEXTURE_2D, tex);
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+			gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+			gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+			if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) {
+				gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+				return false;
+			}
+		}
+		this.feedbackWidth = width;
+		this.feedbackHeight = height;
+		this.feedbackReadIndex = 0;
+		this.feedbackNeedsClear = false;
+		this.clearFeedbackTargets(width, height);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		return true;
+	}
+	clearFeedbackTargets(width, height) {
+		const gl = this.gl;
+		if (!gl) return;
+		gl.clearColor(.01, .01, .015, 1);
+		for (const fb of this.feedbackFramebuffers) {
+			if (!fb) continue;
+			gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+			gl.viewport(0, 0, width, height);
+			gl.clear(gl.COLOR_BUFFER_BIT);
+		}
+	}
+	drawFastDefault(timeSeconds, width, height, audioData) {
+		const gl = this.gl;
+		const lineProgram = this.lineProgram;
+		const lineBuffer = this.lineBuffer;
+		if (!gl || !lineProgram || !lineBuffer) return;
+		const aspect = width > 0 ? height / width : 1;
+		const intensity = .72 + .28 * Math.sin(timeSeconds * 2.5);
+		gl.useProgram(lineProgram.program);
+		if (lineProgram.aspectLocation) gl.uniform1f(lineProgram.aspectLocation, aspect);
+		if (lineProgram.intensityLocation) gl.uniform1f(lineProgram.intensityLocation, intensity);
+		if (lineProgram.primaryColorLocation) gl.uniform3f(lineProgram.primaryColorLocation, this.primaryColor[0], this.primaryColor[1], this.primaryColor[2]);
+		const points = this.buildPresetData(audioData, timeSeconds);
+		gl.bindBuffer(gl.ARRAY_BUFFER, lineBuffer);
+		gl.bufferSubData(gl.ARRAY_BUFFER, 0, points);
+		gl.enableVertexAttribArray(0);
+		gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+		gl.drawArrays(gl.LINE_STRIP, 0, AUDIO_TEXTURE_WIDTH);
+	}
+	buildPresetData(audioData, timeSeconds) {
+		if (this.preset === "lissajous") return audioData;
+		const out = this.presetData;
+		const n$4 = AUDIO_TEXTURE_WIDTH;
+		if (this.preset === "scope") {
+			for (let i$6 = 0; i$6 < n$4; i$6++) {
+				const t$12 = i$6 / (n$4 - 1) * 2 - 1;
+				const y$5 = ((audioData[i$6 * 2] ?? 0) + (audioData[i$6 * 2 + 1] ?? 0)) * .5;
+				out[i$6 * 2] = t$12;
+				out[i$6 * 2 + 1] = clamp11(y$5 * .92);
+			}
+			return out;
+		}
+		if (this.preset === "orbit") {
+			const phase = timeSeconds * .6;
+			for (let i$6 = 0; i$6 < n$4; i$6++) {
+				const theta = i$6 / (n$4 - 1) * TWO_PI + phase;
+				const radius = .2 + .6 * (.5 + .5 * ((audioData[i$6 * 2] ?? 0) + (audioData[i$6 * 2 + 1] ?? 0)) * .5);
+				out[i$6 * 2] = Math.cos(theta) * radius;
+				out[i$6 * 2 + 1] = Math.sin(theta) * radius;
+			}
+			return out;
+		}
+		if (this.preset === "plasma") {
+			const phase = timeSeconds * 1.2;
+			for (let i$6 = 0; i$6 < n$4; i$6++) {
+				const p$7 = i$6 / (n$4 - 1) * TWO_PI;
+				const l$10 = audioData[i$6 * 2] ?? 0;
+				const r$13 = audioData[i$6 * 2 + 1] ?? 0;
+				const sx = Math.sin(p$7 * 3 + phase) * .7 + Math.sin(p$7 * 11 - phase * 1.7) * .2;
+				const sy = Math.sin(p$7 * 4 + phase * 1.1) * .7 + Math.sin(p$7 * 9 + phase * .6) * .2;
+				out[i$6 * 2] = clamp11(sx + r$13 * .18);
+				out[i$6 * 2 + 1] = clamp11(sy + l$10 * .18);
+			}
+			return out;
+		}
+		if (this.preset === "tunnel") {
+			const phase = timeSeconds * 1.4;
+			for (let i$6 = 0; i$6 < n$4; i$6++) {
+				const t$12 = i$6 / (n$4 - 1);
+				const l$10 = audioData[i$6 * 2] ?? 0;
+				const r$13 = audioData[i$6 * 2 + 1] ?? 0;
+				const angle = t$12 * TWO_PI * 6 + phase;
+				const radius = clamp11(.95 - t$12 * .88 + (l$10 + r$13) * .05);
+				out[i$6 * 2] = clamp11(Math.cos(angle) * radius + r$13 * .08);
+				out[i$6 * 2 + 1] = clamp11(Math.sin(angle) * radius + l$10 * .08);
+			}
+			return out;
+		}
+		if (this.preset === "rotozoom") {
+			const phase = timeSeconds * .9;
+			const c$7 = Math.cos(phase);
+			const s$4 = Math.sin(phase);
+			for (let i$6 = 0; i$6 < n$4; i$6++) {
+				const u$5 = i$6 / (n$4 - 1) * 2 - 1;
+				const l$10 = audioData[i$6 * 2] ?? 0;
+				const r$13 = audioData[i$6 * 2 + 1] ?? 0;
+				const wave = Math.sin((u$5 + phase * .35) * 12) * .18;
+				const x$4 = clamp11(u$5 + r$13 * .16 + wave);
+				const y$5 = clamp11((l$10 + r$13) * .46 + l$10 * .14 + Math.cos((u$5 - phase * .25) * 10) * .1);
+				out[i$6 * 2] = clamp11(x$4 * c$7 - y$5 * s$4);
+				out[i$6 * 2 + 1] = clamp11(x$4 * s$4 + y$5 * c$7);
+			}
+			return out;
+		}
+		if (this.preset === "ribbon") {
+			for (let i$6 = 0; i$6 < n$4; i$6++) {
+				const t$12 = i$6 / (n$4 - 1) * 2 - 1;
+				const l$10 = audioData[i$6 * 2] ?? 0;
+				const r$13 = audioData[i$6 * 2 + 1] ?? 0;
+				const y$5 = (l$10 + r$13) * .45;
+				out[i$6 * 2] = clamp11(t$12 + r$13 * .18);
+				out[i$6 * 2 + 1] = clamp11(y$5 + l$10 * .18);
+			}
+			return out;
+		}
+		for (let i$6 = 0; i$6 < n$4; i$6++) {
+			const t$12 = i$6 / (n$4 - 1) * 2 - 1;
+			const l$10 = audioData[i$6 * 2] ?? 0;
+			const r$13 = audioData[i$6 * 2 + 1] ?? 0;
+			const y$5 = (l$10 + r$13) * .45;
+			out[i$6 * 2] = clamp11(t$12 + r$13 * .18);
+			out[i$6 * 2 + 1] = clamp11(y$5 + l$10 * .18);
+		}
+		return out;
+	}
+	drawCustom(timeSeconds, width, height) {
+		const gl = this.gl;
+		const program = this.customProgram;
+		const texture = this.texture;
+		if (!gl || !program || !texture) return;
+		gl.useProgram(program.program);
+		gl.activeTexture(gl.TEXTURE1);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		if (program.audioLocation) gl.uniform1i(program.audioLocation, 1);
+		if (program.timeLocation) gl.uniform1f(program.timeLocation, timeSeconds);
+		if (program.resolutionLocation) gl.uniform2f(program.resolutionLocation, width, height);
+		if (program.primaryColorLocation) gl.uniform3f(program.primaryColorLocation, this.primaryColor[0], this.primaryColor[1], this.primaryColor[2]);
+		gl.drawArrays(gl.TRIANGLES, 0, 6);
+	}
+	drawPost(timeSeconds, width, height, sourceTexture, feedbackTexture) {
+		const gl = this.gl;
+		const post = this.postProgram;
+		const audioTexture = this.texture;
+		if (!gl || !post || !audioTexture) return;
+		gl.useProgram(post.program);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, sourceTexture);
+		gl.activeTexture(gl.TEXTURE1);
+		gl.bindTexture(gl.TEXTURE_2D, audioTexture);
+		gl.activeTexture(gl.TEXTURE2);
+		gl.bindTexture(gl.TEXTURE_2D, feedbackTexture);
+		if (post.sceneLocation) gl.uniform1i(post.sceneLocation, 0);
+		if (post.audioLocation) gl.uniform1i(post.audioLocation, 1);
+		if (post.feedbackLocation) gl.uniform1i(post.feedbackLocation, 2);
+		if (post.timeLocation) gl.uniform1f(post.timeLocation, timeSeconds);
+		if (post.resolutionLocation) gl.uniform2f(post.resolutionLocation, width, height);
+		if (post.primaryColorLocation) gl.uniform3f(post.primaryColorLocation, this.primaryColor[0], this.primaryColor[1], this.primaryColor[2]);
+		gl.drawArrays(gl.TRIANGLES, 0, 6);
+	}
+	drawBlit(texture) {
+		const gl = this.gl;
+		const blit = this.blitProgram;
+		if (!gl || !blit) return;
+		gl.useProgram(blit.program);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		if (blit.sourceLocation) gl.uniform1i(blit.sourceLocation, 0);
+		gl.drawArrays(gl.TRIANGLES, 0, 6);
+	}
+	createFastLineProgram() {
+		const linked = this.linkProgram(FAST_LINE_VERTEX_SHADER, FAST_LINE_FRAGMENT_SHADER);
+		if ("error" in linked) return linked;
+		const { program } = linked;
+		return {
+			program,
+			aspectLocation: this.gl.getUniformLocation(program, "u_aspect"),
+			intensityLocation: this.gl.getUniformLocation(program, "u_intensity"),
+			primaryColorLocation: this.gl.getUniformLocation(program, "u_primaryColor")
+		};
+	}
+	createCustomProgram(vertexSource, fragmentSource) {
+		const linked = this.linkProgram(vertexSource, fragmentSource);
+		if ("error" in linked) return linked;
+		const { program } = linked;
+		return {
+			program,
+			audioLocation: this.gl.getUniformLocation(program, "u_audio"),
+			timeLocation: this.gl.getUniformLocation(program, "u_time"),
+			resolutionLocation: this.gl.getUniformLocation(program, "u_resolution"),
+			primaryColorLocation: this.gl.getUniformLocation(program, "u_primaryColor")
+		};
+	}
+	createPostProgram(fragmentSource) {
+		const linked = this.linkProgram(FULLSCREEN_PASS_VERTEX_SHADER, fragmentSource, "postfragment");
+		if ("error" in linked) return linked;
+		const { program } = linked;
+		return {
+			program,
+			sceneLocation: this.gl.getUniformLocation(program, "u_scene"),
+			feedbackLocation: this.gl.getUniformLocation(program, "u_feedback"),
+			audioLocation: this.gl.getUniformLocation(program, "u_audio"),
+			timeLocation: this.gl.getUniformLocation(program, "u_time"),
+			resolutionLocation: this.gl.getUniformLocation(program, "u_resolution"),
+			primaryColorLocation: this.gl.getUniformLocation(program, "u_primaryColor")
+		};
+	}
+	createBlitProgram() {
+		const linked = this.linkProgram(FULLSCREEN_PASS_VERTEX_SHADER, BLIT_FRAGMENT_SHADER, "fragment");
+		if ("error" in linked) return linked;
+		const { program } = linked;
+		return {
+			program,
+			sourceLocation: this.gl.getUniformLocation(program, "u_source")
+		};
+	}
+	linkProgram(vertexSource, fragmentSource, fragmentStage = "fragment") {
+		const gl = this.gl;
+		if (!gl) return { error: {
+			stage: fragmentStage,
+			message: "WebGL2 context is unavailable"
+		} };
+		const vertex = this.createShader(gl.VERTEX_SHADER, vertexSource, "vertex");
+		if ("error" in vertex) return vertex;
+		const fragment = this.createShader(gl.FRAGMENT_SHADER, fragmentSource, fragmentStage);
+		if ("error" in fragment) {
+			gl.deleteShader(vertex.shader);
+			return fragment;
+		}
+		const program = gl.createProgram();
+		if (!program) {
+			gl.deleteShader(vertex.shader);
+			gl.deleteShader(fragment.shader);
+			return { error: {
+				stage: fragmentStage,
+				message: "Failed to create shader program"
+			} };
+		}
+		gl.attachShader(program, vertex.shader);
+		gl.attachShader(program, fragment.shader);
+		gl.linkProgram(program);
+		gl.deleteShader(vertex.shader);
+		gl.deleteShader(fragment.shader);
+		if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+			const log = gl.getProgramInfoLog(program) || "Unknown link error";
+			gl.deleteProgram(program);
+			return { error: {
+				stage: fragmentStage,
+				message: `Shader link failed: ${log}`
+			} };
+		}
+		return { program };
+	}
+	createShader(type, source, stage) {
+		const gl = this.gl;
+		if (!gl) return { error: {
+			stage,
+			message: `${stage} shader failed: WebGL2 context is unavailable`
+		} };
+		const shader = gl.createShader(type);
+		if (!shader) return { error: {
+			stage,
+			message: `${stage} shader failed: could not allocate shader`
+		} };
+		gl.shaderSource(shader, source);
+		gl.compileShader(shader);
+		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+			const log = gl.getShaderInfoLog(shader) || "Unknown compile error";
+			gl.deleteShader(shader);
+			return { error: {
+				stage,
+				message: `${stage} shader compile failed: ${log}`
+			} };
+		}
+		return { shader };
+	}
+};
+function setShaderRuntimeDiagnostic(programCtx, error$1) {
+	if (!error$1) {
+		programCtx.shaderRuntimeDiagnostic.value = null;
+		return;
+	}
+	const loc = error$1.stage === "vertex" ? programCtx.shaderLocations.value.vertex ?? programCtx.shaderLocations.value.fragment : error$1.stage === "postfragment" ? programCtx.shaderLocations.value.postfragment ?? programCtx.shaderLocations.value.postshader ?? programCtx.shaderLocations.value.fragment ?? programCtx.shaderLocations.value.vertex : programCtx.shaderLocations.value.fragment ?? programCtx.shaderLocations.value.vertex;
+	if (!loc) {
+		programCtx.shaderRuntimeDiagnostic.value = null;
+		return;
+	}
+	programCtx.shaderRuntimeDiagnostic.value = {
+		message: error$1.message,
+		loc
+	};
+}
+function hexToRgb01(hex, fallback) {
+	const normalized = hex.trim().replace(/^#/, "");
+	const six = normalized.length === 3 ? normalized.split("").map((c$7) => c$7 + c$7).join("") : normalized.length === 6 ? normalized : null;
+	if (!six || !/^[0-9a-fA-F]{6}$/.test(six)) return fallback;
+	return [
+		parseInt(six.slice(0, 2), 16) / 255,
+		parseInt(six.slice(2, 4), 16) / 255,
+		parseInt(six.slice(4, 6), 16) / 255
+	];
+}
+function clamp11(x$4) {
+	return Math.max(-1, Math.min(1, x$4));
+}
+const ShaderCanvas = () => {
+	const ref = A(null);
+	const rendererRef = A(null);
+	const tapRef = A(new StereoAudioTap());
+	const audioDataRef = A(new Float32Array(AUDIO_TEXTURE_WIDTH * 2));
+	const activeProgramCtxRef = A(null);
+	const rafIdRef = A(null);
+	const cancelFrame = () => {
+		if (rafIdRef.current != null) {
+			cancelAnimationFrame(rafIdRef.current);
+			rafIdRef.current = null;
+		}
+	};
+	const drawFrame = () => {
+		rafIdRef.current = null;
+		if (settings.showShaders !== true) return;
+		const renderer = rendererRef.current;
+		const canvas = ref.current;
+		const programCtx = currentProgramContext.value;
+		if (!renderer || !canvas || !programCtx) {
+			rafIdRef.current = requestAnimationFrame(drawFrame);
+			return;
+		}
+		if (activeProgramCtxRef.current && activeProgramCtxRef.current !== programCtx) activeProgramCtxRef.current.shaderRuntimeDiagnostic.value = null;
+		activeProgramCtxRef.current = programCtx;
+		renderer.setPrimaryColor(theme.value.red);
+		setShaderRuntimeDiagnostic(programCtx, renderer.setShaders(programCtx.shaderSources.value.vertex, programCtx.shaderSources.value.fragment, programCtx.shaderSources.value.shader, programCtx.shaderSources.value.shaderinput, programCtx.shaderSources.value.postfragment, programCtx.shaderSources.value.postshader));
+		tapRef.current.fillAudio(audioDataRef.current);
+		renderer.draw(canvas, programCtx.timeSeconds.value ?? 0, audioDataRef.current);
+		rafIdRef.current = requestAnimationFrame(drawFrame);
+	};
+	const ensureFrameLoop = () => {
+		if (rafIdRef.current == null) rafIdRef.current = requestAnimationFrame(drawFrame);
+	};
+	y(() => {
+		const canvas = ref.current;
+		if (!canvas) return;
+		const renderer = new ShaderRenderer();
+		if (!renderer.init(canvas)) return;
+		rendererRef.current = renderer;
+		renderer.setPrimaryColor(primaryColor.value);
+		if (settings.showShaders === true && currentProgramContext.value) {
+			activeProgramCtxRef.current = currentProgramContext.value;
+			const error$1 = renderer.setShaders(currentProgramContext.value.shaderSources.value.vertex, currentProgramContext.value.shaderSources.value.fragment, currentProgramContext.value.shaderSources.value.shader, currentProgramContext.value.shaderSources.value.shaderinput, currentProgramContext.value.shaderSources.value.postfragment, currentProgramContext.value.shaderSources.value.postshader);
+			setShaderRuntimeDiagnostic(currentProgramContext.value, error$1);
+			ensureFrameLoop();
+		}
+		return () => {
+			cancelFrame();
+			if (activeProgramCtxRef.current) activeProgramCtxRef.current.shaderRuntimeDiagnostic.value = null;
+			activeProgramCtxRef.current = null;
+			tapRef.current.disconnect();
+			renderer.dispose();
+			rendererRef.current = null;
+		};
+	}, []);
+	useReactiveEffect(() => {
+		if (settings.showShaders !== true) {
+			cancelFrame();
+			tapRef.current.disconnect();
+			if (activeProgramCtxRef.current) activeProgramCtxRef.current.shaderRuntimeDiagnostic.value = null;
+			return;
+		}
+		tapRef.current.connect();
+		ensureFrameLoop();
+	});
+	return /* @__PURE__ */ u("canvas", {
+		ref,
+		class: "absolute inset-0 w-full h-full pointer-events-none"
+	});
+};
 var blockquoteRule = {
 	type: "inline-block",
 	name: "blockquote",
@@ -62894,6 +64503,11 @@ const WallOfSounds = () => {
 };
 const App = () => {
 	const header = useSignal(null);
+	const showGlobalShader = settings.showShaders === true && mainPage.value !== null && mainPage.value !== "wall-of-sounds";
+	const effectMode = settings.effect;
+	const showGlitchEffect = effectMode === "glitch";
+	const showShakeEffect = effectMode === "shake";
+	const hideEditorForEffect = showShakeEffect;
 	y(() => () => ctx.value?.dispose(), []);
 	useReactiveEffect(() => {
 		if (!settings.debug) return;
@@ -62971,22 +64585,54 @@ const App = () => {
         *::selection {
           background-color: ${theme.value.blue + "42"};
         }
+        ${settings.showShaders ? `
+        .shader-bg-ui,
+        .shader-bg-ui > * {
+          background-color: transparent !important;
+          background-image: none !important;
+        }
+        .shader-bg-ui [class*=" bg-"],
+        .shader-bg-ui [class^="bg-"] {
+          background-color: transparent !important;
+          background-image: none !important;
+        }
+        .shader-bg-ui [style*="background:"] {
+          background: transparent !important;
+        }
+        .shader-bg-ui [style*="background-color"] {
+          background-color: transparent !important;
+        }
+        ` : ""}
     ` } }),
+		showGlobalShader && /* @__PURE__ */ u("div", {
+			class: "fixed inset-0 z-0 pointer-events-none",
+			children: /* @__PURE__ */ u(ShaderCanvas, {})
+		}),
 		mainPage.value === null ? /* @__PURE__ */ u(Landing, {}) : mainPage.value === "wall-of-sounds" ? /* @__PURE__ */ u(WallOfSounds, {}) : settings.fullSize ? /* @__PURE__ */ u("div", {
-			class: "w-screen h-screen max-w-full max-h-full bg-black",
-			children: [/* @__PURE__ */ u(Editor, {
-				doc: b(() => currentProgramContext.value?.doc ?? null),
-				header: null,
-				gutter: false,
-				transparent: true
-			}), /* @__PURE__ */ u("button", {
-				onClick: () => settings.fullSize = !settings.fullSize,
-				class: "absolute top-2 right-5 text-white/40 hover:text-white",
-				children: /* @__PURE__ */ u(r, {})
-			})]
+			class: `relative z-10 w-screen h-screen max-w-full max-h-full ${settings.showShaders ? "bg-transparent shader-bg-ui" : "bg-black"}`,
+			children: [
+				showGlitchEffect && /* @__PURE__ */ u(EditorShakeCanvas, { mode: "glitch" }, "glitch-fullsize"),
+				/* @__PURE__ */ u("div", {
+					class: "relative z-10 w-full h-full",
+					children: [/* @__PURE__ */ u("div", {
+						class: `w-full h-full ${hideEditorForEffect ? "opacity-0" : ""}`,
+						children: /* @__PURE__ */ u(Editor, {
+							doc: b(() => currentProgramContext.value?.doc ?? null),
+							header: null,
+							gutter: false,
+							transparent: settings.showShaders
+						})
+					}), showShakeEffect && /* @__PURE__ */ u(EditorShakeCanvas, { mode: "shake" }, "shake-fullsize")]
+				}),
+				/* @__PURE__ */ u("button", {
+					onClick: () => settings.fullSize = !settings.fullSize,
+					class: "absolute z-20 top-2 right-5 text-white/40 hover:text-white",
+					children: /* @__PURE__ */ u(r, {})
+				})
+			]
 		}) : /* @__PURE__ */ u(k, { children: /* @__PURE__ */ u("div", {
-			class: "flex flex-row w-screen h-screen max-w-full max-h-full",
-			style: { backgroundColor: theme.value.black },
+			class: `relative z-10 flex flex-row w-screen h-screen max-w-full max-h-full ${settings.showShaders ? "shader-bg-ui" : ""}`,
+			style: { backgroundColor: settings.showShaders ? "transparent" : theme.value.black },
 			children: [
 				!isMobile() && /* @__PURE__ */ u("div", {
 					class: "flex w-auto h-full flex-shrink-0",
@@ -62994,20 +64640,32 @@ const App = () => {
 				}),
 				/* @__PURE__ */ u("div", {
 					class: "flex flex-col flex-1 min-w-0 h-full",
-					children: mainPage.value === "docs" ? /* @__PURE__ */ u(DocsMain, {}) : mainPage.value === "tutorials" ? /* @__PURE__ */ u(TutorialsMain, {}) : mainPage.value === "browse" ? /* @__PURE__ */ u(BrowseMain, {}) : mainPage.value === "admin" ? /* @__PURE__ */ u(AdminMain, {}) : mainPage.value === "artist" ? /* @__PURE__ */ u(ArtistMain, {}) : mainPage.value === "project" ? /* @__PURE__ */ u(ProjectMain, {}) : mainPage.value === "help" ? /* @__PURE__ */ u(HelpMain, {}) : mainPage.value === "about" ? /* @__PURE__ */ u(AboutMain, {}) : mainPage.value === "dj" ? /* @__PURE__ */ u(DJMain, {}) : mainPage.value === "editor" ? /* @__PURE__ */ u(k, { children: [/* @__PURE__ */ u("div", {
-						class: "relative",
-						children: /* @__PURE__ */ u(Nav, {})
-					}), currentProgramContext.value?.doc && /* @__PURE__ */ u("div", {
-						class: "flex-1 min-w-0 h-full overflow-hidden",
-						children: [/* @__PURE__ */ u(Editor, {
-							doc: b(() => currentProgramContext.value?.doc ?? null),
-							header: header.value
-						}), /* @__PURE__ */ u("button", {
-							onClick: () => settings.fullSize = !settings.fullSize,
-							class: "absolute top-14 right-5 text-white/40 hover:text-white",
-							children: /* @__PURE__ */ u(r, {})
+					children: mainPage.value === "docs" ? /* @__PURE__ */ u(DocsMain, {}) : mainPage.value === "tutorials" ? /* @__PURE__ */ u(TutorialsMain, {}) : mainPage.value === "browse" ? /* @__PURE__ */ u(BrowseMain, {}) : mainPage.value === "admin" ? /* @__PURE__ */ u(AdminMain, {}) : mainPage.value === "artist" ? /* @__PURE__ */ u(ArtistMain, {}) : mainPage.value === "project" ? /* @__PURE__ */ u(ProjectMain, {}) : mainPage.value === "help" ? /* @__PURE__ */ u(HelpMain, {}) : mainPage.value === "about" ? /* @__PURE__ */ u(AboutMain, {}) : mainPage.value === "dj" ? /* @__PURE__ */ u(DJMain, {}) : mainPage.value === "editor" ? /* @__PURE__ */ u("div", {
+						class: "relative flex flex-col flex-1 min-w-0 h-full",
+						children: [/* @__PURE__ */ u("div", {
+							class: "relative z-20",
+							children: /* @__PURE__ */ u(Nav, {})
+						}), currentProgramContext.value?.doc && /* @__PURE__ */ u("div", {
+							class: "relative z-10 flex-1 min-w-0 h-full overflow-hidden",
+							children: [
+								showGlitchEffect && /* @__PURE__ */ u(EditorShakeCanvas, { mode: "glitch" }, "glitch-windowed"),
+								/* @__PURE__ */ u("div", {
+									class: `w-full h-full ${hideEditorForEffect ? "opacity-0" : ""}`,
+									children: /* @__PURE__ */ u(Editor, {
+										doc: b(() => currentProgramContext.value?.doc ?? null),
+										header: header.value,
+										transparent: settings.showShaders
+									})
+								}),
+								showShakeEffect && /* @__PURE__ */ u(EditorShakeCanvas, { mode: "shake" }, "shake-windowed"),
+								/* @__PURE__ */ u("button", {
+									onClick: () => settings.fullSize = !settings.fullSize,
+									class: "absolute z-20 top-14 right-5 text-white/40 hover:text-white",
+									children: /* @__PURE__ */ u(r, {})
+								})
+							]
 						})]
-					})] }) : null
+					}) : null
 				}),
 				showIntro.value && /* @__PURE__ */ u(Intro, {})
 			]
@@ -63047,4 +64705,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-DtFIcmoy.js.map
+//# sourceMappingURL=index-DkYyJZLE.js.map

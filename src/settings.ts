@@ -7,6 +7,8 @@ export const settings = signalify({
   useCtrlEnter: false,
   showVisuals: true,
   showKnobs: true,
+  showShaders: false,
+  effect: 'none' as 'none' | 'shake' | 'glitch',
   showDocs: true,
   wordWrap: true,
   analyserType: 'waveform' as 'waveform' | 'spectrum' | 'amplitude',

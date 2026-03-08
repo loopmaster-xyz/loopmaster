@@ -10,6 +10,12 @@ import {
 } from 'engine'
 import { controlPipeline } from 'engine/src/live/pipeline.ts'
 import { computeDocErrors } from './lib/format-errors.ts'
+import {
+  prepareShaderDirectives,
+  type ShaderDirectiveDiagnostic,
+  type ShaderDirectiveLocations,
+  type ShaderDirectiveSources,
+} from './lib/shader-directives.ts'
 import { tokenize } from './lib/tokenizer.ts'
 import type { WaveformBuffer } from './lib/waveform-buffer.ts'
 import { settings } from './settings.ts'
@@ -86,6 +92,24 @@ async function createDspProgramContextImpl(
   let submittedCode = doc.code
 
   const result = signal<ControlCompileSnapshot | null>(null)
+  const shaderSources = signal<ShaderDirectiveSources>({
+    vertex: null,
+    fragment: null,
+    shader: null,
+    shaderinput: null,
+    postfragment: null,
+    postshader: null,
+  })
+  const shaderLocations = signal<ShaderDirectiveLocations>({
+    vertex: null,
+    fragment: null,
+    shader: null,
+    shaderinput: null,
+    postfragment: null,
+    postshader: null,
+  })
+  const shaderDirectiveDiagnostics = signal<ShaderDirectiveDiagnostic[]>([])
+  const shaderRuntimeDiagnostic = signal<ShaderDirectiveDiagnostic | null>(null)
   const latency = signal<DspLatency>(program.latency)
   const timeSeconds = signal(0)
   const histories = signal<TypedHistory[]>([])
@@ -166,6 +190,10 @@ async function createDspProgramContextImpl(
     program,
     doc,
     result,
+    shaderSources,
+    shaderLocations,
+    shaderDirectiveDiagnostics,
+    shaderRuntimeDiagnostic,
     latency,
     timeSeconds,
     histories,
@@ -230,17 +258,38 @@ async function createDspProgramContextImpl(
     const forceFullResync = fullResync.value
     queueMicrotask(async () => {
       if (version !== submitVersion.value) return
+      const prepared = prepareShaderDirectives(code)
+      batch(() => {
+        shaderSources.value = prepared.shaderSources
+        shaderLocations.value = prepared.shaderLocations
+        shaderDirectiveDiagnostics.value = prepared.shaderDiagnostics
+        shaderRuntimeDiagnostic.value = null
+      })
+      const extraDiagnostics = [
+        ...prepared.shaderDiagnostics,
+        ...(
+          shaderRuntimeDiagnostic.peek()
+            ? [shaderRuntimeDiagnostic.peek()!]
+            : []
+        ),
+      ]
 
       try {
-        const ccs = controlPipeline.compileSource(code, { projectId: opts.projectId ?? undefined })
+        if (prepared.shaderDiagnostics.length > 0) {
+          doc.errors = computeDocErrors(null, undefined, extraDiagnostics)
+          compiledSubmitVersion = version
+          return
+        }
+
+        const ccs = controlPipeline.compileSource(prepared.sanitizedSource, { projectId: opts.projectId ?? undefined })
         result.value = ccs
         if (ccs.errors.length > 0) {
-          doc.errors = computeDocErrors(ccs)
+          doc.errors = computeDocErrors(ccs, undefined, extraDiagnostics)
           compiledSubmitVersion = version
           return
         }
         else {
-          doc.errors = []
+          doc.errors = computeDocErrors(ccs, undefined, extraDiagnostics)
         }
 
         if (!shouldSkipSyncPreview.value) {
@@ -268,7 +317,11 @@ async function createDspProgramContextImpl(
         historiesRefreshed.value++
       }
       catch (error) {
-        doc.errors = computeDocErrors(null, (error instanceof Error ? error.message : String(error)).split(' in ')[0])
+        doc.errors = computeDocErrors(
+          null,
+          (error instanceof Error ? error.message : String(error)).split(' in ')[0],
+          extraDiagnostics,
+        )
         compiledSubmitVersion = version
       }
     })

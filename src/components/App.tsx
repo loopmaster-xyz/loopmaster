@@ -30,17 +30,27 @@ import { BrowseMain } from './BrowseMain.tsx'
 import { DJMain } from './DJMain.tsx'
 import { DocsMain } from './DocsMain.tsx'
 import { Editor } from './Editor.tsx'
+import { EditorShakeCanvas } from './EditorShakeCanvas.tsx'
 import { HelpMain } from './HelpMain.tsx'
 import { Intro } from './Intro.tsx'
 import { Landing } from './Landing.tsx'
 import { Nav } from './Nav.tsx'
 import { ProjectMain } from './ProjectMain.tsx'
+import { ShaderCanvas } from './ShaderCanvas.tsx'
 import { Sidebar } from './Sidebar.tsx'
 import { TutorialsMain } from './TutorialsMain.tsx'
 import { WallOfSounds } from './WallOfSounds.tsx'
 
 export const App = () => {
   const header = useSignal<Header | null>(null)
+  const showGlobalShader = settings.showShaders === true
+    && mainPage.value !== null
+    && mainPage.value !== 'wall-of-sounds'
+  const effectMode = settings.effect
+  const showGlitchEffect = effectMode === 'glitch'
+  const showShakeEffect = effectMode === 'shake'
+  const hideEditorForEffect = false // showShakeEffect
+  const transparentEditor = settings.showShaders || showGlitchEffect || showShakeEffect
 
   useEffect(() => () => ctx.value?.dispose(), [])
 
@@ -131,22 +141,67 @@ export const App = () => {
         *::selection {
           background-color: ${theme.value.blue + '42'};
         }
+        ${
+        settings.showShaders
+          ? `
+        .shader-bg-ui,
+        .shader-bg-ui > * {
+          background-color: transparent !important;
+          background-image: none !important;
+        }
+        .shader-bg-ui [class*=" bg-"],
+        .shader-bg-ui [class^="bg-"] {
+          background-color: transparent !important;
+          background-image: none !important;
+        }
+        .shader-bg-ui [style*="background:"] {
+          background: transparent !important;
+        }
+        .shader-bg-ui [style*="background-color"] {
+          background-color: transparent !important;
+        }
+        `
+          : ''
+      }
     ` }} />
+      {showGlobalShader && (
+        <div class="fixed inset-0 z-0 pointer-events-none">
+          <ShaderCanvas />
+        </div>
+      )}
       {mainPage.value === null
         ? <Landing />
         : mainPage.value === 'wall-of-sounds'
         ? <WallOfSounds />
         : settings.fullSize
         ? (
-          <div class="w-screen h-screen max-w-full max-h-full bg-black">
-            <Editor
-              doc={computed(() => currentProgramContext.value?.doc ?? null)}
-              header={null}
-              gutter={false}
-              transparent={true}
-            />
+          <div
+            class={`relative z-10 w-screen h-screen max-w-full max-h-full ${
+              settings.showShaders ? 'bg-transparent shader-bg-ui' : 'bg-black'
+            }`}
+          >
+            {showGlitchEffect && (
+              <div class="absolute inset-0 z-0">
+                <EditorShakeCanvas mode="glitch" key="glitch-fullsize" />
+              </div>
+            )}
+            {showShakeEffect && (
+              <div class="absolute inset-0 z-0">
+                <EditorShakeCanvas mode="shake" key="shake-fullsize" />
+              </div>
+            )}
+            <div class="relative z-10 w-full h-full">
+              <div class={`relative z-10 w-full h-full ${hideEditorForEffect ? 'opacity-0' : ''}`}>
+                <Editor
+                  doc={computed(() => currentProgramContext.value?.doc ?? null)}
+                  header={null}
+                  gutter={false}
+                  transparent={transparentEditor}
+                />
+              </div>
+            </div>
             <button onClick={() => settings.fullSize = !settings.fullSize}
-              class="absolute top-2 right-5 text-white/40 hover:text-white"
+              class="absolute z-20 top-2 right-5 text-white/40 hover:text-white"
             >
               <CornersOutIcon />
             </button>
@@ -154,8 +209,11 @@ export const App = () => {
         )
         : (
           <>
-            <div class="flex flex-row w-screen h-screen max-w-full max-h-full"
-              style={{ backgroundColor: theme.value.black }}
+            <div
+              class={`relative z-10 flex flex-row w-screen h-screen max-w-full max-h-full ${
+                settings.showShaders ? 'shader-bg-ui' : ''
+              }`}
+              style={{ backgroundColor: settings.showShaders ? 'transparent' : theme.value.black }}
             >
               {!isMobile() && (
                 <div class="flex w-auto h-full flex-shrink-0">
@@ -183,24 +241,38 @@ export const App = () => {
                   ? <DJMain />
                   : mainPage.value === 'editor'
                   ? (
-                    <>
-                      <div class="relative">
+                    <div class="relative flex flex-col flex-1 min-w-0 h-full">
+                      <div class="relative z-20">
                         <Nav />
                       </div>
                       {currentProgramContext.value?.doc && (
-                        <div class="flex-1 min-w-0 h-full overflow-hidden">
-                          <Editor
-                            doc={computed(() => currentProgramContext.value?.doc ?? null)}
-                            header={header.value}
-                          />
+                        <div class="relative z-10 flex-1 min-w-0 h-full overflow-hidden">
+                          {showGlitchEffect && (
+                            <div class="absolute inset-0 z-0">
+                              <EditorShakeCanvas mode="glitch" key="glitch-windowed" />
+                            </div>
+                          )}
+                          {showShakeEffect && (
+                            <div class="absolute inset-0 z-0">
+                              <EditorShakeCanvas mode="shake" key="shake-windowed" />
+                            </div>
+                          )}
+                          <div class={`relative z-10 w-full h-full ${hideEditorForEffect ? 'opacity-0' : ''}`}>
+                            <Editor
+                              doc={computed(() => currentProgramContext.value?.doc ?? null)}
+                              header={header.value}
+                              transparent={transparentEditor}
+                            />
+                          </div>
+
                           <button onClick={() => settings.fullSize = !settings.fullSize}
-                            class="absolute top-14 right-5 text-white/40 hover:text-white"
+                            class="absolute z-20 top-14 right-5 text-white/40 hover:text-white"
                           >
                             <CornersOutIcon />
                           </button>
                         </div>
                       )}
-                    </>
+                    </div>
                   )
                   : null}
               </div>

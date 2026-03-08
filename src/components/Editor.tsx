@@ -53,7 +53,7 @@ export const Editor = (
     if (transparent) {
       editor.settings.colors.black = 'transparent'
     }
-  }, [editor])
+  }, [editor, transparent])
 
   useReactiveEffect(() => {
     createEditorOnHover(editor)

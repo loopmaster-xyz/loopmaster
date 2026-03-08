@@ -4,6 +4,7 @@ import { controlPipeline } from 'engine/src/live/pipeline.ts'
 import { useEffect, useRef } from 'preact/hooks'
 import WavEncoder from 'wav-encoder'
 import { useAsyncMemo } from '../hooks/useAsyncMemo.ts'
+import { prepareShaderDirectives } from '../lib/shader-directives.ts'
 import { throttle } from '../lib/throttle.ts'
 import {
   audioContext,
@@ -287,9 +288,14 @@ export const ExportAudio = () => {
     const { dsp } = ctx.value
     const doc = currentProgramContext.value.doc
     const projectId = currentProject.value?.id ?? null
+    const prepared = prepareShaderDirectives(doc.code)
     let step
     try {
-      const ccs = controlPipeline.compileSource(doc.code, { projectId })
+      if (prepared.shaderDiagnostics.length > 0) {
+        throw new Error(`Shader directives failed:\n${prepared.shaderDiagnostics.map(d => d.message).join('\n')}`)
+      }
+
+      const ccs = controlPipeline.compileSource(prepared.sanitizedSource, { projectId })
       if (ccs.errors.length > 0) {
         throw new Error(`Compilation failed:\n${ccs.errors.join('\n')}`)
       }
@@ -301,7 +307,7 @@ export const ExportAudio = () => {
       })
 
       const gen = dsp.core.preview.renderToAudio(
-        doc.code,
+        prepared.sanitizedSource,
         numberOfBars.value,
         BEATS_PER_BAR,
         999,
