@@ -62,7 +62,7 @@ var __require = /* @__PURE__ */ ((x$4) => typeof require !== "undefined" ? requi
 		fetch(link.href, fetchOpts);
 	}
 })();
-var n$3, l, u$4, t$7, i$5, r$12, o$32, e$60, f$4, c$6, s$3, a$34, h$4, p$6 = {}, v$3 = [], y$4 = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i, d$4 = Array.isArray;
+var n$3, l, u$4, t$7, i$5, r$12, o$32, e$60, f$4, c$6, s$3, a$34, h$4, p$7 = {}, v$3 = [], y$4 = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i, d$4 = Array.isArray;
 function w$4(n$4, l$10) {
 	for (var u$5 in l$10) n$4[u$5] = l$10[u$5];
 	return n$4;
@@ -125,7 +125,7 @@ function I$1() {
 }
 function P$2(n$4, l$10, u$5, t$12, i$6, r$13, o$33, e$61, f$5, c$7, s$4) {
 	var a$35, h$5, y$5, d$5, w$5, g$5, _$5, m$5 = t$12 && t$12.__k || v$3, b$4 = l$10.length;
-	for (f$5 = A$2(u$5, l$10, m$5, f$5, b$4), a$35 = 0; a$35 < b$4; a$35++) null != (y$5 = u$5.__k[a$35]) && (h$5 = -1 != y$5.__i && m$5[y$5.__i] || p$6, y$5.__i = a$35, g$5 = z$2(n$4, y$5, h$5, i$6, r$13, o$33, e$61, f$5, c$7, s$4), d$5 = y$5.__e, y$5.ref && h$5.ref != y$5.ref && (h$5.ref && D$3(h$5.ref, null, y$5), s$4.push(y$5.ref, y$5.__c || d$5, y$5)), null == w$5 && null != d$5 && (w$5 = d$5), (_$5 = !!(4 & y$5.__u)) || h$5.__k === y$5.__k ? f$5 = H$2(y$5, f$5, n$4, _$5) : "function" == typeof y$5.type && void 0 !== g$5 ? f$5 = g$5 : d$5 && (f$5 = d$5.nextSibling), y$5.__u &= -7);
+	for (f$5 = A$2(u$5, l$10, m$5, f$5, b$4), a$35 = 0; a$35 < b$4; a$35++) null != (y$5 = u$5.__k[a$35]) && (h$5 = -1 != y$5.__i && m$5[y$5.__i] || p$7, y$5.__i = a$35, g$5 = z$2(n$4, y$5, h$5, i$6, r$13, o$33, e$61, f$5, c$7, s$4), d$5 = y$5.__e, y$5.ref && h$5.ref != y$5.ref && (h$5.ref && D$3(h$5.ref, null, y$5), s$4.push(y$5.ref, y$5.__c || d$5, y$5)), null == w$5 && null != d$5 && (w$5 = d$5), (_$5 = !!(4 & y$5.__u)) || h$5.__k === y$5.__k ? f$5 = H$2(y$5, f$5, n$4, _$5) : "function" == typeof y$5.type && void 0 !== g$5 ? f$5 = g$5 : d$5 && (f$5 = d$5.nextSibling), y$5.__u &= -7);
 	return u$5.__e = w$5, f$5;
 }
 function A$2(n$4, l$10, u$5, t$12, i$6) {
@@ -190,11 +190,11 @@ function O$2(n$4) {
 	};
 }
 function z$2(n$4, u$5, t$12, i$6, r$13, o$33, e$61, f$5, c$7, s$4) {
-	var a$35, h$5, p$7, y$5, _$5, m$5, b$4, S$3, C$4, M$2, $$2, I$2, A$3, H$3, L$3, T$4 = u$5.type;
+	var a$35, h$5, p$8, y$5, _$5, m$5, b$4, S$3, C$4, M$2, $$2, I$2, A$3, H$3, L$3, T$4 = u$5.type;
 	if (void 0 !== u$5.constructor) return null;
 	128 & t$12.__u && (c$7 = !!(32 & t$12.__u), o$33 = [f$5 = u$5.__e = t$12.__e]), (a$35 = l.__b) && a$35(u$5);
 	n: if ("function" == typeof T$4) try {
-		if (S$3 = u$5.props, C$4 = "prototype" in T$4 && T$4.prototype.render, M$2 = (a$35 = T$4.contextType) && i$6[a$35.__c], $$2 = a$35 ? M$2 ? M$2.props.value : a$35.__ : i$6, t$12.__c ? b$4 = (h$5 = u$5.__c = t$12.__c).__ = h$5.__E : (C$4 ? u$5.__c = h$5 = new T$4(S$3, $$2) : (u$5.__c = h$5 = new x$1(S$3, $$2), h$5.constructor = T$4, h$5.render = G$2), M$2 && M$2.sub(h$5), h$5.state || (h$5.state = {}), h$5.__n = i$6, p$7 = h$5.__d = !0, h$5.__h = [], h$5._sb = []), C$4 && null == h$5.__s && (h$5.__s = h$5.state), C$4 && null != T$4.getDerivedStateFromProps && (h$5.__s == h$5.state && (h$5.__s = w$4({}, h$5.__s)), w$4(h$5.__s, T$4.getDerivedStateFromProps(S$3, h$5.__s))), y$5 = h$5.props, _$5 = h$5.state, h$5.__v = u$5, p$7) C$4 && null == T$4.getDerivedStateFromProps && null != h$5.componentWillMount && h$5.componentWillMount(), C$4 && null != h$5.componentDidMount && h$5.__h.push(h$5.componentDidMount);
+		if (S$3 = u$5.props, C$4 = "prototype" in T$4 && T$4.prototype.render, M$2 = (a$35 = T$4.contextType) && i$6[a$35.__c], $$2 = a$35 ? M$2 ? M$2.props.value : a$35.__ : i$6, t$12.__c ? b$4 = (h$5 = u$5.__c = t$12.__c).__ = h$5.__E : (C$4 ? u$5.__c = h$5 = new T$4(S$3, $$2) : (u$5.__c = h$5 = new x$1(S$3, $$2), h$5.constructor = T$4, h$5.render = G$2), M$2 && M$2.sub(h$5), h$5.state || (h$5.state = {}), h$5.__n = i$6, p$8 = h$5.__d = !0, h$5.__h = [], h$5._sb = []), C$4 && null == h$5.__s && (h$5.__s = h$5.state), C$4 && null != T$4.getDerivedStateFromProps && (h$5.__s == h$5.state && (h$5.__s = w$4({}, h$5.__s)), w$4(h$5.__s, T$4.getDerivedStateFromProps(S$3, h$5.__s))), y$5 = h$5.props, _$5 = h$5.state, h$5.__v = u$5, p$8) C$4 && null == T$4.getDerivedStateFromProps && null != h$5.componentWillMount && h$5.componentWillMount(), C$4 && null != h$5.componentDidMount && h$5.__h.push(h$5.componentDidMount);
 		else {
 			if (C$4 && null == T$4.getDerivedStateFromProps && S$3 !== y$5 && null != h$5.componentWillReceiveProps && h$5.componentWillReceiveProps(S$3, $$2), u$5.__v == t$12.__v || !h$5.__e && null != h$5.shouldComponentUpdate && !1 === h$5.shouldComponentUpdate(S$3, h$5.__s, $$2)) {
 				u$5.__v != t$12.__v && (h$5.props = S$3, h$5.state = h$5.__s, h$5.__d = !1), u$5.__e = t$12.__e, u$5.__k = t$12.__k, u$5.__k.some(function(n$5) {
@@ -210,7 +210,7 @@ function z$2(n$4, u$5, t$12, i$6, r$13, o$33, e$61, f$5, c$7, s$4) {
 		else do
 			h$5.__d = !1, I$2 && I$2(u$5), a$35 = h$5.render(h$5.props, h$5.state, h$5.context), h$5.state = h$5.__s;
 		while (h$5.__d && ++A$3 < 25);
-		h$5.state = h$5.__s, null != h$5.getChildContext && (i$6 = w$4(w$4({}, i$6), h$5.getChildContext())), C$4 && !p$7 && null != h$5.getSnapshotBeforeUpdate && (m$5 = h$5.getSnapshotBeforeUpdate(y$5, _$5)), H$3 = null != a$35 && a$35.type === k && null == a$35.key ? q$4(a$35.props.children) : a$35, f$5 = P$2(n$4, d$4(H$3) ? H$3 : [H$3], u$5, t$12, i$6, r$13, o$33, e$61, f$5, c$7, s$4), h$5.base = u$5.__e, u$5.__u &= -161, h$5.__h.length && e$61.push(h$5), b$4 && (h$5.__E = h$5.__ = null);
+		h$5.state = h$5.__s, null != h$5.getChildContext && (i$6 = w$4(w$4({}, i$6), h$5.getChildContext())), C$4 && !p$8 && null != h$5.getSnapshotBeforeUpdate && (m$5 = h$5.getSnapshotBeforeUpdate(y$5, _$5)), H$3 = null != a$35 && a$35.type === k && null == a$35.key ? q$4(a$35.props.children) : a$35, f$5 = P$2(n$4, d$4(H$3) ? H$3 : [H$3], u$5, t$12, i$6, r$13, o$33, e$61, f$5, c$7, s$4), h$5.base = u$5.__e, u$5.__u &= -161, h$5.__h.length && e$61.push(h$5), b$4 && (h$5.__E = h$5.__ = null);
 	} catch (n$5) {
 		if (u$5.__v = null, c$7 || null != o$33) if (n$5.then) {
 			for (u$5.__u |= c$7 ? 160 : 128; f$5 && 8 == f$5.nodeType && f$5.nextSibling;) f$5 = f$5.nextSibling;
@@ -244,7 +244,7 @@ function q$4(n$4) {
 	return "object" != typeof n$4 || null == n$4 || n$4.__b > 0 ? n$4 : d$4(n$4) ? n$4.map(q$4) : w$4({}, n$4);
 }
 function B$3(u$5, t$12, i$6, r$13, o$33, e$61, f$5, c$7, s$4) {
-	var a$35, h$5, v$4, y$5, w$5, _$5, m$5, b$4 = i$6.props || p$6, k$4 = t$12.props, x$4 = t$12.type;
+	var a$35, h$5, v$4, y$5, w$5, _$5, m$5, b$4 = i$6.props || p$7, k$4 = t$12.props, x$4 = t$12.type;
 	if ("svg" == x$4 ? o$33 = "http://www.w3.org/2000/svg" : "math" == x$4 ? o$33 = "http://www.w3.org/1998/Math/MathML" : o$33 || (o$33 = "http://www.w3.org/1999/xhtml"), null != e$61) {
 		for (a$35 = 0; a$35 < e$61.length; a$35++) if ((w$5 = e$61[a$35]) && "setAttribute" in w$5 == !!x$4 && (x$4 ? w$5.localName == x$4 : 3 == w$5.nodeType)) {
 			u$5 = w$5, e$61[a$35] = null;
@@ -294,7 +294,7 @@ function G$2(n$4, l$10, u$5) {
 }
 function J(u$5, t$12, i$6) {
 	var r$13, o$33, e$61, f$5;
-	t$12 == document && (t$12 = document.documentElement), l.__ && l.__(u$5, t$12), o$33 = (r$13 = "function" == typeof i$6) ? null : i$6 && i$6.__k || t$12.__k, e$61 = [], f$5 = [], z$2(t$12, u$5 = (!r$13 && i$6 || t$12).__k = _$4(k, null, [u$5]), o$33 || p$6, p$6, t$12.namespaceURI, !r$13 && i$6 ? [i$6] : o$33 ? null : t$12.firstChild ? n$3.call(t$12.childNodes) : null, e$61, !r$13 && i$6 ? i$6 : o$33 ? o$33.__e : t$12.firstChild, r$13, f$5), V$2(e$61, u$5, f$5);
+	t$12 == document && (t$12 = document.documentElement), l.__ && l.__(u$5, t$12), o$33 = (r$13 = "function" == typeof i$6) ? null : i$6 && i$6.__k || t$12.__k, e$61 = [], f$5 = [], z$2(t$12, u$5 = (!r$13 && i$6 || t$12).__k = _$4(k, null, [u$5]), o$33 || p$7, p$7, t$12.namespaceURI, !r$13 && i$6 ? [i$6] : o$33 ? null : t$12.firstChild ? n$3.call(t$12.childNodes) : null, e$61, !r$13 && i$6 ? i$6 : o$33 ? o$33.__e : t$12.firstChild, r$13, f$5), V$2(e$61, u$5, f$5);
 }
 function R$1(n$4) {
 	function l$10(n$5) {
@@ -337,7 +337,7 @@ n$3 = v$3.slice, l = { __e: function(n$4, l$10, u$5, t$12) {
 	return n$4.__v.__b - l$10.__v.__b;
 }, I$1.__r = 0, f$4 = /(PointerCapture)$|Capture$/i, c$6 = 0, s$3 = O$2(!1), a$34 = O$2(!0), h$4 = 0;
 var t$11, r$11, u$3, i$4, o$31 = 0, f$3 = [], c$5 = l, e$59 = c$5.__b, a$33 = c$5.__r, v$2 = c$5.diffed, l$9 = c$5.__c, m$3 = c$5.unmount, s$2 = c$5.__;
-function p$5(n$4, t$12) {
+function p$6(n$4, t$12) {
 	c$5.__h && c$5.__h(r$11, n$4, o$31 || t$12), o$31 = 0;
 	var u$5 = r$11.__H || (r$11.__H = {
 		__: [],
@@ -349,7 +349,7 @@ function d(n$4) {
 	return o$31 = 1, h$3(D$2, n$4);
 }
 function h$3(n$4, u$5, i$6) {
-	var o$33 = p$5(t$11++, 2);
+	var o$33 = p$6(t$11++, 2);
 	if (o$33.t = n$4, !o$33.__c && (o$33.__ = [i$6 ? i$6(u$5) : D$2(void 0, u$5), function(n$5) {
 		var t$12 = o$33.__N ? o$33.__N[0] : o$33.__[0], r$13 = o$33.t(t$12, n$5);
 		t$12 !== r$13 && (o$33.__N = [r$13, o$33.__[1]], o$33.__c.setState({}));
@@ -383,11 +383,11 @@ function h$3(n$4, u$5, i$6) {
 	return o$33.__N || o$33.__;
 }
 function y(n$4, u$5) {
-	var i$6 = p$5(t$11++, 3);
+	var i$6 = p$6(t$11++, 3);
 	!c$5.__s && C$2(i$6.__H, u$5) && (i$6.__ = n$4, i$6.u = u$5, r$11.__H.__h.push(i$6));
 }
 function _(n$4, u$5) {
-	var i$6 = p$5(t$11++, 4);
+	var i$6 = p$6(t$11++, 4);
 	!c$5.__s && C$2(i$6.__H, u$5) && (i$6.__ = n$4, i$6.u = u$5, r$11.__h.push(i$6));
 }
 function A(n$4) {
@@ -396,7 +396,7 @@ function A(n$4) {
 	}, []);
 }
 function T(n$4, r$13) {
-	var u$5 = p$5(t$11++, 7);
+	var u$5 = p$6(t$11++, 7);
 	return C$2(u$5.__H, r$13) && (u$5.__ = n$4(), u$5.__H = r$13, u$5.__h = n$4), u$5.__;
 }
 function q(n$4, t$12) {
@@ -405,7 +405,7 @@ function q(n$4, t$12) {
 	}, t$12);
 }
 function x$3(n$4) {
-	var u$5 = r$11.context[n$4.__c], i$6 = p$5(t$11++, 9);
+	var u$5 = r$11.context[n$4.__c], i$6 = p$6(t$11++, 9);
 	return i$6.c = n$4, u$5 ? (i$6.__ ?? (i$6.__ = !0, u$5.sub(r$11)), u$5.props.value) : n$4.__;
 }
 function j$2() {
@@ -632,11 +632,11 @@ function rn() {}
 function un() {
 	return this.cancelBubble;
 }
-function on$1() {
+function on$2() {
 	return this.defaultPrevented;
 }
 l.event = function(n$4) {
-	return en && (n$4 = en(n$4)), n$4.persist = rn, n$4.isPropagationStopped = un, n$4.isDefaultPrevented = on$1, n$4.nativeEvent = n$4;
+	return en && (n$4 = en(n$4)), n$4.persist = rn, n$4.isPropagationStopped = un, n$4.isDefaultPrevented = on$2, n$4.nativeEvent = n$4;
 };
 var cn$1 = {
 	enumerable: !1,
@@ -1459,7 +1459,7 @@ var o$30 = R$1({
 	weight: "regular",
 	mirrored: !1
 });
-var p$4 = D$1((s$4, a$35) => {
+var p$5 = D$1((s$4, a$35) => {
 	const { alt: n$4, color: r$13, size: t$12, weight: o$33, mirrored: c$7, children: i$6, weights: m$5, ...x$4 } = s$4, { color: d$5 = "currentColor", size: l$10, weight: f$5 = "regular", mirrored: g$5 = !1, ...w$5 } = x$3(o$30);
 	return /* @__PURE__ */ _$4("svg", {
 		ref: a$35,
@@ -1473,428 +1473,428 @@ var p$4 = D$1((s$4, a$35) => {
 		...x$4
 	}, !!n$4 && /* @__PURE__ */ _$4("title", null, n$4), i$6, m$5.get(o$33 != null ? o$33 : f$5));
 });
-p$4.displayName = "IconBase";
-var r$8 = D$1((e$61, c$7) => /* @__PURE__ */ _$4(p$4, {
+p$5.displayName = "IconBase";
+var r$8 = D$1((e$61, c$7) => /* @__PURE__ */ _$4(p$5, {
 	ref: c$7,
 	...e$61,
 	weights: a$32
 }));
 r$8.displayName = "ArrowClockwiseIcon";
-var r$4 = D$1((e$61, s$4) => /* @__PURE__ */ _$4(p$4, {
+var r$4 = D$1((e$61, s$4) => /* @__PURE__ */ _$4(p$5, {
 	ref: s$4,
 	...e$61,
 	weights: e$58
 }));
 r$4.displayName = "ArrowsClockwiseIcon";
-var o$6 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var o$6 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: e$57
 }));
 o$6.displayName = "ArticleIcon";
-var e = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var e = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: e$56
 }));
 e.displayName = "BookOpenIcon";
-var e$19 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var e$19 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: t$10
 }));
 e$19.displayName = "CaretDownIcon";
-var t$2 = D$1((o$33, r$13) => /* @__PURE__ */ _$4(p$4, {
+var t$2 = D$1((o$33, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...o$33,
 	weights: a$31
 }));
 t$2.displayName = "CaretLeftIcon";
-var e$9 = D$1((o$33, r$13) => /* @__PURE__ */ _$4(p$4, {
+var e$9 = D$1((o$33, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...o$33,
 	weights: t$9
 }));
 e$9.displayName = "CaretRightIcon";
-var o$26 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var o$26 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: a$30
 }));
 o$26.displayName = "CaretUpIcon";
-var e$1 = D$1((o$33, r$13) => /* @__PURE__ */ _$4(p$4, {
+var e$1 = D$1((o$33, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...o$33,
 	weights: e$55
 }));
 e$1.displayName = "ChalkboardTeacherIcon";
-var o$9 = D$1((c$7, r$13) => /* @__PURE__ */ _$4(p$4, {
+var o$9 = D$1((c$7, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...c$7,
 	weights: a$29
 }));
 o$9.displayName = "CheckIcon";
-var c$1 = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$4, {
+var c$1 = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...e$61,
 	weights: a$28
 }));
 c$1.displayName = "CircleNotchIcon";
-var c$2 = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$4, {
+var c$2 = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...e$61,
 	weights: a$27
 }));
 c$2.displayName = "ClockIcon";
-var e$6 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var e$6 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: l$8
 }));
 e$6.displayName = "CodeIcon";
-var r = D$1((e$61, t$12) => /* @__PURE__ */ _$4(p$4, {
+var r = D$1((e$61, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...e$61,
 	weights: e$54
 }));
 r.displayName = "CornersOutIcon";
-var r$6 = D$1((c$7, e$61) => /* @__PURE__ */ _$4(p$4, {
+var r$6 = D$1((c$7, e$61) => /* @__PURE__ */ _$4(p$5, {
 	ref: e$61,
 	...c$7,
 	weights: l$7
 }));
 r$6.displayName = "DiscordLogoIcon";
-var a = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$4, {
+var a = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...e$61,
 	weights: e$53
 }));
 a.displayName = "DownloadIcon";
-var e$12 = D$1((a$35, m$5) => /* @__PURE__ */ _$4(p$4, {
+var e$12 = D$1((a$35, m$5) => /* @__PURE__ */ _$4(p$5, {
 	ref: m$5,
 	...a$35,
 	weights: e$52
 }));
 e$12.displayName = "DownloadSimpleIcon";
-var o$27 = D$1((m$5, p$7) => /* @__PURE__ */ _$4(p$4, {
-	ref: p$7,
+var o$27 = D$1((m$5, p$8) => /* @__PURE__ */ _$4(p$5, {
+	ref: p$8,
 	...m$5,
 	weights: a$26
 }));
 o$27.displayName = "EnvelopeSimpleIcon";
-var o$14 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var o$14 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: a$25
 }));
 o$14.displayName = "ExclamationMarkIcon";
-var o$10 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var o$10 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: a$24
 }));
 o$10.displayName = "EyeIcon";
-var o$11 = D$1((a$35, r$13) => /* @__PURE__ */ _$4(p$4, {
+var o$11 = D$1((a$35, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...a$35,
 	weights: e$51
 }));
 o$11.displayName = "EyeSlashIcon";
-var o$20 = D$1((r$13, a$35) => /* @__PURE__ */ _$4(p$4, {
+var o$20 = D$1((r$13, a$35) => /* @__PURE__ */ _$4(p$5, {
 	ref: a$35,
 	...r$13,
 	weights: e$50
 }));
 o$20.displayName = "FadersIcon";
-var o$25 = D$1((r$13, i$6) => /* @__PURE__ */ _$4(p$4, {
+var o$25 = D$1((r$13, i$6) => /* @__PURE__ */ _$4(p$5, {
 	ref: i$6,
 	...r$13,
 	weights: a$23
 }));
 o$25.displayName = "FireSimpleIcon";
-var a$1 = D$1((p$7, c$7) => /* @__PURE__ */ _$4(p$4, {
+var a$1 = D$1((p$8, c$7) => /* @__PURE__ */ _$4(p$5, {
 	ref: c$7,
-	...p$7,
+	...p$8,
 	weights: e$49
 }));
 a$1.displayName = "FloppyDiskBackIcon";
-var o = D$1((r$13, a$35) => /* @__PURE__ */ _$4(p$4, {
+var o = D$1((r$13, a$35) => /* @__PURE__ */ _$4(p$5, {
 	ref: a$35,
 	...r$13,
 	weights: l$6
 }));
 o.displayName = "GearSixIcon";
-var t$4 = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$4, {
+var t$4 = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...e$61,
 	weights: e$48
 }));
 t$4.displayName = "GithubLogoIcon";
-var e$3 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var e$3 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: e$47
 }));
 e$3.displayName = "GlobeIcon";
-var o$1 = D$1((a$35, r$13) => /* @__PURE__ */ _$4(p$4, {
+var o$1 = D$1((a$35, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...a$35,
 	weights: e$46
 }));
 o$1.displayName = "HeadphonesIcon";
-var o$13 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var o$13 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: a$22
 }));
 o$13.displayName = "HeartIcon";
-var e$7 = D$1((r$13, s$4) => /* @__PURE__ */ _$4(p$4, {
+var e$7 = D$1((r$13, s$4) => /* @__PURE__ */ _$4(p$5, {
 	ref: s$4,
 	...r$13,
 	weights: e$45
 }));
 e$7.displayName = "HouseIcon";
-var o$19 = D$1((t$12, e$61) => /* @__PURE__ */ _$4(p$4, {
+var o$19 = D$1((t$12, e$61) => /* @__PURE__ */ _$4(p$5, {
 	ref: e$61,
 	...t$12,
 	weights: e$44
 }));
 o$19.displayName = "InfinityIcon";
-var e$16 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var e$16 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: a$21
 }));
 e$16.displayName = "InfoIcon";
-var e$8 = D$1((o$33, a$35) => /* @__PURE__ */ _$4(p$4, {
+var e$8 = D$1((o$33, a$35) => /* @__PURE__ */ _$4(p$5, {
 	ref: a$35,
 	...o$33,
 	weights: e$43
 }));
 e$8.displayName = "LightbulbFilamentIcon";
-var t = D$1((n$4, i$6) => /* @__PURE__ */ _$4(p$4, {
+var t = D$1((n$4, i$6) => /* @__PURE__ */ _$4(p$5, {
 	ref: i$6,
 	...n$4,
 	weights: a$20
 }));
 t.displayName = "LightningIcon";
-var e$2 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var e$2 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: e$42
 }));
 e$2.displayName = "LinkIcon";
-var o$2 = D$1((c$7, e$61) => /* @__PURE__ */ _$4(p$4, {
+var o$2 = D$1((c$7, e$61) => /* @__PURE__ */ _$4(p$5, {
 	ref: e$61,
 	...c$7,
 	weights: e$41
 }));
 o$2.displayName = "MagicWandIcon";
-var o$3 = D$1((s$4, n$4) => /* @__PURE__ */ _$4(p$4, {
+var o$3 = D$1((s$4, n$4) => /* @__PURE__ */ _$4(p$5, {
 	ref: n$4,
 	...s$4,
 	weights: a$19
 }));
 o$3.displayName = "MagnifyingGlassIcon";
-var t$5 = D$1((a$35, e$61) => /* @__PURE__ */ _$4(p$4, {
+var t$5 = D$1((a$35, e$61) => /* @__PURE__ */ _$4(p$5, {
 	ref: e$61,
 	...a$35,
 	weights: e$40
 }));
 t$5.displayName = "MathOperationsIcon";
-var o$18 = D$1((a$35, r$13) => /* @__PURE__ */ _$4(p$4, {
+var o$18 = D$1((a$35, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...a$35,
 	weights: e$39
 }));
 o$18.displayName = "MegaphoneIcon";
-var e$17 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var e$17 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: e$38
 }));
 e$17.displayName = "MicrophoneStageIcon";
-var e$15 = D$1((s$4, t$12) => /* @__PURE__ */ _$4(p$4, {
+var e$15 = D$1((s$4, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...s$4,
 	weights: a$18
 }));
 e$15.displayName = "MusicNotesIcon";
-var a$3 = D$1((o$33, r$13) => /* @__PURE__ */ _$4(p$4, {
+var a$3 = D$1((o$33, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...o$33,
 	weights: a$17
 }));
 a$3.displayName = "PaperPlaneRightIcon";
-var o$12 = D$1((i$6, m$5) => /* @__PURE__ */ _$4(p$4, {
+var o$12 = D$1((i$6, m$5) => /* @__PURE__ */ _$4(p$5, {
 	ref: m$5,
 	...i$6,
 	weights: e$37
 }));
 o$12.displayName = "PencilSimpleIcon";
-var i = D$1((o$33, n$4) => /* @__PURE__ */ _$4(p$4, {
+var i = D$1((o$33, n$4) => /* @__PURE__ */ _$4(p$5, {
 	ref: n$4,
 	...o$33,
 	weights: a$16
 }));
 i.displayName = "PencilSimpleLineIcon";
-var e$18 = D$1((a$35, r$13) => /* @__PURE__ */ _$4(p$4, {
+var e$18 = D$1((a$35, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...a$35,
 	weights: e$36
 }));
 e$18.displayName = "PianoKeysIcon";
-var a$2 = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$4, {
+var a$2 = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...e$61,
 	weights: a$15
 }));
 a$2.displayName = "PlayIcon";
-var e$10 = D$1((r$13, s$4) => /* @__PURE__ */ _$4(p$4, {
+var e$10 = D$1((r$13, s$4) => /* @__PURE__ */ _$4(p$5, {
 	ref: s$4,
 	...r$13,
 	weights: a$14
 }));
 e$10.displayName = "PlusIcon";
-var e$4 = D$1((t$12, r$13) => /* @__PURE__ */ _$4(p$4, {
+var e$4 = D$1((t$12, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...t$12,
 	weights: a$13
 }));
 e$4.displayName = "QuestionIcon";
-var o$16 = D$1((t$12, a$35) => /* @__PURE__ */ _$4(p$4, {
+var o$16 = D$1((t$12, a$35) => /* @__PURE__ */ _$4(p$5, {
 	ref: a$35,
 	...t$12,
 	weights: e$35
 }));
 o$16.displayName = "RepeatIcon";
-var c$3 = D$1((e$61, t$12) => /* @__PURE__ */ _$4(p$4, {
+var c$3 = D$1((e$61, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...e$61,
 	weights: e$34
 }));
 c$3.displayName = "RocketLaunchIcon";
-var o$17 = D$1((r$13, a$35) => /* @__PURE__ */ _$4(p$4, {
+var o$17 = D$1((r$13, a$35) => /* @__PURE__ */ _$4(p$5, {
 	ref: a$35,
 	...r$13,
 	weights: e$33
 }));
 o$17.displayName = "ShareIcon";
-var o$7 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var o$7 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: e$32
 }));
 o$7.displayName = "ShareNetworkIcon";
-var n$1 = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$4, {
+var n$1 = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...e$61,
 	weights: e$31
 }));
 n$1.displayName = "SignInIcon";
-var t$3 = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$4, {
+var t$3 = D$1((e$61, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...e$61,
 	weights: e$30
 }));
 t$3.displayName = "SignOutIcon";
-var r$1 = D$1((e$61, a$35) => /* @__PURE__ */ _$4(p$4, {
+var r$1 = D$1((e$61, a$35) => /* @__PURE__ */ _$4(p$5, {
 	ref: a$35,
 	...e$61,
 	weights: e$29
 }));
 r$1.displayName = "SquaresFourIcon";
-var o$21 = D$1((t$12, a$35) => /* @__PURE__ */ _$4(p$4, {
+var o$21 = D$1((t$12, a$35) => /* @__PURE__ */ _$4(p$5, {
 	ref: a$35,
 	...t$12,
 	weights: l$5
 }));
 o$21.displayName = "StackSimpleIcon";
-var r$7 = D$1((t$12, a$35) => /* @__PURE__ */ _$4(p$4, {
+var r$7 = D$1((t$12, a$35) => /* @__PURE__ */ _$4(p$5, {
 	ref: a$35,
 	...t$12,
 	weights: l$4
 }));
 r$7.displayName = "StarIcon";
-var e$13 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var e$13 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: a$12
 }));
 e$13.displayName = "StopCircleIcon";
-var o$8 = D$1((r$13, a$35) => /* @__PURE__ */ _$4(p$4, {
+var o$8 = D$1((r$13, a$35) => /* @__PURE__ */ _$4(p$5, {
 	ref: a$35,
 	...r$13,
 	weights: a$11
 }));
 o$8.displayName = "TerminalIcon";
-var o$22 = D$1((t$12, r$13) => /* @__PURE__ */ _$4(p$4, {
+var o$22 = D$1((t$12, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...t$12,
 	weights: a$10
 }));
 o$22.displayName = "TestTubeIcon";
-var r$3 = D$1((a$35, e$61) => /* @__PURE__ */ _$4(p$4, {
+var r$3 = D$1((a$35, e$61) => /* @__PURE__ */ _$4(p$5, {
 	ref: e$61,
 	...a$35,
 	weights: e$28
 }));
 r$3.displayName = "TrashIcon";
-var e$14 = D$1((a$35, m$5) => /* @__PURE__ */ _$4(p$4, {
+var e$14 = D$1((a$35, m$5) => /* @__PURE__ */ _$4(p$5, {
 	ref: m$5,
 	...a$35,
 	weights: e$27
 }));
 e$14.displayName = "UploadSimpleIcon";
-var o$4 = D$1((r$13, s$4) => /* @__PURE__ */ _$4(p$4, {
+var o$4 = D$1((r$13, s$4) => /* @__PURE__ */ _$4(p$5, {
 	ref: s$4,
 	...r$13,
 	weights: a$9
 }));
 o$4.displayName = "UserIcon";
-var r$5 = D$1((o$33, c$7) => /* @__PURE__ */ _$4(p$4, {
+var r$5 = D$1((o$33, c$7) => /* @__PURE__ */ _$4(p$5, {
 	ref: c$7,
 	...o$33,
 	weights: a$8
 }));
 r$5.displayName = "UserCircleIcon";
-var o$15 = D$1((r$13, s$4) => /* @__PURE__ */ _$4(p$4, {
+var o$15 = D$1((r$13, s$4) => /* @__PURE__ */ _$4(p$5, {
 	ref: s$4,
 	...r$13,
 	weights: e$26
 }));
 o$15.displayName = "UserPlusIcon";
-var r$2 = D$1((o$33, s$4) => /* @__PURE__ */ _$4(p$4, {
+var r$2 = D$1((o$33, s$4) => /* @__PURE__ */ _$4(p$5, {
 	ref: s$4,
 	...o$33,
 	weights: e$25
 }));
 r$2.displayName = "UsersThreeIcon";
-var t$1 = D$1((a$35, e$61) => /* @__PURE__ */ _$4(p$4, {
+var t$1 = D$1((a$35, e$61) => /* @__PURE__ */ _$4(p$5, {
 	ref: e$61,
 	...a$35,
 	weights: a$7
 }));
 t$1.displayName = "WaveSawtoothIcon";
-var e$5 = D$1((r$13, a$35) => /* @__PURE__ */ _$4(p$4, {
+var e$5 = D$1((r$13, a$35) => /* @__PURE__ */ _$4(p$5, {
 	ref: a$35,
 	...r$13,
 	weights: e$24
 }));
 e$5.displayName = "WaveformIcon";
-var o$23 = D$1((a$35, r$13) => /* @__PURE__ */ _$4(p$4, {
+var o$23 = D$1((a$35, r$13) => /* @__PURE__ */ _$4(p$5, {
 	ref: r$13,
 	...a$35,
 	weights: e$23
 }));
 o$23.displayName = "WavesIcon";
-var o$5 = D$1((r$13, c$7) => /* @__PURE__ */ _$4(p$4, {
+var o$5 = D$1((r$13, c$7) => /* @__PURE__ */ _$4(p$5, {
 	ref: c$7,
 	...r$13,
 	weights: e$22
 }));
 o$5.displayName = "WrenchIcon";
-var e$11 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$4, {
+var e$11 = D$1((r$13, t$12) => /* @__PURE__ */ _$4(p$5, {
 	ref: t$12,
 	...r$13,
 	weights: a$6
@@ -2200,7 +2200,7 @@ function _$3(i$6) {
 		} catch (t$12) {
 			i$6.f &= -2;
 			i$6.f |= 8;
-			p$3(i$6);
+			p$4(i$6);
 			throw t$12;
 		} finally {
 			r$10 = o$33;
@@ -2208,7 +2208,7 @@ function _$3(i$6) {
 		}
 	}
 }
-function p$3(i$6) {
+function p$4(i$6) {
 	for (var t$12 = i$6.s; void 0 !== t$12; t$12 = t$12.n) t$12.S.U(t$12);
 	i$6.x = void 0;
 	i$6.s = void 0;
@@ -2219,7 +2219,7 @@ function g$2(i$6) {
 	y$3(this);
 	r$10 = i$6;
 	this.f &= -2;
-	if (8 & this.f) p$3(this);
+	if (8 & this.f) p$4(this);
 	t$8();
 }
 function S$1(i$6, t$12) {
@@ -2262,7 +2262,7 @@ S$1.prototype.N = function() {
 };
 S$1.prototype.d = function() {
 	this.f |= 8;
-	if (!(1 & this.f)) p$3(this);
+	if (!(1 & this.f)) p$4(this);
 };
 S$1.prototype.dispose = function() {
 	this.d();
@@ -2279,7 +2279,7 @@ function m(i$6, t$12) {
 	r$13[Symbol.dispose] = r$13;
 	return r$13;
 }
-var l$2, d$3, h$1, p$2 = "undefined" != typeof window && !!window.__PREACT_SIGNALS_DEVTOOLS__, _$2 = [];
+var l$2, d$3, h$1, p$3 = "undefined" != typeof window && !!window.__PREACT_SIGNALS_DEVTOOLS__, _$2 = [];
 m(function() {
 	l$2 = this.N;
 })();
@@ -2374,7 +2374,7 @@ g$1("__r", function(i$6, n$4) {
 				return r$14;
 			}(function() {
 				var i$7;
-				if (p$2) null == (i$7 = r$13.y) || i$7.call(r$13);
+				if (p$3) null == (i$7 = r$13.y) || i$7.call(r$13);
 				o$33.__$f |= 1;
 				o$33.setState({});
 			}, "function" == typeof n$4.type ? n$4.type.displayName || n$4.type.name : "");
@@ -2574,7 +2574,7 @@ var SkipString = class SkipString {
 	splice(s$4, offset, value, level) {
 		const steps = s$4.steps;
 		const width = s$4.width;
-		let p$7;
+		let p$8;
 		let q$5;
 		let len;
 		level = level || this.randomLevel();
@@ -2583,16 +2583,16 @@ var SkipString = class SkipString {
 		let i$6;
 		i$6 = level;
 		while (i$6--) {
-			p$7 = steps[i$6];
-			q$5.next[i$6] = p$7.next[i$6];
-			p$7.next[i$6] = q$5;
-			q$5.width[i$6] = p$7.width[i$6] - width[i$6] + len;
-			p$7.width[i$6] = width[i$6];
+			p$8 = steps[i$6];
+			q$5.next[i$6] = p$8.next[i$6];
+			p$8.next[i$6] = q$5;
+			q$5.width[i$6] = p$8.width[i$6] - width[i$6] + len;
+			p$8.width[i$6] = width[i$6];
 		}
 		i$6 = this.levels;
 		while (i$6-- > level) {
-			p$7 = steps[i$6];
-			p$7.width[i$6] += len;
+			p$8 = steps[i$6];
+			p$8.width[i$6] += len;
 		}
 		return q$5;
 	}
@@ -2719,13 +2719,17 @@ function spliceChangeForOp(op) {
 		type: "splice",
 		start: op.index,
 		deletedText: "",
-		insertedText: op.text
+		insertedText: op.text,
+		startLine: op.startLine,
+		startColumn: op.startColumn
 	};
 	return {
 		type: "splice",
 		start: op.start,
 		deletedText: op.text,
-		insertedText: ""
+		insertedText: "",
+		startLine: op.startLine,
+		startColumn: op.startColumn
 	};
 }
 function applyBufferOp(skipString, op) {
@@ -2753,6 +2757,77 @@ function lineColumnFromIndex(code, index) {
 	} else column++;
 	return [line, column];
 }
+function analyzeTextForLineSplice(text) {
+	let lineBreaks = 0;
+	let tailLength = 0;
+	for (let i$6 = 0; i$6 < text.length; i$6++) if (text[i$6] === "\n") {
+		lineBreaks++;
+		tailLength = 0;
+	} else tailLength++;
+	return {
+		lineBreaks,
+		tailLength
+	};
+}
+function resolveLineColumnAtIndex(lines, index, lineHint, columnHint) {
+	if (lines.length === 0) return {
+		line: 0,
+		column: 0
+	};
+	if (lineHint !== void 0 && columnHint !== void 0) {
+		const line = Math.max(0, Math.min(lineHint, lines.length - 1));
+		const maxColumn = lines[line]?.length ?? 0;
+		return {
+			line,
+			column: Math.max(0, Math.min(columnHint, maxColumn))
+		};
+	}
+	let remaining = Math.max(0, index);
+	for (let line = 0; line < lines.length; line++) {
+		const lineLength = lines[line]?.length ?? 0;
+		if (remaining <= lineLength) return {
+			line,
+			column: remaining
+		};
+		remaining -= lineLength + 1;
+	}
+	const lastLine = lines.length - 1;
+	return {
+		line: lastLine,
+		column: lines[lastLine]?.length ?? 0
+	};
+}
+function applySpliceToLinesInPlace(lines, start, deletedText, insertedText, startLineHint, startColumnHint) {
+	if (lines.length === 0) lines.push("");
+	const startPos = resolveLineColumnAtIndex(lines, start, startLineHint, startColumnHint);
+	const startLine = Math.max(0, Math.min(startPos.line, lines.length - 1));
+	const startLineText = lines[startLine] ?? "";
+	const startColumn = Math.max(0, Math.min(startPos.column, startLineText.length));
+	const deletedInfo = analyzeTextForLineSplice(deletedText);
+	let deletedEndLine = startLine + deletedInfo.lineBreaks;
+	if (deletedEndLine < startLine) deletedEndLine = startLine;
+	if (deletedEndLine >= lines.length) deletedEndLine = lines.length - 1;
+	const deletedEndLineText = lines[deletedEndLine] ?? "";
+	const rawDeletedEndColumn = deletedInfo.lineBreaks === 0 ? startColumn + deletedInfo.tailLength : deletedInfo.tailLength;
+	const deletedEndColumn = Math.max(0, Math.min(rawDeletedEndColumn, deletedEndLineText.length));
+	const prefix = startLineText.slice(0, startColumn);
+	const suffix = deletedEndLineText.slice(deletedEndColumn);
+	const firstNewline = insertedText.indexOf("\n");
+	let replacement;
+	if (firstNewline === -1) replacement = [prefix + insertedText + suffix];
+	else {
+		replacement = insertedText.split("\n");
+		replacement[0] = prefix + replacement[0];
+		replacement[replacement.length - 1] = replacement[replacement.length - 1] + suffix;
+	}
+	const deleteCount = Math.max(1, deletedEndLine - startLine + 1);
+	lines.splice(startLine, deleteCount, ...replacement);
+	if (lines.length === 0) lines.push("");
+	return {
+		startLine,
+		startColumn
+	};
+}
 function createBuffer(bufferCode) {
 	const skipString = new SkipString();
 	skipString.set(bufferCode);
@@ -2768,35 +2843,98 @@ function createBuffer(bufferCode) {
 			for (const listener of changeListeners) listener(change);
 		});
 	};
-	const codeSignal = c(bufferCode);
+	const codeVersion = c(0);
+	let codeCache = bufferCode;
+	let codeDirty = false;
+	let codeLength = bufferCode.length;
+	const linesState = bufferCode.split("\n");
+	const linesVersion = c(0);
+	const getCode = () => {
+		if (codeDirty) {
+			codeCache = skipString.toString();
+			codeDirty = false;
+		}
+		return codeCache;
+	};
+	const applySpliceState = (start, deletedText, insertedText, startLineHint, startColumnHint) => {
+		if (deletedText.length === 0 && insertedText.length === 0) return null;
+		const clampedStart = Math.max(0, Math.min(start, codeLength));
+		const removedLength = Math.max(0, Math.min(deletedText.length, codeLength - clampedStart));
+		if (removedLength === 0 && insertedText.length === 0) return null;
+		const { startLine, startColumn } = applySpliceToLinesInPlace(linesState, clampedStart, deletedText, insertedText, startLineHint, startColumnHint);
+		const removedText = removedLength === deletedText.length ? deletedText : deletedText.slice(0, removedLength);
+		codeLength = codeLength - removedLength + insertedText.length;
+		codeDirty = true;
+		n(() => {
+			codeVersion.value++;
+			linesVersion.value++;
+		});
+		return {
+			start: clampedStart,
+			deletedText: removedText,
+			insertedText,
+			startLine,
+			startColumn
+		};
+	};
 	const code = {
 		get value() {
-			return codeSignal.value;
+			codeVersion.value;
+			return getCode();
 		},
 		set value(value) {
-			const prevCode = codeSignal.peek();
+			const prevCode = getCode();
 			if (value === prevCode) return;
 			skipString.set(value);
+			const nextLines = value.split("\n");
+			linesState.length = 0;
+			for (let i$6 = 0; i$6 < nextLines.length; i$6++) linesState.push(nextLines[i$6] ?? "");
+			codeCache = value;
+			codeDirty = false;
+			codeLength = value.length;
 			emitChange({
 				type: "reset",
 				prevCode,
 				nextCode: value
 			});
-			codeSignal.value = value;
+			n(() => {
+				codeVersion.value++;
+				linesVersion.value++;
+			});
 		}
 	};
-	const lines = b(() => code.value.split("\n"));
+	const lines = { get value() {
+		linesVersion.value;
+		return linesState;
+	} };
 	const history$1 = c([]);
 	const index = c(-1);
 	let mergeTimestamp = -Infinity;
-	const applyOp = (op) => {
+	const applyOp = (op, useHints = true) => {
 		applyBufferOp(skipString, op);
-		codeSignal.value = skipString.toString();
+		let appliedSplice = null;
+		if (op.type === BufferOpType.Insert) {
+			const result = applySpliceState(op.index, "", op.text, useHints ? op.startLine : void 0, useHints ? op.startColumn : void 0);
+			if (result) appliedSplice = {
+				startLine: result.startLine,
+				startColumn: result.startColumn
+			};
+		} else {
+			const result = applySpliceState(op.start, op.text, "", useHints ? op.startLine : void 0, useHints ? op.startColumn : void 0);
+			if (result) appliedSplice = {
+				startLine: result.startLine,
+				startColumn: result.startColumn
+			};
+		}
+		if (appliedSplice) {
+			if (op.startLine === void 0) op.startLine = appliedSplice.startLine;
+			if (op.startColumn === void 0) op.startColumn = appliedSplice.startColumn;
+		}
 	};
 	const apply = (op, merge = false) => {
 		const prevOp = history$1.value[index.value];
 		const now = Date.now();
-		applyOp(op);
+		applyOp(op, true);
 		if (merge && prevOp && now - mergeTimestamp < 1e3) {
 			if (op.type === BufferOpType.Insert && prevOp.type === BufferOpType.Insert) {
 				if (op.index === prevOp.index + prevOp.text.length) {
@@ -2807,6 +2945,8 @@ function createBuffer(bufferCode) {
 								type: BufferOpType.Insert,
 								index: prevOp.index,
 								text: prevOp.text + op.text,
+								startLine: prevOp.startLine ?? op.startLine,
+								startColumn: prevOp.startColumn ?? op.startColumn,
 								replace: true,
 								selection: prevOp.selection
 							};
@@ -2826,6 +2966,8 @@ function createBuffer(bufferCode) {
 						type: BufferOpType.Insert,
 						index: prevOp.index,
 						text: prevOp.text + op.text,
+						startLine: prevOp.startLine ?? op.startLine,
+						startColumn: prevOp.startColumn ?? op.startColumn,
 						selection: prevOp.selection
 					};
 					if (prevOp.caretIndex !== void 0) mergedOp.caretIndex = prevOp.caretIndex;
@@ -2855,6 +2997,8 @@ function createBuffer(bufferCode) {
 									start: prevPrevDeleteOp.start,
 									end: prevPrevDeleteOp.end,
 									text: prevPrevDeleteOp.text,
+									startLine: prevPrevDeleteOp.startLine ?? prevOp.startLine,
+									startColumn: prevPrevDeleteOp.startColumn ?? prevOp.startColumn,
 									replace: true,
 									selection: prevPrevDeleteOp.selection,
 									caretIndex: prevPrevDeleteOp.caretIndex
@@ -2863,6 +3007,8 @@ function createBuffer(bufferCode) {
 									type: BufferOpType.Insert,
 									index: prevPrevOp.index,
 									text: op.text,
+									startLine: op.startLine ?? prevPrevOp.startLine,
+									startColumn: op.startColumn ?? prevPrevOp.startColumn,
 									replace: true,
 									selection: op.selection || prevPrevOp.selection,
 									caretIndex: op.caretIndex
@@ -2881,6 +3027,8 @@ function createBuffer(bufferCode) {
 									start: prevPrevDeleteOp.start,
 									end: prevOp.end,
 									text: prevPrevDeleteOp.text + prevOp.text,
+									startLine: prevPrevDeleteOp.startLine ?? prevOp.startLine,
+									startColumn: prevPrevDeleteOp.startColumn ?? prevOp.startColumn,
 									replace: true,
 									selection: prevPrevDeleteOp.selection || prevOp.selection,
 									caretIndex: prevPrevDeleteOp.caretIndex
@@ -2889,6 +3037,8 @@ function createBuffer(bufferCode) {
 									type: BufferOpType.Insert,
 									index: prevPrevOp.index,
 									text: prevPrevOp.text + op.text,
+									startLine: prevPrevOp.startLine ?? op.startLine,
+									startColumn: prevPrevOp.startColumn ?? op.startColumn,
 									replace: true,
 									selection: op.selection || prevPrevOp.selection,
 									caretIndex: op.caretIndex
@@ -2914,6 +3064,13 @@ function createBuffer(bufferCode) {
 						text,
 						selection: prevOp.selection
 					};
+					if (prevOp.startLine !== void 0 || op.startLine !== void 0) mergedOp.startLine = Math.min(prevOp.startLine ?? op.startLine ?? 0, op.startLine ?? prevOp.startLine ?? 0);
+					if (mergedOp.startLine !== void 0) {
+						if (prevOp.startLine !== void 0 && op.startLine !== void 0 && prevOp.startLine === op.startLine) {
+							if (prevOp.startColumn !== void 0 || op.startColumn !== void 0) mergedOp.startColumn = Math.min(prevOp.startColumn ?? op.startColumn ?? 0, op.startColumn ?? prevOp.startColumn ?? 0);
+						} else if (mergedOp.startLine === prevOp.startLine) mergedOp.startColumn = prevOp.startColumn;
+						else if (mergedOp.startLine === op.startLine) mergedOp.startColumn = op.startColumn;
+					}
 					if (prevOp.caretIndex !== void 0) mergedOp.caretIndex = prevOp.caretIndex;
 					history$1.value = [
 						...history$1.value.slice(0, index.value),
@@ -2941,27 +3098,39 @@ function createBuffer(bufferCode) {
 		switch (op.type) {
 			case BufferOpType.Insert: {
 				skipString.remove([op.index, op.index + op.text.length]);
-				codeSignal.value = skipString.toString();
+				const removed = applySpliceState(op.index, op.text, "", void 0, void 0);
+				if (removed) {
+					if (op.startLine === void 0) op.startLine = removed.startLine;
+					if (op.startColumn === void 0) op.startColumn = removed.startColumn;
+				}
 				emitChange({
 					type: "splice",
 					start: op.index,
 					deletedText: op.text,
-					insertedText: ""
+					insertedText: "",
+					startLine: op.startLine,
+					startColumn: op.startColumn
 				});
 				if (op.replace) {
 					const deleteOp = history$1.value[index.value];
 					if (deleteOp && deleteOp.type === BufferOpType.Delete) {
 						skipString.insert(deleteOp.start, deleteOp.text);
-						codeSignal.value = skipString.toString();
+						const inserted = applySpliceState(deleteOp.start, "", deleteOp.text, void 0, void 0);
+						if (inserted) {
+							if (deleteOp.startLine === void 0) deleteOp.startLine = inserted.startLine;
+							if (deleteOp.startColumn === void 0) deleteOp.startColumn = inserted.startColumn;
+						}
 						index.value--;
 						emitChange({
 							type: "splice",
 							start: deleteOp.start,
 							deletedText: "",
-							insertedText: deleteOp.text
+							insertedText: deleteOp.text,
+							startLine: deleteOp.startLine,
+							startColumn: deleteOp.startColumn
 						});
 						if (deleteOp.selection) {
-							const lines$4 = code.value.split("\n");
+							const lines$4 = linesState;
 							const maxLine$3 = Math.max(0, lines$4.length - 1);
 							const startLine = Math.min(deleteOp.selection.start.line, maxLine$3);
 							const endLine = Math.min(deleteOp.selection.end.line, maxLine$3);
@@ -2993,9 +3162,9 @@ function createBuffer(bufferCode) {
 							};
 						}
 						if (deleteOp.caretIndex !== void 0) {
-							const clampedCaretIndex = Math.min(deleteOp.caretIndex, code.value.length);
+							const clampedCaretIndex = Math.min(deleteOp.caretIndex, codeLength);
 							const [line$3, column$3] = lineColumnFromIndex(code.value, clampedCaretIndex);
-							const lines$4 = code.value.split("\n");
+							const lines$4 = linesState;
 							const maxLine$3 = Math.max(0, lines$4.length - 1);
 							const maxColumn$3 = lines$4[Math.min(line$3, maxLine$3)]?.length || 0;
 							return {
@@ -3005,7 +3174,7 @@ function createBuffer(bufferCode) {
 						}
 						const caretIndex$2 = deleteOp.start + deleteOp.text.length;
 						const [line$2, column$2] = lineColumnFromIndex(code.value, caretIndex$2);
-						const lines$3 = code.value.split("\n");
+						const lines$3 = linesState;
 						const maxLine$2 = Math.max(0, lines$3.length - 1);
 						const maxColumn$2 = lines$3[Math.min(line$2, maxLine$2)]?.length || 0;
 						return {
@@ -3013,9 +3182,9 @@ function createBuffer(bufferCode) {
 							column: Math.min(column$2, maxColumn$2)
 						};
 					}
-					const caretIndex$1 = Math.min(op.index, code.value.length);
+					const caretIndex$1 = Math.min(op.index, codeLength);
 					const [line$1, column$1] = lineColumnFromIndex(code.value, caretIndex$1);
-					const lines$2 = code.value.split("\n");
+					const lines$2 = linesState;
 					const maxLine$1 = Math.max(0, lines$2.length - 1);
 					const maxColumn$1 = lines$2[Math.min(line$1, maxLine$1)]?.length || 0;
 					return {
@@ -3024,7 +3193,7 @@ function createBuffer(bufferCode) {
 					};
 				}
 				if (op.selection) {
-					const lines$2 = code.value.split("\n");
+					const lines$2 = linesState;
 					const maxLine$1 = Math.max(0, lines$2.length - 1);
 					const startLine = Math.min(op.selection.start.line, maxLine$1);
 					const endLine = Math.min(op.selection.end.line, maxLine$1);
@@ -3057,7 +3226,7 @@ function createBuffer(bufferCode) {
 				}
 				if (op.caretIndex !== void 0) {
 					const [line$1, column$1] = lineColumnFromIndex(code.value, op.caretIndex);
-					const lines$2 = code.value.split("\n");
+					const lines$2 = linesState;
 					const maxLine$1 = Math.max(0, lines$2.length - 1);
 					const maxColumn$1 = lines$2[Math.min(line$1, maxLine$1)]?.length || 0;
 					return {
@@ -3065,9 +3234,9 @@ function createBuffer(bufferCode) {
 						column: Math.min(column$1, maxColumn$1)
 					};
 				}
-				const caretIndex = Math.min(op.index, code.value.length);
+				const caretIndex = Math.min(op.index, codeLength);
 				const [line, column] = lineColumnFromIndex(code.value, caretIndex);
-				const lines$1 = code.value.split("\n");
+				const lines$1 = linesState;
 				const maxLine = Math.max(0, lines$1.length - 1);
 				const maxColumn = lines$1[Math.min(line, maxLine)]?.length || 0;
 				return {
@@ -3077,15 +3246,21 @@ function createBuffer(bufferCode) {
 			}
 			case BufferOpType.Delete: {
 				skipString.insert(op.start, op.text);
-				codeSignal.value = skipString.toString();
+				const inserted = applySpliceState(op.start, "", op.text, void 0, void 0);
+				if (inserted) {
+					if (op.startLine === void 0) op.startLine = inserted.startLine;
+					if (op.startColumn === void 0) op.startColumn = inserted.startColumn;
+				}
 				emitChange({
 					type: "splice",
 					start: op.start,
 					deletedText: "",
-					insertedText: op.text
+					insertedText: op.text,
+					startLine: op.startLine,
+					startColumn: op.startColumn
 				});
 				if (op.selection) {
-					const lines$2 = code.value.split("\n");
+					const lines$2 = linesState;
 					const maxLine$1 = Math.max(0, lines$2.length - 1);
 					const startLine = Math.min(op.selection.start.line, maxLine$1);
 					const endLine = Math.min(op.selection.end.line, maxLine$1);
@@ -3118,7 +3293,7 @@ function createBuffer(bufferCode) {
 				}
 				if (op.caretIndex !== void 0) {
 					const [line$1, column$1] = lineColumnFromIndex(code.value, op.caretIndex);
-					const lines$2 = code.value.split("\n");
+					const lines$2 = linesState;
 					const maxLine$1 = Math.max(0, lines$2.length - 1);
 					const maxColumn$1 = lines$2[Math.min(line$1, maxLine$1)]?.length || 0;
 					return {
@@ -3128,7 +3303,7 @@ function createBuffer(bufferCode) {
 				}
 				const caretIndex = op.start + op.text.length;
 				const [line, column] = lineColumnFromIndex(code.value, caretIndex);
-				const lines$1 = code.value.split("\n");
+				const lines$1 = linesState;
 				const maxLine = Math.max(0, lines$1.length - 1);
 				const maxColumn = lines$1[Math.min(line, maxLine)]?.length || 0;
 				return {
@@ -3142,16 +3317,16 @@ function createBuffer(bufferCode) {
 		const op = history$1.value[index.value + 1];
 		if (!op) return null;
 		index.value++;
-		applyOp(op);
+		applyOp(op, false);
 		emitChange(spliceChangeForOp(op));
 		if (op.replace) {
 			const nextOp = history$1.value[index.value + 1];
 			if (nextOp && nextOp.type === BufferOpType.Insert && nextOp.replace) {
 				index.value++;
-				applyOp(nextOp);
+				applyOp(nextOp, false);
 				emitChange(spliceChangeForOp(nextOp));
 				if (nextOp.selection) {
-					const lines$1 = code.value.split("\n");
+					const lines$1 = linesState;
 					const maxLine = Math.max(0, lines$1.length - 1);
 					const startLine = Math.min(nextOp.selection.start.line, maxLine);
 					const endLine = Math.min(nextOp.selection.end.line, maxLine);
@@ -3241,11 +3416,13 @@ function createBuffer(bufferCode) {
 	};
 	const insert$1 = (line, column, text) => {
 		const raw = indexFromLineColumn(lines.value, line, column);
-		const index$1 = Math.max(0, Math.min(raw, code.value.length));
+		const index$1 = Math.max(0, Math.min(raw, codeLength));
 		apply({
 			type: BufferOpType.Insert,
 			index: index$1,
-			text
+			text,
+			startLine: line,
+			startColumn: column
 		}, true);
 	};
 	const del = (line, column) => {
@@ -3256,18 +3433,24 @@ function createBuffer(bufferCode) {
 			start: index$1,
 			end: index$1 + 1,
 			text: char,
-			caretIndex: index$1
+			caretIndex: index$1,
+			startLine: line,
+			startColumn: column
 		}, true);
 	};
 	const backspace = (line, column) => {
 		const index$1 = indexFromLineColumn(lines.value, line, column);
 		const char = skipString.substring(index$1 - 1, index$1);
+		const startLine = Math.max(0, column > 0 ? line : line - 1);
+		const startColumn = column > 0 ? column - 1 : lines.value[startLine]?.length ?? 0;
 		apply({
 			type: BufferOpType.Delete,
 			start: index$1 - 1,
 			end: index$1,
 			text: char,
-			caretIndex: index$1
+			caretIndex: index$1,
+			startLine,
+			startColumn
 		}, true);
 	};
 	const deleteSelection = (start, end, selection, merge = false, caretPosition) => {
@@ -3281,7 +3464,9 @@ function createBuffer(bufferCode) {
 			end: endIndex,
 			text,
 			selection,
-			caretIndex
+			caretIndex,
+			startLine: start.line,
+			startColumn: start.column
 		}, merge);
 	};
 	const replace = (index$1, length, text) => {
@@ -3310,10 +3495,8 @@ function createBuffer(bufferCode) {
 		const deletedText = skipString.substring(startIndex, endIndex);
 		const beforeCaretIndex = caretPositionBefore !== void 0 ? indexFromLineColumn(lines.value, caretPositionBefore.line, caretPositionBefore.column) : void 0;
 		const afterCaretIndex = caretPositionAfter !== void 0 ? (() => {
-			const tempSkipString = skipString.copy();
-			tempSkipString.remove([startIndex, endIndex]);
-			tempSkipString.insert(startIndex, text);
-			return indexFromLineColumn(tempSkipString.toString().split("\n"), caretPositionAfter.line, caretPositionAfter.column);
+			const currentCode = code.value;
+			return indexFromLineColumn((currentCode.slice(0, startIndex) + text + currentCode.slice(endIndex)).split("\n"), caretPositionAfter.line, caretPositionAfter.column);
 		})() : void 0;
 		const deleteOp = {
 			type: BufferOpType.Delete,
@@ -3322,7 +3505,9 @@ function createBuffer(bufferCode) {
 			text: deletedText,
 			replace: true,
 			selection: selectionBefore,
-			caretIndex: beforeCaretIndex
+			caretIndex: beforeCaretIndex,
+			startLine: start.line,
+			startColumn: start.column
 		};
 		const insertOp = {
 			type: BufferOpType.Insert,
@@ -3330,7 +3515,9 @@ function createBuffer(bufferCode) {
 			text,
 			replace: true,
 			selection: selectionAfter,
-			caretIndex: afterCaretIndex
+			caretIndex: afterCaretIndex,
+			startLine: start.line,
+			startColumn: start.column
 		};
 		const now = Date.now();
 		n(() => {
@@ -3520,6 +3707,74 @@ var quoteChars = new Set([
 	"`"
 ]);
 var braceCache = /* @__PURE__ */ new WeakMap();
+function getBraceCacheRebuildDebounceMs(lineCount) {
+	if (lineCount >= 1e5) return 650;
+	if (lineCount >= 5e4) return 420;
+	if (lineCount >= 2e4) return 280;
+	return 180;
+}
+var EMPTY_BRACE_CACHE = {
+	braces: [],
+	matchedPairs: [],
+	lineLengths: [],
+	lineStartPositions: [0],
+	pairEntries: [],
+	coverageSegments: []
+};
+function makeBraceLocationKey(line, tokenIndex, charIndex) {
+	return `${line}:${tokenIndex}:${charIndex}`;
+}
+function comparePairPriority(a$35, b$4, pairEntries) {
+	const aPair = pairEntries[a$35];
+	const bPair = pairEntries[b$4];
+	if (aPair.range !== bPair.range) return aPair.range - bPair.range;
+	return aPair.id - bPair.id;
+}
+function pushMinHeap(heap, value, pairEntries) {
+	heap.push(value);
+	let index = heap.length - 1;
+	while (index > 0) {
+		const parent = index - 1 >> 1;
+		if (comparePairPriority(heap[index], heap[parent], pairEntries) >= 0) break;
+		const tmp = heap[parent];
+		heap[parent] = heap[index];
+		heap[index] = tmp;
+		index = parent;
+	}
+}
+function popMinHeap(heap, pairEntries) {
+	if (heap.length === 0) return void 0;
+	const top = heap[0];
+	const last = heap.pop();
+	if (heap.length === 0 || last === void 0) return top;
+	heap[0] = last;
+	let index = 0;
+	while (true) {
+		const left = index * 2 + 1;
+		const right = left + 1;
+		let smallest = index;
+		if (left < heap.length && comparePairPriority(heap[left], heap[smallest], pairEntries) < 0) smallest = left;
+		if (right < heap.length && comparePairPriority(heap[right], heap[smallest], pairEntries) < 0) smallest = right;
+		if (smallest === index) break;
+		const tmp = heap[index];
+		heap[index] = heap[smallest];
+		heap[smallest] = tmp;
+		index = smallest;
+	}
+	return top;
+}
+function peekMinHeap(heap) {
+	return heap.length > 0 ? heap[0] : void 0;
+}
+function getBestActivePairIndex(heap, active, pairEntries) {
+	while (heap.length > 0) {
+		const top = peekMinHeap(heap);
+		if (top === void 0) return null;
+		if (active[top]) return top;
+		popMinHeap(heap, pairEntries);
+	}
+	return null;
+}
 function getMatchingOpenBrace(closeChar) {
 	switch (closeChar) {
 		case "}": return "{";
@@ -3531,14 +3786,174 @@ function getMatchingOpenBrace(closeChar) {
 		default: return "";
 	}
 }
-function buildBraceCache(tokenLines) {
+var sameLineBraceDepthCache = /* @__PURE__ */ new WeakMap();
+function makeSameLineBraceLocationKey(tokenIndex, charIndex) {
+	return `${tokenIndex}:${charIndex}`;
+}
+function getSameLineBraceDepthForPosition(tokenLines, line, tokenIndex, charIndex) {
+	if (line < 0 || line >= tokenLines.length) return null;
+	const lineTokens = tokenLines[line] ?? [];
+	if (lineTokens.length === 0) return null;
+	let depthByLocation = sameLineBraceDepthCache.get(lineTokens);
+	if (!depthByLocation) {
+		depthByLocation = /* @__PURE__ */ new Map();
+		const braces = [];
+		let inString = null;
+		for (let i$6 = 0; i$6 < lineTokens.length; i$6++) {
+			const token = lineTokens[i$6];
+			if (token.type === "comment") continue;
+			const text = token.text;
+			let escaped = false;
+			for (let j$4 = 0; j$4 < text.length; j$4++) {
+				const char = text[j$4];
+				if (escaped) {
+					escaped = false;
+					continue;
+				}
+				if (char === "\\") {
+					escaped = true;
+					continue;
+				}
+				if (quoteChars.has(char)) {
+					if (inString === null) {
+						inString = char;
+						braces.push({
+							char,
+							tokenIndex: i$6,
+							charIndex: j$4,
+							isOpening: true
+						});
+					} else if (inString === char) {
+						inString = null;
+						braces.push({
+							char,
+							tokenIndex: i$6,
+							charIndex: j$4,
+							isOpening: false
+						});
+					}
+					continue;
+				}
+				if (openingBraces.has(char) || closingBraces.has(char)) braces.push({
+					char,
+					tokenIndex: i$6,
+					charIndex: j$4,
+					isOpening: openingBraces.has(char)
+				});
+			}
+		}
+		const stack = [];
+		for (let i$6 = 0; i$6 < braces.length; i$6++) {
+			const brace = braces[i$6];
+			if (brace.isOpening) {
+				stack.push({
+					char: brace.char,
+					index: i$6,
+					depth: stack.length
+				});
+				continue;
+			}
+			const expectedOpen = getMatchingOpenBrace(brace.char);
+			for (let j$4 = stack.length - 1; j$4 >= 0; j$4--) {
+				if (stack[j$4].char !== expectedOpen) continue;
+				const open = braces[stack[j$4].index];
+				const depth = stack[j$4].depth;
+				depthByLocation.set(makeSameLineBraceLocationKey(open.tokenIndex, open.charIndex), depth);
+				depthByLocation.set(makeSameLineBraceLocationKey(brace.tokenIndex, brace.charIndex), depth);
+				stack.splice(j$4, 1);
+				break;
+			}
+		}
+		sameLineBraceDepthCache.set(lineTokens, depthByLocation);
+	}
+	return depthByLocation.get(makeSameLineBraceLocationKey(tokenIndex, charIndex)) ?? null;
+}
+function findSameLineMatchingBraceFallback(tokenLines, cursorLine, cursorColumn) {
+	if (cursorLine < 0 || cursorLine >= tokenLines.length) return null;
+	const lineTokens = tokenLines[cursorLine] ?? [];
+	if (lineTokens.length === 0) return null;
+	const stack = [];
+	const pairs = [];
+	let position = 0;
+	for (let tokenIndex = 0; tokenIndex < lineTokens.length; tokenIndex++) {
+		const token = lineTokens[tokenIndex];
+		const text = token.text;
+		if (token.type === "comment") {
+			position += text.length;
+			continue;
+		}
+		for (let charIndex = 0; charIndex < text.length; charIndex++) {
+			const char = text[charIndex];
+			if (openingBraces.has(char)) stack.push({
+				char,
+				tokenIndex,
+				token,
+				charIndex,
+				position: position + charIndex,
+				depth: stack.length
+			});
+			else if (closingBraces.has(char)) {
+				const expectedOpen = getMatchingOpenBrace(char);
+				for (let i$6 = stack.length - 1; i$6 >= 0; i$6--) {
+					if (stack[i$6].char !== expectedOpen) continue;
+					const open = stack[i$6];
+					const close = {
+						char,
+						tokenIndex,
+						token,
+						charIndex,
+						position: position + charIndex,
+						depth: open.depth
+					};
+					pairs.push({
+						open,
+						close
+					});
+					stack.splice(i$6, 1);
+					break;
+				}
+			}
+		}
+		position += text.length;
+	}
+	if (pairs.length === 0) return null;
+	let best = null;
+	let bestRange = Number.POSITIVE_INFINITY;
+	for (let i$6 = 0; i$6 < pairs.length; i$6++) {
+		const pair = pairs[i$6];
+		const openPos = pair.open.position;
+		const closePos = pair.close.position;
+		if (cursorColumn < openPos || cursorColumn > closePos + 1) continue;
+		const range = closePos - openPos;
+		if (!best || range < bestRange) {
+			best = pair;
+			bestRange = range;
+		}
+	}
+	if (!best) return null;
+	return {
+		line: cursorLine,
+		tokenIndex: best.open.tokenIndex,
+		token: best.open.token,
+		charIndex: best.open.charIndex,
+		matchingLine: cursorLine,
+		matchingTokenIndex: best.close.tokenIndex,
+		matchingToken: best.close.token,
+		matchingCharIndex: best.close.charIndex,
+		depth: best.open.depth
+	};
+}
+function buildBraceCache(tokenLines, tokenVersion) {
 	const existing = braceCache.get(tokenLines);
-	if (existing) return existing;
+	if (existing && existing.tokenVersion === tokenVersion) return existing.cache;
 	const braces = [];
 	const lineLengths = [];
+	const lineStartPositions = new Array(tokenLines.length + 1).fill(0);
 	let inString = null;
+	let globalPos = 0;
 	for (let lineIndex = 0; lineIndex < tokenLines.length; lineIndex++) {
 		const line = tokenLines[lineIndex];
+		lineStartPositions[lineIndex] = globalPos;
 		let currentColumn = 0;
 		let lineLength = 0;
 		for (let tokenIndex = 0; tokenIndex < line.length; tokenIndex++) {
@@ -3595,7 +4010,9 @@ function buildBraceCache(tokenLines) {
 			currentColumn += text.length;
 		}
 		lineLengths.push(lineLength);
+		globalPos += lineLength + 1;
 	}
+	lineStartPositions[tokenLines.length] = globalPos;
 	const matchedPairs = [];
 	const stack = [];
 	for (let i$6 = 0; i$6 < braces.length; i$6++) {
@@ -3620,52 +4037,658 @@ function buildBraceCache(tokenLines) {
 			}
 		}
 	}
+	const pairEntries = matchedPairs.map((pair, id) => {
+		const openBrace = braces[pair.openIndex];
+		const closeBrace = braces[pair.closeIndex];
+		const openStart = (lineStartPositions[openBrace.line] ?? 0) + openBrace.position;
+		const closeStart = (lineStartPositions[closeBrace.line] ?? 0) + closeBrace.position;
+		const openEnd = openStart + 1;
+		const closeEnd = closeStart + 1;
+		return {
+			id,
+			openIndex: pair.openIndex,
+			closeIndex: pair.closeIndex,
+			depth: pair.depth,
+			openStart,
+			openEnd,
+			closeStart,
+			closeEnd,
+			range: closeEnd - openStart
+		};
+	});
+	const events = [];
+	events.length = pairEntries.length * 2;
+	let eventOffset = 0;
+	for (let i$6 = 0; i$6 < pairEntries.length; i$6++) {
+		const pairEntry = pairEntries[i$6];
+		events[eventOffset++] = {
+			pos: pairEntry.openStart,
+			add: true,
+			pairIndex: i$6
+		};
+		events[eventOffset++] = {
+			pos: pairEntry.closeEnd + 1,
+			add: false,
+			pairIndex: i$6
+		};
+	}
+	events.length = eventOffset;
+	events.sort((a$35, b$4) => {
+		if (a$35.pos !== b$4.pos) return a$35.pos - b$4.pos;
+		if (a$35.add === b$4.add) return 0;
+		return a$35.add ? 1 : -1;
+	});
+	const active = new Array(pairEntries.length).fill(false);
+	const heap = [];
+	const coverageSegments = [];
+	for (let i$6 = 0; i$6 < events.length;) {
+		const pos = events[i$6].pos;
+		while (i$6 < events.length && events[i$6].pos === pos && !events[i$6].add) {
+			active[events[i$6].pairIndex] = false;
+			i$6++;
+		}
+		while (i$6 < events.length && events[i$6].pos === pos && events[i$6].add) {
+			const pairIndex = events[i$6].pairIndex;
+			active[pairIndex] = true;
+			pushMinHeap(heap, pairIndex, pairEntries);
+			i$6++;
+		}
+		const nextPos = i$6 < events.length ? events[i$6].pos : void 0;
+		if (nextPos === void 0) continue;
+		const bestPairIndex = getBestActivePairIndex(heap, active, pairEntries);
+		if (bestPairIndex === null) continue;
+		const segmentStart = pos;
+		const segmentEnd = nextPos - 1;
+		if (segmentEnd < segmentStart) continue;
+		const prev = coverageSegments[coverageSegments.length - 1];
+		if (prev && prev.pairEntryIndex === bestPairIndex && prev.end + 1 === segmentStart) prev.end = segmentEnd;
+		else coverageSegments.push({
+			start: segmentStart,
+			end: segmentEnd,
+			pairEntryIndex: bestPairIndex
+		});
+	}
 	const cache = {
 		braces,
 		matchedPairs,
-		lineLengths
+		lineLengths,
+		lineStartPositions,
+		pairEntries,
+		coverageSegments
 	};
-	braceCache.set(tokenLines, cache);
+	braceCache.set(tokenLines, {
+		tokenVersion,
+		cache
+	});
 	return cache;
 }
-function detectBlockStart(codeLines, lineIndex) {
-	if (lineIndex >= codeLines.length) return false;
-	const line = codeLines[lineIndex];
-	if (line.trim().length === 0) return false;
-	const nextLineIndex = lineIndex + 1;
-	if (nextLineIndex >= codeLines.length) return false;
-	const nextLine = codeLines[nextLineIndex];
-	if (nextLine.trim().length === 0) return false;
-	const currentIndent = line.length - line.trimStart().length;
-	return nextLine.length - nextLine.trimStart().length > currentIndent;
-}
-function findBlockEnd(codeLines, startLine) {
-	const startLineContent = codeLines[startLine];
-	const startIndent = startLineContent.length - startLineContent.trimStart().length;
-	for (let i$6 = startLine + 1; i$6 < codeLines.length; i$6++) {
-		const line = codeLines[i$6];
-		const indent = line.length - line.trimStart().length;
-		if (line.trim().length > 0 && indent <= startIndent) return i$6 - 1;
+function computeBlockRanges(codeLines) {
+	const starts = /* @__PURE__ */ new Set();
+	const ends = /* @__PURE__ */ new Map();
+	const stack = [];
+	const lineCount = codeLines.length;
+	const nonEmpty = new Uint8Array(lineCount);
+	const indentByLine = new Uint32Array(lineCount);
+	const nextNonEmptyLine = new Int32Array(lineCount);
+	nextNonEmptyLine.fill(-1);
+	for (let i$6 = 0; i$6 < lineCount; i$6++) {
+		const line = codeLines[i$6] ?? "";
+		let indent = 0;
+		while (indent < line.length) {
+			const code = line.charCodeAt(indent);
+			if (code !== 32 && code !== 9) break;
+			indent++;
+		}
+		if (indent < line.length) {
+			nonEmpty[i$6] = 1;
+			indentByLine[i$6] = indent;
+		}
 	}
-	return codeLines.length - 1;
+	let next = -1;
+	for (let i$6 = lineCount - 1; i$6 >= 0; i$6--) {
+		nextNonEmptyLine[i$6] = next;
+		if (nonEmpty[i$6] === 1) next = i$6;
+	}
+	for (let i$6 = 0; i$6 < lineCount; i$6++) {
+		if (nonEmpty[i$6] === 0) continue;
+		const currentIndent = indentByLine[i$6];
+		while (stack.length > 0 && currentIndent <= stack[stack.length - 1].indent) {
+			const block = stack.pop();
+			ends.set(block.startLine, i$6 - 1);
+		}
+		const nextLineIndex = nextNonEmptyLine[i$6];
+		if (nextLineIndex < 0) continue;
+		if (indentByLine[nextLineIndex] > currentIndent) {
+			starts.add(i$6);
+			stack.push({
+				startLine: i$6,
+				indent: currentIndent
+			});
+		}
+	}
+	const defaultEnd = Math.max(0, lineCount - 1);
+	while (stack.length > 0) {
+		const block = stack.pop();
+		ends.set(block.startLine, defaultEnd);
+	}
+	return {
+		starts,
+		ends
+	};
+}
+function mergeBraceMultilineBlockRanges(baseRanges, cache, lineCount) {
+	if (lineCount <= 0 || cache.matchedPairs.length === 0) return baseRanges;
+	const starts = new Set(baseRanges.starts);
+	const ends = new Map(baseRanges.ends);
+	const { braces, matchedPairs } = cache;
+	for (let i$6 = 0; i$6 < matchedPairs.length; i$6++) {
+		const pair = matchedPairs[i$6];
+		const openBrace = braces[pair.openIndex];
+		const closeBrace = braces[pair.closeIndex];
+		if (!openBrace || !closeBrace) continue;
+		if (openBrace.char !== "{" || closeBrace.char !== "}") continue;
+		if (closeBrace.line <= openBrace.line) continue;
+		const startLine = openBrace.line;
+		if (startLine < 0 || startLine >= lineCount) continue;
+		const endLine = Math.min(lineCount - 1, closeBrace.line - 1);
+		if (endLine < startLine) continue;
+		starts.add(startLine);
+		const existingEnd = ends.get(startLine);
+		if (existingEnd === void 0 || endLine > existingEnd) ends.set(startLine, endLine);
+	}
+	return {
+		starts,
+		ends
+	};
+}
+function upperBound$1(sorted, target) {
+	let low = 0;
+	let high = sorted.length;
+	while (low < high) {
+		const mid = low + high >> 1;
+		if (sorted[mid] <= target) low = mid + 1;
+		else high = mid;
+	}
+	return low;
+}
+function findCoverageSegment(coverageSegments, pos) {
+	let low = 0;
+	let high = coverageSegments.length;
+	while (low < high) {
+		const mid = low + high >> 1;
+		if (coverageSegments[mid].start <= pos) low = mid + 1;
+		else high = mid;
+	}
+	const index = low - 1;
+	if (index < 0) return null;
+	const segment = coverageSegments[index];
+	return pos <= segment.end ? segment : null;
+}
+function findBracePairEntryAtPosition(cache, cursorLine, cursorColumn) {
+	const { pairEntries, coverageSegments, lineStartPositions, lineLengths } = cache;
+	if (pairEntries.length === 0 || coverageSegments.length === 0) return null;
+	const maxLine = Math.max(0, lineStartPositions.length - 2);
+	const clampedCursorLine = Math.max(0, Math.min(cursorLine, maxLine));
+	const maxColumn = lineLengths[clampedCursorLine] ?? 0;
+	const clampedCursorColumn = Math.max(0, Math.min(cursorColumn, maxColumn));
+	const coverageSegment = findCoverageSegment(coverageSegments, (lineStartPositions[clampedCursorLine] ?? 0) + clampedCursorColumn);
+	if (!coverageSegment) return null;
+	return pairEntries[coverageSegment.pairEntryIndex] ?? null;
+}
+function findMatchingBraceInCache(cache, cursorLine, cursorColumn) {
+	const { braces, lineStartPositions } = cache;
+	if (braces.length === 0) return null;
+	const pairEntry = findBracePairEntryAtPosition(cache, cursorLine, cursorColumn);
+	if (!pairEntry) return null;
+	const openBrace = braces[pairEntry.openIndex];
+	const closeBrace = braces[pairEntry.closeIndex];
+	const isTopLevelCurlyPair = pairEntry.depth === 0 && openBrace.char === "{" && closeBrace.char === "}";
+	const isAfterRootCloseBrace = cursorLine === closeBrace.line && closeBrace.position === 0 && cursorColumn > closeBrace.position + 1;
+	if (isTopLevelCurlyPair && isAfterRootCloseBrace) return null;
+	return {
+		line: openBrace.line,
+		tokenIndex: openBrace.tokenIndex,
+		token: openBrace.token,
+		charIndex: openBrace.charIndex,
+		matchingLine: closeBrace.line,
+		matchingTokenIndex: closeBrace.tokenIndex,
+		matchingToken: closeBrace.token,
+		matchingCharIndex: closeBrace.charIndex,
+		depth: pairEntry.depth,
+		openColumn: openBrace.position,
+		closeColumn: closeBrace.position
+	};
+}
+function getColumnFromTokenLocation(tokenLines, line, tokenIndex, charIndex) {
+	if (line < 0 || line >= tokenLines.length) return Math.max(0, charIndex);
+	const lineTokens = tokenLines[line] ?? [];
+	if (lineTokens.length === 0) return Math.max(0, charIndex);
+	const safeTokenIndex = Math.max(0, Math.min(tokenIndex, lineTokens.length - 1));
+	let column = Math.max(0, charIndex);
+	for (let i$6 = 0; i$6 < safeTokenIndex; i$6++) column += lineTokens[i$6]?.text.length ?? 0;
+	return column;
+}
+function isCursorInsideMatchingBraceRange(tokenLines, match, cursorLine, cursorColumn) {
+	if (cursorLine < match.line || cursorLine > match.matchingLine) return false;
+	const openColumn = getColumnFromTokenLocation(tokenLines, match.line, match.tokenIndex, match.charIndex);
+	const closeColumn = getColumnFromTokenLocation(tokenLines, match.matchingLine, match.matchingTokenIndex, match.matchingCharIndex);
+	if (match.line === match.matchingLine) return cursorColumn >= openColumn && cursorColumn <= closeColumn + 1;
+	if (cursorLine === match.line) return cursorColumn >= openColumn;
+	if (cursorLine === match.matchingLine) {
+		const openChar = match.token.text[match.charIndex];
+		const closeChar = match.matchingToken.text[match.matchingCharIndex];
+		const isTopLevelCurlyPair = match.depth === 0 && openChar === "{" && closeChar === "}";
+		const isAfterRootCloseBrace = closeColumn === 0 && cursorColumn > closeColumn + 1;
+		if (isTopLevelCurlyPair && isAfterRootCloseBrace) return false;
+		return cursorColumn <= closeColumn + 1;
+	}
+	return true;
+}
+function resolveTokenLocationAtColumn(tokenLines, line, column, expectedChar) {
+	if (line < 0 || line >= tokenLines.length) return null;
+	const tokens = tokenLines[line] ?? [];
+	if (tokens.length === 0) return null;
+	const targetColumn = Math.max(0, column);
+	let currentColumn = 0;
+	for (let tokenIndex = 0; tokenIndex < tokens.length; tokenIndex++) {
+		const token = tokens[tokenIndex];
+		const text = token?.text ?? "";
+		const nextColumn = currentColumn + text.length;
+		if (text.length > 0 && targetColumn < nextColumn) {
+			let charIndex = targetColumn - currentColumn;
+			if (charIndex < 0) charIndex = 0;
+			if (charIndex >= text.length) charIndex = text.length - 1;
+			if (text[charIndex] === expectedChar) return {
+				tokenIndex,
+				charIndex,
+				token
+			};
+			const localExactIndex = text.indexOf(expectedChar);
+			if (localExactIndex >= 0) return {
+				tokenIndex,
+				charIndex: localExactIndex,
+				token
+			};
+		}
+		currentColumn = nextColumn;
+	}
+	let best = null;
+	currentColumn = 0;
+	for (let tokenIndex = 0; tokenIndex < tokens.length; tokenIndex++) {
+		const token = tokens[tokenIndex];
+		const text = token?.text ?? "";
+		for (let charIndex = 0; charIndex < text.length; charIndex++) {
+			if (text[charIndex] !== expectedChar) continue;
+			const absoluteColumn = currentColumn + charIndex;
+			const distance = Math.abs(absoluteColumn - targetColumn);
+			if (!best || distance < best.distance) {
+				best = {
+					tokenIndex,
+					charIndex,
+					token,
+					distance
+				};
+				if (distance === 0) return {
+					tokenIndex,
+					charIndex,
+					token
+				};
+			}
+		}
+		currentColumn += text.length;
+	}
+	if (!best) return null;
+	return {
+		tokenIndex: best.tokenIndex,
+		charIndex: best.charIndex,
+		token: best.token
+	};
+}
+function countIndent$1(line) {
+	let indent = 0;
+	while (indent < line.length) {
+		const code = line.charCodeAt(indent);
+		if (code !== 32 && code !== 9) break;
+		indent++;
+	}
+	return indent;
 }
 function createBlocks(doc, caches) {
-	const blockStarts = b(() => {
+	let lastStableBraceCache = EMPTY_BRACE_CACHE;
+	let lastStableBraceTokenVersion = -1;
+	let braceRebuildTimer = null;
+	let braceWorker = null;
+	let braceWorkerJobId = 0;
+	let activeBraceWorkerJob = null;
+	let queuedBraceWorkerTokenVersion = null;
+	const debouncedBraceTokenVersion = c(-1);
+	const pendingLineTransforms = [];
+	let pendingLineTransformsVersion = 0;
+	let staleLookupCacheStamp = "";
+	const stableLineCandidatesCache = /* @__PURE__ */ new Map();
+	const staleDepthByColumnCache = /* @__PURE__ */ new Map();
+	const staleMatchingBraceCache = /* @__PURE__ */ new Map();
+	const MAX_STABLE_LINE_CANDIDATES = 64;
+	const MAX_PENDING_LINE_TRANSFORMS = 4096;
+	const initialTokenVersion = doc.tokenVersion;
+	debouncedBraceTokenVersion.value = initialTokenVersion;
+	lastStableBraceCache = buildBraceCache(doc.tokenLines, initialTokenVersion);
+	lastStableBraceTokenVersion = initialTokenVersion;
+	const clearStaleLookupCaches = () => {
+		stableLineCandidatesCache.clear();
+		staleDepthByColumnCache.clear();
+		staleMatchingBraceCache.clear();
+	};
+	const getStaleLookupCacheStamp = () => {
+		return `${doc.tokenVersion}:${lastStableBraceTokenVersion}:${pendingLineTransformsVersion}`;
+	};
+	const ensureStaleLookupCachesFresh = () => {
+		const nextStamp = getStaleLookupCacheStamp();
+		if (nextStamp === staleLookupCacheStamp) return;
+		staleLookupCacheStamp = nextStamp;
+		clearStaleLookupCaches();
+	};
+	const resetPendingLineTransforms = () => {
+		pendingLineTransforms.length = 0;
+		pendingLineTransformsVersion++;
+		clearStaleLookupCaches();
+	};
+	const publishStableBraceCache = (tokenVersion, cache) => {
+		lastStableBraceCache = cache;
+		lastStableBraceTokenVersion = tokenVersion;
+		debouncedBraceTokenVersion.value = tokenVersion;
+		resetPendingLineTransforms();
+	};
+	const shouldUseBraceWorker = () => {
+		return typeof window !== "undefined" && typeof Worker !== "undefined" && doc.lines.length >= 2e4;
+	};
+	const flushQueuedBraceWorkerRebuild = () => {
+		if (queuedBraceWorkerTokenVersion === null) return;
+		if (activeBraceWorkerJob) return;
+		const nextTokenVersion = queuedBraceWorkerTokenVersion;
+		queuedBraceWorkerTokenVersion = null;
+		if (doc.tokenVersion !== nextTokenVersion) return;
+		const worker = ensureBraceWorker();
+		if (!worker) {
+			publishStableBraceCache(nextTokenVersion, buildBraceCache(doc.tokenLines, nextTokenVersion));
+			return;
+		}
+		const jobId = ++braceWorkerJobId;
+		activeBraceWorkerJob = {
+			jobId,
+			tokenVersion: nextTokenVersion
+		};
+		const message = {
+			type: "braceCacheRebuild",
+			jobId,
+			tokenVersion: nextTokenVersion,
+			tokenLines: doc.tokenLines
+		};
+		worker.postMessage(message);
+	};
+	const ensureBraceWorker = () => {
+		if (!shouldUseBraceWorker()) return null;
+		if (braceWorker) return braceWorker;
+		braceWorker = new Worker(new URL(
+			/* @vite-ignore */
+			"/assets/brace-worker-DyuxA6xZ.js",
+			"" + import.meta.url
+		), { type: "module" });
+		braceWorker.onmessage = (event) => {
+			const message = event.data;
+			if (!message || message.type !== "braceCacheRebuildResult") return;
+			if (!activeBraceWorkerJob || activeBraceWorkerJob.jobId !== message.jobId) return;
+			activeBraceWorkerJob = null;
+			if (doc.tokenVersion === message.tokenVersion) publishStableBraceCache(message.tokenVersion, message.cache);
+			flushQueuedBraceWorkerRebuild();
+		};
+		return braceWorker;
+	};
+	const mapCurrentLineToStableLine = (line) => {
+		let mappedLine = line;
+		for (let i$6 = pendingLineTransforms.length - 1; i$6 >= 0; i$6--) {
+			const transform = pendingLineTransforms[i$6];
+			const delta = transform.lineDelta;
+			if (delta === 0) continue;
+			if (mappedLine < transform.startLine) continue;
+			if (mappedLine <= transform.endLineAfter) return null;
+			mappedLine -= delta;
+		}
+		return mappedLine;
+	};
+	const mapCurrentLineToStableLineApprox = (line) => {
+		let mappedLine = line;
+		for (let i$6 = pendingLineTransforms.length - 1; i$6 >= 0; i$6--) {
+			const transform = pendingLineTransforms[i$6];
+			const delta = transform.lineDelta;
+			if (delta === 0) continue;
+			if (mappedLine < transform.startLine) continue;
+			if (mappedLine <= transform.endLineAfter) {
+				mappedLine = transform.startLine;
+				continue;
+			}
+			mappedLine -= delta;
+		}
+		return mappedLine;
+	};
+	const mapStableLineToCurrentLineApprox = (line) => {
+		let mappedLine = line;
+		for (let i$6 = 0; i$6 < pendingLineTransforms.length; i$6++) {
+			const transform = pendingLineTransforms[i$6];
+			const delta = transform.lineDelta;
+			if (delta === 0) continue;
+			const startLine = transform.startLine;
+			const endLineBefore = transform.endLineAfter - delta;
+			if (mappedLine < startLine) continue;
+			if (mappedLine > endLineBefore) {
+				mappedLine += delta;
+				continue;
+			}
+			if (delta < 0) mappedLine = startLine;
+		}
+		return mappedLine;
+	};
+	const getStableLineCandidatesForCurrentLine = (line) => {
+		ensureStaleLookupCachesFresh();
+		const cached = stableLineCandidatesCache.get(line);
+		if (cached) return cached;
+		let candidates = new Set([line]);
+		for (let i$6 = pendingLineTransforms.length - 1; i$6 >= 0; i$6--) {
+			const transform = pendingLineTransforms[i$6];
+			const delta = transform.lineDelta;
+			if (delta === 0) continue;
+			const startLine = transform.startLine;
+			const endLineAfter = transform.endLineAfter;
+			const endLineBefore = endLineAfter - delta;
+			const rangeStart = Math.min(startLine, endLineBefore);
+			const rangeEnd = Math.max(startLine, endLineBefore);
+			const next = /* @__PURE__ */ new Set();
+			for (const mappedLine of candidates) {
+				if (mappedLine < startLine) {
+					next.add(mappedLine);
+					continue;
+				}
+				if (mappedLine > endLineAfter) {
+					next.add(mappedLine - delta);
+					continue;
+				}
+				if (rangeEnd - rangeStart + 1 <= MAX_STABLE_LINE_CANDIDATES) for (let stableLine = rangeStart; stableLine <= rangeEnd; stableLine++) next.add(stableLine);
+				else {
+					const half = MAX_STABLE_LINE_CANDIDATES >> 1;
+					const headEnd = rangeStart + half - 1;
+					const tailStart = rangeEnd - half + 1;
+					for (let stableLine = rangeStart; stableLine <= headEnd; stableLine++) next.add(stableLine);
+					for (let stableLine = tailStart; stableLine <= rangeEnd; stableLine++) next.add(stableLine);
+				}
+			}
+			if (next.size > MAX_STABLE_LINE_CANDIDATES) {
+				const sorted = Array.from(next).sort((a$35, b$4) => a$35 - b$4);
+				const trimmed = /* @__PURE__ */ new Set();
+				const half = MAX_STABLE_LINE_CANDIDATES >> 1;
+				for (let j$4 = 0; j$4 < sorted.length && j$4 < half; j$4++) trimmed.add(sorted[j$4]);
+				for (let j$4 = Math.max(half, sorted.length - half); j$4 < sorted.length; j$4++) trimmed.add(sorted[j$4]);
+				candidates = trimmed;
+			} else candidates = next;
+		}
+		const result = Array.from(candidates);
+		stableLineCandidatesCache.set(line, result);
+		return result;
+	};
+	const findStaleDepthAtCurrentColumn = (line, column) => {
+		if (lastStableBraceTokenVersion < 0) return null;
+		ensureStaleLookupCachesFresh();
+		const cacheKey = `${line}:${column}`;
+		const cached = staleDepthByColumnCache.get(cacheKey);
+		if (cached !== void 0) return cached;
+		const candidates = /* @__PURE__ */ new Set();
+		const exactLine = mapCurrentLineToStableLine(line);
+		if (exactLine !== null) candidates.add(exactLine);
+		const approxLine = mapCurrentLineToStableLineApprox(line);
+		if (approxLine !== null) candidates.add(approxLine);
+		const expanded = getStableLineCandidatesForCurrentLine(line);
+		for (let i$6 = 0; i$6 < expanded.length; i$6++) candidates.add(expanded[i$6]);
+		if (candidates.size === 0) candidates.add(line);
+		const maxStableLine = Math.max(0, lastStableBraceCache.lineStartPositions.length - 2);
+		for (const stableLineRaw of candidates) {
+			const stableLine = Math.max(0, Math.min(stableLineRaw, maxStableLine));
+			const pairEntry = findBracePairEntryAtPosition(lastStableBraceCache, stableLine, column);
+			if (!pairEntry) continue;
+			const stableGlobalPos = (lastStableBraceCache.lineStartPositions[stableLine] ?? 0) + column;
+			if (stableGlobalPos === pairEntry.openStart || stableGlobalPos === pairEntry.closeStart) {
+				staleDepthByColumnCache.set(cacheKey, pairEntry.depth);
+				return pairEntry.depth;
+			}
+		}
+		staleDepthByColumnCache.set(cacheKey, null);
+		return null;
+	};
+	doc.onIncrementalChange((change) => {
+		if (change.source === "reset") {
+			if (braceRebuildTimer !== null) {
+				clearTimeout(braceRebuildTimer);
+				braceRebuildTimer = null;
+			}
+			activeBraceWorkerJob = null;
+			queuedBraceWorkerTokenVersion = null;
+			const tokenVersion = doc.tokenVersion;
+			publishStableBraceCache(tokenVersion, buildBraceCache(doc.tokenLines, tokenVersion));
+			return;
+		}
+		if (change.source !== "sync") return;
+		if (lastStableBraceTokenVersion === doc.tokenVersion) {
+			resetPendingLineTransforms();
+			return;
+		}
+		const lineDelta = change.endLineAfter - change.endLineBefore;
+		if (lineDelta === 0) return;
+		pendingLineTransforms.push({
+			startLine: change.startLine,
+			endLineAfter: change.endLineAfter,
+			lineDelta
+		});
+		pendingLineTransformsVersion++;
+		clearStaleLookupCaches();
+		if (pendingLineTransforms.length > MAX_PENDING_LINE_TRANSFORMS) {
+			const excess = pendingLineTransforms.length - MAX_PENDING_LINE_TRANSFORMS;
+			pendingLineTransforms.splice(0, excess);
+		}
+	});
+	const scheduleBraceRebuild = (tokenVersion) => {
+		if (braceRebuildTimer !== null) clearTimeout(braceRebuildTimer);
+		const debounceMs = getBraceCacheRebuildDebounceMs(doc.lines.length);
+		braceRebuildTimer = setTimeout(() => {
+			braceRebuildTimer = null;
+			if (doc.tokenVersion !== tokenVersion) return;
+			if (shouldUseBraceWorker()) {
+				queuedBraceWorkerTokenVersion = tokenVersion;
+				flushQueuedBraceWorkerRebuild();
+				return;
+			}
+			publishStableBraceCache(tokenVersion, buildBraceCache(doc.tokenLines, tokenVersion));
+		}, debounceMs);
+	};
+	m(() => {
+		const tokenVersion = doc.tokenVersion;
+		doc.tokenizationPending;
+		const keyHoldActive = doc.keyHoldActive;
+		if (lastStableBraceTokenVersion === tokenVersion) {
+			if (braceRebuildTimer !== null) {
+				clearTimeout(braceRebuildTimer);
+				braceRebuildTimer = null;
+			}
+			return;
+		}
+		if (keyHoldActive) {
+			if (braceRebuildTimer !== null) {
+				clearTimeout(braceRebuildTimer);
+				braceRebuildTimer = null;
+			}
+			return;
+		}
+		if (lastStableBraceTokenVersion < 0) {
+			publishStableBraceCache(tokenVersion, buildBraceCache(doc.tokenLines, tokenVersion));
+			return;
+		}
+		scheduleBraceRebuild(tokenVersion);
+	});
+	const indentBlockRanges = b(() => {
+		return computeBlockRanges(doc.lines);
+	});
+	const blockRanges = b(() => {
 		const codeLines = doc.lines;
-		const starts = /* @__PURE__ */ new Set();
-		for (let i$6 = 0; i$6 < codeLines.length; i$6++) if (detectBlockStart(codeLines, i$6)) starts.add(i$6);
-		return starts;
+		const indentRanges = indentBlockRanges.value;
+		debouncedBraceTokenVersion.value;
+		if (!(lastStableBraceTokenVersion >= 0 && lastStableBraceTokenVersion === doc.tokenVersion)) return indentRanges;
+		return mergeBraceMultilineBlockRanges(indentRanges, lastStableBraceCache, codeLines.length);
+	});
+	const blockStarts = b(() => {
+		return blockRanges.value.starts;
 	});
 	const blockEnds = b(() => {
+		return blockRanges.value.ends;
+	});
+	const blockNavigation = b(() => {
+		const starts = Array.from(blockStarts.value).sort((a$35, b$4) => a$35 - b$4);
 		const codeLines = doc.lines;
-		const starts = blockStarts.value;
-		const ends = /* @__PURE__ */ new Map();
-		for (const startLine of starts) ends.set(startLine, findBlockEnd(codeLines, startLine));
-		return ends;
+		const endByStart = blockEnds.value;
+		const parentByStart = /* @__PURE__ */ new Map();
+		const indentByStart = /* @__PURE__ */ new Map();
+		const stack = [];
+		for (let i$6 = 0; i$6 < starts.length; i$6++) {
+			const startLine = starts[i$6];
+			const indent = countIndent$1(codeLines[startLine] ?? "");
+			indentByStart.set(startLine, indent);
+			const endLine = endByStart.get(startLine);
+			if (endLine === void 0 || endLine < startLine) {
+				parentByStart.set(startLine, null);
+				continue;
+			}
+			while (stack.length > 0) {
+				const parentCandidate = stack[stack.length - 1];
+				const parentCandidateEnd = endByStart.get(parentCandidate);
+				if (parentCandidateEnd === void 0 || parentCandidateEnd < startLine) {
+					stack.pop();
+					continue;
+				}
+				break;
+			}
+			parentByStart.set(startLine, stack.length > 0 ? stack[stack.length - 1] : null);
+			stack.push(startLine);
+		}
+		return {
+			sortedStarts: starts,
+			parentByStart,
+			indentByStart,
+			endByStart
+		};
+	});
+	const braceCacheSnapshot = b(() => {
+		doc.tokenVersion;
+		debouncedBraceTokenVersion.value;
+		return lastStableBraceCache;
 	});
 	const braceDepths = b(() => {
-		const tokenLines = doc.tokenLines;
-		const { braces, matchedPairs } = buildBraceCache(tokenLines);
+		const { braces, matchedPairs } = braceCacheSnapshot.value;
 		const depths = /* @__PURE__ */ new Map();
 		for (const pair of matchedPairs) {
 			const openBrace = braces[pair.openIndex];
@@ -3677,8 +4700,7 @@ function createBlocks(doc, caches) {
 		return depths;
 	});
 	const braceGlobalPos = b(() => {
-		const tokenLines = doc.tokenLines;
-		const { lineLengths } = buildBraceCache(tokenLines);
+		const { lineLengths } = braceCacheSnapshot.value;
 		const globalPos = /* @__PURE__ */ new Map();
 		let pos = 0;
 		let i$6 = 0;
@@ -3689,8 +4711,46 @@ function createBlocks(doc, caches) {
 		globalPos.set(i$6, pos);
 		return globalPos;
 	});
+	const braceDepthByLocation = b(() => {
+		const { braces, matchedPairs } = braceCacheSnapshot.value;
+		const depthByLocation = /* @__PURE__ */ new Map();
+		for (const pair of matchedPairs) {
+			const openBrace = braces[pair.openIndex];
+			const closeBrace = braces[pair.closeIndex];
+			depthByLocation.set(makeBraceLocationKey(openBrace.line, openBrace.tokenIndex, openBrace.charIndex), pair.depth);
+			depthByLocation.set(makeBraceLocationKey(closeBrace.line, closeBrace.tokenIndex, closeBrace.charIndex), pair.depth);
+		}
+		return depthByLocation;
+	});
 	const isCollapsed = (line) => {
 		return doc.collapsed.has(line);
+	};
+	const findNearestBlockStartAtOrBefore = (line) => {
+		if (line < 0 || line >= doc.lines.length) return null;
+		const { sortedStarts } = blockNavigation.value;
+		if (sortedStarts.length === 0) return null;
+		const index = upperBound$1(sortedStarts, line) - 1;
+		if (index < 0) return null;
+		return sortedStarts[index];
+	};
+	const findContainingBlockStart = (line) => {
+		if (line < 0 || line >= doc.lines.length) return null;
+		const { sortedStarts, endByStart, parentByStart } = blockNavigation.value;
+		if (sortedStarts.length === 0) return null;
+		const index = upperBound$1(sortedStarts, line) - 1;
+		if (index < 0) return null;
+		let current = sortedStarts[index];
+		while (current !== null) {
+			const endLine = endByStart.get(current);
+			if (endLine !== void 0 && line <= endLine) return current;
+			current = parentByStart.get(current) ?? null;
+		}
+		return null;
+	};
+	const getParentBlockStart = (startLine) => {
+		const { parentByStart } = blockNavigation.value;
+		if (!parentByStart.has(startLine)) return null;
+		return parentByStart.get(startLine) ?? null;
 	};
 	const toggle = (line) => {
 		const newCollapsed = new Set(doc.collapsed);
@@ -3735,73 +4795,171 @@ function createBlocks(doc, caches) {
 		doc.collapsed = newCollapsed;
 	};
 	const getBraceDepthForPosition = (line, tokenIndex, charIndex) => {
-		const tokenLines = doc.tokenLines;
-		const { braces, matchedPairs } = buildBraceCache(tokenLines);
-		let column = 0;
-		const lineTokens = tokenLines[line] || [];
-		for (let i$6 = 0; i$6 < tokenIndex && i$6 < lineTokens.length; i$6++) column += lineTokens[i$6]?.text.length || 0;
-		column += charIndex;
-		for (const pair of matchedPairs) {
-			const openBrace = braces[pair.openIndex];
-			const closeBrace = braces[pair.closeIndex];
-			if (openBrace.line === line && openBrace.tokenIndex === tokenIndex && openBrace.charIndex === charIndex) return pair.depth;
-			if (closeBrace.line === line && closeBrace.tokenIndex === tokenIndex && closeBrace.charIndex === charIndex) return pair.depth;
+		if (lastStableBraceTokenVersion >= 0) {
+			const lookupLine = lastStableBraceTokenVersion === doc.tokenVersion ? line : mapCurrentLineToStableLine(line);
+			if (lookupLine !== null) {
+				const depth = braceDepthByLocation.value.get(makeBraceLocationKey(lookupLine, tokenIndex, charIndex));
+				if (depth !== void 0) return depth;
+			}
+			if (lastStableBraceTokenVersion !== doc.tokenVersion) {
+				const approxLine = mapCurrentLineToStableLineApprox(line);
+				if (approxLine !== null) {
+					const approxDepth = braceDepthByLocation.value.get(makeBraceLocationKey(approxLine, tokenIndex, charIndex));
+					if (approxDepth !== void 0) return approxDepth;
+				}
+				const staleDepth = findStaleDepthAtCurrentColumn(line, getColumnFromTokenLocation(doc.tokenLines, line, tokenIndex, charIndex));
+				if (staleDepth !== null) return staleDepth;
+			}
+		}
+		if (doc.tokenizationPending) return getSameLineBraceDepthForPosition(doc.tokenLines, line, tokenIndex, charIndex);
+		if (lastStableBraceTokenVersion < 0) return null;
+		if (lastStableBraceTokenVersion !== doc.tokenVersion) {
+			const column = getColumnFromTokenLocation(doc.tokenLines, line, tokenIndex, charIndex);
+			const fromMatchAfter = findMatchingBrace(line, column + 1);
+			if (fromMatchAfter) {
+				const isOpen = fromMatchAfter.line === line && fromMatchAfter.tokenIndex === tokenIndex && fromMatchAfter.charIndex === charIndex;
+				const isClose = fromMatchAfter.matchingLine === line && fromMatchAfter.matchingTokenIndex === tokenIndex && fromMatchAfter.matchingCharIndex === charIndex;
+				if (isOpen || isClose) return fromMatchAfter.depth;
+			}
+			const fromMatchAt = findMatchingBrace(line, column);
+			if (fromMatchAt) {
+				const isOpen = fromMatchAt.line === line && fromMatchAt.tokenIndex === tokenIndex && fromMatchAt.charIndex === charIndex;
+				const isClose = fromMatchAt.matchingLine === line && fromMatchAt.matchingTokenIndex === tokenIndex && fromMatchAt.matchingCharIndex === charIndex;
+				if (isOpen || isClose) return fromMatchAt.depth;
+			}
+			return getSameLineBraceDepthForPosition(doc.tokenLines, line, tokenIndex, charIndex);
+		}
+		return null;
+	};
+	const getBraceDepthForLine = (line) => {
+		if (lastStableBraceTokenVersion < 0 && doc.tokenizationPending) return null;
+		const lookupLine = lastStableBraceTokenVersion === doc.tokenVersion ? line : mapCurrentLineToStableLine(line);
+		if (lookupLine !== null) return braceDepths.value.get(lookupLine) ?? null;
+		if (lastStableBraceTokenVersion !== doc.tokenVersion) {
+			const approxLine = mapCurrentLineToStableLineApprox(line);
+			if (approxLine !== null) {
+				const approxDepth = braceDepths.value.get(approxLine);
+				if (approxDepth !== void 0) return approxDepth;
+			}
 		}
 		return null;
 	};
 	const getBraceGlobalPos = (brace) => {
 		return (braceGlobalPos.value.get(brace.line) ?? 0) + brace.position;
 	};
+	const mapStableMatchToCurrent = (stableMatch) => {
+		const maxCurrentLine = Math.max(0, doc.lines.length - 1);
+		const openLine = Math.max(0, Math.min(mapStableLineToCurrentLineApprox(stableMatch.line), maxCurrentLine));
+		const closeLine = Math.max(0, Math.min(mapStableLineToCurrentLineApprox(stableMatch.matchingLine), maxCurrentLine));
+		const openExpectedChar = stableMatch.token.text[stableMatch.charIndex] ?? "{";
+		const closeExpectedChar = stableMatch.matchingToken.text[stableMatch.matchingCharIndex] ?? "}";
+		const resolvedOpen = resolveTokenLocationAtColumn(doc.tokenLines, openLine, stableMatch.openColumn, openExpectedChar);
+		const resolvedClose = resolveTokenLocationAtColumn(doc.tokenLines, closeLine, stableMatch.closeColumn, closeExpectedChar);
+		const openTokenIndex = resolvedOpen?.tokenIndex ?? stableMatch.tokenIndex;
+		const openCharIndex = resolvedOpen?.charIndex ?? stableMatch.charIndex;
+		const openToken = resolvedOpen?.token ?? doc.tokenLines[openLine]?.[openTokenIndex] ?? stableMatch.token;
+		const closeTokenIndex = resolvedClose?.tokenIndex ?? stableMatch.matchingTokenIndex;
+		const closeCharIndex = resolvedClose?.charIndex ?? stableMatch.matchingCharIndex;
+		return {
+			line: openLine,
+			tokenIndex: openTokenIndex,
+			token: openToken,
+			charIndex: openCharIndex,
+			matchingLine: closeLine,
+			matchingTokenIndex: closeTokenIndex,
+			matchingToken: resolvedClose?.token ?? doc.tokenLines[closeLine]?.[closeTokenIndex] ?? stableMatch.matchingToken,
+			matchingCharIndex: closeCharIndex,
+			depth: stableMatch.depth
+		};
+	};
+	const debugBraceProbe = (cursorLine, cursorColumn) => {
+		const staleAnalysis = lastStableBraceTokenVersion >= 0 && lastStableBraceTokenVersion !== doc.tokenVersion;
+		const exactStableLine = staleAnalysis ? mapCurrentLineToStableLine(cursorLine) : null;
+		const approxStableLine = staleAnalysis ? mapCurrentLineToStableLineApprox(cursorLine) : null;
+		const candidateStableLines = staleAnalysis ? (() => {
+			const candidates = /* @__PURE__ */ new Set();
+			if (exactStableLine !== null) candidates.add(exactStableLine);
+			if (approxStableLine !== null) candidates.add(approxStableLine);
+			const expanded = getStableLineCandidatesForCurrentLine(cursorLine);
+			for (let i$6 = 0; i$6 < expanded.length; i$6++) candidates.add(expanded[i$6]);
+			if (candidates.size === 0) candidates.add(cursorLine);
+			const maxStableLine = Math.max(0, lastStableBraceCache.lineStartPositions.length - 2);
+			const normalized = Array.from(candidates).map((line) => Math.max(0, Math.min(line, maxStableLine)));
+			normalized.sort((a$35, b$4) => a$35 - b$4);
+			return normalized;
+		})() : [];
+		let staleMatch = null;
+		if (staleAnalysis) for (let i$6 = 0; i$6 < candidateStableLines.length; i$6++) {
+			const stableLine = candidateStableLines[i$6];
+			const match = findMatchingBraceInCache(lastStableBraceCache, stableLine, cursorColumn);
+			if (!match) continue;
+			staleMatch = mapStableMatchToCurrent(match);
+			break;
+		}
+		const sameLineFallback = findSameLineMatchingBraceFallback(doc.tokenLines, cursorLine, cursorColumn);
+		const finalMatch = findMatchingBrace(cursorLine, cursorColumn);
+		return {
+			tokenVersion: doc.tokenVersion,
+			braceAnalysisVersion: lastStableBraceTokenVersion,
+			tokenizationPending: doc.tokenizationPending,
+			keyHoldActive: doc.keyHoldActive,
+			staleAnalysis,
+			exactStableLine,
+			approxStableLine,
+			candidateStableLines,
+			staleMatch,
+			sameLineFallback,
+			finalMatch
+		};
+	};
 	const findMatchingBrace = (cursorLine, cursorColumn) => {
-		const cacheKey = `${cursorLine}:${cursorColumn}`;
+		if (lastStableBraceTokenVersion >= 0 && lastStableBraceTokenVersion !== doc.tokenVersion) {
+			ensureStaleLookupCachesFresh();
+			const staleCacheKey = `${cursorLine}:${cursorColumn}`;
+			const staleCached = staleMatchingBraceCache.get(staleCacheKey);
+			if (staleCached !== void 0) return staleCached;
+			const candidateLines = /* @__PURE__ */ new Set();
+			const exactLine = mapCurrentLineToStableLine(cursorLine);
+			if (exactLine !== null) candidateLines.add(exactLine);
+			const approxLine = mapCurrentLineToStableLineApprox(cursorLine);
+			if (approxLine !== null) candidateLines.add(approxLine);
+			const expanded = getStableLineCandidatesForCurrentLine(cursorLine);
+			for (let i$6 = 0; i$6 < expanded.length; i$6++) candidateLines.add(expanded[i$6]);
+			if (candidateLines.size === 0) candidateLines.add(cursorLine);
+			const maxStableLine = Math.max(0, lastStableBraceCache.lineStartPositions.length - 2);
+			for (const stableLineRaw of candidateLines) {
+				const stableMatch = findMatchingBraceInCache(lastStableBraceCache, Math.max(0, Math.min(stableLineRaw, maxStableLine)), cursorColumn);
+				if (!stableMatch) continue;
+				const mapped = mapStableMatchToCurrent(stableMatch);
+				if (!isCursorInsideMatchingBraceRange(doc.tokenLines, mapped, cursorLine, cursorColumn)) continue;
+				staleMatchingBraceCache.set(staleCacheKey, mapped);
+				return mapped;
+			}
+			const fallback = findSameLineMatchingBraceFallback(doc.tokenLines, cursorLine, cursorColumn);
+			if (fallback && !isCursorInsideMatchingBraceRange(doc.tokenLines, fallback, cursorLine, cursorColumn)) {
+				staleMatchingBraceCache.set(staleCacheKey, null);
+				return null;
+			}
+			staleMatchingBraceCache.set(staleCacheKey, fallback);
+			return fallback;
+		}
+		if (doc.tokenizationPending) return findSameLineMatchingBraceFallback(doc.tokenLines, cursorLine, cursorColumn);
+		const cacheKey = `${doc.tokenVersion}:${lastStableBraceTokenVersion}:${cursorLine}:${cursorColumn}`;
 		const cached = caches.matchingBraceCache.get(cacheKey);
 		if (cached !== void 0) return cached;
-		const tokenLines = doc.tokenLines;
-		const { braces, matchedPairs, lineLengths } = buildBraceCache(tokenLines);
-		if (braces.length === 0 || matchedPairs.length === 0) {
+		const resolved = findMatchingBraceInCache(braceCacheSnapshot.value, cursorLine, cursorColumn);
+		if (!resolved || !isCursorInsideMatchingBraceRange(doc.tokenLines, resolved, cursorLine, cursorColumn)) {
 			caches.matchingBraceCache.set(cacheKey, null);
 			return null;
 		}
-		const clampedCursorLine = Math.max(0, Math.min(cursorLine, tokenLines.length));
-		let cursorGlobalPos = 0;
-		for (let i$6 = 0; i$6 < clampedCursorLine; i$6++) cursorGlobalPos += lineLengths[i$6] + 1;
-		cursorGlobalPos += cursorColumn;
-		let innermostPair = null;
-		let smallestRange = Infinity;
-		for (const pair of matchedPairs) {
-			const openBrace$1 = braces[pair.openIndex];
-			const closeBrace$1 = braces[pair.closeIndex];
-			const openStart = getBraceGlobalPos(openBrace$1);
-			const closeStart = getBraceGlobalPos(closeBrace$1);
-			const openEnd = openStart + 1;
-			const closeEnd = closeStart + 1;
-			if (cursorGlobalPos > openStart && cursorGlobalPos < closeEnd || cursorGlobalPos === openStart || cursorGlobalPos === openEnd || cursorGlobalPos === closeStart || cursorGlobalPos === closeEnd) {
-				const range = closeEnd - openStart;
-				if (range < smallestRange) {
-					smallestRange = range;
-					innermostPair = pair;
-				}
-			}
-		}
-		if (!innermostPair) {
-			caches.matchingBraceCache.set(cacheKey, null);
-			return null;
-		}
-		const openBrace = braces[innermostPair.openIndex];
-		const closeBrace = braces[innermostPair.closeIndex];
-		const result = {
-			line: openBrace.line,
-			tokenIndex: openBrace.tokenIndex,
-			token: openBrace.token,
-			charIndex: openBrace.charIndex,
-			matchingLine: closeBrace.line,
-			matchingTokenIndex: closeBrace.tokenIndex,
-			matchingToken: closeBrace.token,
-			matchingCharIndex: closeBrace.charIndex,
-			depth: innermostPair.depth
-		};
-		caches.matchingBraceCache.set(cacheKey, result);
-		return result;
+		caches.matchingBraceCache.set(cacheKey, resolved);
+		return resolved;
+	};
+	const isBraceAnalysisCurrent = () => {
+		return !doc.tokenizationPending && lastStableBraceTokenVersion === doc.tokenVersion;
+	};
+	const getBraceAnalysisVersion = () => {
+		return lastStableBraceTokenVersion;
 	};
 	return {
 		blockStarts,
@@ -3815,13 +4973,43 @@ function createBlocks(doc, caches) {
 		adjustOnLineInsertRange,
 		adjustOnLineDelete,
 		adjustOnLineDeleteRange,
+		findNearestBlockStartAtOrBefore,
+		findContainingBlockStart,
+		getParentBlockStart,
 		findMatchingBrace,
 		getBraceGlobalPos,
-		getBraceDepthForPosition
+		getBraceDepthForPosition,
+		getBraceDepthForLine,
+		isBraceAnalysisCurrent,
+		getBraceAnalysisVersion,
+		debugBraceProbe
 	};
 }
-function getTokenCacheKey(token) {
-	return `${token.type}${token.text}`;
+var MIN_LINE_CANVAS_DIMENSION = 32;
+var MIN_LINE_CANVAS_POOL_SIZE = 128;
+function nextPowerOfTwo(value) {
+	let power = 1;
+	const target = Math.max(1, Math.ceil(value));
+	while (power < target) power *= 2;
+	return power;
+}
+function quantizeLineCanvasDimension(value) {
+	return Math.max(MIN_LINE_CANVAS_DIMENSION, nextPowerOfTwo(value));
+}
+function makeLineCanvasBucketKey(width, height) {
+	return `${width}x${height}`;
+}
+function getLineCanvasSegmentKey(logicalLine, tokenOffset) {
+	return `${logicalLine}:${tokenOffset}`;
+}
+var logicalTokenLineIdCache = /* @__PURE__ */ new WeakMap();
+var nextLogicalTokenLineId = 1;
+function getLogicalTokenLineId(tokens) {
+	const cached = logicalTokenLineIdCache.get(tokens);
+	if (cached !== void 0) return cached;
+	const id = nextLogicalTokenLineId++;
+	logicalTokenLineIdCache.set(tokens, id);
+	return id;
 }
 function getWidgetCacheKey(widget) {
 	const type = widget.type;
@@ -3836,16 +5024,12 @@ function getErrorCacheKey(error$1) {
 	const [x1, x2] = error$1.x;
 	return `${x1}${x2}${error$1.y}${error$1.message}`;
 }
-function getWrapTokensCacheKey(tokens, logicalLine, maxWidth, lineWidgets, lineErrors, settings$1) {
-	let tokensKey = "";
-	for (let i$6 = 0; i$6 < tokens.length; i$6++) tokensKey += getTokenCacheKey(tokens[i$6]);
+function getWrapTokensCacheKey(maxWidth, lineWidgets, lineErrors, settings$1) {
 	let widgetsKey = "";
 	for (let i$6 = 0; i$6 < lineWidgets.length; i$6++) widgetsKey += getWidgetCacheKey(lineWidgets[i$6]);
 	let errorsKey = "";
 	for (let i$6 = 0; i$6 < lineErrors.length; i$6++) errorsKey += getErrorCacheKey(lineErrors[i$6]);
 	return [
-		tokensKey,
-		logicalLine,
 		maxWidth,
 		widgetsKey,
 		errorsKey,
@@ -3854,182 +5038,163 @@ function getWrapTokensCacheKey(tokens, logicalLine, maxWidth, lineWidgets, lineE
 	].join(WRAP_TOKENS_CACHE_KEY_DELIMITER);
 }
 var WRAP_TOKENS_CACHE_KEY_DELIMITER = "|||";
-function parseCacheKeyLineNumber(key) {
-	const delimiterIndex = key.indexOf(WRAP_TOKENS_CACHE_KEY_DELIMITER);
-	if (delimiterIndex === -1) return null;
-	const afterDelimiter = key.slice(delimiterIndex + 3);
-	const nextDelimiterIndex = afterDelimiter.indexOf(WRAP_TOKENS_CACHE_KEY_DELIMITER);
-	if (nextDelimiterIndex === -1) return null;
-	const lineNumStr = afterDelimiter.slice(0, nextDelimiterIndex);
-	const lineNum = Number.parseInt(lineNumStr, 10);
-	if (!Number.isNaN(lineNum)) return lineNum;
-	return null;
-}
-function updateCacheKeyLineNumber(key, newLineNumber) {
-	const delimiterIndex = key.indexOf(WRAP_TOKENS_CACHE_KEY_DELIMITER);
-	if (delimiterIndex === -1) return key;
-	const before = key.slice(0, delimiterIndex + 3);
-	const afterDelimiter = key.slice(delimiterIndex + 3);
-	const nextDelimiterIndex = afterDelimiter.indexOf(WRAP_TOKENS_CACHE_KEY_DELIMITER);
-	if (nextDelimiterIndex === -1) return key;
-	return `${before}${newLineNumber}${afterDelimiter.slice(nextDelimiterIndex)}`;
-}
-function getLineCacheKey(context, visualTokens) {
-	return visualTokens.map((vt) => getTokenCacheKey(vt.token)).join("") + `${context.canvas.ligatureDpr.value}${context.settings.lineHeight}${context.settings.fontSize}`;
+function getLineCacheKey(context, line, logicalLineTokens) {
+	const tokenLineId = getLogicalTokenLineId(logicalLineTokens);
+	const first = line.tokens[0];
+	const last = line.tokens[line.tokens.length - 1];
+	const firstLogicalTokenIndex = first?.logicalTokenIndex ?? -1;
+	const firstLogicalCharOffset = first?.logicalCharOffset ?? -1;
+	const lastLogicalTokenIndex = last?.logicalTokenIndex ?? -1;
+	const lastLogicalCharOffset = last?.logicalCharOffset ?? -1;
+	return `${tokenLineId}|${line.logicalLine}|${line.tokenOffset}|${line.tokens.length}|${firstLogicalTokenIndex}|${firstLogicalCharOffset}|${lastLogicalTokenIndex}|${lastLogicalCharOffset}|${line.width}|${line.height}|${context.canvas.ligatureDpr.value}|${context.settings.lineHeight}|${context.settings.fontSize}|${context.doc.revision}`;
 }
 function createCaches(canvas, settings$1, doc) {
 	const measureTextCache = /* @__PURE__ */ new Map();
 	const lineCanvasCache = /* @__PURE__ */ new Map();
 	const lineCanvasCacheByLine = /* @__PURE__ */ new Map();
+	const lineCanvasPoolByBucket = /* @__PURE__ */ new Map();
+	let lineCanvasPoolCount = 0;
+	const lineCanvasUsageOrder = /* @__PURE__ */ new Map();
+	let lineCanvasBudget = 128;
 	const wrapTokensCache = /* @__PURE__ */ new Map();
+	const wrapTokensCacheByTokenRef = /* @__PURE__ */ new Map();
 	const wrapTokensCacheByLine = /* @__PURE__ */ new Map();
 	const matchingBraceCache = /* @__PURE__ */ new Map();
 	const getXFromColumnCache = /* @__PURE__ */ new Map();
 	const findVisualLineForColumnCache = /* @__PURE__ */ new Map();
 	const blockInfoCache = /* @__PURE__ */ new Map();
+	const getLineCanvasBucketSize = (targetWidth, targetHeight) => {
+		return {
+			width: quantizeLineCanvasDimension(targetWidth),
+			height: quantizeLineCanvasDimension(targetHeight)
+		};
+	};
+	const trimLineCanvasPool = () => {
+		const maxPoolSize = Math.max(MIN_LINE_CANVAS_POOL_SIZE, lineCanvasBudget * 2);
+		while (lineCanvasPoolCount > maxPoolSize) {
+			const firstBucketEntry = lineCanvasPoolByBucket.entries().next().value;
+			if (!firstBucketEntry) break;
+			const [key, bucket] = firstBucketEntry;
+			if (bucket.length === 0) {
+				lineCanvasPoolByBucket.delete(key);
+				continue;
+			}
+			bucket.pop();
+			lineCanvasPoolCount--;
+			if (bucket.length === 0) lineCanvasPoolByBucket.delete(key);
+		}
+	};
+	const recycleLineCanvas = (lineCanvas) => {
+		lineCanvas.lineCacheKey = "";
+		lineCanvas.braceAnalysisVersion = -1;
+		lineCanvas.braceRenderTokenVersion = -1;
+		lineCanvas.braceRenderTokenRef = null;
+		const bucketKey = makeLineCanvasBucketKey(lineCanvas.canvas.width, lineCanvas.canvas.height);
+		const bucket = lineCanvasPoolByBucket.get(bucketKey);
+		if (bucket) bucket.push(lineCanvas);
+		else lineCanvasPoolByBucket.set(bucketKey, [lineCanvas]);
+		lineCanvasPoolCount++;
+		trimLineCanvasPool();
+	};
+	const trimLineCanvasesToBudget = () => {
+		while (lineCanvasCacheByLine.size > lineCanvasBudget) {
+			const oldestKey = lineCanvasUsageOrder.keys().next().value;
+			if (typeof oldestKey !== "string") break;
+			lineCanvasUsageOrder.delete(oldestKey);
+			const lineCanvas = lineCanvasCacheByLine.get(oldestKey);
+			if (!lineCanvas) continue;
+			lineCanvasCacheByLine.delete(oldestKey);
+			if (lineCanvas.lineCacheKey) lineCanvasCache.delete(lineCanvas.lineCacheKey);
+			recycleLineCanvas(lineCanvas);
+		}
+	};
+	const setLineCanvasBudget = (budget) => {
+		const nextBudget = Math.max(32, Math.floor(budget));
+		if (nextBudget === lineCanvasBudget) return;
+		lineCanvasBudget = nextBudget;
+		trimLineCanvasPool();
+	};
+	const markLineCanvasUsed = (segmentKey) => {
+		if (lineCanvasUsageOrder.has(segmentKey)) lineCanvasUsageOrder.delete(segmentKey);
+		lineCanvasUsageOrder.set(segmentKey, true);
+	};
+	const acquireLineCanvas = (targetWidth, targetHeight, dpr) => {
+		const bucketSize = getLineCanvasBucketSize(targetWidth, targetHeight);
+		const bucketKey = makeLineCanvasBucketKey(bucketSize.width, bucketSize.height);
+		const bucket = lineCanvasPoolByBucket.get(bucketKey);
+		const pooled = bucket?.pop();
+		if (bucket && bucket.length === 0) lineCanvasPoolByBucket.delete(bucketKey);
+		if (pooled) lineCanvasPoolCount--;
+		if (!pooled) {
+			const canvas$1 = new OffscreenCanvas(bucketSize.width, bucketSize.height);
+			const c$7 = canvas$1.getContext("2d");
+			c$7.setTransform(dpr, 0, 0, dpr, 0, 0);
+			return {
+				lineCacheKey: "",
+				braceAnalysisVersion: -1,
+				braceRenderTokenVersion: -1,
+				braceRenderTokenRef: null,
+				canvas: canvas$1,
+				c: c$7
+			};
+		}
+		const { canvas: pooledCanvas, c: pooledContext } = pooled;
+		if (pooledCanvas.width !== bucketSize.width || pooledCanvas.height !== bucketSize.height) {
+			pooledCanvas.width = bucketSize.width;
+			pooledCanvas.height = bucketSize.height;
+			pooledContext.setTransform(dpr, 0, 0, dpr, 0, 0);
+		}
+		pooledContext.clearRect(0, 0, pooledCanvas.width / dpr, pooledCanvas.height / dpr);
+		pooled.lineCacheKey = "";
+		pooled.braceAnalysisVersion = -1;
+		pooled.braceRenderTokenVersion = -1;
+		pooled.braceRenderTokenRef = null;
+		return pooled;
+	};
 	const clear = () => {
 		measureTextCache.clear();
+		clearVisualCaches();
+	};
+	const clearDrawCaches = () => {
 		lineCanvasCache.clear();
 		lineCanvasCacheByLine.clear();
-		wrapTokensCache.clear();
-		wrapTokensCacheByLine.clear();
+		lineCanvasPoolByBucket.clear();
+		lineCanvasPoolCount = 0;
+		lineCanvasUsageOrder.clear();
 		matchingBraceCache.clear();
 		getXFromColumnCache.clear();
 		findVisualLineForColumnCache.clear();
 		blockInfoCache.clear();
 	};
-	const adjustWrapTokensCacheOnLineInsert = (insertedAt) => {
-		const splitLineKey = wrapTokensCacheByLine.get(insertedAt - 1);
-		if (splitLineKey) {
-			wrapTokensCache.delete(splitLineKey);
-			wrapTokensCacheByLine.delete(insertedAt - 1);
-		}
-		const lineNums = Array.from(wrapTokensCacheByLine.keys()).filter((lineNum) => lineNum >= insertedAt);
-		for (const lineNum of lineNums) {
-			const key = wrapTokensCacheByLine.get(lineNum);
-			if (key) {
-				wrapTokensCache.delete(key);
-				wrapTokensCacheByLine.delete(lineNum);
-			}
-		}
-	};
-	const adjustWrapTokensCacheOnLineInsertRange = (startLine, endLine) => {
-		endLine - startLine + 1;
-		const splitLineKey = wrapTokensCacheByLine.get(startLine - 1);
-		if (splitLineKey) {
-			wrapTokensCache.delete(splitLineKey);
-			wrapTokensCacheByLine.delete(startLine - 1);
-		}
-		const lineNums = Array.from(wrapTokensCacheByLine.keys()).filter((lineNum) => lineNum >= startLine);
-		for (const lineNum of lineNums) {
-			const key = wrapTokensCacheByLine.get(lineNum);
-			if (key) {
-				wrapTokensCache.delete(key);
-				wrapTokensCacheByLine.delete(lineNum);
-			}
-		}
-	};
-	const adjustWrapTokensCacheOnLineDelete = (deletedAt) => {
-		const deletedKey = wrapTokensCacheByLine.get(deletedAt);
-		if (deletedKey) {
-			wrapTokensCache.delete(deletedKey);
-			wrapTokensCacheByLine.delete(deletedAt);
-		}
-		const prevLineKey = wrapTokensCacheByLine.get(deletedAt - 1);
-		if (prevLineKey) {
-			wrapTokensCache.delete(prevLineKey);
-			wrapTokensCacheByLine.delete(deletedAt - 1);
-		}
-		const keysToUpdate = [];
-		for (const [lineNum, key] of wrapTokensCacheByLine.entries()) if (lineNum > deletedAt) {
-			const value = wrapTokensCache.get(key);
-			if (value) {
-				const lineNumInKey = parseCacheKeyLineNumber(key);
-				if (lineNumInKey !== null && lineNumInKey === lineNum) {
-					const parts = key.split(WRAP_TOKENS_CACHE_KEY_DELIMITER);
-					const widgetsPart = parts.length > 3 ? parts[3] : "";
-					const errorsPart = parts.length > 4 ? parts[4] : "";
-					if (!(widgetsPart !== "" || errorsPart !== "")) {
-						const newKey = updateCacheKeyLineNumber(key, lineNum - 1);
-						const updatedValue = value.map((line) => ({
-							...line,
-							logicalLine: line.logicalLine - 1
-						}));
-						keysToUpdate.push([
-							key,
-							newKey,
-							lineNum,
-							updatedValue
-						]);
-					} else {
-						wrapTokensCache.delete(key);
-						wrapTokensCacheByLine.delete(lineNum);
-					}
-				}
-			}
-		}
-		for (const [oldKey, newKey, oldLineNum, updatedValue] of keysToUpdate) {
-			wrapTokensCache.set(newKey, updatedValue);
-			wrapTokensCache.delete(oldKey);
-			wrapTokensCacheByLine.delete(oldLineNum);
-			wrapTokensCacheByLine.set(oldLineNum - 1, newKey);
-		}
-	};
-	const adjustWrapTokensCacheOnLineDeleteRange = (startLine, endLine) => {
-		const deletedCount = endLine - startLine;
-		for (let i$6 = startLine; i$6 <= endLine; i$6++) {
-			const deletedKey = wrapTokensCacheByLine.get(i$6);
-			if (deletedKey) {
-				wrapTokensCache.delete(deletedKey);
-				wrapTokensCacheByLine.delete(i$6);
-			}
-		}
-		const prevLineKey = wrapTokensCacheByLine.get(startLine - 1);
-		if (prevLineKey) {
-			wrapTokensCache.delete(prevLineKey);
-			wrapTokensCacheByLine.delete(startLine - 1);
-		}
-		const keysToUpdate = [];
-		for (const [lineNum, key] of wrapTokensCacheByLine.entries()) if (lineNum > endLine) {
-			const value = wrapTokensCache.get(key);
-			if (value) {
-				const lineNumInKey = parseCacheKeyLineNumber(key);
-				if (lineNumInKey !== null && lineNumInKey === lineNum) {
-					const parts = key.split(WRAP_TOKENS_CACHE_KEY_DELIMITER);
-					const widgetsPart = parts.length > 3 ? parts[3] : "";
-					const errorsPart = parts.length > 4 ? parts[4] : "";
-					if (!(widgetsPart !== "" || errorsPart !== "")) {
-						const newKey = updateCacheKeyLineNumber(key, lineNum - deletedCount);
-						const updatedValue = value.map((line) => ({
-							...line,
-							logicalLine: line.logicalLine - deletedCount
-						}));
-						keysToUpdate.push([
-							key,
-							newKey,
-							lineNum,
-							updatedValue
-						]);
-					} else {
-						wrapTokensCache.delete(key);
-						wrapTokensCacheByLine.delete(lineNum);
-					}
-				}
-			}
-		}
-		for (const [oldKey, newKey, oldLineNum, updatedValue] of keysToUpdate) {
-			wrapTokensCache.set(newKey, updatedValue);
-			wrapTokensCache.delete(oldKey);
-			wrapTokensCacheByLine.delete(oldLineNum);
-			wrapTokensCacheByLine.set(oldLineNum - deletedCount, newKey);
-		}
+	const clearVisualCaches = () => {
+		clearDrawCaches();
+		wrapTokensCache.clear();
+		wrapTokensCacheByTokenRef.clear();
+		wrapTokensCacheByLine.clear();
 	};
 	const invalidateWrapTokensCacheForLine = (line) => {
+		if (line < 0) return;
+		const tokenRef = doc.tokenLines[line];
+		if (tokenRef) wrapTokensCacheByTokenRef.delete(tokenRef);
 		const cacheKey = wrapTokensCacheByLine.get(line);
 		if (cacheKey) {
 			wrapTokensCache.delete(cacheKey);
 			wrapTokensCacheByLine.delete(line);
 		}
+	};
+	const adjustWrapTokensCacheOnLineInsert = (insertedAt) => {
+		invalidateWrapTokensCacheForLine(insertedAt - 1);
+	};
+	const adjustWrapTokensCacheOnLineInsertRange = (startLine, _endLine) => {
+		invalidateWrapTokensCacheForLine(startLine - 1);
+	};
+	const adjustWrapTokensCacheOnLineDelete = (deletedAt) => {
+		invalidateWrapTokensCacheForLine(deletedAt);
+		invalidateWrapTokensCacheForLine(deletedAt - 1);
+	};
+	const adjustWrapTokensCacheOnLineDeleteRange = (startLine, _endLine) => {
+		invalidateWrapTokensCacheForLine(startLine);
+		invalidateWrapTokensCacheForLine(startLine - 1);
 	};
 	m(() => {
 		doc.widgets;
@@ -4045,6 +5210,7 @@ function createCaches(canvas, settings$1, doc) {
 	});
 	m(() => {
 		doc.buffer.code.value;
+		doc.tokenVersion;
 		doc.errors;
 		settings$1.wordWrap;
 		matchingBraceCache.clear();
@@ -4059,7 +5225,14 @@ function createCaches(canvas, settings$1, doc) {
 		measureTextCache,
 		lineCanvasCache,
 		lineCanvasCacheByLine,
+		acquireLineCanvas,
+		getLineCanvasBucketSize,
+		markLineCanvasUsed,
+		setLineCanvasBudget,
+		trimLineCanvasesToBudget,
+		getLineCanvasSegmentKey,
 		wrapTokensCache,
+		wrapTokensCacheByTokenRef,
 		wrapTokensCacheByLine,
 		matchingBraceCache,
 		getXFromColumnCache,
@@ -4070,33 +5243,45 @@ function createCaches(canvas, settings$1, doc) {
 		adjustWrapTokensCacheOnLineDelete,
 		adjustWrapTokensCacheOnLineDeleteRange,
 		invalidateWrapTokensCacheForLine,
+		clearDrawCaches,
+		clearVisualCaches,
 		clear,
 		dispose
 	};
 }
+var fontMetricsCache = /* @__PURE__ */ new Map();
+var MAX_FONT_METRICS_CACHE_ENTRIES = 256;
 function measureText(c$7, settings$1, caches, token) {
 	const measureTextCache = caches.measureTextCache;
 	const { text, type } = token;
 	const { fontSize: fontSize$1, fontFamilyName: fontFamilyName$1, theme: { [type]: { style, weight } } } = settings$1;
-	const cacheKey = `${text}${style}${weight}${fontSize$1}${fontFamilyName$1}`;
+	const font = `${weight === "bold" ? 700 : 400} ${style} ${fontSize$1} '${fontFamilyName$1}', monospace`;
+	const cacheKey = `${text}\u0000${font}`;
 	if (measureTextCache.has(cacheKey)) return measureTextCache.get(cacheKey);
-	c$7.save();
-	c$7.font = `${weight === "bold" ? 700 : 400} ${style} ${fontSize$1} '${fontFamilyName$1}', monospace`;
+	const prevFont = c$7.font;
+	if (prevFont !== font) c$7.font = font;
 	const width = c$7.measureText(text).width;
-	const heightMetrics = c$7.measureText("Mg");
-	const height = Math.ceil(heightMetrics.actualBoundingBoxAscent + heightMetrics.actualBoundingBoxDescent);
-	const fontHeight = Math.ceil(heightMetrics.fontBoundingBoxAscent + heightMetrics.fontBoundingBoxDescent);
-	c$7.restore();
-	measureTextCache.set(cacheKey, {
+	let metrics = fontMetricsCache.get(font);
+	if (!metrics) {
+		const heightMetrics = c$7.measureText("Mg");
+		metrics = {
+			height: Math.ceil(heightMetrics.actualBoundingBoxAscent + heightMetrics.actualBoundingBoxDescent),
+			fontHeight: Math.ceil(heightMetrics.fontBoundingBoxAscent + heightMetrics.fontBoundingBoxDescent)
+		};
+		if (!fontMetricsCache.has(font) && fontMetricsCache.size >= MAX_FONT_METRICS_CACHE_ENTRIES) {
+			const oldestKey = fontMetricsCache.keys().next().value;
+			if (typeof oldestKey === "string") fontMetricsCache.delete(oldestKey);
+		}
+		fontMetricsCache.set(font, metrics);
+	}
+	if (prevFont !== font) c$7.font = prevFont;
+	const measured = {
 		width,
-		height,
-		fontHeight
-	});
-	return {
-		width,
-		height,
-		fontHeight
+		height: metrics.height,
+		fontHeight: metrics.fontHeight
 	};
+	measureTextCache.set(cacheKey, measured);
+	return measured;
 }
 function measureVisualTokens(c$7, settings$1, caches, visualTokens) {
 	let width = 0;
@@ -4112,15 +5297,26 @@ function measureVisualTokens(c$7, settings$1, caches, visualTokens) {
 	};
 }
 var visualLineCharOffsetCache = /* @__PURE__ */ new WeakMap();
+var visualLineEmptyCache = /* @__PURE__ */ new WeakMap();
+var NON_WHITESPACE_RE = /\S/;
 function isLineEmpty(line) {
-	if (line.tokens.length === 0) return true;
-	return line.tokens.every((token) => token.token.text.trim() === "");
+	const cached = visualLineEmptyCache.get(line);
+	if (cached !== void 0) return cached;
+	let isEmpty = true;
+	if (line.tokens.length > 0) {
+		for (let i$6 = 0; i$6 < line.tokens.length; i$6++) if (NON_WHITESPACE_RE.test(line.tokens[i$6].token.text)) {
+			isEmpty = false;
+			break;
+		}
+	}
+	visualLineEmptyCache.set(line, isEmpty);
+	return isEmpty;
 }
 function findVisualLineForColumn(lines, logicalLine, column, tokenLines, caches) {
 	const cacheKey = `${logicalLine}:${column}`;
 	const cached = caches.findVisualLineForColumnCache.get(cacheKey);
 	if (cached !== void 0) return cached;
-	const relevantLines = lines.visualLinesByLogicalLine.value.get(logicalLine) ?? [];
+	const relevantLines = lines.visualLinesByLogicalLine.value[logicalLine] ?? [];
 	if (relevantLines.length === 0) return null;
 	for (const visualLine of relevantLines) {
 		const lineStartColumn = getCharOffsetForVisualLine(logicalLine, visualLine, tokenLines, lines);
@@ -4146,7 +5342,7 @@ function getCharOffsetForVisualLine(logicalLine, visualLine, tokenLines, lines) 
 	let columnOffset = 0;
 	for (let i$6 = 0; i$6 < visualLine.tokenOffset; i$6++) if (!currentTokenIndices.has(i$6)) columnOffset += logicalLineTokens[i$6]?.text.length || 0;
 	if (lines) {
-		const allVisualLines = lines.visualLinesByLogicalLine.value.get(logicalLine) ?? [];
+		const allVisualLines = lines.visualLinesByLogicalLine.value[logicalLine] ?? [];
 		for (const prevLine of allVisualLines) {
 			if (prevLine === visualLine) break;
 			for (const token of prevLine.tokens) if (currentTokenIndices.has(token.logicalTokenIndex)) columnOffset += token.token.text.length;
@@ -4336,320 +5532,171 @@ function findLineBoundaries(line) {
 		end: line.length
 	};
 }
-var SCROLLBAR_MIN_THUMB = 20;
-var SCROLLBAR_TRACK_COLOR = "rgba(255, 255, 255, 0.05)";
-var SCROLLBAR_THUMB_COLOR = "rgba(255, 255, 255, 0.1)";
-var SCROLLBAR_THUMB_HOVER_COLOR = "rgba(255, 255, 255, 0.2)";
-function hitTestScrollbar(canvas, scroll, lines, settings$1, gutter, header, x$4, y$5) {
-	const width = canvas.size.width.value;
-	const height = canvas.size.height.value;
-	const totalWidth = lines.totalWidth.value;
-	const totalHeight = lines.totalHeight.value;
-	const scrollWidth = scroll.scrollWidth.value;
-	const scrollHeight = scroll.scrollHeight.value;
-	const scrollX = scroll.targetX.value;
-	const scrollY = scroll.targetY.value;
-	const headerHeight = header.value?.height ?? 0;
-	const availableHeight = height - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
-	const availableWidth = width - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value;
-	const needsVertical = totalHeight > availableHeight;
-	const needsHorizontal = !settings$1.wordWrap && totalWidth > availableWidth;
-	if (needsVertical) {
-		if (x$4 >= width - 12 && x$4 <= width && y$5 >= headerHeight) {
-			const trackHeight = height - headerHeight;
-			const thumbHeight = Math.max(SCROLLBAR_MIN_THUMB, availableHeight / totalHeight * trackHeight);
-			const scrollRange = -scrollHeight;
-			const thumbY = headerHeight + (scrollRange > 0 ? -scrollY / scrollRange : 0) * (trackHeight - thumbHeight);
-			return {
-				type: "vertical",
-				thumb: y$5 >= thumbY && y$5 <= thumbY + thumbHeight
-			};
-		}
-	}
-	if (needsHorizontal) {
-		if (y$5 >= height - 3 && y$5 <= height) {
-			const trackWidth = width - (needsVertical ? 12 : 0);
-			const thumbWidth = Math.max(SCROLLBAR_MIN_THUMB, availableWidth / totalWidth * trackWidth);
-			const scrollRange = -scrollWidth;
-			const thumbX = (scrollRange > 0 ? -scrollX / scrollRange : 0) * (trackWidth - thumbWidth);
-			return {
-				type: "horizontal",
-				thumb: x$4 >= thumbX && x$4 <= thumbX + thumbWidth
-			};
-		}
-	}
-	return {
-		type: null,
-		thumb: false
-	};
-}
-function drawScrollbars(context) {
-	const { canvas, scroll, lines, settings: settings$1, gutter, header } = context;
-	const { c: c$7 } = canvas;
-	const width = canvas.size.width.value;
-	const height = canvas.size.height.value;
-	const totalWidth = lines.totalWidth.value;
-	const totalHeight = lines.totalHeight.value;
-	const scrollWidth = scroll.scrollWidth.value;
-	const scrollHeight = scroll.scrollHeight.value;
-	const scrollX = scroll.targetX.value;
-	const scrollY = scroll.targetY.value;
-	const headerHeight = header.value?.height ?? 0;
-	const availableHeight = height - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
-	const availableWidth = width - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value;
-	const needsVertical = totalHeight > availableHeight;
-	const needsHorizontal = !settings$1.wordWrap && totalWidth > availableWidth;
-	if (needsVertical) {
-		const scrollbarX = width - 12;
-		const trackHeight = height - headerHeight;
-		c$7.strokeStyle = SCROLLBAR_TRACK_COLOR;
-		c$7.lineWidth = 1;
-		c$7.beginPath();
-		c$7.moveTo(scrollbarX, headerHeight);
-		c$7.lineTo(scrollbarX, height);
-		c$7.stroke();
-		const thumbHeight = Math.max(SCROLLBAR_MIN_THUMB, availableHeight / totalHeight * trackHeight);
-		const scrollRange = -scrollHeight;
-		const thumbY = headerHeight + (scrollRange > 0 ? -scrollY / scrollRange : 0) * (trackHeight - thumbHeight);
-		c$7.fillStyle = context.mouse.hovered.scrollbar === "vertical" ? SCROLLBAR_THUMB_HOVER_COLOR : SCROLLBAR_THUMB_COLOR;
-		c$7.fillRect(scrollbarX, thumbY, 12, thumbHeight);
-	}
-	if (needsHorizontal) {
-		const scrollbarY = height - 3;
-		const trackWidth = width - (needsVertical ? 12 : 0);
-		const thumbWidth = Math.max(SCROLLBAR_MIN_THUMB, availableWidth / totalWidth * trackWidth);
-		const scrollRange = -scrollWidth;
-		const thumbX = (scrollRange > 0 ? -scrollX / scrollRange : 0) * (trackWidth - thumbWidth);
-		c$7.fillStyle = context.mouse.hovered.scrollbar === "horizontal" ? SCROLLBAR_THUMB_HOVER_COLOR : SCROLLBAR_THUMB_COLOR;
-		c$7.fillRect(thumbX, scrollbarY, thumbWidth, 3);
-	}
-}
-function getAboveHeight(visualLines, line) {
-	if (line.widgets.above.length === 0) return 0;
-	const firstVisualLineIndex = visualLines.findIndex((l$10) => l$10.logicalLine === line.logicalLine && l$10.tokenOffset === 0);
-	if (firstVisualLineIndex === -1) return 0;
-	let emptyHeight = 0;
-	for (let i$6 = firstVisualLineIndex - 1; i$6 >= 0; i$6--) {
-		const prevLine = visualLines[i$6];
-		if (prevLine.logicalLine >= line.logicalLine) continue;
-		if (isLineEmpty(prevLine)) emptyHeight += prevLine.height;
-		else break;
-	}
-	return emptyHeight;
-}
-function calculateAboveHeightForLine(context, line) {
-	return getAboveHeight(context.lines.visualLines.value, line);
-}
-function shouldBreakBottom(visualLines, line, lineY, visibleBottom, scrollY) {
-	if (lineY <= visibleBottom + getAboveHeight(visualLines, line)) return false;
-	if (!isLineEmpty(line)) return true;
-	const idx = visualLines.indexOf(line);
-	for (let j$4 = idx + 1; j$4 < visualLines.length; j$4++) {
-		const next = visualLines[j$4];
-		if (next.tokenOffset === 0 && next.widgets.above.length > 0) {
-			const nextAbove = getAboveHeight(visualLines, next);
-			if (next.y + scrollY <= visibleBottom + nextAbove) return false;
-			break;
-		}
-	}
-	return true;
-}
-function drawAboveWidgets(context, line) {
-	const aboveWidgets = line.widgets.above;
-	if (aboveWidgets.length === 0) return;
-	const { lines } = context;
-	const { c: c$7, size } = context.canvas;
-	const visualLines = context.lines.visualLines.value;
-	if (visualLines.findIndex((l$10) => l$10 === line) === -1) return;
-	let emptyHeight = 0;
-	const firstVisualLineIndex = visualLines.findIndex((l$10) => l$10.logicalLine === line.logicalLine && l$10.tokenOffset === 0);
-	if (firstVisualLineIndex === -1) return;
-	for (let i$6 = firstVisualLineIndex - 1; i$6 >= 0; i$6--) {
-		const prevLine = visualLines[i$6];
-		if (prevLine.logicalLine >= line.logicalLine) continue;
-		if (isLineEmpty(prevLine)) emptyHeight += prevLine.height;
-		else break;
-	}
-	if (emptyHeight === 0) return;
-	const tokenLines = context.doc.tokenLines;
-	tokenLines[line.logicalLine];
-	const lineStartColumn = getCharOffsetForVisualLine(line.logicalLine, line, tokenLines, context.lines);
-	let lineEndColumn = lineStartColumn;
-	for (const token of line.tokens) lineEndColumn += token.token.text.length;
-	const widgetPositions = [];
-	for (const widget of aboveWidgets) {
-		const [startColumn, endColumn] = widget.pos.x;
-		const startCol0 = startColumn - 1;
-		const endCol0 = endColumn - 1;
-		if (startCol0 >= lineEndColumn) continue;
-		const clampedStartColumn = Math.max(startCol0, lineStartColumn);
-		const clampedEndColumn = Math.min(endCol0, lineEndColumn);
-		const startX = getXFromColumnUnclamped(lines, line, clampedStartColumn, tokenLines, context.canvas, context.settings, context.caches);
-		const widgetWidth = getXFromColumnUnclamped(lines, line, clampedEndColumn, tokenLines, context.canvas, context.settings, context.caches) - startX;
-		const finalWidth = widgetWidth > 0 ? widgetWidth : size.width.value - startX;
-		widgetPositions.push({
-			widget,
-			x: startX,
-			width: finalWidth
-		});
-	}
-	widgetPositions.sort((a$35, b$4) => a$35.x - b$4.x);
-	const widgetY = line.tokenOffset === 0 ? line.y - emptyHeight : line.y;
-	for (let i$6 = 0; i$6 < widgetPositions.length; i$6++) {
-		const current = widgetPositions[i$6];
-		let width = current.width;
-		if (i$6 < widgetPositions.length - 1) {
-			const next = widgetPositions[i$6 + 1];
-			if (current.x + width > next.x) width = next.x - current.x;
-		}
-		if (width > 0) {
-			c$7.save();
-			current.widget.draw(c$7, current.x, widgetY, width, emptyHeight);
-			c$7.restore();
-		}
-	}
-}
-function drawFullWidgets(context, line) {
-	const fullWidgets = line.widgets.full ?? [];
-	if (fullWidgets.length === 0 || line.tokenOffset !== 0) return;
-	const { c: c$7 } = context.canvas;
-	const visualLines = context.lines.visualLines.value;
-	const firstVisualLineIndex = visualLines.findIndex((l$10) => l$10.logicalLine === line.logicalLine && l$10.tokenOffset === 0);
-	if (firstVisualLineIndex === -1) return;
-	let emptyHeight = 0;
-	for (let i$6 = firstVisualLineIndex - 1; i$6 >= 0; i$6--) {
-		const prevLine = visualLines[i$6];
-		if (prevLine.logicalLine >= line.logicalLine) continue;
-		if (isLineEmpty(prevLine)) emptyHeight += prevLine.height;
-		else break;
-	}
-	if (emptyHeight === 0) return;
-	const headerHeight = context.header.value?.height ?? 0;
-	const needsVertical = context.lines.totalHeight.value > context.canvas.size.height.value - headerHeight - context.settings.paddingTop - context.settings.paddingBottom;
-	const widgetY = line.y - emptyHeight;
-	const x$4 = -context.scroll.pos.x;
-	const contentLeft = context.gutter.width.value + context.settings.paddingLeft;
-	const w$5 = context.canvas.size.width.value - context.gutter.width.value - (needsVertical ? 12 : 0);
-	const fw = context.canvas.size.width.value;
-	for (const widget of fullWidgets) {
-		c$7.save();
-		widget.draw(c$7, x$4, widgetY, w$5, emptyHeight, fw, contentLeft);
-		c$7.restore();
-	}
-}
-function drawBelowWidgets(context, line) {
-	const widgets = line.widgets.below;
-	if (widgets.length === 0) return;
-	const { lines } = context;
-	const { c: c$7 } = context.canvas;
-	const { lineHeight: lineHeight$1 } = context.settings;
-	const tokenLines = context.doc.tokenLines;
-	const aboveHeight = calculateAboveHeightForLine(context, line);
-	const contentY = line.tokenOffset === 0 ? line.y : line.y + aboveHeight;
-	for (const widget of widgets) {
-		const [startColumn, endColumn] = widget.pos.x;
-		const startCol0 = startColumn - 1;
-		const endCol0 = endColumn - 1;
-		const startX = getXFromColumnUnclamped(lines, line, startCol0, tokenLines, context.canvas, context.settings, context.caches);
-		const widgetWidth = getXFromColumnUnclamped(lines, line, endCol0, tokenLines, context.canvas, context.settings, context.caches) - startX;
-		c$7.save();
-		widget.draw(c$7, startX, contentY + lineHeight$1 - 2, widgetWidth, lineHeight$1);
-		c$7.restore();
-	}
-}
-function drawOverlayWidgets(context, line) {
-	const widgets = line.widgets.overlay;
-	if (widgets.length === 0) return;
-	const { lines } = context;
-	const { c: c$7 } = context.canvas;
-	const { lineHeight: lineHeight$1 } = context.settings;
-	const tokenLines = context.doc.tokenLines;
-	const aboveHeight = calculateAboveHeightForLine(context, line);
-	const contentY = line.tokenOffset === 0 ? line.y : line.y + aboveHeight;
-	for (const widget of widgets) {
-		const [startColumn, endColumn] = widget.pos.x;
-		const startCol0 = startColumn - 1;
-		const endCol0 = endColumn - 1;
-		const startX = getXFromColumnUnclamped(lines, line, startCol0, tokenLines, context.canvas, context.settings, context.caches);
-		const widgetWidth = getXFromColumnUnclamped(lines, line, endCol0, tokenLines, context.canvas, context.settings, context.caches) - startX;
-		c$7.save();
-		widget.draw(c$7, startX, contentY, widgetWidth, lineHeight$1);
-		c$7.restore();
-	}
-}
-function drawInlayWidgets(context, line) {
-	const widgets = line.widgets.inlay;
-	if (widgets.length === 0) return;
-	const { lines } = context;
-	const { c: c$7 } = context.canvas;
-	const { lineHeight: lineHeight$1 } = context.settings;
-	const tokenLines = context.doc.tokenLines;
-	const lineY = line.y;
-	const charOffset = getCharOffsetForVisualLine(line.logicalLine, line, tokenLines, context.lines);
-	const tokenStart = line.tokenOffset;
-	for (const widget of widgets) {
-		const widgetColumn = widget.pos.x - 1;
-		let currentCharOffset = charOffset;
-		for (let i$6 = tokenStart; i$6 < tokenStart + line.tokens.length; i$6++) {
-			const token = tokenLines[line.logicalLine]?.[i$6];
-			if (!token) break;
-			const tokenEnd = currentCharOffset + token.text.length;
-			if (widgetColumn >= currentCharOffset && widgetColumn <= tokenEnd) {
-				const widgetX = getXFromColumnUnclamped(lines, line, widgetColumn, tokenLines, context.canvas, context.settings, context.caches);
-				const { width } = measureText(c$7, context.settings, context.caches, {
-					text: widget.content,
-					type: "text"
-				});
-				c$7.save();
-				c$7.font = `400 normal ${context.settings.fontSize} '${context.settings.fontFamilyName}', monospace`;
-				c$7.textBaseline = "top";
-				widget.draw(c$7, widgetX, lineY, width, lineHeight$1);
-				c$7.restore();
-				break;
-			}
-			currentCharOffset = tokenEnd;
-		}
-	}
-}
-function drawBeforeAfterWidgets(context, line) {
-	const widgets = line.widgets.beforeAfter;
-	if (widgets.length === 0) return;
-	const { lines } = context;
-	const { c: c$7 } = context.canvas;
-	const { lineHeight: lineHeight$1 } = context.settings;
-	const tokenLines = context.doc.tokenLines;
-	const aboveHeight = calculateAboveHeightForLine(context, line);
-	const contentY = line.tokenOffset === 0 ? line.y : line.y + aboveHeight;
-	let lineStartColumn = getCharOffsetForVisualLine(line.logicalLine, line, tokenLines, context.lines);
-	let lineEndColumn = lineStartColumn;
-	for (const token of line.tokens) lineEndColumn += token.token.text.length;
-	for (const widget of widgets) {
-		const widgetColumn = widget.pos.x - 1;
-		if (widget.type === "before") {
-			if (widgetColumn < lineStartColumn || widgetColumn >= lineEndColumn) continue;
-			const widgetX = getXFromColumnUnclamped(lines, line, widgetColumn, tokenLines, context.canvas, context.settings, context.caches);
-			c$7.save();
-			widget.draw(c$7, widgetX, contentY, widget.pos.width, lineHeight$1);
-			c$7.restore();
-			continue;
-		}
-		if (widget.type === "after") {
-			if (widgetColumn <= lineStartColumn || widgetColumn > lineEndColumn) continue;
-			const widgetX = getXFromColumnUnclamped(lines, line, widgetColumn + 1, tokenLines, context.canvas, context.settings, context.caches);
-			c$7.save();
-			widget.draw(c$7, widgetX, contentY, widget.pos.width, lineHeight$1);
-			c$7.restore();
-			continue;
-		}
-	}
-}
 var OPACITY_HIGHLIGHT = .8;
 var OPACITY_NORMAL = .3;
 var LINE_WIDTH$6 = 1;
+var OPTIMISTIC_BRACE_MARGIN_LINES = 80;
+var OPTIMISTIC_INPUT_WINDOW_MS = 180;
+var optimisticSnapshotCacheByContext = /* @__PURE__ */ new WeakMap();
+function upperBound(sorted, target) {
+	let low = 0;
+	let high = sorted.length;
+	while (low < high) {
+		const mid = low + high >> 1;
+		if (sorted[mid] <= target) low = mid + 1;
+		else high = mid;
+	}
+	return low;
+}
+function buildOptimisticViewportSnapshot(codeLines, startLine, endLine) {
+	const scanStart = Math.max(0, Math.min(startLine, codeLines.length - 1));
+	const scanEnd = Math.max(scanStart, Math.min(endLine, codeLines.length - 1));
+	const depthByLine = /* @__PURE__ */ new Map();
+	const blockEndsByStart = /* @__PURE__ */ new Map();
+	const parentByStart = /* @__PURE__ */ new Map();
+	const sortedStarts = [];
+	if (codeLines.length === 0 || scanStart > scanEnd) return {
+		depthByLine,
+		blockEndsByStart,
+		sortedStarts,
+		parentByStart,
+		matchingBrace: null
+	};
+	const nonEmpty = new Uint8Array(scanEnd - scanStart + 1);
+	const indentByLine = new Uint32Array(scanEnd - scanStart + 1);
+	const nextNonEmpty = new Int32Array(scanEnd - scanStart + 1);
+	nextNonEmpty.fill(-1);
+	for (let line = scanStart; line <= scanEnd; line++) {
+		const text = codeLines[line] ?? "";
+		const localIndex = line - scanStart;
+		const indent = countIndent(text);
+		if (indent < text.length) {
+			nonEmpty[localIndex] = 1;
+			indentByLine[localIndex] = indent;
+		}
+	}
+	const startCandidates = [];
+	const findCrossingEndInRange = (indent) => {
+		for (let line = scanStart; line <= scanEnd; line++) {
+			const localIndex = line - scanStart;
+			if (nonEmpty[localIndex] === 0) continue;
+			if (indentByLine[localIndex] <= indent) return line - 1;
+		}
+		return scanEnd;
+	};
+	if (scanStart > 0) {
+		let minIndentSeen = Number.POSITIVE_INFINITY;
+		let nextNonEmptyIndent = -1;
+		const crossing = [];
+		for (let line = scanStart - 1; line >= 0; line--) {
+			const text = codeLines[line] ?? "";
+			const indent = countIndent(text);
+			if (indent >= text.length) continue;
+			if (nextNonEmptyIndent > indent && indent < minIndentSeen) {
+				crossing.push({
+					startLine: line,
+					indent,
+					crossesIntoViewport: true
+				});
+				if (indent === 0) break;
+			}
+			if (indent < minIndentSeen) minIndentSeen = indent;
+			nextNonEmptyIndent = indent;
+		}
+		crossing.reverse();
+		for (let i$6 = 0; i$6 < crossing.length; i$6++) {
+			const candidate = crossing[i$6];
+			const endLine$1 = findCrossingEndInRange(candidate.indent);
+			if (endLine$1 < scanStart) continue;
+			startCandidates.push(candidate);
+			blockEndsByStart.set(candidate.startLine, endLine$1);
+		}
+	}
+	let next = -1;
+	for (let line = scanEnd; line >= scanStart; line--) {
+		const localIndex = line - scanStart;
+		nextNonEmpty[localIndex] = next;
+		if (nonEmpty[localIndex] === 1) next = line;
+	}
+	const stack = [];
+	for (let line = scanStart; line <= scanEnd; line++) {
+		const localIndex = line - scanStart;
+		if (nonEmpty[localIndex] === 0) continue;
+		const currentIndent = indentByLine[localIndex];
+		while (stack.length > 0 && currentIndent <= stack[stack.length - 1].indent) {
+			const block = stack.pop();
+			blockEndsByStart.set(block.startLine, line - 1);
+		}
+		const nextLine = nextNonEmpty[localIndex];
+		if (nextLine < 0) continue;
+		if (indentByLine[nextLine - scanStart] > currentIndent) {
+			startCandidates.push({
+				startLine: line,
+				indent: currentIndent,
+				crossesIntoViewport: false
+			});
+			stack.push({
+				startLine: line,
+				indent: currentIndent
+			});
+		}
+	}
+	while (stack.length > 0) {
+		const block = stack.pop();
+		blockEndsByStart.set(block.startLine, scanEnd);
+	}
+	startCandidates.sort((a$35, b$4) => a$35.startLine - b$4.startLine);
+	const parentStack = [];
+	for (let i$6 = 0; i$6 < startCandidates.length; i$6++) {
+		const candidate = startCandidates[i$6];
+		const start = candidate.startLine;
+		const end = blockEndsByStart.get(start);
+		if (end === void 0 || end < start) continue;
+		while (parentStack.length > 0) {
+			const parent$1 = parentStack[parentStack.length - 1];
+			const parentEnd = blockEndsByStart.get(parent$1.startLine);
+			if (parentEnd === void 0 || parentEnd < start || candidate.indent <= parent$1.indent) parentStack.pop();
+			else break;
+		}
+		const parent = parentStack.length > 0 ? parentStack[parentStack.length - 1].startLine : null;
+		parentByStart.set(start, parent);
+		sortedStarts.push(start);
+		depthByLine.set(start, parentStack.length);
+		parentStack.push({
+			startLine: start,
+			indent: candidate.indent
+		});
+	}
+	return {
+		depthByLine,
+		blockEndsByStart,
+		sortedStarts,
+		parentByStart,
+		matchingBrace: null
+	};
+}
+function countIndent(line) {
+	let indent = 0;
+	while (indent < line.length) {
+		const code = line.charCodeAt(indent);
+		if (code !== 32 && code !== 9) break;
+		indent++;
+	}
+	return indent;
+}
+function resolveGuideIndent(codeLines, startLine, endLine, startIndent) {
+	for (let line = startLine + 1; line <= endLine; line++) {
+		const text = codeLines[line] ?? "";
+		const indent = countIndent(text);
+		if (indent >= text.length) continue;
+		if (indent < startIndent) return indent;
+		return startIndent;
+	}
+	return startIndent;
+}
 function drawBlocks(context) {
 	const { canvas, doc, lines, blocks, settings: settings$1, caches, scroll, header, caret } = context;
 	const { c: c$7 } = canvas;
-	const visualLines = lines.visualLines.value;
 	const visualLinesByLogicalLine = lines.visualLinesByLogicalLine.value;
 	const blockStarts = blocks.blockStarts.value;
 	const codeLines = doc.lines;
@@ -4657,8 +5704,54 @@ function drawBlocks(context) {
 	const scrollY = scroll.pos.y;
 	const visibleTop = -(header.value?.height ?? 0) - settings$1.paddingTop;
 	const canvasHeight = canvas.size.height.value - settings$1.paddingTop;
+	const visibleVisualLines = lines.getVisibleVisualLines(visibleTop, canvasHeight, scrollY);
+	const visibleLogicalLines = /* @__PURE__ */ new Set();
+	const firstVisibleVisualByLogicalLine = /* @__PURE__ */ new Map();
+	const lastVisibleVisualByLogicalLine = /* @__PURE__ */ new Map();
+	for (let i$6 = 0; i$6 < visibleVisualLines.length; i$6++) {
+		const visualLine = visibleVisualLines[i$6];
+		const logicalLine = visualLine.logicalLine;
+		visibleLogicalLines.add(logicalLine);
+		if (!firstVisibleVisualByLogicalLine.has(logicalLine)) firstVisibleVisualByLogicalLine.set(logicalLine, visualLine);
+		lastVisibleVisualByLogicalLine.set(logicalLine, visualLine);
+	}
+	if (visibleLogicalLines.size === 0) return;
+	const visibleLinesArray = Array.from(visibleLogicalLines).sort((a$35, b$4) => a$35 - b$4);
+	const firstVisibleLogicalLine = visibleLinesArray[0];
+	const lastVisibleLogicalLine = visibleLinesArray[visibleLinesArray.length - 1];
+	let optimisticSnapshot = null;
+	const inputAgeMs = Date.now() - caret.lastInputTime.value;
+	const shouldUseOptimistic = doc.keyHoldActive || !blocks.isBraceAnalysisCurrent() || caret.isTyping.value && inputAgeMs <= OPTIMISTIC_INPUT_WINDOW_MS;
+	const shouldBypassOptimisticCache = doc.keyHoldActive;
+	if (shouldUseOptimistic) {
+		const optimisticStartLine = Math.max(0, firstVisibleLogicalLine - OPTIMISTIC_BRACE_MARGIN_LINES);
+		const optimisticEndLine = Math.min(codeLines.length - 1, lastVisibleLogicalLine + OPTIMISTIC_BRACE_MARGIN_LINES);
+		if (optimisticStartLine <= optimisticEndLine) {
+			const cachedOptimistic = optimisticSnapshotCacheByContext.get(context);
+			if (!shouldBypassOptimisticCache && cachedOptimistic && cachedOptimistic.revision === doc.revision && cachedOptimistic.tokenVersion === doc.tokenVersion && cachedOptimistic.startLine === optimisticStartLine && cachedOptimistic.endLine === optimisticEndLine && cachedOptimistic.cursorLine === caret.line.value && cachedOptimistic.cursorColumn === caret.column.value) optimisticSnapshot = cachedOptimistic.snapshot;
+			else {
+				optimisticSnapshot = buildOptimisticViewportSnapshot(codeLines, optimisticStartLine, optimisticEndLine);
+				optimisticSnapshotCacheByContext.set(context, {
+					revision: doc.revision,
+					tokenVersion: doc.tokenVersion,
+					startLine: optimisticStartLine,
+					endLine: optimisticEndLine,
+					cursorLine: caret.line.value,
+					cursorColumn: caret.column.value,
+					snapshot: optimisticSnapshot
+				});
+			}
+		}
+	}
+	const optimisticDepthByLine = optimisticSnapshot?.depthByLine ?? null;
+	const optimisticBlockEndsByStart = optimisticSnapshot?.blockEndsByStart ?? null;
+	const optimisticSortedStarts = optimisticSnapshot?.sortedStarts ?? [];
+	const optimisticParentByStart = optimisticSnapshot?.parentByStart ?? null;
+	const useOptimisticTopology = optimisticSnapshot !== null;
 	const matchingBrace = blocks.findMatchingBrace(caret.line.value, caret.column.value);
 	const blockColors = settings$1.ui.blockColors;
+	const blockInfoCache = /* @__PURE__ */ new Map();
+	let didDrawMatchingMultilineGuide = false;
 	function textBottom(line) {
 		return line.y + (line.widgets.below.length > 0 ? settings$1.lineHeight : line.height);
 	}
@@ -4690,91 +5783,82 @@ function drawBlocks(context) {
 	}
 	function getBlockInfo(startLine) {
 		if (startLine < 0 || startLine >= codeLines.length) return null;
-		const cached = caches.blockInfoCache.get(startLine);
-		if (cached !== void 0) return cached;
-		const endLine = blocks.blockEnds.value.get(startLine);
-		if (endLine === void 0 || endLine < startLine) return null;
-		const depth = blocks.braceDepths.value.get(startLine) ?? null;
+		if (blockInfoCache.has(startLine)) return blockInfoCache.get(startLine) ?? null;
+		const endLine = useOptimisticTopology ? optimisticBlockEndsByStart?.get(startLine) : blocks.blockEnds.value.get(startLine);
+		if (endLine === void 0 || endLine < startLine) {
+			blockInfoCache.set(startLine, null);
+			return null;
+		}
+		const depth = useOptimisticTopology ? optimisticDepthByLine?.get(startLine) ?? 0 : blocks.getBraceDepthForLine(startLine) ?? 0;
 		const startLineText = codeLines[startLine];
+		const indent = countIndent(startLineText);
 		const info = {
 			endLine,
 			depth,
-			indent: startLineText.length - startLineText.trimStart().length
+			indent,
+			guideIndent: resolveGuideIndent(codeLines, startLine, endLine, indent)
 		};
-		caches.blockInfoCache.set(startLine, info);
+		blockInfoCache.set(startLine, info);
 		return info;
 	}
-	function findBlockContainingLine(line) {
-		if (line < 0 || line >= codeLines.length) return null;
-		let bestStart = null;
-		for (const startLine of blockStarts) {
-			if (startLine > line) continue;
-			const info = getBlockInfo(startLine);
-			if (!info) continue;
-			if (line >= startLine && line <= info.endLine) {
-				if (bestStart === null || startLine > bestStart) {
-					bestStart = startLine;
-					info.endLine;
-				}
-			}
+	const findOptimisticNearestBlockStartAtOrBefore = (line) => {
+		if (!optimisticBlockEndsByStart || optimisticSortedStarts.length === 0) return null;
+		const index = upperBound(optimisticSortedStarts, line) - 1;
+		if (index < 0) return null;
+		return optimisticSortedStarts[index];
+	};
+	const findOptimisticContainingBlockStart = (line) => {
+		if (!optimisticBlockEndsByStart || !optimisticParentByStart || optimisticSortedStarts.length === 0) return null;
+		const index = upperBound(optimisticSortedStarts, line) - 1;
+		if (index < 0) return null;
+		let current = optimisticSortedStarts[index];
+		while (current !== null) {
+			const endLine = optimisticBlockEndsByStart.get(current);
+			if (endLine !== void 0 && line <= endLine) return current;
+			current = optimisticParentByStart.get(current) ?? null;
 		}
-		return bestStart;
-	}
-	function findNearestBlockStart(line) {
-		if (line < 0 || line >= codeLines.length) return null;
-		let nearest = null;
-		for (const startLine of blockStarts) if (startLine <= line) {
-			if (nearest === null || startLine > nearest) nearest = startLine;
-		}
-		return nearest;
-	}
-	const visibleLogicalLines = /* @__PURE__ */ new Set();
-	for (let i$6 = 0; i$6 < visualLines.length; i$6++) {
-		const visualLine = visualLines[i$6];
-		const lineY = visualLine.y + scrollY;
-		const blockTop = lineY - calculateAboveHeightForLine(context, visualLine);
-		if (lineY + visualLine.height > visibleTop && blockTop < canvasHeight) visibleLogicalLines.add(visualLine.logicalLine);
-		else if (isLineEmpty(visualLine)) for (let j$4 = i$6 + 1; j$4 < visualLines.length; j$4++) {
-			const next = visualLines[j$4];
-			if (next.tokenOffset === 0 && next.widgets.above.length > 0) {
-				const nextAbove = calculateAboveHeightForLine(context, next);
-				const nextY = next.y + scrollY;
-				if (nextY + next.height > visibleTop && nextY - nextAbove < canvasHeight) visibleLogicalLines.add(visualLine.logicalLine);
-				break;
-			}
-		}
-	}
-	if (visibleLogicalLines.size === 0) {
-		c$7.restore();
-		return;
-	}
+		return null;
+	};
 	const blocksToDraw = /* @__PURE__ */ new Set();
 	for (const logicalLine of visibleLogicalLines) {
-		const containingBlock = findBlockContainingLine(logicalLine);
+		const containingBlock = useOptimisticTopology ? findOptimisticContainingBlockStart(logicalLine) : blocks.findContainingBlockStart(logicalLine);
 		if (containingBlock !== null) blocksToDraw.add(containingBlock);
 		else {
-			const nearestBlock = findNearestBlockStart(logicalLine);
+			const nearestBlock = useOptimisticTopology ? findOptimisticNearestBlockStartAtOrBefore(logicalLine) : blocks.findNearestBlockStartAtOrBefore(logicalLine);
 			if (nearestBlock !== null) blocksToDraw.add(nearestBlock);
+		}
+	}
+	const initialBlocks = Array.from(blocksToDraw);
+	for (const startLine of initialBlocks) {
+		let current = startLine;
+		while (true) {
+			const currentInfo = getBlockInfo(current);
+			if (!currentInfo || currentInfo.indent === 0) break;
+			let parent;
+			if (useOptimisticTopology) parent = optimisticParentByStart?.get(current) ?? null;
+			else parent = blocks.getParentBlockStart(current);
+			if (parent === null) break;
+			if (!blocksToDraw.has(parent)) blocksToDraw.add(parent);
+			current = parent;
 		}
 	}
 	const drawnBlocks = /* @__PURE__ */ new Set();
 	function drawBlock(startLine) {
 		if (drawnBlocks.has(startLine)) return;
-		if (!blockStarts.has(startLine)) return;
+		if (useOptimisticTopology) {
+			if (!(optimisticBlockEndsByStart?.has(startLine) ?? false)) return;
+		} else if (!blockStarts.has(startLine)) return;
 		drawnBlocks.add(startLine);
 		const info = getBlockInfo(startLine);
 		if (!info) return;
-		const { endLine, depth } = info;
-		if (depth === null) return;
-		const startVisualLines = visualLinesByLogicalLine.get(startLine) ?? [];
-		const endVisualLines = visualLinesByLogicalLine.get(endLine) ?? [];
-		if (startVisualLines.length === 0) return;
-		const startVisualLine = startVisualLines.at(0);
-		const isCollapsed = blocks.isCollapsed(startLine);
+		const { endLine, depth, guideIndent } = info;
+		const startVisualLine = firstVisibleVisualByLogicalLine.get(startLine) ?? (visualLinesByLogicalLine[startLine] ?? []).at(0);
+		if (!startVisualLine) return;
+		const isCollapsed = blockStarts.has(startLine) && blocks.isCollapsed(startLine);
 		const hasMatchingBrace = matchingBrace && startLine === matchingBrace.line && endLine === matchingBrace.matchingLine - 1;
 		if (isCollapsed && !hasMatchingBrace) return;
-		const startLineText = codeLines[startLine];
-		const x$4 = getXFromColumn(lines, startVisualLine, startLineText.length - startLineText.trimStart().length, tokenLines, canvas, settings$1, caches) + 1;
+		codeLines[startLine];
+		const x$4 = getXFromColumn(lines, startVisualLine, guideIndent, tokenLines, canvas, settings$1, caches) + 1;
 		const startY = startVisualLine.y + startVisualLine.height;
 		if (isCollapsed) {
 			if (hasMatchingBrace && matchingBrace.line === startLine) {
@@ -4796,11 +5880,13 @@ function drawBlocks(context) {
 			}
 			return;
 		}
-		if (endVisualLines.length === 0) return;
-		const endY = textBottom(endVisualLines.at(-1));
+		const endVisualLine = lastVisibleVisualByLogicalLine.get(endLine) ?? (visualLinesByLogicalLine[endLine] ?? []).at(-1);
+		if (!endVisualLine) return;
+		const endY = textBottom(endVisualLine);
 		const startYCanvas = startY + scrollY;
 		if (endY + scrollY < visibleTop || startYCanvas > canvasHeight) return;
 		if (hasMatchingBrace) {
+			didDrawMatchingMultilineGuide = true;
 			c$7.strokeStyle = blockColors[matchingBrace.depth % blockColors.length];
 			c$7.globalAlpha = OPACITY_HIGHLIGHT;
 		} else {
@@ -4824,34 +5910,36 @@ function drawBlocks(context) {
 		}
 		c$7.stroke();
 	}
-	function walkUp(fromLine) {
-		if (fromLine < 0) return;
-		for (let line = fromLine; line >= 0; line--) {
-			if (!blockStarts.has(line)) continue;
-			const info = getBlockInfo(line);
-			if (!info) continue;
-			if (!blocksToDraw.has(line)) blocksToDraw.add(line);
-			if (info.indent === 0) return;
-		}
-	}
-	function walkDown(fromLine) {
-		if (fromLine >= codeLines.length) return;
-		for (let line = fromLine; line < codeLines.length; line++) {
-			if (!blockStarts.has(line)) continue;
-			const info = getBlockInfo(line);
-			if (!info) continue;
-			if (!blocksToDraw.has(line)) blocksToDraw.add(line);
-			if (info.indent === 0) return;
-		}
-	}
-	const visibleLinesArray = Array.from(visibleLogicalLines).sort((a$35, b$4) => a$35 - b$4);
-	if (visibleLinesArray.length > 0) {
-		const firstVisibleLine = visibleLinesArray[0];
-		const lastVisibleLine = visibleLinesArray[visibleLinesArray.length - 1];
-		walkUp(firstVisibleLine - 1);
-		walkDown(lastVisibleLine + 1);
-	}
 	for (const startLine of blocksToDraw) drawBlock(startLine);
+	if (matchingBrace && matchingBrace.line !== matchingBrace.matchingLine && !didDrawMatchingMultilineGuide) {
+		const startLine = matchingBrace.line;
+		const startVisualLine = firstVisibleVisualByLogicalLine.get(startLine) ?? (visualLinesByLogicalLine[startLine] ?? []).at(0);
+		if (startVisualLine) {
+			const endLine = Math.max(startLine, matchingBrace.matchingLine - 1);
+			const x$4 = getXFromColumn(lines, startVisualLine, resolveGuideIndent(codeLines, startLine, endLine, countIndent(codeLines[startLine] ?? "")), tokenLines, canvas, settings$1, caches) + 1;
+			const startY = startVisualLine.y + startVisualLine.height;
+			const fallbackEndLine = endLine;
+			const fallbackEndVisualLine = lastVisibleVisualByLogicalLine.get(fallbackEndLine) ?? (visualLinesByLogicalLine[fallbackEndLine] ?? []).at(-1);
+			const endY = fallbackEndVisualLine ? textBottom(fallbackEndVisualLine) : startY;
+			const startYCanvas = startY + scrollY;
+			if (!(endY + scrollY < visibleTop || startYCanvas > canvasHeight)) {
+				let braceColumn = 0;
+				for (let i$6 = 0; i$6 < matchingBrace.tokenIndex; i$6++) braceColumn += tokenLines[matchingBrace.line][i$6]?.text.length || 0;
+				braceColumn += matchingBrace.charIndex;
+				const braceVisualLine = findVisualLineForColumn(lines, matchingBrace.line, braceColumn, tokenLines, caches);
+				c$7.strokeStyle = blockColors[matchingBrace.depth % blockColors.length];
+				c$7.globalAlpha = OPACITY_HIGHLIGHT;
+				c$7.beginPath();
+				c$7.moveTo(x$4, endY);
+				c$7.lineTo(x$4, startY);
+				if (braceVisualLine) {
+					const braceX = getXFromColumn(lines, braceVisualLine, braceColumn, tokenLines, canvas, settings$1, caches);
+					c$7.lineTo(braceX, startY);
+				}
+				c$7.stroke();
+			}
+		}
+	}
 	c$7.restore();
 }
 let MouseButton$1 = /* @__PURE__ */ function(MouseButton$2) {
@@ -4968,7 +6056,39 @@ function setActiveCanvas(canvas) {
 function getTextareaElement() {
 	return getTextarea();
 }
+function drawRoundedRect(c$7, x$4, y$5, width, height, radius) {
+	c$7.beginPath();
+	c$7.moveTo(x$4 + radius, y$5);
+	c$7.lineTo(x$4 + width - radius, y$5);
+	c$7.quadraticCurveTo(x$4 + width, y$5, x$4 + width, y$5 + radius);
+	c$7.lineTo(x$4 + width, y$5 + height - radius);
+	c$7.quadraticCurveTo(x$4 + width, y$5 + height, x$4 + width - radius, y$5 + height);
+	c$7.lineTo(x$4 + radius, y$5 + height);
+	c$7.quadraticCurveTo(x$4, y$5 + height, x$4, y$5 + height - radius);
+	c$7.lineTo(x$4, y$5 + radius);
+	c$7.quadraticCurveTo(x$4, y$5, x$4 + radius, y$5);
+	c$7.closePath();
+}
+function drawText(c$7, text, x$4, y$5, color) {
+	c$7.fillStyle = color;
+	c$7.strokeStyle = color;
+	c$7.lineWidth = .2;
+	c$7.lineCap = "round";
+	c$7.lineJoin = "miter";
+	c$7.miterLimit = 3;
+	c$7.fillText(text, x$4, y$5);
+	c$7.strokeText(text, x$4, y$5);
+}
 var COLLAPSE_TOGGLE_SIZE = 11;
+var COLLAPSE_TOGGLE_RIGHT_MARGIN = 5;
+function getVisibleVisualLinesForRange(lines, visibleTop, visibleBottom, scrollY) {
+	if (typeof lines.getVisibleVisualLines === "function") return lines.getVisibleVisualLines(visibleTop, visibleBottom, scrollY);
+	return lines.visualLines.value;
+}
+function getLastVisualLine(lines) {
+	if (typeof lines.getLastVisualLine === "function") return lines.getLastVisualLine();
+	return lines.visualLines.value.at(-1) ?? null;
+}
 function drawGutterBackground(context) {
 	if (!context.settings.showGutter) return;
 	const { canvas, gutter, header } = context;
@@ -4985,7 +6105,7 @@ function drawGutter(context) {
 	if (!context.settings.showGutter) return;
 	const { canvas, lines, caret, settings: settings$1, gutter, doc, header, caches } = context;
 	const { c: c$7 } = canvas;
-	const visualLines = lines.visualLines.value;
+	const visualLinesByLogicalLine = lines.visualLinesByLogicalLine.value;
 	const currentLine = caret.line.value;
 	const currentColumn = caret.column.value;
 	const collapsedLines = doc.collapsed;
@@ -4995,37 +6115,34 @@ function drawGutter(context) {
 	const { y: scrollY } = context.scroll.pos;
 	const visibleTop = -(header.value?.height ?? 0) - paddingTop;
 	const visibleBottom = height - paddingTop;
-	const lineNumberMap = gutter.lineNumberMap.value;
 	const blockStarts = gutter.blockStarts.value;
-	const lineNumberMetrics = gutter.lineNumberMetrics.value;
+	const visibleVisualLines = lines.getVisibleVisualLines(visibleTop, visibleBottom, scrollY);
+	const visibleLogicalLines = /* @__PURE__ */ new Set();
+	for (let i$6 = 0; i$6 < visibleVisualLines.length; i$6++) visibleLogicalLines.add(visibleVisualLines[i$6].logicalLine);
 	const isFocused = getActiveCanvas() === canvas.el;
 	const currentVisualLine = isFocused && currentLine >= 0 && currentLine < doc.lines.length ? findVisualLineForColumn(lines, currentLine, currentColumn, doc.tokenLines, caches) : null;
 	c$7.save();
-	for (const visualLine of visualLines) {
+	c$7.font = `${settings$1.fontSize} ${settings$1.fontFamilyName}`;
+	c$7.textBaseline = "top";
+	c$7.fillStyle = "rgba(255, 255, 255, 0.05)";
+	if (currentVisualLine) {
+		const currentLineY = currentVisualLine.y + scrollY;
+		if (currentLineY + currentVisualLine.height >= visibleTop && currentLineY <= visibleBottom) c$7.fillRect(-settings$1.paddingLeft, currentLineY, gutterWidth + settings$1.paddingLeft, settings$1.lineHeight);
+	}
+	const showCollapseToggles = !!context.mouse.hovered.gutter;
+	for (const logicalLine of visibleLogicalLines) {
+		const visualLine = (visualLinesByLogicalLine[logicalLine] ?? [])[0];
+		if (!visualLine) continue;
 		const lineY = visualLine.y + scrollY;
-		if (lineY + visualLine.height < visibleTop) continue;
-		if (shouldBreakBottom(visualLines, visualLine, lineY, visibleBottom, scrollY)) break;
-		const logicalLine = visualLine.logicalLine;
-		const isFirstVisualLine = lineNumberMap.get(logicalLine)?.[0] === visualLine;
+		if (lineY + visualLine.height < visibleTop || lineY > visibleBottom) continue;
 		const hasError = visualLine.errors.length > 0;
-		const isCurrentVisualLine = visualLine.y === currentVisualLine?.y;
 		const isCollapsed = collapsedLines.has(logicalLine);
 		const canCollapse = blockStarts.has(logicalLine);
-		if (isCurrentVisualLine) {
-			c$7.fillStyle = "rgba(255, 255, 255, 0.05)";
-			c$7.fillRect(-settings$1.paddingLeft, lineY, gutterWidth + settings$1.paddingLeft, settings$1.lineHeight);
-		}
-		if (!isFirstVisualLine) continue;
-		const metrics = lineNumberMetrics.get(logicalLine);
-		if (metrics) {
-			const lineNumberY = lineY + 2;
-			c$7.fillStyle = hasError ? "#f00" : "rgba(255, 255, 255, 0.3)";
-			c$7.font = `${settings$1.fontSize} ${settings$1.fontFamilyName}`;
-			c$7.textBaseline = "top";
-			c$7.fillText(metrics.text, metrics.x, lineNumberY);
-		}
-		if (canCollapse && (isCollapsed || context.mouse.hovered.gutter)) {
-			const toggleX = gutterWidth - COLLAPSE_TOGGLE_SIZE - 5;
+		const metrics = gutter.getLineNumberMetric(logicalLine);
+		const lineNumberY = lineY + 2;
+		drawText(c$7, metrics.text, metrics.x, lineNumberY, hasError ? "#f00" : "rgba(255, 255, 255, 0.3)");
+		if (canCollapse && (isCollapsed || showCollapseToggles)) {
+			const toggleX = gutterWidth - COLLAPSE_TOGGLE_SIZE - COLLAPSE_TOGGLE_RIGHT_MARGIN;
 			const toggleY = lineY + 6.5;
 			const size = COLLAPSE_TOGGLE_SIZE - 4;
 			const centerX = toggleX + size / 2;
@@ -5053,24 +6170,20 @@ function drawGutter(context) {
 		}
 	}
 	const lastLineIndex = context.doc.lines.length - 1;
-	if (lastLineIndex >= 0 && !lineNumberMap.has(lastLineIndex)) {
-		const lastVisualLine = visualLines[visualLines.length - 1];
+	const lastVisualLines = lastLineIndex >= 0 ? visualLinesByLogicalLine[lastLineIndex] ?? [] : [];
+	if (lastLineIndex >= 0 && lastVisualLines.length === 0) {
+		const lastVisualLine = getLastVisualLine(lines);
 		if (lastVisualLine) {
 			const lineY = lastVisualLine.y + lastVisualLine.height + scrollY;
 			if (lineY >= -paddingTop && lineY <= visibleBottom) {
 				const isCurrentVisualLine = isFocused && lastLineIndex === currentLine && currentVisualLine?.logicalLine === lastLineIndex;
-				const metrics = lineNumberMetrics.get(lastLineIndex);
+				const metrics = gutter.getLineNumberMetric(lastLineIndex);
 				if (isCurrentVisualLine) {
 					c$7.fillStyle = "rgba(255, 255, 255, 0.05)";
 					c$7.fillRect(-settings$1.paddingLeft, lineY, gutterWidth + settings$1.paddingLeft, settings$1.lineHeight);
 				}
-				if (metrics) {
-					const lineNumberY = lineY + 2;
-					c$7.fillStyle = "rgba(255, 255, 255, 0.3)";
-					c$7.font = `${settings$1.fontSize} ${settings$1.fontFamilyName}`;
-					c$7.textBaseline = "top";
-					c$7.fillText(metrics.text, metrics.x, lineNumberY);
-				}
+				const lineNumberY = lineY + 2;
+				drawText(c$7, metrics.text, metrics.x, lineNumberY, "rgba(255, 255, 255, 0.3)");
 			}
 		}
 	}
@@ -5083,24 +6196,22 @@ function hitTestGutter(canvas, settings$1, lines, scroll, gutter, x$4, y$5, head
 	const { paddingLeft, paddingTop } = settings$1;
 	const { y: scrollY } = scroll.pos;
 	const gutterX = x$4 - paddingLeft;
-	if (!(x$4 >= 0 && x$4 < gutterWidth) || y$5 < headerHeight) return {
+	const gutterInteractiveWidth = gutterWidth + paddingLeft;
+	if (!(x$4 >= 0 && x$4 < gutterInteractiveWidth) || y$5 < headerHeight) return {
 		type: null,
 		line: null
 	};
 	const relativeY = y$5 - headerHeight - paddingTop;
-	const visualLines = lines.visualLines.value;
-	const lineNumberMap = gutter.lineNumberMap.value;
+	const visualLines = getVisibleVisualLinesForRange(lines, -headerHeight - paddingTop, canvas.size.height.value - paddingTop, scrollY);
 	const blockStarts = gutter.blockStarts.value;
-	const visibleBottom = canvas.size.height.value - headerHeight - paddingTop;
-	for (const visualLine of visualLines) {
+	for (let i$6 = 0; i$6 < visualLines.length; i$6++) {
+		const visualLine = visualLines[i$6];
 		const lineY = visualLine.y + scrollY;
-		if (lineY + visualLine.height + paddingTop < 0) continue;
-		if (shouldBreakBottom(visualLines, visualLine, lineY, visibleBottom, scrollY)) break;
 		if (relativeY >= lineY && relativeY < lineY + visualLine.height) {
 			const logicalLine = visualLine.logicalLine;
-			const isFirstVisualLine = lineNumberMap.get(logicalLine)?.[0] === visualLine;
+			const isFirstVisualLine = visualLine.tokenOffset === 0;
 			if (blockStarts.has(logicalLine) && isFirstVisualLine) {
-				const toggleX = gutterWidth - COLLAPSE_TOGGLE_SIZE - 4;
+				const toggleX = gutterWidth - COLLAPSE_TOGGLE_SIZE - COLLAPSE_TOGGLE_RIGHT_MARGIN;
 				const toggleRight = toggleX + COLLAPSE_TOGGLE_SIZE;
 				if (gutterX >= toggleX && gutterX <= toggleRight) return {
 					type: "collapse",
@@ -5117,6 +6228,94 @@ function hitTestGutter(canvas, settings$1, lines, scroll, gutter, x$4, y$5, head
 		type: "gutter",
 		line: null
 	};
+}
+var SCROLLBAR_MIN_THUMB = 20;
+var SCROLLBAR_TRACK_COLOR = "rgba(255, 255, 255, 0.05)";
+var SCROLLBAR_THUMB_COLOR = "rgba(255, 255, 255, 0.1)";
+var SCROLLBAR_THUMB_HOVER_COLOR = "rgba(255, 255, 255, 0.2)";
+function hitTestScrollbar(canvas, scroll, lines, settings$1, gutter, header, x$4, y$5) {
+	const width = canvas.size.width.value;
+	const height = canvas.size.height.value;
+	const totalWidth = lines.totalWidth.value;
+	const totalHeight = lines.totalHeight.value;
+	const scrollWidth = scroll.scrollWidth.value;
+	const scrollHeight = scroll.scrollHeight.value;
+	const scrollX = scroll.targetX.value;
+	const scrollY = scroll.targetY.value;
+	const headerHeight = header.value?.height ?? 0;
+	const availableHeight = height - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
+	const availableWidth = width - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value;
+	const needsVertical = totalHeight > availableHeight;
+	const needsHorizontal = !settings$1.wordWrap && totalWidth > availableWidth;
+	if (needsVertical) {
+		if (x$4 >= width - 12 && x$4 <= width && y$5 >= headerHeight) {
+			const trackHeight = height - headerHeight;
+			const thumbHeight = Math.max(SCROLLBAR_MIN_THUMB, availableHeight / totalHeight * trackHeight);
+			const scrollRange = -scrollHeight;
+			const thumbY = headerHeight + (scrollRange > 0 ? -scrollY / scrollRange : 0) * (trackHeight - thumbHeight);
+			return {
+				type: "vertical",
+				thumb: y$5 >= thumbY && y$5 <= thumbY + thumbHeight
+			};
+		}
+	}
+	if (needsHorizontal) {
+		if (y$5 >= height - 3 && y$5 <= height) {
+			const trackWidth = width - (needsVertical ? 12 : 0);
+			const thumbWidth = Math.max(SCROLLBAR_MIN_THUMB, availableWidth / totalWidth * trackWidth);
+			const scrollRange = -scrollWidth;
+			const thumbX = (scrollRange > 0 ? -scrollX / scrollRange : 0) * (trackWidth - thumbWidth);
+			return {
+				type: "horizontal",
+				thumb: x$4 >= thumbX && x$4 <= thumbX + thumbWidth
+			};
+		}
+	}
+	return {
+		type: null,
+		thumb: false
+	};
+}
+function drawScrollbars(context) {
+	const { canvas, scroll, lines, settings: settings$1, gutter, header } = context;
+	const { c: c$7 } = canvas;
+	const width = canvas.size.width.value;
+	const height = canvas.size.height.value;
+	const totalWidth = lines.totalWidth.value;
+	const totalHeight = lines.totalHeight.value;
+	const scrollWidth = scroll.scrollWidth.value;
+	const scrollHeight = scroll.scrollHeight.value;
+	const scrollX = scroll.targetX.value;
+	const scrollY = scroll.targetY.value;
+	const headerHeight = header.value?.height ?? 0;
+	const availableHeight = height - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
+	const availableWidth = width - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value;
+	const needsVertical = totalHeight > availableHeight;
+	const needsHorizontal = !settings$1.wordWrap && totalWidth > availableWidth;
+	if (needsVertical) {
+		const scrollbarX = width - 12;
+		const trackHeight = height - headerHeight;
+		c$7.strokeStyle = SCROLLBAR_TRACK_COLOR;
+		c$7.lineWidth = 1;
+		c$7.beginPath();
+		c$7.moveTo(scrollbarX, headerHeight);
+		c$7.lineTo(scrollbarX, height);
+		c$7.stroke();
+		const thumbHeight = Math.max(SCROLLBAR_MIN_THUMB, availableHeight / totalHeight * trackHeight);
+		const scrollRange = -scrollHeight;
+		const thumbY = headerHeight + (scrollRange > 0 ? -scrollY / scrollRange : 0) * (trackHeight - thumbHeight);
+		c$7.fillStyle = context.mouse.hovered.scrollbar === "vertical" ? SCROLLBAR_THUMB_HOVER_COLOR : SCROLLBAR_THUMB_COLOR;
+		c$7.fillRect(scrollbarX, thumbY, 12, thumbHeight);
+	}
+	if (needsHorizontal) {
+		const scrollbarY = height - 3;
+		const trackWidth = width - (needsVertical ? 12 : 0);
+		const thumbWidth = Math.max(SCROLLBAR_MIN_THUMB, availableWidth / totalWidth * trackWidth);
+		const scrollRange = -scrollWidth;
+		const thumbX = (scrollRange > 0 ? -scrollX / scrollRange : 0) * (trackWidth - thumbWidth);
+		c$7.fillStyle = context.mouse.hovered.scrollbar === "horizontal" ? SCROLLBAR_THUMB_HOVER_COLOR : SCROLLBAR_THUMB_COLOR;
+		c$7.fillRect(thumbX, scrollbarY, thumbWidth, 3);
+	}
 }
 var signalified$1 = /* @__PURE__ */ new WeakSet();
 function signalify$1(value) {
@@ -5251,7 +6450,15 @@ function createScroll(canvas, lines, settings$1, gutter, header, metrics) {
 			};
 			return;
 		}
-		const visualLines = o$24(() => lines.visualLines.value);
+		const scrollY = pos.y;
+		const visibleTop = -(header.value?.height ?? 0) - settings$1.paddingTop;
+		const visibleBottom = canvas.size.height.value - settings$1.paddingTop;
+		const approxVisibleRange = typeof lines.getApproxVisibleLogicalRange === "function" ? lines.getApproxVisibleLogicalRange(visibleTop, visibleBottom, scrollY) : null;
+		if (approxVisibleRange) {
+			metrics.visibleLines.value = approxVisibleRange;
+			return;
+		}
+		const visualLines = o$24(() => lines.getVisibleVisualLines(visibleTop, visibleBottom, scrollY));
 		if (visualLines.length === 0) {
 			metrics.visibleLines.value = {
 				start: 0,
@@ -5259,16 +6466,10 @@ function createScroll(canvas, lines, settings$1, gutter, header, metrics) {
 			};
 			return;
 		}
-		const scrollY = pos.y;
-		const visibleTop = -(header.value?.height ?? 0) - settings$1.paddingTop;
-		const visibleBottom = canvas.size.height.value - settings$1.paddingTop;
 		let start = null;
 		let end = null;
-		for (const line of visualLines) {
-			const lineY = line.y + scrollY;
-			if (lineY + line.height < visibleTop) continue;
-			if (shouldBreakBottom(visualLines, line, lineY, visibleBottom, scrollY)) break;
-			const logicalLine = line.logicalLine;
+		for (let i$6 = 0; i$6 < visualLines.length; i$6++) {
+			const logicalLine = visualLines[i$6].logicalLine;
 			if (start === null) start = logicalLine;
 			end = logicalLine;
 		}
@@ -5286,9 +6487,18 @@ function createScroll(canvas, lines, settings$1, gutter, header, metrics) {
 	});
 	m(() => {
 		if (pos.x === Infinity || pos.y === Infinity) return;
-		if (targetX.value < scrollWidth.value) targetX.value = scrollWidth.value;
+		const approxContentMetrics = typeof lines.getApproxContentMetrics === "function" ? lines.getApproxContentMetrics() : null;
+		if (!approxContentMetrics) return;
+		const headerHeight = header.value?.height ?? 0;
+		const needsVertical = approxContentMetrics.totalHeight > canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
+		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value - (needsVertical ? 12 : 0);
+		const minScrollX = settings$1.wordWrap ? 0 : Math.min(0, -approxContentMetrics.totalWidth + availableWidth);
+		const needsHorizontal = !settings$1.wordWrap && approxContentMetrics.totalWidth > availableWidth;
+		const availableHeight = canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom - (needsHorizontal ? 3 : 0);
+		const minScrollY = Math.min(0, -approxContentMetrics.totalHeight + availableHeight);
+		if (targetX.value < minScrollX) targetX.value = minScrollX;
 		if (targetX.value > 0) targetX.value = 0;
-		if (targetY.value < scrollHeight.value) targetY.value = scrollHeight.value;
+		if (targetY.value < minScrollY) targetY.value = minScrollY;
 		if (targetY.value > 0) targetY.value = 0;
 	});
 	return {
@@ -5300,6 +6510,86 @@ function createScroll(canvas, lines, settings$1, gutter, header, metrics) {
 		scrollHeight,
 		update
 	};
+}
+function lowerBoundVisualLineBottom(visualLines, worldY) {
+	let low = 0;
+	let high = visualLines.length;
+	while (low < high) {
+		const mid = low + high >> 1;
+		const line = visualLines[mid];
+		if (line.y + line.height <= worldY) low = mid + 1;
+		else high = mid;
+	}
+	return low;
+}
+function lowerBoundVisualLineStart(visualLines, worldY) {
+	let low = 0;
+	let high = visualLines.length;
+	while (low < high) {
+		const mid = low + high >> 1;
+		if (visualLines[mid].y < worldY) low = mid + 1;
+		else high = mid;
+	}
+	return low;
+}
+function findVisualLineAtWorldY(visualLines, worldY) {
+	const index = lowerBoundVisualLineBottom(visualLines, worldY);
+	if (index < 0 || index >= visualLines.length) return null;
+	const line = visualLines[index];
+	if (worldY >= line.y && worldY < line.y + line.height) return line;
+	return null;
+}
+function findNearestVisualLineAtWorldY(visualLines, worldY) {
+	if (visualLines.length === 0) return null;
+	const containing = findVisualLineAtWorldY(visualLines, worldY);
+	if (containing) return containing;
+	const insertionIndex = lowerBoundVisualLineBottom(visualLines, worldY);
+	if (insertionIndex <= 0) return visualLines[0];
+	if (insertionIndex >= visualLines.length) return visualLines[visualLines.length - 1];
+	const before = visualLines[insertionIndex - 1];
+	const after = visualLines[insertionIndex];
+	return Math.abs(worldY - (before.y + before.height / 2)) <= Math.abs(worldY - (after.y + after.height / 2)) ? before : after;
+}
+function moveTokenPosition$1(tokenLines, lineIndex, tokenIndex, delta) {
+	if (delta === 0) return {
+		lineIndex,
+		tokenIndex
+	};
+	let line = lineIndex;
+	let token = tokenIndex;
+	if (delta > 0) {
+		for (let i$6 = 0; i$6 < delta; i$6++) {
+			token++;
+			while (line < tokenLines.length && token >= (tokenLines[line]?.length ?? 0)) {
+				line++;
+				token = 0;
+			}
+			if (line >= tokenLines.length) return null;
+		}
+		return {
+			lineIndex: line,
+			tokenIndex: token
+		};
+	}
+	for (let i$6 = 0; i$6 < -delta; i$6++) {
+		token--;
+		while (line >= 0 && token < 0) {
+			line--;
+			if (line < 0) return null;
+			token = (tokenLines[line]?.length ?? 0) - 1;
+		}
+		if (line < 0) return null;
+	}
+	return {
+		lineIndex: line,
+		tokenIndex: token
+	};
+}
+function findCallBlockTokenPositionFromAnchor$1(tokenLines, callBlock, anchorLine, anchorTokenIndex, anchorToken, targetToken) {
+	const anchorBlockIndex = callBlock.indexOf(anchorToken);
+	const targetBlockIndex = callBlock.indexOf(targetToken);
+	if (anchorBlockIndex < 0 || targetBlockIndex < 0) return null;
+	return moveTokenPosition$1(tokenLines, anchorLine, anchorTokenIndex, targetBlockIndex - anchorBlockIndex);
 }
 function findCallBlock(tokenLines, lineIndex, tokenIndex) {
 	const line = tokenLines[lineIndex];
@@ -5423,18 +6713,6 @@ function getParameterStartToken(callBlock, parameterIndex) {
 		}
 	}
 	if (parameterIndex === 0 && openParenIndex >= 0 && openParenIndex + 1 < callBlock.length) return callBlock[openParenIndex + 1];
-	return null;
-}
-function findTokenPositionInTokenLines(tokenLines, token) {
-	for (let lineIndex = 0; lineIndex < tokenLines.length; lineIndex++) {
-		const line = tokenLines[lineIndex];
-		if (!line) continue;
-		const tokenIndex = line.indexOf(token);
-		if (tokenIndex >= 0) return {
-			lineIndex,
-			tokenIndex
-		};
-	}
 	return null;
 }
 function findCallBlockForToken(tokenLines, lineIndex, tokenIndex) {
@@ -5592,67 +6870,42 @@ function createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scro
 			if (Math.abs(velocityY) < MIN_VELOCITY) velocityY = 0;
 		}
 	};
+	const getInteractiveVisualLines = (extraMarginLines = 4) => {
+		const headerHeight = header.value?.height ?? 0;
+		const margin = settings$1.lineHeight * extraMarginLines;
+		const visibleTop = -headerHeight - settings$1.paddingTop - margin;
+		const visibleBottom = canvas.size.height.value - settings$1.paddingTop + margin;
+		return lines.getVisibleVisualLines(visibleTop, visibleBottom, scroll.pos.y);
+	};
 	const findLineColumnFromPosition = (x$4, y$5) => {
 		const headerHeight = header.value?.height ?? 0;
-		const visualLines = lines.visualLines.value;
+		const visualLines = getInteractiveVisualLines();
 		const scrollY = scroll.pos.y;
 		const scrollX = scroll.pos.x;
 		const worldY = y$5 - headerHeight - settings$1.paddingTop - scrollY;
 		const worldX = x$4 - settings$1.paddingLeft - gutter.width.value - scrollX;
-		let foundLine = null;
-		let minDistance = Infinity;
-		for (const line of visualLines) {
-			if (worldY >= line.y && worldY < line.y + line.height) {
-				foundLine = line;
-				break;
-			}
-			const lineCenterY = line.y + line.height / 2;
-			const distance = Math.abs(worldY - lineCenterY);
-			if (distance < minDistance) {
-				minDistance = distance;
-				foundLine = line;
-			}
-		}
-		if (!foundLine) {
-			if (visualLines.length === 0) return null;
-			foundLine = worldY < 0 ? visualLines[0] : visualLines[visualLines.length - 1];
-		}
+		let foundLine = findNearestVisualLineAtWorldY(visualLines, worldY);
+		if (!foundLine) return null;
 		const codeLines = doc.lines;
 		const tokenLines = doc.tokenLines;
-		const column = getColumnFromVisualPosition(lines, foundLine, worldX, tokenLines, codeLines, canvas, settings$1, caches);
 		return {
 			line: foundLine,
-			column
+			column: getColumnFromVisualPosition(lines, foundLine, worldX, tokenLines, codeLines, canvas, settings$1, caches)
 		};
 	};
 	const getAboveHeightForLine = (line) => {
-		if (line.widgets.above.length === 0) return 0;
-		const visualLines = lines.visualLines.value;
-		const firstIndex = visualLines.findIndex((l$10) => l$10.logicalLine === line.logicalLine && l$10.tokenOffset === 0);
-		if (firstIndex === -1) return 0;
-		let emptyHeight = 0;
-		for (let i$6 = firstIndex - 1; i$6 >= 0; i$6--) {
-			const prev = visualLines[i$6];
-			if (prev.logicalLine >= line.logicalLine) continue;
-			if (isLineEmpty(prev)) emptyHeight += prev.height;
-			else break;
-		}
-		return emptyHeight;
+		return line.aboveHeight ?? line.logicalAboveHeight ?? 0;
 	};
 	const findBelowWidgetHit = (x$4, y$5) => {
 		const headerHeight = header.value?.height ?? 0;
-		const visualLines = lines.visualLines.value;
+		const visualLines = getInteractiveVisualLines();
 		const scrollY = scroll.pos.y;
 		const scrollX = scroll.pos.x;
 		const worldY = y$5 - headerHeight - settings$1.paddingTop - scrollY;
 		const worldX = x$4 - settings$1.paddingLeft - gutter.width.value - scrollX;
 		const tokenLines = doc.tokenLines;
 		const { lineHeight: lineHeight$1 } = settings$1;
-		let foundLine = null;
-		for (const line of visualLines) if (worldY >= line.y && worldY < line.y + line.height) {
-			foundLine = line;
-			break;
-		}
+		const foundLine = findVisualLineAtWorldY(visualLines, worldY);
 		if (!foundLine || foundLine.widgets.below.length === 0) return null;
 		if (worldY < foundLine.y + lineHeight$1 || worldY >= foundLine.y + foundLine.height) return null;
 		const widgetWorldY = (foundLine.tokenOffset === 0 ? foundLine.y : foundLine.y + getAboveHeightForLine(foundLine)) + lineHeight$1 - 2;
@@ -5677,18 +6930,14 @@ function createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scro
 	};
 	const findBeforeAfterWidgetHit = (x$4, y$5) => {
 		const headerHeight = header.value?.height ?? 0;
-		const visualLines = lines.visualLines.value;
+		const visualLines = getInteractiveVisualLines();
 		const scrollY = scroll.pos.y;
 		const scrollX = scroll.pos.x;
 		const worldY = y$5 - headerHeight - settings$1.paddingTop - scrollY;
 		const worldX = x$4 - settings$1.paddingLeft - gutter.width.value - scrollX;
 		const tokenLines = doc.tokenLines;
 		const { lineHeight: lineHeight$1 } = settings$1;
-		let foundLine = null;
-		for (const line of visualLines) if (worldY >= line.y && worldY < line.y + line.height) {
-			foundLine = line;
-			break;
-		}
+		const foundLine = findVisualLineAtWorldY(visualLines, worldY);
 		if (!foundLine || foundLine.widgets.beforeAfter.length === 0) return null;
 		const contentY = foundLine.tokenOffset === 0 ? foundLine.y : foundLine.y + getAboveHeightForLine(foundLine);
 		if (worldY < contentY || worldY >= contentY + lineHeight$1) return null;
@@ -5714,12 +6963,10 @@ function createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scro
 	m(() => {
 		const { x: x$4, y: y$5 } = pos;
 		const headerHeight = header.value?.height ?? 0;
-		const gutterWidth = gutter.width.value;
 		const inHeader = y$5 >= 0 && y$5 < headerHeight;
+		const gutterHit = hitTestGutter(canvas, settings$1, lines, scroll, gutter, x$4, y$5, headerHeight);
 		const scrollbarHit = hitTestScrollbar(canvas, scroll, lines, settings$1, gutter, header, x$4, y$5);
-		const belowWidgetHit = findBelowWidgetHit(x$4, y$5);
-		const beforeAfterWidgetHit = findBeforeAfterWidgetHit(x$4, y$5);
-		canvas.el.style.cursor = y$5 < 0 || inHeader || x$4 < gutterWidth || scrollbarHit.type !== null || belowWidgetHit || beforeAfterWidgetHit || widgetPressed.value || headerPressed.value || scrollbars.isDragging.value ? "default" : "text";
+		canvas.el.style.cursor = gutterHit.type === "collapse" ? "pointer" : y$5 < 0 || inHeader || gutterHit.type !== null || scrollbarHit.type !== null || widgetPressed.value || headerPressed.value || scrollbars.isDragging.value ? "default" : "text";
 	});
 	m(() => {
 		const { x: x$4, y: y$5 } = pos;
@@ -5768,14 +7015,10 @@ function createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scro
 			return;
 		}
 		o$24(() => {
-			const visualLines = lines.visualLines.value;
+			const visualLines = getInteractiveVisualLines();
 			const worldX = hit.worldX;
 			const worldY = hit.worldY;
-			let foundLine = null;
-			for (const line of visualLines) if (worldY >= line.y && worldY < line.y + line.height) {
-				foundLine = line;
-				break;
-			}
+			const foundLine = findVisualLineAtWorldY(visualLines, worldY);
 			if (!foundLine) {
 				hovered.line = null;
 				hovered.column = null;
@@ -5824,6 +7067,15 @@ function createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scro
 			hovered.token = foundToken;
 			hovered.column = column;
 			if (foundToken && foundLine) {
+				if (settings$1.performanceMode === "stress") {
+					if (hoverShowTimeout) {
+						clearTimeout(hoverShowTimeout);
+						hoverShowTimeout = null;
+					}
+					currentHoverTokenId = null;
+					hovered.hoverToken = null;
+					return;
+				}
 				const tokenId = `${foundLine.logicalLine}:${foundToken.logicalTokenIndex}`;
 				if (tokenId !== currentHoverTokenId && !escapePressed && !buttonsDown.value) {
 					if (hoverShowTimeout) {
@@ -5855,7 +7107,7 @@ function createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scro
 							if (parameterIndex >= 0) {
 								const paramStartToken = getParameterStartToken(callBlock, parameterIndex);
 								if (paramStartToken) {
-									const pos$1 = findTokenPositionInTokenLines(tokenLines$1, paramStartToken);
+									const pos$1 = findCallBlockTokenPositionFromAnchor$1(tokenLines$1, callBlock, logicalLine, logicalTokenIndex, foundToken.token, paramStartToken);
 									if (pos$1) {
 										const column$1 = getColumnForTokenIndex(tokenLines$1[pos$1.lineIndex] || [], pos$1.tokenIndex);
 										const paramLine = findVisualLineForColumn(lines, pos$1.lineIndex, column$1, tokenLines$1, caches);
@@ -5871,20 +7123,25 @@ function createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scro
 							let callBlockX = tokenX;
 							let callBlockY = tokenY;
 							if (callBlock.length > 0) {
-								const lineTokens = tokenLines$1[logicalLine] || [];
-								let functionTokenIndex = -1;
+								let functionToken = null;
 								for (let i$6 = 0; i$6 < callBlock.length; i$6++) if (callBlock[i$6].text === "(" && i$6 > 0) {
 									const prevToken = callBlock[i$6 - 1];
 									if (prevToken && (prevToken.type === "function" || prevToken.type === "identifier")) {
-										functionTokenIndex = lineTokens.indexOf(prevToken);
+										functionToken = prevToken;
 										break;
 									}
 								}
-								if (functionTokenIndex >= 0) {
-									for (const visualToken of foundLine.tokens) if (visualToken.logicalTokenIndex === functionTokenIndex) {
-										callBlockX = visualToken.x + gutter.width.value + settings$1.paddingLeft + scrollX + canvasRect.left;
-										callBlockY = contentY + headerHeight + settings$1.paddingTop + scrollY + canvasRect.top;
-										break;
+								if (functionToken) {
+									const functionPos = findCallBlockTokenPositionFromAnchor$1(tokenLines$1, callBlock, logicalLine, logicalTokenIndex, foundToken.token, functionToken);
+									if (functionPos) {
+										const functionColumn = getColumnForTokenIndex(tokenLines$1[functionPos.lineIndex] || [], functionPos.tokenIndex);
+										const functionLine = findVisualLineForColumn(lines, functionPos.lineIndex, functionColumn, tokenLines$1, caches);
+										if (functionLine) {
+											const functionX = getXFromColumn(lines, functionLine, functionColumn, tokenLines$1, canvas, settings$1, caches);
+											const functionContentY = functionLine.tokenOffset === 0 ? functionLine.y : functionLine.y + getAboveHeightForLine(functionLine);
+											callBlockX = functionX + gutter.width.value + settings$1.paddingLeft + scrollX + canvasRect.left;
+											callBlockY = functionContentY + headerHeight + settings$1.paddingTop + scrollY + canvasRect.top;
+										}
 									}
 								}
 							}
@@ -6044,14 +7301,16 @@ function createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scro
 			if (selection.isSelecting.value) {
 				const codeLines = doc.lines;
 				if (direction === "down") {
-					const visualLines = lines.visualLines.value;
+					const visualLines = getInteractiveVisualLines();
 					const headerHeight$1 = header.value?.height ?? 0;
 					const canvasHeight$1 = canvas.size.height.value - headerHeight$1 - settings$1.paddingTop - settings$1.paddingBottom;
 					const scrollY = scroll.pos.y;
 					const scrollX = scroll.pos.x;
 					const maxCaretY = canvasHeight$1 - settings$1.lineHeight;
 					let targetLine = null;
-					for (const line of visualLines) {
+					const firstVisibleIndex = lowerBoundVisualLineBottom(visualLines, -scrollY);
+					for (let i$6 = firstVisibleIndex; i$6 < visualLines.length; i$6++) {
+						const line = visualLines[i$6];
 						const lineY = line.y + scrollY;
 						if (lineY <= maxCaretY && lineY + line.height > 0) targetLine = line;
 						else if (lineY > maxCaretY) break;
@@ -6076,17 +7335,11 @@ function createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scro
 						caret.resetBlink();
 					}
 				} else if (direction === "up") {
-					const visualLines = lines.visualLines.value;
+					const visualLines = getInteractiveVisualLines();
 					const scrollY = scroll.pos.y;
 					const scrollX = scroll.pos.x;
-					let targetLine = null;
-					for (const line of visualLines) {
-						const lineY = line.y + scrollY;
-						if (lineY >= 0 && lineY + line.height > 0) {
-							targetLine = line;
-							break;
-						}
-					}
+					const firstAtOrBelowTop = lowerBoundVisualLineStart(visualLines, -scrollY);
+					const targetLine = firstAtOrBelowTop < visualLines.length ? visualLines[firstAtOrBelowTop] : null;
 					if (targetLine && lastMouseX !== null) {
 						const logicalLine = targetLine.logicalLine;
 						const worldX = lastMouseX - settings$1.paddingLeft - gutter.width.value - scrollX;
@@ -6528,61 +7781,340 @@ function createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scro
 		buttonsDown
 	};
 }
+function calculateAboveHeightForLine(context, line) {
+	return line.aboveHeight ?? 0;
+}
+function drawAboveWidgets(context, line) {
+	const aboveWidgets = line.widgets.above;
+	if (aboveWidgets.length === 0) return;
+	const { lines } = context;
+	const { c: c$7, size } = context.canvas;
+	const emptyHeight = line.aboveHeight ?? line.logicalAboveHeight ?? 0;
+	if (emptyHeight === 0) return;
+	const tokenLines = context.doc.tokenLines;
+	tokenLines[line.logicalLine];
+	const lineStartColumn = getCharOffsetForVisualLine(line.logicalLine, line, tokenLines, context.lines);
+	let lineEndColumn = lineStartColumn;
+	for (const token of line.tokens) lineEndColumn += token.token.text.length;
+	const widgetPositions = [];
+	for (const widget of aboveWidgets) {
+		const [startColumn, endColumn] = widget.pos.x;
+		const startCol0 = startColumn - 1;
+		const endCol0 = endColumn - 1;
+		if (startCol0 >= lineEndColumn) continue;
+		const clampedStartColumn = Math.max(startCol0, lineStartColumn);
+		const clampedEndColumn = Math.min(endCol0, lineEndColumn);
+		const startX = getXFromColumnUnclamped(lines, line, clampedStartColumn, tokenLines, context.canvas, context.settings, context.caches);
+		const widgetWidth = getXFromColumnUnclamped(lines, line, clampedEndColumn, tokenLines, context.canvas, context.settings, context.caches) - startX;
+		const finalWidth = widgetWidth > 0 ? widgetWidth : size.width.value - startX;
+		widgetPositions.push({
+			widget,
+			x: startX,
+			width: finalWidth
+		});
+	}
+	widgetPositions.sort((a$35, b$4) => a$35.x - b$4.x);
+	const widgetY = line.tokenOffset === 0 ? line.y - emptyHeight : line.y;
+	for (let i$6 = 0; i$6 < widgetPositions.length; i$6++) {
+		const current = widgetPositions[i$6];
+		let width = current.width;
+		if (i$6 < widgetPositions.length - 1) {
+			const next = widgetPositions[i$6 + 1];
+			if (current.x + width > next.x) width = next.x - current.x;
+		}
+		if (width > 0) {
+			c$7.save();
+			current.widget.draw(c$7, current.x, widgetY, width, emptyHeight);
+			c$7.restore();
+		}
+	}
+}
+function drawFullWidgets(context, line) {
+	const fullWidgets = line.widgets.full ?? [];
+	if (fullWidgets.length === 0 || line.tokenOffset !== 0) return;
+	const { c: c$7 } = context.canvas;
+	const emptyHeight = line.logicalAboveHeight ?? line.aboveHeight ?? 0;
+	if (emptyHeight === 0) return;
+	const headerHeight = context.header.value?.height ?? 0;
+	const needsVertical = context.lines.totalHeight.value > context.canvas.size.height.value - headerHeight - context.settings.paddingTop - context.settings.paddingBottom;
+	const widgetY = line.y - emptyHeight;
+	const x$4 = -context.scroll.pos.x;
+	const contentLeft = context.gutter.width.value + context.settings.paddingLeft;
+	const w$5 = context.canvas.size.width.value - context.gutter.width.value - (needsVertical ? 12 : 0);
+	const fw = context.canvas.size.width.value;
+	for (const widget of fullWidgets) {
+		c$7.save();
+		widget.draw(c$7, x$4, widgetY, w$5, emptyHeight, fw, contentLeft);
+		c$7.restore();
+	}
+}
+function drawBelowWidgets(context, line) {
+	const widgets = line.widgets.below;
+	if (widgets.length === 0) return;
+	const { lines } = context;
+	const { c: c$7 } = context.canvas;
+	const { lineHeight: lineHeight$1 } = context.settings;
+	const tokenLines = context.doc.tokenLines;
+	const aboveHeight = calculateAboveHeightForLine(context, line);
+	const contentY = line.tokenOffset === 0 ? line.y : line.y + aboveHeight;
+	for (const widget of widgets) {
+		const [startColumn, endColumn] = widget.pos.x;
+		const startCol0 = startColumn - 1;
+		const endCol0 = endColumn - 1;
+		const startX = getXFromColumnUnclamped(lines, line, startCol0, tokenLines, context.canvas, context.settings, context.caches);
+		const widgetWidth = getXFromColumnUnclamped(lines, line, endCol0, tokenLines, context.canvas, context.settings, context.caches) - startX;
+		c$7.save();
+		widget.draw(c$7, startX, contentY + lineHeight$1 - 2, widgetWidth, lineHeight$1);
+		c$7.restore();
+	}
+}
+function drawOverlayWidgets(context, line) {
+	const widgets = line.widgets.overlay;
+	if (widgets.length === 0) return;
+	const { lines } = context;
+	const { c: c$7 } = context.canvas;
+	const { lineHeight: lineHeight$1 } = context.settings;
+	const tokenLines = context.doc.tokenLines;
+	const aboveHeight = calculateAboveHeightForLine(context, line);
+	const contentY = line.tokenOffset === 0 ? line.y : line.y + aboveHeight;
+	for (const widget of widgets) {
+		const [startColumn, endColumn] = widget.pos.x;
+		const startCol0 = startColumn - 1;
+		const endCol0 = endColumn - 1;
+		const startX = getXFromColumnUnclamped(lines, line, startCol0, tokenLines, context.canvas, context.settings, context.caches);
+		const widgetWidth = getXFromColumnUnclamped(lines, line, endCol0, tokenLines, context.canvas, context.settings, context.caches) - startX;
+		c$7.save();
+		widget.draw(c$7, startX, contentY, widgetWidth, lineHeight$1);
+		c$7.restore();
+	}
+}
+function drawInlayWidgets(context, line) {
+	const widgets = line.widgets.inlay;
+	if (widgets.length === 0) return;
+	const { lines } = context;
+	const { c: c$7 } = context.canvas;
+	const { lineHeight: lineHeight$1 } = context.settings;
+	const tokenLines = context.doc.tokenLines;
+	const lineY = line.y;
+	const charOffset = getCharOffsetForVisualLine(line.logicalLine, line, tokenLines, context.lines);
+	const tokenStart = line.tokenOffset;
+	for (const widget of widgets) {
+		const widgetColumn = widget.pos.x - 1;
+		let currentCharOffset = charOffset;
+		for (let i$6 = tokenStart; i$6 < tokenStart + line.tokens.length; i$6++) {
+			const token = tokenLines[line.logicalLine]?.[i$6];
+			if (!token) break;
+			const tokenEnd = currentCharOffset + token.text.length;
+			if (widgetColumn >= currentCharOffset && widgetColumn <= tokenEnd) {
+				const widgetX = getXFromColumnUnclamped(lines, line, widgetColumn, tokenLines, context.canvas, context.settings, context.caches);
+				const { width } = measureText(c$7, context.settings, context.caches, {
+					text: widget.content,
+					type: "text"
+				});
+				c$7.save();
+				c$7.font = `400 normal ${context.settings.fontSize} '${context.settings.fontFamilyName}', monospace`;
+				c$7.textBaseline = "top";
+				widget.draw(c$7, widgetX, lineY, width, lineHeight$1);
+				c$7.restore();
+				break;
+			}
+			currentCharOffset = tokenEnd;
+		}
+	}
+}
+function drawBeforeAfterWidgets(context, line) {
+	const widgets = line.widgets.beforeAfter;
+	if (widgets.length === 0) return;
+	const { lines } = context;
+	const { c: c$7 } = context.canvas;
+	const { lineHeight: lineHeight$1 } = context.settings;
+	const tokenLines = context.doc.tokenLines;
+	const aboveHeight = calculateAboveHeightForLine(context, line);
+	const contentY = line.tokenOffset === 0 ? line.y : line.y + aboveHeight;
+	let lineStartColumn = getCharOffsetForVisualLine(line.logicalLine, line, tokenLines, context.lines);
+	let lineEndColumn = lineStartColumn;
+	for (const token of line.tokens) lineEndColumn += token.token.text.length;
+	for (const widget of widgets) {
+		const widgetColumn = widget.pos.x - 1;
+		if (widget.type === "before") {
+			if (widgetColumn < lineStartColumn || widgetColumn >= lineEndColumn) continue;
+			const widgetX = getXFromColumnUnclamped(lines, line, widgetColumn, tokenLines, context.canvas, context.settings, context.caches);
+			c$7.save();
+			widget.draw(c$7, widgetX, contentY, widget.pos.width, lineHeight$1);
+			c$7.restore();
+			continue;
+		}
+		if (widget.type === "after") {
+			if (widgetColumn <= lineStartColumn || widgetColumn > lineEndColumn) continue;
+			const widgetX = getXFromColumnUnclamped(lines, line, widgetColumn + 1, tokenLines, context.canvas, context.settings, context.caches);
+			c$7.save();
+			widget.draw(c$7, widgetX, contentY, widget.pos.width, lineHeight$1);
+			c$7.restore();
+			continue;
+		}
+	}
+}
+var caretCallBlockAnalysisByContext = /* @__PURE__ */ new WeakMap();
+function createSyntheticCaretLine(currentLine, y$5, lineHeight$1) {
+	return {
+		tokens: [],
+		logicalLine: currentLine,
+		tokenOffset: 0,
+		y: y$5,
+		width: 0,
+		height: lineHeight$1,
+		aboveHeight: 0,
+		logicalAboveHeight: 0,
+		widgets: {
+			above: [],
+			below: [],
+			overlay: [],
+			inlay: [],
+			beforeAfter: [],
+			full: []
+		},
+		errors: []
+	};
+}
+function resolveCaretVisualLine(context, currentLine, currentColumn, tokenLines) {
+	const { lines, settings: settings$1, caches } = context;
+	let foundLine = findVisualLineForColumn(lines, currentLine, currentColumn, tokenLines, caches);
+	if (foundLine) return foundLine;
+	const relevantLines = lines.visualLinesByLogicalLine.value[currentLine] ?? [];
+	if (relevantLines.length > 0) return relevantLines[0];
+	const lastVisualLine = (typeof lines.getLastVisualLine === "function" ? lines.getLastVisualLine.bind(lines) : () => lines.visualLines.value.at(-1) ?? null)();
+	if (lastVisualLine && currentLine === lastVisualLine.logicalLine + 1) return createSyntheticCaretLine(currentLine, lastVisualLine.y + lastVisualLine.height, settings$1.lineHeight);
+	return null;
+}
+function resolveBeforeWidgetOffset(context, line, column) {
+	let offset = 0;
+	for (const widget of context.doc.widgets) if (widget.type === "before" && widget.pos.y - 1 === line && widget.pos.x - 1 === column) offset += widget.pos.width;
+	return offset;
+}
+function toScreenPosition(context, x$4, contentY) {
+	const { settings: settings$1, gutter, scroll, canvas, header } = context;
+	const headerHeight = header.value?.height ?? 0;
+	const canvasRect = canvas.rect;
+	return {
+		x: x$4 + gutter.width.value + settings$1.paddingLeft + scroll.pos.x + canvasRect.left,
+		y: contentY + headerHeight + settings$1.paddingTop + scroll.pos.y + canvasRect.top
+	};
+}
+function resolveCaretLayout(context) {
+	const { doc, lines, caret, settings: settings$1, caches, canvas } = context;
+	const codeLines = doc.lines;
+	const currentLine = caret.line.value;
+	const currentColumn = caret.column.value;
+	if (currentLine < 0 || currentLine >= codeLines.length) return null;
+	const tokenLines = doc.tokenLines;
+	const foundLine = resolveCaretVisualLine(context, currentLine, currentColumn, tokenLines);
+	if (!foundLine) return null;
+	const contentX = Math.max(1, getXFromColumn(lines, foundLine, currentColumn, tokenLines, canvas, settings$1, caches)) + resolveBeforeWidgetOffset(context, currentLine, currentColumn);
+	const aboveHeight = calculateAboveHeightForLine(context, foundLine);
+	const contentY = foundLine.tokenOffset === 0 ? foundLine.y : foundLine.y + aboveHeight;
+	const screen = toScreenPosition(context, contentX, contentY);
+	return {
+		visualLine: foundLine,
+		contentX,
+		contentY,
+		screenX: screen.x,
+		screenY: screen.y
+	};
+}
+function moveTokenPosition(tokenLines, lineIndex, tokenIndex, delta) {
+	if (delta === 0) return {
+		lineIndex,
+		tokenIndex
+	};
+	let line = lineIndex;
+	let token = tokenIndex;
+	if (delta > 0) {
+		for (let i$6 = 0; i$6 < delta; i$6++) {
+			token++;
+			while (line < tokenLines.length && token >= (tokenLines[line]?.length ?? 0)) {
+				line++;
+				token = 0;
+			}
+			if (line >= tokenLines.length) return null;
+		}
+		return {
+			lineIndex: line,
+			tokenIndex: token
+		};
+	}
+	for (let i$6 = 0; i$6 < -delta; i$6++) {
+		token--;
+		while (line >= 0 && token < 0) {
+			line--;
+			if (line < 0) return null;
+			token = (tokenLines[line]?.length ?? 0) - 1;
+		}
+		if (line < 0) return null;
+	}
+	return {
+		lineIndex: line,
+		tokenIndex: token
+	};
+}
+function findCallBlockTokenPositionFromAnchor(tokenLines, callBlock, anchorLine, anchorTokenIndex, anchorToken, targetToken) {
+	const anchorBlockIndex = callBlock.indexOf(anchorToken);
+	const targetBlockIndex = callBlock.indexOf(targetToken);
+	if (anchorBlockIndex < 0 || targetBlockIndex < 0) return null;
+	return moveTokenPosition(tokenLines, anchorLine, anchorTokenIndex, targetBlockIndex - anchorBlockIndex);
+}
+function resolveCaretCallBlockAnalysis(context, tokenLines, line, tokenIndex, token) {
+	const revision = context.doc.revision;
+	const tokenVersion = context.doc.tokenVersion;
+	const cached = caretCallBlockAnalysisByContext.get(context);
+	if (cached && cached.revision === revision && cached.tokenVersion === tokenVersion && cached.line === line && cached.tokenIndex === tokenIndex && cached.token === token) return cached;
+	const callBlock = findCallBlockForToken(tokenLines, line, tokenIndex);
+	const parameterIndex = callBlock.length > 0 ? getParameterIndex(callBlock, tokenLines, line, tokenIndex) : -1;
+	const parameterStartToken = parameterIndex >= 0 ? getParameterStartToken(callBlock, parameterIndex) : null;
+	let functionToken = null;
+	for (let i$6 = 0; i$6 < callBlock.length; i$6++) if (callBlock[i$6].text === "(" && i$6 > 0) {
+		const prevToken = callBlock[i$6 - 1];
+		if (prevToken && (prevToken.type === "function" || prevToken.type === "identifier")) {
+			functionToken = prevToken;
+			break;
+		}
+	}
+	const analysis = {
+		revision,
+		tokenVersion,
+		line,
+		tokenIndex,
+		token,
+		callBlock,
+		parameterIndex,
+		parameterStartToken,
+		functionToken
+	};
+	caretCallBlockAnalysisByContext.set(context, analysis);
+	return analysis;
+}
 function drawCaret(context) {
-	const { canvas, doc, lines, caret, settings: settings$1, caches, gutter, scroll, header } = context;
+	const { canvas, doc, lines, caret, settings: settings$1, caches } = context;
 	const { c: c$7 } = canvas;
 	if (!(getActiveCanvas() === canvas.el)) {
 		caret.caretToken = null;
+		caret.screenPosition = null;
 		return;
 	}
-	if (context.mouse.buttonsDown.value) {
-		caret.caretToken = null;
-		return;
-	}
+	const isSelectingWithMouse = context.mouse.buttonsDown.value;
+	if (isSelectingWithMouse) caret.caretToken = null;
 	const opacity = caret.updateBlink();
-	lines.visualLines.value;
-	const codeLines = doc.code.split("\n");
+	const layout = resolveCaretLayout(context);
+	if (!layout) {
+		caret.caretToken = null;
+		caret.screenPosition = null;
+		return;
+	}
 	const currentLine = caret.line.value;
 	const currentColumn = caret.column.value;
-	if (currentLine < 0 || currentLine >= codeLines.length) {
-		caret.caretToken = null;
-		return;
-	}
 	const tokenLines = doc.tokenLines;
-	let foundLine = findVisualLineForColumn(lines, currentLine, currentColumn, tokenLines, caches);
-	if (!foundLine) {
-		const visualLines = lines.visualLines.value;
-		const relevantLines = visualLines.filter((line) => line.logicalLine === currentLine);
-		if (relevantLines.length > 0) foundLine = relevantLines[0];
-		else {
-			const lastVisualLine = visualLines[visualLines.length - 1];
-			if (lastVisualLine && currentLine === lastVisualLine.logicalLine + 1) foundLine = {
-				tokens: [],
-				logicalLine: currentLine,
-				tokenOffset: 0,
-				y: lastVisualLine.y + lastVisualLine.height,
-				width: 0,
-				height: settings$1.lineHeight,
-				widgets: {
-					above: [],
-					below: [],
-					overlay: [],
-					inlay: [],
-					beforeAfter: [],
-					full: []
-				},
-				errors: []
-			};
-			else {
-				caret.caretToken = null;
-				return;
-			}
-		}
-	}
-	let x$4 = Math.max(1, getXFromColumn(lines, foundLine, currentColumn, tokenLines, canvas, settings$1, caches));
-	for (const w$5 of doc.widgets) if (w$5.type === "before" && w$5.pos.y - 1 === currentLine && w$5.pos.x - 1 === currentColumn) x$4 += w$5.pos.width;
-	const aboveHeight = calculateAboveHeightForLine(context, foundLine);
-	const contentY = foundLine.tokenOffset === 0 ? foundLine.y : foundLine.y + aboveHeight;
+	const foundLine = layout.visualLine;
+	const x$4 = layout.contentX;
+	const contentY = layout.contentY;
 	const lineHeight$1 = settings$1.lineHeight;
 	c$7.strokeStyle = settings$1.colors.brightWhite;
 	c$7.globalAlpha = opacity;
@@ -6592,60 +8124,53 @@ function drawCaret(context) {
 	c$7.lineTo(x$4, contentY + lineHeight$1);
 	c$7.stroke();
 	c$7.globalAlpha = 1;
+	caret.screenPosition = {
+		x: layout.screenX,
+		y: layout.screenY
+	};
 	const logicalLineTokens = tokenLines[currentLine] || [];
-	codeLines[currentLine];
 	if (logicalLineTokens.length > 0 && foundLine.tokens.length > 0) {
-		let tokenIndex = getTokenIndexFromColumn(logicalLineTokens, currentColumn > 0 ? currentColumn - 1 : currentColumn);
-		let finalToken = tokenIndex >= 0 && tokenIndex < logicalLineTokens.length ? logicalLineTokens[tokenIndex] : null;
-		let finalTokenIndex = tokenIndex;
+		const tokenIndex = getTokenIndexFromColumn(logicalLineTokens, currentColumn > 0 ? currentColumn - 1 : currentColumn);
+		const finalTokenIndex = tokenIndex;
+		const finalToken = tokenIndex >= 0 && tokenIndex < logicalLineTokens.length ? logicalLineTokens[tokenIndex] : null;
 		if (finalToken && finalTokenIndex >= 0 && finalTokenIndex < logicalLineTokens.length) {
-			if (caret.isTyping.value) {
-				const callBlock = findCallBlockForToken(tokenLines, currentLine, finalTokenIndex);
-				const parameterIndex = callBlock.length > 0 ? getParameterIndex(callBlock, tokenLines, currentLine, finalTokenIndex) : -1;
+			if (!isSelectingWithMouse && caret.isTyping.value && context.onCaretToken) {
+				const analysis = resolveCaretCallBlockAnalysis(context, tokenLines, currentLine, finalTokenIndex, finalToken);
+				const callBlock = analysis.callBlock;
+				const parameterIndex = analysis.parameterIndex;
 				let tokenX = x$4;
 				for (const visualToken of foundLine.tokens) if (visualToken.logicalTokenIndex === finalTokenIndex) {
 					tokenX = visualToken.x;
 					break;
 				}
-				const headerHeight = header.value?.height ?? 0;
-				const scrollX = scroll.pos.x;
-				const scrollY = scroll.pos.y;
-				const canvasRect = canvas.rect;
-				let screenX = tokenX + gutter.width.value + settings$1.paddingLeft + scrollX + canvasRect.left;
-				let screenY = contentY + headerHeight + settings$1.paddingTop + scrollY + canvasRect.top;
+				let { x: screenX, y: screenY } = toScreenPosition(context, tokenX, contentY);
 				if (parameterIndex >= 0) {
-					const paramStartToken = getParameterStartToken(callBlock, parameterIndex);
+					const paramStartToken = analysis.parameterStartToken;
 					if (paramStartToken) {
-						const pos = findTokenPositionInTokenLines(tokenLines, paramStartToken);
+						const pos = findCallBlockTokenPositionFromAnchor(tokenLines, callBlock, currentLine, finalTokenIndex, finalToken, paramStartToken);
 						if (pos) {
 							const column = getColumnForTokenIndex(tokenLines[pos.lineIndex] || [], pos.tokenIndex);
 							const paramLine = findVisualLineForColumn(lines, pos.lineIndex, column, tokenLines, caches);
 							if (paramLine) {
-								const paramX = getXFromColumn(lines, paramLine, column, tokenLines, canvas, settings$1, caches);
-								const paramContentY = paramLine.tokenOffset === 0 ? paramLine.y : paramLine.y + calculateAboveHeightForLine(context, paramLine);
-								screenX = paramX + gutter.width.value + settings$1.paddingLeft + scrollX + canvasRect.left;
-								screenY = paramContentY + headerHeight + settings$1.paddingTop + scrollY + canvasRect.top;
+								const paramScreen = toScreenPosition(context, getXFromColumn(lines, paramLine, column, tokenLines, canvas, settings$1, caches), paramLine.tokenOffset === 0 ? paramLine.y : paramLine.y + calculateAboveHeightForLine(context, paramLine));
+								screenX = paramScreen.x;
+								screenY = paramScreen.y;
 							}
 						}
 					}
 				}
 				let callBlockX = screenX;
 				let callBlockY = screenY;
-				if (callBlock.length > 0) {
-					const lineTokens = tokenLines[currentLine] || [];
-					let functionTokenIndex = -1;
-					for (let i$6 = 0; i$6 < callBlock.length; i$6++) if (callBlock[i$6].text === "(" && i$6 > 0) {
-						const prevToken = callBlock[i$6 - 1];
-						if (prevToken && (prevToken.type === "function" || prevToken.type === "identifier")) {
-							functionTokenIndex = lineTokens.indexOf(prevToken);
-							break;
-						}
-					}
-					if (functionTokenIndex >= 0) {
-						for (const visualToken of foundLine.tokens) if (visualToken.logicalTokenIndex === functionTokenIndex) {
-							callBlockX = visualToken.x + gutter.width.value + settings$1.paddingLeft + scrollX + canvasRect.left;
-							callBlockY = contentY + headerHeight + settings$1.paddingTop + scrollY + canvasRect.top;
-							break;
+				const functionToken = analysis.functionToken;
+				if (callBlock.length > 0 && functionToken) {
+					const functionPos = findCallBlockTokenPositionFromAnchor(tokenLines, callBlock, currentLine, finalTokenIndex, finalToken, functionToken);
+					if (functionPos) {
+						const functionColumn = getColumnForTokenIndex(tokenLines[functionPos.lineIndex] || [], functionPos.tokenIndex);
+						const functionLine = findVisualLineForColumn(lines, functionPos.lineIndex, functionColumn, tokenLines, caches);
+						if (functionLine) {
+							const functionScreen = toScreenPosition(context, getXFromColumn(lines, functionLine, functionColumn, tokenLines, canvas, settings$1, caches), functionLine.tokenOffset === 0 ? functionLine.y : functionLine.y + calculateAboveHeightForLine(context, functionLine));
+							callBlockX = functionScreen.x;
+							callBlockY = functionScreen.y;
 						}
 					}
 				}
@@ -6663,52 +8188,6 @@ function drawCaret(context) {
 		} else if (!context.mouse.hovered.hoverToken) caret.caretToken = null;
 	} else caret.caretToken = null;
 }
-function getCaretScreenPosition(context) {
-	const { doc, lines, caret, settings: settings$1, caches, gutter, scroll, header } = context;
-	const codeLines = doc.code.split("\n");
-	const currentLine = caret.line.value;
-	const currentColumn = caret.column.value;
-	if (currentLine < 0 || currentLine >= codeLines.length) return null;
-	const tokenLines = doc.tokenLines;
-	let foundLine = findVisualLineForColumn(lines, currentLine, currentColumn, tokenLines, caches);
-	if (!foundLine) {
-		const visualLines = lines.visualLines.value;
-		const relevantLines = visualLines.filter((line) => line.logicalLine === currentLine);
-		if (relevantLines.length > 0) foundLine = relevantLines[0];
-		else {
-			const lastVisualLine = visualLines[visualLines.length - 1];
-			if (lastVisualLine && currentLine === lastVisualLine.logicalLine + 1) foundLine = {
-				tokens: [],
-				logicalLine: currentLine,
-				tokenOffset: 0,
-				y: lastVisualLine.y + lastVisualLine.height,
-				width: 0,
-				height: settings$1.lineHeight,
-				widgets: {
-					above: [],
-					below: [],
-					overlay: [],
-					inlay: [],
-					beforeAfter: [],
-					full: []
-				},
-				errors: []
-			};
-			else return null;
-		}
-	}
-	const { canvas } = context;
-	let x$4 = Math.max(1, getXFromColumn(lines, foundLine, currentColumn, tokenLines, canvas, settings$1, caches));
-	for (const w$5 of doc.widgets) if (w$5.type === "before" && w$5.pos.y - 1 === currentLine && w$5.pos.x - 1 === currentColumn) x$4 += w$5.pos.width;
-	const aboveHeight = calculateAboveHeightForLine(context, foundLine);
-	const contentY = foundLine.tokenOffset === 0 ? foundLine.y : foundLine.y + aboveHeight;
-	const headerHeight = header.value?.height ?? 0;
-	const canvasRect = canvas.rect;
-	return {
-		x: x$4 + gutter.width.value + settings$1.paddingLeft + scroll.pos.x + canvasRect.left,
-		y: contentY + headerHeight + settings$1.paddingTop + scroll.pos.y + canvasRect.top
-	};
-}
 function drawHeader(context) {
 	const header = context.header.value;
 	if (!header) return;
@@ -6720,35 +8199,6 @@ function drawHeader(context) {
 	c$7.save();
 	header.draw(c$7, 0, 0, width, header.height, tx, tw);
 	c$7.restore();
-}
-function drawSquiggle(c$7, x$4, y$5, width) {
-	c$7.strokeStyle = "#ff0000";
-	c$7.lineWidth = 1.25;
-	c$7.beginPath();
-	const amplitude = 1;
-	const period = 5;
-	for (let i$6 = 0; i$6 <= width; i$6 += .5) {
-		const squiggleY = y$5 + (2 * amplitude * Math.abs(2 * (i$6 / period - Math.floor(.5 + i$6 / period))) - amplitude);
-		if (i$6 === 0) c$7.moveTo(x$4 + i$6, squiggleY);
-		else c$7.lineTo(x$4 + i$6, squiggleY);
-	}
-	c$7.stroke();
-}
-function drawErrorSquiggles(context, line) {
-	const errors = line.errors;
-	if (errors.length === 0) return;
-	const { lines, doc, canvas, settings: settings$1, caches } = context;
-	const { c: c$7 } = canvas;
-	const { lineHeight: lineHeight$1 } = settings$1;
-	const tokenLines = doc.tokenLines;
-	const aboveHeight = calculateAboveHeightForLine(context, line);
-	const contentY = line.tokenOffset === 0 ? line.y : line.y + aboveHeight;
-	for (const error$1 of errors) {
-		const [startColumn, endColumn] = [error$1.x[0] - 1, error$1.x[1] - 1];
-		const startX = getXFromColumn(lines, line, startColumn, tokenLines, canvas, settings$1, caches);
-		const errorWidth = getXFromColumn(lines, line, endColumn, tokenLines, canvas, settings$1, caches) - startX;
-		drawSquiggle(c$7, startX, contentY + lineHeight$1 - 2, errorWidth);
-	}
 }
 function Deferred$2() {
 	const _onwhen = () => {
@@ -6941,41 +8391,46 @@ async function drawLigature(c$7, ligature, x$4, y$5, width, height, options$2) {
 	ligatureCanvas = await renderLigature(ligature, width, height, options$2);
 	drawLigatureCanvas(c$7, ligatureCanvas, x$4, y$5, options$2);
 }
-function drawRoundedRect(c$7, x$4, y$5, width, height, radius) {
+function drawSquiggle(c$7, x$4, y$5, width) {
+	c$7.strokeStyle = "#ff0000";
+	c$7.lineWidth = 1.25;
 	c$7.beginPath();
-	c$7.moveTo(x$4 + radius, y$5);
-	c$7.lineTo(x$4 + width - radius, y$5);
-	c$7.quadraticCurveTo(x$4 + width, y$5, x$4 + width, y$5 + radius);
-	c$7.lineTo(x$4 + width, y$5 + height - radius);
-	c$7.quadraticCurveTo(x$4 + width, y$5 + height, x$4 + width - radius, y$5 + height);
-	c$7.lineTo(x$4 + radius, y$5 + height);
-	c$7.quadraticCurveTo(x$4, y$5 + height, x$4, y$5 + height - radius);
-	c$7.lineTo(x$4, y$5 + radius);
-	c$7.quadraticCurveTo(x$4, y$5, x$4 + radius, y$5);
-	c$7.closePath();
+	const amplitude = 1;
+	const period = 5;
+	for (let i$6 = 0; i$6 <= width; i$6 += .5) {
+		const squiggleY = y$5 + (2 * amplitude * Math.abs(2 * (i$6 / period - Math.floor(.5 + i$6 / period))) - amplitude);
+		if (i$6 === 0) c$7.moveTo(x$4 + i$6, squiggleY);
+		else c$7.lineTo(x$4 + i$6, squiggleY);
+	}
+	c$7.stroke();
 }
-function drawText(c$7, text, x$4, y$5, color) {
-	c$7.fillStyle = color;
-	c$7.strokeStyle = color;
-	c$7.lineWidth = .2;
-	c$7.lineCap = "round";
-	c$7.lineJoin = "miter";
-	c$7.miterLimit = 3;
-	c$7.fillText(text, x$4, y$5);
-	c$7.strokeText(text, x$4, y$5);
+function drawErrorSquiggles(context, line) {
+	const errors = line.errors;
+	if (errors.length === 0) return;
+	const { lines, doc, canvas, settings: settings$1, caches } = context;
+	const { c: c$7 } = canvas;
+	const { lineHeight: lineHeight$1 } = settings$1;
+	const tokenLines = doc.tokenLines;
+	const aboveHeight = calculateAboveHeightForLine(context, line);
+	const contentY = line.tokenOffset === 0 ? line.y : line.y + aboveHeight;
+	for (const error$1 of errors) {
+		const [startColumn, endColumn] = [error$1.x[0] - 1, error$1.x[1] - 1];
+		const startX = getXFromColumn(lines, line, startColumn, tokenLines, canvas, settings$1, caches);
+		const errorWidth = getXFromColumn(lines, line, endColumn, tokenLines, canvas, settings$1, caches) - startX;
+		drawSquiggle(c$7, startX, contentY + lineHeight$1 - 2, errorWidth);
+	}
 }
-var IS_CHROME = navigator.userAgent.includes("Chrome");
+var IS_CHROME$1 = navigator.userAgent.includes("Chrome");
 function drawToken(c$7, context, token, x$4, y$5, colorOverride) {
 	const { text, type } = token;
 	const { color: themeColor, style, weight } = context.settings.theme[type];
 	const color = colorOverride ?? themeColor;
-	const { width, height } = measureText(context.canvas.c, context.settings, context.caches, token);
 	const fontWeight = weight === "bold" ? 700 : 400;
-	c$7.save();
-	try {
-		c$7.font = `${fontWeight} ${style} ${context.settings.fontSize} '${context.settings.fontFamilyName}', monospace`;
-		c$7.textBaseline = "top";
-		if (IS_CHROME && ligatures.has(text)) return {
+	c$7.font = `${fontWeight} ${style} ${context.settings.fontSize} '${context.settings.fontFamilyName}', monospace`;
+	c$7.textBaseline = "top";
+	if (IS_CHROME$1 && ligatures.has(text)) {
+		const { width, height } = measureText(context.canvas.c, context.settings, context.caches, token);
+		return {
 			promise: drawLigature(c$7, text, x$4, y$5, width, height, {
 				fontUrl: context.settings.fontFamilies.find((font) => font.style === style && font.weight === (weight === "bold" ? "bold" : "normal"))?.url,
 				fontWeight,
@@ -6987,17 +8442,13 @@ function drawToken(c$7, context, token, x$4, y$5, colorOverride) {
 			width,
 			height
 		};
-		else {
-			drawText(c$7, text, x$4, y$5, color);
-			return {
-				promise: null,
-				width,
-				height
-			};
-		}
-	} finally {
-		c$7.restore();
 	}
+	drawText(c$7, text, x$4, y$5, color);
+	return {
+		promise: null,
+		width: 0,
+		height: 0
+	};
 }
 function isBraceOrQuoteChar(char) {
 	switch (char) {
@@ -7013,97 +8464,327 @@ function isBraceOrQuoteChar(char) {
 		default: return false;
 	}
 }
-function drawLine(context, line) {
+var lastKnownBraceDepthByToken = /* @__PURE__ */ new WeakMap();
+var lastKnownBraceDepthBySignature = /* @__PURE__ */ new Map();
+var MAX_BRACE_DEPTH_SIGNATURES = 2e4;
+var braceNullTraceLastLogAt = /* @__PURE__ */ new Map();
+var BRACE_NULL_TRACE_THROTTLE_MS = 150;
+var lineHasBraceCandidatesCache = /* @__PURE__ */ new WeakMap();
+var IS_CHROME = navigator.userAgent.includes("Chrome");
+var RUN_CONTIGUOUS_EPSILON = .001;
+var SCROLL_DIRECT_THRESHOLD_PX = 10;
+function isOffscreen2DContext(c$7) {
+	return typeof OffscreenCanvas !== "undefined" && c$7.canvas instanceof OffscreenCanvas;
+}
+function getLastKnownBraceDepth(token, charOffset) {
+	const perChar = lastKnownBraceDepthByToken.get(token);
+	if (!perChar) return null;
+	const depth = perChar.get(charOffset);
+	return depth === void 0 ? null : depth;
+}
+function setLastKnownBraceDepth(token, charOffset, depth) {
+	let perChar = lastKnownBraceDepthByToken.get(token);
+	if (!perChar) {
+		perChar = /* @__PURE__ */ new Map();
+		lastKnownBraceDepthByToken.set(token, perChar);
+	}
+	perChar.set(charOffset, depth);
+}
+function clearLastKnownBraceDepth(token, charOffset) {
+	const perChar = lastKnownBraceDepthByToken.get(token);
+	if (!perChar) return;
+	perChar.delete(charOffset);
+	if (perChar.size === 0) lastKnownBraceDepthByToken.delete(token);
+}
+function makeBraceDepthSignature(lineText, column, char) {
+	return `${lineText}\u0000${column}\u0000${char}`;
+}
+function getLastKnownBraceDepthBySignature(signature) {
+	const depth = lastKnownBraceDepthBySignature.get(signature);
+	return depth === void 0 ? null : depth;
+}
+function setLastKnownBraceDepthBySignature(signature, depth) {
+	if (!lastKnownBraceDepthBySignature.has(signature) && lastKnownBraceDepthBySignature.size >= MAX_BRACE_DEPTH_SIGNATURES) {
+		const firstKey = lastKnownBraceDepthBySignature.keys().next().value;
+		if (typeof firstKey === "string") lastKnownBraceDepthBySignature.delete(firstKey);
+	}
+	lastKnownBraceDepthBySignature.set(signature, depth);
+}
+function clearLastKnownBraceDepthBySignature(signature) {
+	lastKnownBraceDepthBySignature.delete(signature);
+}
+function isBraceNullTraceEnabled() {
+	return globalThis.__EDITOR_TRACE_NULL_BRACES === true;
+}
+function logBraceNullTrace(key, payload) {
+	const now = Date.now();
+	if (now - (braceNullTraceLastLogAt.get(key) ?? 0) < BRACE_NULL_TRACE_THROTTLE_MS) return;
+	braceNullTraceLastLogAt.set(key, now);
+	console.log("[brace-null-trace]", payload);
+}
+function lineHasBraceCandidates(line) {
+	const cached = lineHasBraceCandidatesCache.get(line);
+	if (cached !== void 0) return cached;
+	const visualTokens = line.tokens;
+	for (let i$6 = 0; i$6 < visualTokens.length; i$6++) {
+		const text = visualTokens[i$6].token.text;
+		if (text.length === 1 && isBraceOrQuoteChar(text)) {
+			lineHasBraceCandidatesCache.set(line, true);
+			return true;
+		}
+	}
+	lineHasBraceCandidatesCache.set(line, false);
+	return false;
+}
+function resolveDirectMode(targetDeltaX, targetDeltaY) {
+	return Math.max(targetDeltaX, targetDeltaY) > SCROLL_DIRECT_THRESHOLD_PX;
+}
+function drawLine(context, line, directDraw = false) {
 	const { canvas, settings: settings$1, caches } = context;
 	const { c: c$7, dpr } = canvas;
-	const { lineCanvasCache, lineCanvasCacheByLine } = caches;
+	const { lineCanvasCacheByLine, getLineCanvasSegmentKey: getLineCanvasSegmentKey$1, getLineCanvasBucketSize, acquireLineCanvas, markLineCanvasUsed } = caches;
 	const logicalLine = line.logicalLine;
 	const visualTokens = line.tokens;
-	const lineCacheKey = getLineCacheKey(context, visualTokens);
-	let needsRedraw = false;
-	let lineCanvas = lineCanvasCacheByLine.get(logicalLine);
-	const cachedLineCanvas = lineCanvasCache.get(lineCacheKey);
-	if (cachedLineCanvas) {
-		lineCanvas = cachedLineCanvas;
-		lineCanvas.lineCacheKey = lineCacheKey;
-		lineCanvasCacheByLine.set(logicalLine, lineCanvas);
-	} else if (!lineCanvas) {
-		needsRedraw = true;
-		const metrics = measureVisualTokens(c$7, settings$1, caches, visualTokens);
-		const lineWidth = Math.max(metrics.width, line.width);
-		const offscreenCanvas = new OffscreenCanvas(lineWidth * dpr.value, metrics.height * dpr.value);
-		lineCanvas = {
-			lineCacheKey,
-			canvas: offscreenCanvas,
-			c: offscreenCanvas.getContext("2d")
+	const logicalLineTokens = context.doc.tokenLines[logicalLine] || [];
+	const lineCacheKey = getLineCacheKey(context, line, logicalLineTokens);
+	const lineCanvasSegmentKey = getLineCanvasSegmentKey$1(logicalLine, line.tokenOffset);
+	const braceAnalysisVersion = context.blocks.getBraceAnalysisVersion();
+	const tokenVersion = context.doc.tokenVersion;
+	const isBraceAnalysisCurrent = context.blocks.isBraceAnalysisCurrent();
+	const hasBraceCandidates = lineHasBraceCandidates(line);
+	const shouldDeferBraceOnlyRedraw = settings$1.performanceMode === "stress" && logicalLine !== context.caret.line.value;
+	const aboveHeight = calculateAboveHeightForLine(context, line);
+	const contentY = line.tokenOffset === 0 ? line.y : line.y + aboveHeight;
+	const drawLineDecorations = () => {
+		drawFullWidgets(context, line);
+		drawAboveWidgets(context, line);
+		drawOverlayWidgets(context, line);
+		drawInlayWidgets(context, line);
+		drawBeforeAfterWidgets(context, line);
+		drawBelowWidgets(context, line);
+		drawErrorSquiggles(context, line);
+	};
+	const renderLineTokens = (targetCtx, textY, allowLigatures) => {
+		const theme$1 = settings$1.theme;
+		const fallbackTokenStyle = theme$1.text;
+		const tokenRenderStyleByType = /* @__PURE__ */ new Map();
+		const getTokenRenderStyle = (token) => {
+			const cached = tokenRenderStyleByType.get(token.type);
+			if (cached) return cached;
+			const tokenStyle = theme$1[token.type] ?? fallbackTokenStyle;
+			const style = {
+				font: `${tokenStyle.weight === "bold" ? 700 : 400} ${tokenStyle.style} ${settings$1.fontSize} '${settings$1.fontFamilyName}', monospace`,
+				color: tokenStyle.color
+			};
+			tokenRenderStyleByType.set(token.type, style);
+			return style;
 		};
-		lineCanvas.c.setTransform(dpr.value, 0, 0, dpr.value, 0, 0);
-		lineCanvasCacheByLine.set(logicalLine, lineCanvas);
-		lineCanvasCache.set(lineCacheKey, lineCanvas);
-	} else if (lineCanvas.lineCacheKey !== lineCacheKey) {
-		needsRedraw = true;
-		const metrics = measureVisualTokens(c$7, settings$1, caches, visualTokens);
-		const lineWidth = Math.max(metrics.width, line.width);
-		const { canvas: offscreenCanvas, c: offscreenContext } = lineCanvas;
-		const targetWidth = lineWidth * dpr.value;
-		const targetHeight = metrics.height * dpr.value;
-		const needsResize = offscreenCanvas.width !== targetWidth || offscreenCanvas.height !== targetHeight;
-		if (needsResize) {
-			offscreenCanvas.width = targetWidth;
-			offscreenCanvas.height = targetHeight;
+		targetCtx.textBaseline = "top";
+		let currentFont = "";
+		let currentFillStyle = "";
+		let currentStrokeStyle = "";
+		let strokeStyleInitialized = false;
+		let runFont = "";
+		let runColor = "";
+		let runText = "";
+		let runStartX = 0;
+		let runEndX = 0;
+		const flushRun = () => {
+			if (runText.length === 0) return;
+			if (currentFont !== runFont) {
+				targetCtx.font = runFont;
+				currentFont = runFont;
+			}
+			if (currentFillStyle !== runColor) {
+				targetCtx.fillStyle = runColor;
+				currentFillStyle = runColor;
+			}
+			if (currentStrokeStyle !== runColor) {
+				targetCtx.strokeStyle = runColor;
+				currentStrokeStyle = runColor;
+			}
+			if (!strokeStyleInitialized) {
+				targetCtx.lineWidth = .2;
+				targetCtx.lineCap = "round";
+				targetCtx.lineJoin = "miter";
+				targetCtx.miterLimit = 3;
+				strokeStyleInitialized = true;
+			}
+			targetCtx.fillText(runText, runStartX, textY);
+			targetCtx.strokeText(runText, runStartX, textY);
+			runText = "";
+			runStartX = 0;
+			runEndX = 0;
+			runFont = "";
+			runColor = "";
+		};
+		const drawRenderedToken = (token, x$4, endX, colorOverride) => {
+			if (allowLigatures && IS_CHROME && ligatures.has(token.text) && isOffscreen2DContext(targetCtx)) {
+				flushRun();
+				drawToken(targetCtx, context, token, x$4, textY, colorOverride);
+				currentFont = "";
+				currentFillStyle = "";
+				return;
+			}
+			const tokenRenderStyle = getTokenRenderStyle(token);
+			const font = tokenRenderStyle.font;
+			const color = colorOverride ?? tokenRenderStyle.color;
+			if (runText.length > 0 && runFont === font && runColor === color && x$4 >= runEndX - RUN_CONTIGUOUS_EPSILON && x$4 <= runEndX + RUN_CONTIGUOUS_EPSILON) {
+				runText += token.text;
+				runEndX = endX;
+				return;
+			}
+			flushRun();
+			runFont = font;
+			runColor = color;
+			runStartX = x$4;
+			runEndX = endX;
+			runText = token.text;
+		};
+		if (!hasBraceCandidates) {
+			for (let i$6 = 0; i$6 < visualTokens.length; i$6++) {
+				const visualToken = visualTokens[i$6];
+				drawRenderedToken(visualToken.token, visualToken.x, visualToken.tokenEndX);
+			}
+			flushRun();
+			return;
 		}
-		offscreenContext.setTransform(dpr.value, 0, 0, dpr.value, 0, 0);
-		if (!needsResize) offscreenContext.clearRect(0, 0, targetWidth / dpr.value, targetHeight / dpr.value);
-		lineCanvasCache.delete(lineCanvas.lineCacheKey);
-		lineCanvas.lineCacheKey = lineCacheKey;
-		lineCanvasCache.set(lineCacheKey, lineCanvas);
-	}
-	if (needsRedraw) {
-		const { c: c$8 } = lineCanvas;
-		const logicalLineTokens = context.doc.tokenLines[logicalLine] || [];
+		let logicalLineText = "";
+		for (let i$6 = 0; i$6 < logicalLineTokens.length; i$6++) logicalLineText += logicalLineTokens[i$6]?.text ?? "";
 		const blockColors = context.settings.ui.blockColors;
-		for (const visualToken of visualTokens) {
-			const { token, x: x$4, logicalTokenIndex } = visualToken;
+		const tokenStartColumns = new Array(logicalLineTokens.length + 1);
+		tokenStartColumns[0] = 0;
+		for (let i$6 = 0; i$6 < logicalLineTokens.length; i$6++) tokenStartColumns[i$6 + 1] = tokenStartColumns[i$6] + (logicalLineTokens[i$6]?.text.length ?? 0);
+		const getColumnFromTokenLocation$1 = (tokenIndex, charIndex) => {
+			return (tokenStartColumns[Math.max(0, Math.min(tokenIndex, logicalLineTokens.length))] ?? 0) + Math.max(0, charIndex);
+		};
+		const getDepthFromMatchingBraceAtColumn = (column) => {
+			const matchAfter = context.blocks.findMatchingBrace(logicalLine, column + 1);
+			if (matchAfter) {
+				if (matchAfter.line === logicalLine) {
+					if (getColumnFromTokenLocation$1(matchAfter.tokenIndex, matchAfter.charIndex) === column) return matchAfter.depth;
+				}
+				if (matchAfter.matchingLine === logicalLine) {
+					if (getColumnFromTokenLocation$1(matchAfter.matchingTokenIndex, matchAfter.matchingCharIndex) === column) return matchAfter.depth;
+				}
+			}
+			const matchAt = context.blocks.findMatchingBrace(logicalLine, column);
+			if (matchAt) {
+				if (matchAt.line === logicalLine) {
+					if (getColumnFromTokenLocation$1(matchAt.tokenIndex, matchAt.charIndex) === column) return matchAt.depth;
+				}
+				if (matchAt.matchingLine === logicalLine) {
+					if (getColumnFromTokenLocation$1(matchAt.matchingTokenIndex, matchAt.matchingCharIndex) === column) return matchAt.depth;
+				}
+			}
+			return null;
+		};
+		let tokenColumnStart = visualTokens.length > 0 ? getColumnFromTokenLocation$1(visualTokens[0].logicalTokenIndex, visualTokens[0].logicalCharOffset) : 0;
+		for (let i$6 = 0; i$6 < visualTokens.length; i$6++) {
+			const visualToken = visualTokens[i$6];
+			const { token, x: x$4, logicalTokenIndex, logicalCharOffset } = visualToken;
 			const logicalToken = logicalLineTokens[logicalTokenIndex];
+			const currentColumn = tokenColumnStart;
 			let colorOverride;
 			if (logicalToken && logicalToken.type !== "comment" && token.type !== "comment" && token.text.length === 1) {
 				const char = token.text;
 				if (isBraceOrQuoteChar(char)) {
-					const charIndex = logicalToken.text.indexOf(char);
-					if (charIndex !== -1) {
-						const depth = context.blocks.getBraceDepthForPosition(logicalLine, logicalTokenIndex, charIndex);
-						if (depth !== null) colorOverride = blockColors[depth % blockColors.length];
-						else colorOverride = "red";
+					const depthToken = logicalToken ?? token;
+					const signature = makeBraceDepthSignature(logicalLineText, currentColumn, char);
+					let depth = context.blocks.getBraceDepthForPosition(logicalLine, logicalTokenIndex, logicalCharOffset);
+					if (depth === null && !isBraceAnalysisCurrent) depth = getDepthFromMatchingBraceAtColumn(currentColumn);
+					if (depth === null && !isBraceAnalysisCurrent) depth = getLastKnownBraceDepth(depthToken, logicalCharOffset);
+					if (depth === null && !isBraceAnalysisCurrent) depth = getLastKnownBraceDepthBySignature(signature);
+					if (depth !== null) {
+						setLastKnownBraceDepth(depthToken, logicalCharOffset, depth);
+						setLastKnownBraceDepthBySignature(signature, depth);
+						colorOverride = blockColors[depth % blockColors.length];
+					} else if (isBraceAnalysisCurrent) {
+						clearLastKnownBraceDepth(depthToken, logicalCharOffset);
+						clearLastKnownBraceDepthBySignature(signature);
+						colorOverride = "red";
+					}
+					if (depth === null && !isBraceAnalysisCurrent && isBraceNullTraceEnabled()) {
+						const probe = context.blocks.debugBraceProbe?.(logicalLine, currentColumn + 1) ?? null;
+						logBraceNullTrace(`${logicalLine}:${currentColumn}:${char}:${tokenVersion}:${braceAnalysisVersion}`, {
+							logicalLine,
+							tokenIndex: logicalTokenIndex,
+							charOffset: logicalCharOffset,
+							column: currentColumn,
+							char,
+							tokenText: token.text,
+							tokenVersion,
+							braceAnalysisVersion,
+							isBraceAnalysisCurrent,
+							probe
+						});
 					}
 				}
 			}
-			drawToken(c$8, context, token, x$4, 2, colorOverride);
+			drawRenderedToken(token, x$4, visualToken.tokenEndX, colorOverride);
+			tokenColumnStart += token.text.length;
 		}
+		flushRun();
+	};
+	if (directDraw) {
+		drawLineDecorations();
+		renderLineTokens(c$7, contentY + 2, false);
+		return;
 	}
-	const aboveHeight = calculateAboveHeightForLine(context, line);
-	const contentY = line.tokenOffset === 0 ? line.y : line.y + aboveHeight;
-	drawFullWidgets(context, line);
-	drawAboveWidgets(context, line);
-	drawOverlayWidgets(context, line);
-	drawInlayWidgets(context, line);
-	drawBeforeAfterWidgets(context, line);
-	drawBelowWidgets(context, line);
-	drawErrorSquiggles(context, line);
+	let needsRedraw = false;
+	let lineCanvas = lineCanvasCacheByLine.get(lineCanvasSegmentKey);
+	if (!lineCanvas) {
+		needsRedraw = true;
+		const metrics = measureVisualTokens(c$7, settings$1, caches, visualTokens);
+		lineCanvas = acquireLineCanvas(Math.max(metrics.width, line.width) * dpr.value, metrics.height * dpr.value, dpr.value);
+		lineCanvas.lineCacheKey = lineCacheKey;
+		lineCanvasCacheByLine.set(lineCanvasSegmentKey, lineCanvas);
+	} else if (lineCanvas.lineCacheKey !== lineCacheKey) {
+		needsRedraw = true;
+		const metrics = measureVisualTokens(c$7, settings$1, caches, visualTokens);
+		const bucketSize = getLineCanvasBucketSize(Math.max(metrics.width, line.width) * dpr.value, metrics.height * dpr.value);
+		const { canvas: offscreenCanvas, c: offscreenContext } = lineCanvas;
+		const needsResize = offscreenCanvas.width !== bucketSize.width || offscreenCanvas.height !== bucketSize.height;
+		if (needsResize) {
+			offscreenCanvas.width = bucketSize.width;
+			offscreenCanvas.height = bucketSize.height;
+			offscreenContext.setTransform(dpr.value, 0, 0, dpr.value, 0, 0);
+		}
+		if (!needsResize) offscreenContext.clearRect(0, 0, offscreenCanvas.width / dpr.value, offscreenCanvas.height / dpr.value);
+		lineCanvas.lineCacheKey = lineCacheKey;
+	}
+	if (!lineCanvas) return;
+	markLineCanvasUsed(lineCanvasSegmentKey);
+	if (!needsRedraw && lineCanvas && hasBraceCandidates && braceAnalysisVersion >= 0 && (lineCanvas.braceAnalysisVersion !== braceAnalysisVersion || lineCanvas.braceRenderTokenVersion !== tokenVersion && lineCanvas.braceRenderTokenRef !== logicalLineTokens)) if (shouldDeferBraceOnlyRedraw) {
+		lineCanvas.braceAnalysisVersion = braceAnalysisVersion;
+		lineCanvas.braceRenderTokenVersion = tokenVersion;
+		lineCanvas.braceRenderTokenRef = logicalLineTokens;
+	} else {
+		needsRedraw = true;
+		const { canvas: offscreenCanvas, c: offscreenContext } = lineCanvas;
+		offscreenContext.clearRect(0, 0, offscreenCanvas.width / dpr.value, offscreenCanvas.height / dpr.value);
+	}
+	if (needsRedraw) {
+		renderLineTokens(lineCanvas.c, 2, true);
+		lineCanvas.braceAnalysisVersion = braceAnalysisVersion;
+		lineCanvas.braceRenderTokenVersion = tokenVersion;
+		lineCanvas.braceRenderTokenRef = logicalLineTokens;
+	}
+	drawLineDecorations();
 	c$7.drawImage(lineCanvas.canvas, 0, contentY, lineCanvas.canvas.width / dpr.value, lineCanvas.canvas.height / dpr.value);
 }
 function drawLines(context) {
-	const visualLines = context.lines.visualLines.value;
 	const { size: { height: { value: height } } } = context.canvas;
 	const { paddingTop } = context.settings;
-	const { y: y$5 } = context.scroll.pos;
+	const { x: x$4, y: y$5 } = context.scroll.pos;
+	const useDirectDraw = resolveDirectMode(Math.abs(context.scroll.targetX.value - x$4), Math.abs(context.scroll.targetY.value - y$5));
 	const visibleTop = -(context.header.value?.height ?? 0) - paddingTop;
 	const visibleBottom = height - paddingTop;
-	for (const line of visualLines) {
-		const lineY = line.y + y$5;
-		if (lineY + line.height < visibleTop) continue;
-		if (shouldBreakBottom(visualLines, line, lineY, visibleBottom, y$5)) break;
-		drawLine(context, line);
-	}
+	const visualLines = context.lines.getVisibleVisualLines(visibleTop, visibleBottom, y$5);
+	if (visualLines.length === 0) return;
+	if (!useDirectDraw) context.caches.setLineCanvasBudget(Math.max(64, visualLines.length * 3));
+	for (let i$6 = 0; i$6 < visualLines.length; i$6++) drawLine(context, visualLines[i$6], useDirectDraw);
+	if (!useDirectDraw) context.caches.trimLineCanvasesToBudget();
 }
 function drawSelection(context) {
 	const { canvas, doc, lines, selection, settings: settings$1, scroll, caches, header } = context;
@@ -7136,7 +8817,7 @@ function drawSelection(context) {
 	let prevEmpty = false;
 	for (let logicalLine = startLine; logicalLine <= endLine; logicalLine++) {
 		if (logicalLine < 0 || logicalLine >= codeLines.length) continue;
-		const visualLines = lines.visualLinesByLogicalLine.value.get(logicalLine) ?? [];
+		const visualLines = lines.visualLinesByLogicalLine.value[logicalLine] ?? [];
 		if (!visualLines.length) continue;
 		let prevVisualBottom = null;
 		let lastIndex = null;
@@ -7262,7 +8943,7 @@ function drawSelection(context) {
 			}
 			if (hasAbove && isFirst) {
 				const pl = logicalLine - 1;
-				const pv = lines.visualLinesByLogicalLine.value.get(pl) ?? [];
+				const pv = lines.visualLinesByLogicalLine.value[pl] ?? [];
 				if (pv.length) {
 					const lv = pv[pv.length - 1];
 					const ps = getCharOffsetForVisualLine(pl, lv, tokenLines, lines);
@@ -7286,7 +8967,7 @@ function drawSelection(context) {
 			}
 			if (hasBelow && isLast) {
 				const nl = logicalLine + 1;
-				const nv = lines.visualLinesByLogicalLine.value.get(nl) ?? [];
+				const nv = lines.visualLinesByLogicalLine.value[nl] ?? [];
 				if (nv.length) {
 					const fv = nv[0];
 					const ns = getCharOffsetForVisualLine(nl, fv, tokenLines, lines);
@@ -7547,7 +9228,35 @@ function drawTooltip(context, error$1, overlayCanvas, preferErrorAbove) {
 	for (let i$6 = 0; i$6 < wrappedLines.length; i$6++) drawText(c$7, wrappedLines[i$6], tooltipX + PADDING, tooltipY + PADDING + i$6 * lineHeight$1, settings$1.theme.text.color);
 	c$7.restore();
 }
+var perfStatsByContext = /* @__PURE__ */ new WeakMap();
+function updatePerformanceMode(context, drawMs) {
+	let stats = perfStatsByContext.get(context);
+	if (!stats) {
+		stats = {
+			emaDrawMs: drawMs,
+			emaInputToPaintMs: 0,
+			lastSampledInputTime: 0
+		};
+		perfStatsByContext.set(context, stats);
+	}
+	const ALPHA = .15;
+	const now = Date.now();
+	const inputTime = context.caret.lastInputTime.value;
+	let inputLagSample = 0;
+	if (inputTime > 0 && inputTime !== stats.lastSampledInputTime) {
+		stats.lastSampledInputTime = inputTime;
+		inputLagSample = Math.max(0, now - inputTime);
+	}
+	stats.emaDrawMs = stats.emaDrawMs * (1 - ALPHA) + drawMs * ALPHA;
+	stats.emaInputToPaintMs = stats.emaInputToPaintMs * (1 - ALPHA) + inputLagSample * ALPHA;
+	const lineCount = context.doc.lines.length;
+	let mode = "normal";
+	if (lineCount >= 5e4 || stats.emaDrawMs > 10) mode = "large";
+	if (lineCount >= 1e5 || stats.emaDrawMs > 16 || stats.emaInputToPaintMs > 45) mode = "stress";
+	if (context.settings.performanceMode !== mode) context.settings.performanceMode = mode;
+}
 function drawContext(context, overlayCanvas, activeTooltip) {
+	const drawStart = performance.now();
 	const { canvas } = context;
 	context.mouse.update();
 	context.scroll.update();
@@ -7596,7 +9305,7 @@ function drawContext(context, overlayCanvas, activeTooltip) {
 	const hoverParamY = hoverToken?.contentParamY != null ? hoverToken.contentParamY + scroll.y + canvasRect.top : void 0;
 	const hoverCallBlockX = hoverToken ? hoverToken.contentCallBlockX + scroll.x + canvasRect.left : 0;
 	const hoverCallBlockY = hoverToken ? hoverToken.contentCallBlockY + scroll.y + canvasRect.top : 0;
-	const caretPos = getCaretScreenPosition(context);
+	const caretPos = context.caret.screenPosition;
 	let hoverPosition = null;
 	let caretPosition = null;
 	if (hoverIsPrimary && canDrawHover) hoverPosition = context.onHoverToken(overlayCanvas, hoverX, hoverY, hoverToken.token, hoverToken.callBlock, hoverToken.parameterIndex, hoverCallBlockX, hoverCallBlockY, context.doc, hoverParamX, hoverParamY, caretPos?.x, caretPos?.y);
@@ -7608,7 +9317,7 @@ function drawContext(context, overlayCanvas, activeTooltip) {
 	const hoverDrew = hoverPosition != null;
 	const caretDrew = caretPosition != null;
 	const primaryPosition = hoverIsPrimary ? hoverPosition : caretPosition;
-	const positionToPreferAbove = (p$7) => p$7 === Position.BottomLeft || p$7 === Position.BottomRight;
+	const positionToPreferAbove = (p$8) => p$8 === Position.BottomLeft || p$8 === Position.BottomRight;
 	const preferErrorAbove = hoverDrew && caretDrew ? !positionToPreferAbove(primaryPosition) : primaryPosition != null ? positionToPreferAbove(primaryPosition) : false;
 	const error$1 = context.tooltipDismissed ? context.mouse.hovered.error : context.mouse.hovered.error ?? context.pinnedError;
 	if (context.mouse.hovered.error) context.tooltipDismissed = false;
@@ -7624,6 +9333,7 @@ function drawContext(context, overlayCanvas, activeTooltip) {
 			context.mouse.clearHoverToken(false);
 		}
 	} else if (currentlyActive === "caret") activeTooltip.set(context, null);
+	updatePerformanceMode(context, performance.now() - drawStart);
 }
 var RenderManager = class {
 	contexts = /* @__PURE__ */ new Set();
@@ -7733,6 +9443,7 @@ function createCaret(settings$1) {
 	const lastInputTime = c(0);
 	let startTime = Date.now();
 	let suppressAutoScroll = false;
+	let screenPosition = null;
 	let caretToken = null;
 	const resetBlink = () => {
 		startTime = Date.now();
@@ -7766,6 +9477,12 @@ function createCaret(settings$1) {
 		set suppressAutoScroll(value) {
 			suppressAutoScroll = value;
 		},
+		get screenPosition() {
+			return screenPosition;
+		},
+		set screenPosition(value) {
+			screenPosition = value;
+		},
 		get caretToken() {
 			return caretToken;
 		},
@@ -7774,7 +9491,7 @@ function createCaret(settings$1) {
 		}
 	};
 }
-function createGutter(doc, canvas, metrics, settings$1, caches, blocks, lines) {
+function createGutter(doc, canvas, metrics, settings$1, caches, blocks, _lines) {
 	const rightReserved = 24;
 	const width = b(() => {
 		if (!settings$1.showGutter) return 0;
@@ -7790,40 +9507,24 @@ function createGutter(doc, canvas, metrics, settings$1, caches, blocks, lines) {
 	m(() => {
 		metrics.gutterWidth.value = width.value;
 	});
+	const blockStarts = b(() => blocks.blockStarts.value);
+	const digitWidth = b(() => {
+		return measureText(canvas.c, settings$1, caches, {
+			type: "text",
+			text: "0"
+		}).width;
+	});
+	const getLineNumberMetric = (logicalLine) => {
+		const text = (logicalLine + 1).toString();
+		return {
+			text,
+			x: width.value - rightReserved - digitWidth.value * text.length
+		};
+	};
 	return {
 		width,
-		lineNumberMap: b(() => {
-			if (!lines) return /* @__PURE__ */ new Map();
-			const visualLines = lines.visualLines.value;
-			const map = /* @__PURE__ */ new Map();
-			for (const visualLine of visualLines) {
-				const logicalLine = visualLine.logicalLine;
-				if (!map.has(logicalLine)) map.set(logicalLine, []);
-				map.get(logicalLine).push(visualLine);
-			}
-			return map;
-		}),
-		blockStarts: b(() => blocks.blockStarts.value),
-		lineNumberMetrics: b(() => {
-			const codeLines = doc.lines;
-			const metrics$1 = /* @__PURE__ */ new Map();
-			const numbersRightEdge = width.value - rightReserved;
-			for (let i$6 = 0; i$6 < codeLines.length; i$6++) {
-				const lineNumber = (i$6 + 1).toString();
-				const token = {
-					type: "text",
-					text: lineNumber
-				};
-				const measure = measureText(canvas.c, settings$1, caches, token);
-				const x$4 = numbersRightEdge - measure.width;
-				metrics$1.set(i$6, {
-					width: measure.width,
-					text: lineNumber,
-					x: x$4
-				});
-			}
-			return metrics$1;
-		})
+		blockStarts,
+		getLineNumberMetric
 	};
 }
 function createClipboard(doc, selection, insertText, deleteSelection, ensureCaretVisible, onKeyDown, onKeyUp, canvas) {
@@ -8086,8 +9787,8 @@ function adjustWidgetsOnLineDeleteRange(doc, startLine, endLine) {
 	}
 	doc.errors = doc.errors.flatMap((error$1) => {
 		const y$5 = error$1.y;
-		if (y$5 > startLine + 1 && y$5 <= endLine + 1) return [];
-		if (y$5 > endLine + 1) return [adjustError(error$1, (x$4, y$6) => ({
+		if (y$5 > startLine && y$5 <= endLine) return [];
+		if (y$5 > endLine) return [adjustError(error$1, (x$4, y$6) => ({
 			x: x$4,
 			y: y$6 - deletedCount
 		}))];
@@ -8127,19 +9828,19 @@ function adjustWidgetsOnMultiLineDelete(doc, startLine, startColumn, endLine, en
 		} else if (widget.pos.y > endWidgetLine) widget.pos.y -= deletedCount;
 		if (endLine > startLine + 1) adjustWidgetsOnLineDeleteRange(doc, startLine + 1, endLine - 1);
 		doc.errors = doc.errors.map((error$1) => adjustError(error$1, (x$4, y$5) => {
-			if (y$5 === endLine + 1) {
+			if (y$5 === endLine) {
 				const [errorStartCol, errorEndCol] = [x$4[0] - 1, x$4[1] - 1];
 				if (errorStartCol >= endColumn) return {
 					x: [errorStartCol - endColumn + startColumn + 1, errorEndCol - endColumn + startColumn + 1],
-					y: startLine + 1
+					y: startLine
 				};
 				if (errorEndCol > endColumn) return {
-					x: [startColumn + 1, errorEndCol - endColumn + startColumn + 1],
-					y: startLine + 1
+					x: [startColumn, errorEndCol - endColumn + startColumn + 1],
+					y: startLine
 				};
 				return null;
 			}
-			if (y$5 > endLine + 1) return {
+			if (y$5 > endLine) return {
 				x: x$4,
 				y: y$5 - deletedCount
 			};
@@ -8195,6 +9896,10 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 	const ctrlKey = c(false);
 	const metaKey = c(false);
 	const altKey = c(false);
+	const pressedInputKeys = /* @__PURE__ */ new Set();
+	const updateKeyHoldActive = () => {
+		doc.keyHoldActive = pressedInputKeys.size > 0;
+	};
 	function insertText(text) {
 		if (selection.hasSelection.value) {
 			const ordered = selection.getOrdered.value;
@@ -8258,11 +9963,12 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 			const insertColumn = caret.column.value;
 			const linesBeforeInsert = doc.lines.length;
 			adjustWidgetsOnLineSplit(doc, insertLine, insertColumn, newlineCount);
-			caches.invalidateWrapTokensCacheForLine(insertLine);
-			for (const [lineNum] of caches.wrapTokensCacheByLine.entries()) if (lineNum > insertLine) caches.invalidateWrapTokensCacheForLine(lineNum);
 			doc.buffer.insert(insertLine, insertColumn, text);
 			const insertedLineCount = doc.lines.length - linesBeforeInsert;
-			if (insertedLineCount > 0) blocks.adjustOnLineInsertRange(insertLine + 1, insertLine + insertedLineCount);
+			if (insertedLineCount > 0) {
+				caches.adjustWrapTokensCacheOnLineInsertRange(insertLine + 1, insertLine + insertedLineCount);
+				blocks.adjustOnLineInsertRange(insertLine + 1, insertLine + insertedLineCount);
+			}
 			const lastNewlineIndex = text.lastIndexOf("\n");
 			if (lastNewlineIndex >= 0) {
 				caret.line.value = insertLine + newlineCount;
@@ -9214,48 +10920,115 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 		const currentColumn = caret.column.value;
 		const codeLines = doc.lines;
 		if (currentLine < 0 || currentLine >= codeLines.length) return;
-		let visualLine = findVisualLineForColumn(lines, currentLine, currentColumn, doc.tokenLines, caches);
-		if (!visualLine) {
-			const visualLines = lines.visualLines.value;
-			const relevantLines = lines.visualLinesByLogicalLine.value.get(currentLine) ?? [];
-			if (relevantLines.length > 0) visualLine = relevantLines[0];
+		const canUseNoWrapFastPath = !settings$1.wordWrap && doc.collapsed.size === 0 && doc.widgets.length === 0 && doc.errors.length === 0;
+		const canUseApproxCaretFastPath = typeof lines.getApproxCaretMetrics === "function";
+		let targetY;
+		let caretX;
+		if (canUseNoWrapFastPath) {
+			const lineLength = codeLines[currentLine]?.length ?? 0;
+			const clampedColumn = Math.max(0, Math.min(currentColumn, lineLength));
+			targetY = currentLine * settings$1.lineHeight + settings$1.lineHeight + 1.5;
+			if (clampedColumn === 0) caretX = 0;
 			else {
-				const lastVisualLine = visualLines[visualLines.length - 1];
-				if (lastVisualLine && currentLine === lastVisualLine.logicalLine + 1) visualLine = {
-					tokens: [],
-					logicalLine: currentLine,
-					tokenOffset: 0,
-					y: lastVisualLine.y + lastVisualLine.height,
-					width: 0,
-					height: settings$1.lineHeight,
-					widgets: {
-						above: [],
-						below: [],
-						full: [],
-						overlay: [],
-						inlay: [],
-						beforeAfter: []
-					},
-					errors: []
-				};
-				else return;
+				const lineTokens = doc.tokenLines[currentLine] ?? [];
+				let x$4 = 0;
+				let tokenStartColumn = 0;
+				let found = false;
+				for (let i$6 = 0; i$6 < lineTokens.length; i$6++) {
+					const token = lineTokens[i$6];
+					const tokenLength = token.text.length;
+					const tokenEndColumn = tokenStartColumn + tokenLength;
+					const tokenWidth = measureText(canvas.c, settings$1, caches, token).width;
+					if (clampedColumn <= tokenEndColumn) {
+						const relativePos = Math.max(0, clampedColumn - tokenStartColumn);
+						const charWidth = tokenLength > 0 ? tokenWidth / tokenLength : 0;
+						caretX = x$4 + relativePos * charWidth;
+						found = true;
+						break;
+					}
+					x$4 += tokenWidth;
+					tokenStartColumn = tokenEndColumn;
+				}
+				if (!found) caretX = x$4;
+			}
+		} else if (canUseApproxCaretFastPath) {
+			const approx = lines.getApproxCaretMetrics(currentLine, currentColumn, doc.tokenLines);
+			if (approx) {
+				targetY = approx.targetY;
+				caretX = approx.caretX;
+			} else {
+				targetY = currentLine * settings$1.lineHeight + settings$1.lineHeight + 1.5;
+				const lineLength = codeLines[currentLine]?.length ?? 0;
+				const clampedColumn = Math.max(0, Math.min(currentColumn, lineLength));
+				if (clampedColumn === 0) caretX = 0;
+				else {
+					const lineTokens = doc.tokenLines[currentLine] ?? [];
+					let x$4 = 0;
+					let tokenStartColumn = 0;
+					let found = false;
+					for (let i$6 = 0; i$6 < lineTokens.length; i$6++) {
+						const token = lineTokens[i$6];
+						const tokenLength = token.text.length;
+						const tokenEndColumn = tokenStartColumn + tokenLength;
+						const tokenWidth = measureText(canvas.c, settings$1, caches, token).width;
+						if (clampedColumn <= tokenEndColumn) {
+							const relativePos = Math.max(0, clampedColumn - tokenStartColumn);
+							const charWidth = tokenLength > 0 ? tokenWidth / tokenLength : 0;
+							caretX = x$4 + relativePos * charWidth;
+							found = true;
+							break;
+						}
+						x$4 += tokenWidth;
+						tokenStartColumn = tokenEndColumn;
+					}
+					if (!found) caretX = x$4;
+				}
+			}
+		} else {
+			targetY = currentLine * settings$1.lineHeight + settings$1.lineHeight + 1.5;
+			const lineLength = codeLines[currentLine]?.length ?? 0;
+			const clampedColumn = Math.max(0, Math.min(currentColumn, lineLength));
+			if (clampedColumn === 0) caretX = 0;
+			else {
+				const lineTokens = doc.tokenLines[currentLine] ?? [];
+				let x$4 = 0;
+				let tokenStartColumn = 0;
+				let found = false;
+				for (let i$6 = 0; i$6 < lineTokens.length; i$6++) {
+					const token = lineTokens[i$6];
+					const tokenLength = token.text.length;
+					const tokenEndColumn = tokenStartColumn + tokenLength;
+					const tokenWidth = measureText(canvas.c, settings$1, caches, token).width;
+					if (clampedColumn <= tokenEndColumn) {
+						const relativePos = Math.max(0, clampedColumn - tokenStartColumn);
+						const charWidth = tokenLength > 0 ? tokenWidth / tokenLength : 0;
+						caretX = x$4 + relativePos * charWidth;
+						found = true;
+						break;
+					}
+					x$4 += tokenWidth;
+					tokenStartColumn = tokenEndColumn;
+				}
+				if (!found) caretX = x$4;
 			}
 		}
-		const targetY = visualLine.y + settings$1.lineHeight + 1.5;
 		const canvasHeight = canvas.size.height.value;
-		const caretY = targetY + scroll.pos.y;
-		const needsVertical = lines.totalHeight.value > canvas.size.height.value;
+		const scrollY = scroll.pos.y;
+		const caretY = targetY + scrollY;
+		const approxContentMetrics = typeof lines.getApproxContentMetrics === "function" ? lines.getApproxContentMetrics() : null;
+		const needsVertical = (approxContentMetrics?.totalHeight ?? Math.max(targetY, codeLines.length * settings$1.lineHeight)) > canvas.size.height.value;
 		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - metrics.gutterWidth.value - (needsVertical ? 12 : 0);
-		const needsHorizontal = !settings$1.wordWrap && lines.totalWidth.value > availableWidth;
+		const estimatedTotalWidth = approxContentMetrics?.totalWidth ?? (settings$1.wordWrap ? availableWidth : Math.max(availableWidth, caretX + 2));
+		const needsHorizontal = !settings$1.wordWrap && estimatedTotalWidth > availableWidth;
 		const headerHeight = header.value?.height ?? 0;
 		const rightMargin = settings$1.caretMarginX;
 		const topMargin = Math.max(0, settings$1.caretMarginY + settings$1.lineHeight);
 		const bottomMargin = canvasHeight - (settings$1.caretMarginY + (needsHorizontal ? 3 : 0) + headerHeight);
 		if (caretY < topMargin) scroll.targetY.value = -targetY + topMargin;
 		else if (caretY > bottomMargin) scroll.targetY.value = -targetY + bottomMargin;
-		const caretX = getXFromColumn(lines, visualLine, currentColumn, doc.tokenLines, canvas, settings$1, caches);
 		const contentWidth = availableWidth;
-		const caretXInView = caretX + scroll.pos.x;
+		const scrollX = scroll.pos.x;
+		const caretXInView = caretX + scrollX;
 		if (caretXInView - 1 < settings$1.caretMarginX) scroll.targetX.value = -(caretX - 1) + settings$1.caretMarginX;
 		else if (caretXInView + 1.5 > contentWidth - rightMargin) scroll.targetX.value = -(caretX + 1.5 - contentWidth + rightMargin);
 	}
@@ -9825,6 +11598,7 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 			return;
 		} else if ((ctrl || meta) && key === "z" && !shift) {
 			const result = doc.buffer.undo();
+			caches.clearDrawCaches();
 			if (result) {
 				caret.line.value = result.line;
 				caret.column.value = result.column;
@@ -9844,6 +11618,7 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 			return;
 		} else if ((ctrl || meta) && (key === "y" || key === "z" && shift)) {
 			const result = doc.buffer.redo();
+			caches.clearDrawCaches();
 			if (result) {
 				caret.line.value = result.line;
 				caret.column.value = result.column;
@@ -10179,6 +11954,8 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 			metaKey.value = event.metaKey;
 			altKey.value = event.altKey;
 			if (NON_KEYS.has(event.key)) return;
+			pressedInputKeys.add(event.code || event.key);
+			updateKeyHoldActive();
 			handleKeyAction(event.key, event.shiftKey, event.ctrlKey, event.metaKey, event.altKey);
 			if (event.key === "ArrowLeft" || event.key === "ArrowRight" || event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "Home" || event.key === "End" || event.key === "PageUp" || event.key === "PageDown" || event.key === "Backspace" || event.key === "Delete" || event.key === "Enter" || event.key === "Escape" || event.key === "Tab" || (event.ctrlKey || event.metaKey) && (event.key.toLowerCase() === "a" || event.key.toLowerCase() === "b" || event.key.toLowerCase() === "z" || event.key.toLowerCase() === "y" || event.key.toLowerCase() === "c" || event.key.toLowerCase() === "x" || event.shiftKey && event.key.toLowerCase() === "d" || !event.shiftKey && (event.key === "/" || event.key.toLowerCase() === "slash") || event.shiftKey && (event.key === "/" || event.key === "?" || event.key.toLowerCase() === "slash") || event.key === "ArrowLeft" || event.key === "ArrowRight") || event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) event.preventDefault();
 		});
@@ -10190,6 +11967,10 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 			ctrlKey.value = event.ctrlKey;
 			metaKey.value = event.metaKey;
 			altKey.value = event.altKey;
+			if (!NON_KEYS.has(event.key)) {
+				pressedInputKeys.delete(event.code || event.key);
+				updateKeyHoldActive();
+			}
 		});
 	};
 	clipboard = createClipboard(doc, selection, insertText, deleteSelection, ensureCaretVisible, handleKeyDown, handleKeyUp, canvas);
@@ -10199,6 +11980,8 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 	};
 	const handleTextareaBlur = () => {
 		setTimeout(() => {
+			pressedInputKeys.clear();
+			updateKeyHoldActive();
 			const activeElement = document.activeElement;
 			if (activeElement !== getTextareaElement() && activeElement?.tagName !== "CANVAS" && getActiveCanvas() !== canvas.el) clipboard.deactivate();
 		}, 0);
@@ -10211,6 +11994,8 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 	textarea$1.addEventListener("focus", handleTextareaFocus);
 	textarea$1.addEventListener("blur", handleTextareaBlur);
 	const dispose = () => {
+		pressedInputKeys.clear();
+		updateKeyHoldActive();
 		textarea$1.removeEventListener("focus", handleTextareaFocus);
 		textarea$1.removeEventListener("blur", handleTextareaBlur);
 		clipboard.dispose();
@@ -10220,6 +12005,93 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 		clipboard,
 		activate
 	};
+}
+var FenwickTree = class FenwickTree {
+	tree;
+	constructor(size) {
+		const n$4 = Math.max(0, size | 0);
+		this.tree = new Array(n$4 + 1).fill(0);
+	}
+	static from(values) {
+		const n$4 = values.length;
+		const fenwick = new FenwickTree(n$4);
+		const tree = fenwick.tree;
+		for (let i$6 = 1; i$6 <= n$4; i$6++) tree[i$6] = values[i$6 - 1] ?? 0;
+		for (let i$6 = 1; i$6 <= n$4; i$6++) {
+			const parent = i$6 + (i$6 & -i$6);
+			if (parent <= n$4) tree[parent] += tree[i$6];
+		}
+		return fenwick;
+	}
+	get size() {
+		return this.tree.length - 1;
+	}
+	add(index, delta) {
+		if (delta === 0) return;
+		let i$6 = (index | 0) + 1;
+		if (i$6 <= 0) i$6 = 1;
+		for (; i$6 < this.tree.length; i$6 += i$6 & -i$6) this.tree[i$6] += delta;
+	}
+	sum(index) {
+		let i$6 = (index | 0) + 1;
+		if (i$6 <= 0) return 0;
+		if (i$6 >= this.tree.length) i$6 = this.tree.length - 1;
+		let result = 0;
+		for (; i$6 > 0; i$6 -= i$6 & -i$6) result += this.tree[i$6];
+		return result;
+	}
+	total() {
+		return this.sum(this.size - 1);
+	}
+	lowerBound(target) {
+		const n$4 = this.size;
+		if (n$4 <= 0) return 0;
+		if (target <= 0) return 0;
+		let idx = 0;
+		let bit = 1;
+		while (bit << 1 <= n$4) bit <<= 1;
+		let acc = 0;
+		for (; bit > 0; bit >>= 1) {
+			const next = idx + bit;
+			if (next <= n$4 && acc + this.tree[next] <= target) {
+				idx = next;
+				acc += this.tree[next];
+			}
+		}
+		if (idx >= n$4) return n$4 - 1;
+		return idx;
+	}
+};
+var EMPTY_DOC_ERRORS = [];
+var EMPTY_WIDGETS = [];
+var EMPTY_TOKENS = [];
+var EMPTY_VISUAL_LINES = [];
+function buildWidgetsByLogicalLineIndex(widgets) {
+	const map = /* @__PURE__ */ new Map();
+	let hasAboveOrFull = false;
+	for (let i$6 = 0; i$6 < widgets.length; i$6++) {
+		const widget = widgets[i$6];
+		const line = widget.pos.y - 1;
+		const existing = map.get(line);
+		if (existing) existing.push(widget);
+		else map.set(line, [widget]);
+		if (widget.type === "above" || widget.type === "full") hasAboveOrFull = true;
+	}
+	return {
+		map,
+		hasAboveOrFull
+	};
+}
+function buildErrorsByLogicalLineIndex(errors) {
+	const map = /* @__PURE__ */ new Map();
+	for (let i$6 = 0; i$6 < errors.length; i$6++) {
+		const error$1 = errors[i$6];
+		const line = error$1.y - 1;
+		const existing = map.get(line);
+		if (existing) existing.push(error$1);
+		else map.set(line, [error$1]);
+	}
+	return map;
 }
 function createTokenColumnPrefix(tokens) {
 	const prefix = new Array(tokens.length + 1);
@@ -10257,7 +12129,8 @@ function applyAboveWidgetSpace(doc, visualLines, widgetsByLogicalLine) {
 	let currentY = 0;
 	for (let i$6 = 0; i$6 < visualLines.length; i$6++) {
 		const line = visualLines[i$6];
-		const aboveHeight = aboveSpaceByLogicalLine.get(line.logicalLine) || 0;
+		const logicalAboveHeight = aboveSpaceByLogicalLine.get(line.logicalLine) || 0;
+		const aboveHeight = line.widgets.above.length > 0 ? logicalAboveHeight : 0;
 		let newHeight = line.height;
 		if (aboveHeight > 0 && line.tokenOffset > 0 && line.widgets.above.length > 0) {
 			const tokenLines = doc.tokenLines;
@@ -10274,17 +12147,19 @@ function applyAboveWidgetSpace(doc, visualLines, widgetsByLogicalLine) {
 		result.push({
 			...line,
 			y: currentY,
-			height: newHeight
+			height: newHeight,
+			aboveHeight,
+			logicalAboveHeight
 		});
 		currentY += newHeight;
 	}
 	return result;
 }
-function createVisualLineFromCurrent(currentLine, tokenOffset, y$5, logicalLine, c$7, settings$1, caches, lineWidgets, lineErrors, inlineWidgetWidthIndex, logicalColumnPrefix, logicalTokenIndices, currentLineTokenWidths) {
+function createVisualLineFromCurrent(currentLine, tokenOffset, y$5, logicalLine, c$7, settings$1, caches, lineWidgets, lineErrors, inlineWidgetWidthIndex, logicalColumnPrefix, logicalTokenIndices, logicalTokenCharOffsets, currentLineTokenWidths) {
 	const lineStartColumn = logicalColumnPrefix[tokenOffset] ?? 0;
 	let lineEndColumn = lineStartColumn;
 	for (let i$6 = 0; i$6 < currentLine.length; i$6++) lineEndColumn += currentLine[i$6].text.length;
-	const visualTokens = calculateVisualTokens(c$7, settings$1, caches, currentLine, tokenOffset, inlineWidgetWidthIndex, logicalColumnPrefix, logicalTokenIndices, currentLineTokenWidths);
+	const visualTokens = calculateVisualTokens(c$7, settings$1, caches, currentLine, tokenOffset, inlineWidgetWidthIndex, logicalColumnPrefix, logicalTokenIndices, logicalTokenCharOffsets, currentLineTokenWidths);
 	const calculatedWidth = visualTokens.length > 0 ? visualTokens[visualTokens.length - 1]?.endX || 0 : 0;
 	const aboveWidgets = [];
 	const belowWidgets = [];
@@ -10316,11 +12191,15 @@ function createVisualLineFromCurrent(currentLine, tokenOffset, y$5, logicalLine,
 		}
 	}
 	const lineHeight$1 = settings$1.lineHeight * (belowWidgets.length > 0 ? 2 : 1);
-	const filteredErrors = [];
-	for (let i$6 = 0; i$6 < lineErrors.length; i$6++) {
-		const error$1 = lineErrors[i$6];
-		const [errorStartColumn, errorEndColumn] = [error$1.x[0] - 1, error$1.x[1] - 1];
-		if (errorStartColumn <= lineEndColumn && errorEndColumn > lineStartColumn) filteredErrors.push(error$1);
+	let filteredErrors = EMPTY_DOC_ERRORS;
+	if (lineErrors.length > 0) {
+		const out = [];
+		for (let i$6 = 0; i$6 < lineErrors.length; i$6++) {
+			const error$1 = lineErrors[i$6];
+			const [errorStartColumn, errorEndColumn] = [error$1.x[0] - 1, error$1.x[1] - 1];
+			if (errorStartColumn <= lineEndColumn && errorEndColumn > lineStartColumn) out.push(error$1);
+		}
+		if (out.length > 0) filteredErrors = out;
 	}
 	return {
 		tokens: visualTokens,
@@ -10329,6 +12208,8 @@ function createVisualLineFromCurrent(currentLine, tokenOffset, y$5, logicalLine,
 		y: y$5,
 		width: calculatedWidth,
 		height: lineHeight$1,
+		aboveHeight: 0,
+		logicalAboveHeight: 0,
 		widgets: {
 			above: aboveWidgets,
 			below: belowWidgets,
@@ -10341,6 +12222,16 @@ function createVisualLineFromCurrent(currentLine, tokenOffset, y$5, logicalLine,
 	};
 }
 function filterErrorsFromLine(lineErrors, tokenOffset, lineLength, logicalLineTokens) {
+	if (lineErrors.length === 0) return EMPTY_DOC_ERRORS;
+	if (tokenOffset === 0 && lineLength === 0) {
+		const out$1 = [];
+		for (let i$6 = 0; i$6 < lineErrors.length; i$6++) {
+			const error$1 = lineErrors[i$6];
+			const [errorStartColumn, errorEndColumn] = [error$1.x[0] - 1, error$1.x[1] - 1];
+			if (errorStartColumn <= 0 && errorEndColumn > 0) out$1.push(error$1);
+		}
+		return out$1.length > 0 ? out$1 : EMPTY_DOC_ERRORS;
+	}
 	const logicalColumnPrefix = createTokenColumnPrefix(logicalLineTokens);
 	const lineStartColumn = logicalColumnPrefix[tokenOffset] ?? 0;
 	const lineEndColumn = logicalColumnPrefix[tokenOffset + lineLength] ?? lineStartColumn;
@@ -10350,9 +12241,9 @@ function filterErrorsFromLine(lineErrors, tokenOffset, lineLength, logicalLineTo
 		const [errorStartColumn, errorEndColumn] = [error$1.x[0] - 1, error$1.x[1] - 1];
 		if (errorStartColumn <= lineEndColumn && errorEndColumn > lineStartColumn) out.push(error$1);
 	}
-	return out;
+	return out.length > 0 ? out : EMPTY_DOC_ERRORS;
 }
-function calculateVisualTokens(c$7, settings$1, caches, tokens, tokenOffset, inlineWidgetWidthIndex, logicalColumnPrefix, logicalTokenIndices, tokenWidths) {
+function calculateVisualTokens(c$7, settings$1, caches, tokens, tokenOffset, inlineWidgetWidthIndex, logicalColumnPrefix, logicalTokenIndices, logicalTokenCharOffsets, tokenWidths) {
 	const visualTokens = [];
 	let x$4 = 0;
 	for (let i$6 = 0; i$6 < tokens.length; i$6++) {
@@ -10371,7 +12262,8 @@ function calculateVisualTokens(c$7, settings$1, caches, tokens, tokenOffset, inl
 			x: tokenStartX,
 			tokenEndX,
 			endX: x$4,
-			logicalTokenIndex
+			logicalTokenIndex,
+			logicalCharOffset: logicalTokenCharOffsets ? logicalTokenCharOffsets[i$6] ?? 0 : 0
 		});
 	}
 	return visualTokens;
@@ -10447,32 +12339,39 @@ function breakToken(c$7, settings$1, caches, token, maxWidth) {
 	c$7.restore();
 	return parts.length > 0 ? parts : [token];
 }
-function applyCachedY(cached, y$5) {
-	const yOffset = y$5 - (cached[0]?.y ?? y$5);
-	if (yOffset === 0) return cached;
-	return cached.map((line) => ({
-		...line,
-		y: line.y + yOffset
-	}));
+function applyCachedPlacement(cached, y$5, logicalLine) {
+	if (cached.length === 0) return cached;
+	const baseY = cached[0]?.y ?? y$5;
+	const baseLogicalLine = cached[0]?.logicalLine ?? logicalLine;
+	const yOffset = y$5 - baseY;
+	const logicalOffset = logicalLine - baseLogicalLine;
+	if (yOffset === 0 && logicalOffset === 0) return cached;
+	const shifted = new Array(cached.length);
+	for (let i$6 = 0; i$6 < cached.length; i$6++) {
+		const line = cached[i$6];
+		shifted[i$6] = {
+			tokens: line.tokens,
+			logicalLine: line.logicalLine + logicalOffset,
+			tokenOffset: line.tokenOffset,
+			y: line.y + yOffset,
+			width: line.width,
+			height: line.height,
+			aboveHeight: line.aboveHeight,
+			logicalAboveHeight: line.logicalAboveHeight,
+			widgets: line.widgets,
+			errors: line.errors
+		};
+	}
+	return shifted;
 }
 function wrapTokens(c$7, settings$1, caches, tokenLines, tokens, logicalLine, y$5, maxWidth, lineWidgets, lineErrors) {
-	const { wrapTokensCache, wrapTokensCacheByLine } = caches;
-	const cacheKey = getWrapTokensCacheKey(tokens, logicalLine, maxWidth, lineWidgets, lineErrors, settings$1);
-	if (wrapTokensCache) {
-		if (wrapTokensCacheByLine) {
-			const existingKey = wrapTokensCacheByLine.get(logicalLine);
-			if (existingKey === cacheKey) {
-				const cached$1 = wrapTokensCache.get(existingKey);
-				if (cached$1) return applyCachedY(cached$1, y$5);
-			}
-		}
-		const cached = wrapTokensCache.get(cacheKey);
-		if (cached) {
-			if (wrapTokensCacheByLine) wrapTokensCacheByLine.set(logicalLine, cacheKey);
-			return applyCachedY(cached, y$5);
-		}
-	}
-	if (tokens.length === 0) {
+	const safeTokens = tokens ?? EMPTY_TOKENS;
+	const { wrapTokensCacheByTokenRef } = caches;
+	const cacheKey = lineWidgets.length > 0 || lineErrors.length > 0 ? getWrapTokensCacheKey(maxWidth, lineWidgets, lineErrors, settings$1) : `${maxWidth}|${settings$1.lineHeight}|${settings$1.fontSize}`;
+	const cachedByVariant = wrapTokensCacheByTokenRef.get(safeTokens);
+	const cached = cachedByVariant?.get(cacheKey);
+	if (cached) return applyCachedPlacement(cached, y$5, logicalLine);
+	if (safeTokens.length === 0) {
 		const aboveWidgets = lineWidgets.filter((w$5) => w$5.type === "above").filter((widget) => {
 			const [startColumn, endColumn] = widget.pos.x;
 			const startCol0 = startColumn - 1;
@@ -10486,6 +12385,8 @@ function wrapTokens(c$7, settings$1, caches, tokenLines, tokens, logicalLine, y$
 			y: y$5,
 			width: 0,
 			height: settings$1.lineHeight,
+			aboveHeight: 0,
+			logicalAboveHeight: 0,
 			widgets: {
 				above: aboveWidgets,
 				below: [],
@@ -10494,12 +12395,10 @@ function wrapTokens(c$7, settings$1, caches, tokenLines, tokens, logicalLine, y$
 				beforeAfter: [],
 				full: []
 			},
-			errors: filterErrorsFromLine(lineErrors, 0, 0, tokenLines[logicalLine] ?? [])
+			errors: lineErrors.length === 0 ? EMPTY_DOC_ERRORS : filterErrorsFromLine(lineErrors, 0, 0, tokenLines[logicalLine] ?? EMPTY_TOKENS)
 		}];
-		if (wrapTokensCache) {
-			wrapTokensCache.set(cacheKey, result$1);
-			if (wrapTokensCacheByLine) wrapTokensCacheByLine.set(logicalLine, cacheKey);
-		}
+		if (cachedByVariant) cachedByVariant.set(cacheKey, result$1);
+		else wrapTokensCacheByTokenRef.set(safeTokens, new Map([[cacheKey, result$1]]));
 		return result$1;
 	}
 	const visualLines = [];
@@ -10509,18 +12408,20 @@ function wrapTokens(c$7, settings$1, caches, tokenLines, tokens, logicalLine, y$
 	let currentY = y$5;
 	let currentLineWidth = 0;
 	const currentLineTokenWidths = [];
-	const logicalColumnPrefix = createTokenColumnPrefix(tokenLines[logicalLine] ?? []);
+	const currentLineTokenCharOffsets = [];
+	const logicalColumnPrefix = createTokenColumnPrefix(tokenLines[logicalLine] ?? safeTokens);
 	function flushCurrentLine() {
 		if (currentLine.length === 0) return;
-		const visualLine = createVisualLineFromCurrent(currentLine, currentLineLogicalIndices[0] ?? 0, currentY, logicalLine, c$7, settings$1, caches, lineWidgets, lineErrors, inlineWidgetWidthIndex, logicalColumnPrefix, currentLineLogicalIndices, currentLineTokenWidths);
+		const visualLine = createVisualLineFromCurrent(currentLine, currentLineLogicalIndices[0] ?? 0, currentY, logicalLine, c$7, settings$1, caches, lineWidgets, lineErrors, inlineWidgetWidthIndex, logicalColumnPrefix, currentLineLogicalIndices, currentLineTokenCharOffsets, currentLineTokenWidths);
 		visualLines.push(visualLine);
 		currentY += visualLine.height;
 		currentLine.length = 0;
 		currentLineLogicalIndices.length = 0;
 		currentLineTokenWidths.length = 0;
+		currentLineTokenCharOffsets.length = 0;
 		currentLineWidth = 0;
 	}
-	function tryAddTokenToCurrentLine(token, logicalTokenIndex, tokenWidth) {
+	function tryAddTokenToCurrentLine(token, logicalTokenIndex, tokenWidth, logicalTokenCharOffset = 0) {
 		const tokenStartColumn = logicalColumnPrefix[logicalTokenIndex] ?? 0;
 		const tokenEndColumn = logicalColumnPrefix[logicalTokenIndex + 1] ?? tokenStartColumn;
 		const beforeWidth = inlineWidgetWidthIndex.before.get(tokenStartColumn) ?? 0;
@@ -10534,23 +12435,27 @@ function wrapTokens(c$7, settings$1, caches, tokenLines, tokens, logicalLine, y$
 			currentLine.push(token);
 			currentLineLogicalIndices.push(logicalTokenIndex);
 			currentLineTokenWidths.push(tokenWidth);
+			currentLineTokenCharOffsets.push(logicalTokenCharOffset);
 			return currentLineWidth;
 		}
 		currentLineWidth = newWidth;
 		currentLine.push(token);
 		currentLineLogicalIndices.push(logicalTokenIndex);
 		currentLineTokenWidths.push(tokenWidth);
+		currentLineTokenCharOffsets.push(logicalTokenCharOffset);
 		return currentLineWidth;
 	}
-	for (let logicalIndex = 0; logicalIndex < tokens.length; logicalIndex++) {
-		const token = tokens[logicalIndex];
+	for (let logicalIndex = 0; logicalIndex < safeTokens.length; logicalIndex++) {
+		const token = safeTokens[logicalIndex];
 		const tokenWidth = measureText(c$7, settings$1, caches, token).width;
 		if (tokenWidth > maxWidth) {
 			const brokenTokens = breakToken(c$7, settings$1, caches, token, maxWidth);
+			let brokenCharOffset = 0;
 			for (let i$6 = 0; i$6 < brokenTokens.length; i$6++) {
 				const brokenToken = brokenTokens[i$6];
 				const brokenTokenWidth = measureText(c$7, settings$1, caches, brokenToken).width;
-				tryAddTokenToCurrentLine(brokenToken, logicalIndex, brokenTokenWidth);
+				tryAddTokenToCurrentLine(brokenToken, logicalIndex, brokenTokenWidth, brokenCharOffset);
+				brokenCharOffset += brokenToken.text.length;
 			}
 		} else tryAddTokenToCurrentLine(token, logicalIndex, tokenWidth);
 	}
@@ -10562,6 +12467,8 @@ function wrapTokens(c$7, settings$1, caches, tokenLines, tokens, logicalLine, y$
 		y: y$5,
 		width: 0,
 		height: settings$1.lineHeight,
+		aboveHeight: 0,
+		logicalAboveHeight: 0,
 		widgets: {
 			above: lineWidgets.filter((w$5) => w$5.type === "above"),
 			below: [],
@@ -10570,79 +12477,601 @@ function wrapTokens(c$7, settings$1, caches, tokenLines, tokens, logicalLine, y$
 			beforeAfter: [],
 			full: lineWidgets.filter((w$5) => w$5.type === "full")
 		},
-		errors: filterErrorsFromLine(lineErrors, 0, 0, tokenLines[logicalLine] ?? [])
+		errors: lineErrors.length === 0 ? EMPTY_DOC_ERRORS : filterErrorsFromLine(lineErrors, 0, 0, tokenLines[logicalLine] ?? EMPTY_TOKENS)
 	}];
-	if (wrapTokensCache) {
-		wrapTokensCache.set(cacheKey, result);
-		if (wrapTokensCacheByLine) wrapTokensCacheByLine.set(logicalLine, cacheKey);
-	}
+	if (cachedByVariant) cachedByVariant.set(cacheKey, result);
+	else wrapTokensCacheByTokenRef.set(safeTokens, new Map([[cacheKey, result]]));
 	return result;
 }
+function lowerBoundVisualLineBottomAtLeast(visualLines, minBottomY) {
+	let low = 0;
+	let high = visualLines.length;
+	while (low < high) {
+		const mid = low + high >> 1;
+		const line = visualLines[mid];
+		if (line.y + line.height < minBottomY) low = mid + 1;
+		else high = mid;
+	}
+	return low;
+}
+function getVisualLineBlockMetrics(visual, startY) {
+	if (visual.length === 0) return {
+		height: 0,
+		width: 0
+	};
+	let width = 0;
+	for (let i$6 = 0; i$6 < visual.length; i$6++) if (visual[i$6].width > width) width = visual[i$6].width;
+	const last = visual[visual.length - 1];
+	return {
+		height: Math.max(0, last.y + last.height - startY),
+		width
+	};
+}
+function createSkippedLineLayout(tokenRef, y$5) {
+	return {
+		tokenRef,
+		visualLines: [],
+		startY: y$5,
+		height: 0,
+		width: 0,
+		pendingYShift: 0,
+		pendingLogicalShift: 0
+	};
+}
+function getCollapsedSkipUntilBeforeLine(collapsedLines, blockEnds, beforeLine) {
+	let skipUntil = -1;
+	for (const collapsedStart of collapsedLines) {
+		if (collapsedStart >= beforeLine) continue;
+		const collapsedEnd = blockEnds.get(collapsedStart);
+		if (collapsedEnd === void 0) continue;
+		if (collapsedEnd > skipUntil) skipUntil = collapsedEnd;
+	}
+	return skipUntil;
+}
 function createLines(doc, canvas, metrics, settings$1, caches, blocks, header) {
-	const totalWidth = c(0);
-	const totalHeight = c(0);
-	const visualLines = b(() => {
+	const incrementalTokenChange = c(null);
+	doc.onIncrementalChange((change) => {
+		incrementalTokenChange.value = change;
+	});
+	let previousLayout = null;
+	let latestCaretLayoutSnapshot = null;
+	let cachedWidgetsRef = null;
+	let cachedWidgetsIndex = {
+		map: /* @__PURE__ */ new Map(),
+		hasAboveOrFull: false
+	};
+	let cachedErrorsRef = null;
+	let cachedErrorsByLine = /* @__PURE__ */ new Map();
+	const visualData = b(() => {
 		const tokenLines = doc.tokenLines;
-		header.value;
+		const tokenChange = incrementalTokenChange.value;
+		const widgetsRef = doc.widgets;
+		const errorsRef = doc.errors;
 		const baseAvailableWidth = canvas.size.width.value - settings$1.paddingLeft - settings$1.paddingRight - metrics.gutterWidth.value;
 		const maxWidth = settings$1.wordWrap ? baseAvailableWidth - 12 : Infinity;
-		const widgetsByLogicalLine = /* @__PURE__ */ new Map();
-		for (const widget of doc.widgets) {
-			const line = widget.pos.y - 1;
-			const existing = widgetsByLogicalLine.get(line);
-			if (existing) existing.push(widget);
-			else widgetsByLogicalLine.set(line, [widget]);
+		if (widgetsRef !== cachedWidgetsRef) {
+			cachedWidgetsRef = widgetsRef;
+			cachedWidgetsIndex = buildWidgetsByLogicalLineIndex(widgetsRef);
 		}
-		const errorsByLogicalLine = /* @__PURE__ */ new Map();
-		for (const error$1 of doc.errors) {
-			const line = error$1.y - 1;
-			const existing = errorsByLogicalLine.get(line);
-			if (existing) existing.push(error$1);
-			else errorsByLogicalLine.set(line, [error$1]);
+		const widgetsByLogicalLine = cachedWidgetsIndex.map;
+		const hasAboveOrFullWidgets = cachedWidgetsIndex.hasAboveOrFull;
+		if (errorsRef !== cachedErrorsRef) {
+			cachedErrorsRef = errorsRef;
+			cachedErrorsByLine = buildErrorsByLogicalLineIndex(errorsRef);
 		}
-		const visualLines$1 = [];
-		let logicalLine = 0;
+		const errorsByLogicalLine = cachedErrorsByLine;
+		const hasCollapsed = doc.collapsed.size > 0;
+		const collapsedLines = doc.collapsed;
+		const collapsedBlockEnds = hasCollapsed ? blocks.blockEnds.value : null;
+		if (previousLayout !== null && tokenChange !== null && tokenChange.source !== "reset" && previousLayout.maxWidth === maxWidth && previousLayout.baseAvailableWidth === baseAvailableWidth && previousLayout.lineHeight === settings$1.lineHeight && previousLayout.fontSize === settings$1.fontSize && previousLayout.wordWrap === settings$1.wordWrap) {
+			const prev = previousLayout;
+			const delta = tokenChange.endLineAfter - tokenChange.endLineBefore;
+			const newLayouts = new Array(tokenLines.length);
+			const nextLineHeights = prev.lineHeights.slice();
+			let maxLineWidth$1 = 0;
+			if (delta > 0) {
+				const insertAt = Math.max(0, Math.min(tokenChange.endLineBefore + 1, nextLineHeights.length));
+				nextLineHeights.splice(insertAt, 0, ...new Array(delta).fill(0));
+			} else if (delta < 0) {
+				const removeAt = Math.max(0, Math.min(tokenChange.endLineAfter + 1, nextLineHeights.length));
+				const removeCount = Math.min(-delta, Math.max(0, nextLineHeights.length - removeAt));
+				if (removeCount > 0) nextLineHeights.splice(removeAt, removeCount);
+			}
+			if (nextLineHeights.length > tokenLines.length) nextLineHeights.length = tokenLines.length;
+			while (nextLineHeights.length < tokenLines.length) nextLineHeights.push(0);
+			const nextHeightIndex = FenwickTree.from(nextLineHeights);
+			const getLineStartY = (lineIndex) => lineIndex <= 0 ? 0 : nextHeightIndex.sum(lineIndex - 1);
+			const includeLayoutWidth = (layout) => {
+				if (layout.width > maxLineWidth$1) maxLineWidth$1 = layout.width;
+			};
+			const setLayoutWithHeightUpdate = (lineIndex, layout) => {
+				newLayouts[lineIndex] = layout;
+				includeLayoutWidth(layout);
+				const previousHeight = nextLineHeights[lineIndex] ?? 0;
+				if (layout.height !== previousHeight) {
+					nextLineHeights[lineIndex] = layout.height;
+					nextHeightIndex.add(lineIndex, layout.height - previousHeight);
+				}
+			};
+			let recomputeStart = Math.max(0, Math.min(tokenChange.startLine, tokenLines.length));
+			while (recomputeStart > 0) {
+				const prevIndex = recomputeStart - 1;
+				const prevLayout = prev.lineLayouts[prevIndex];
+				const prevTokenRef = tokenLines[prevIndex] ?? EMPTY_TOKENS;
+				if (prevLayout && prevTokenRef !== EMPTY_TOKENS && prevTokenRef === prevLayout.tokenRef) break;
+				recomputeStart--;
+			}
+			for (let i$6 = 0; i$6 < recomputeStart; i$6++) {
+				const prevLayout = prev.lineLayouts[i$6];
+				const tokenRef = tokenLines[i$6] ?? EMPTY_TOKENS;
+				if (!prevLayout || tokenRef === EMPTY_TOKENS || tokenRef !== prevLayout.tokenRef) {
+					recomputeStart = i$6;
+					break;
+				}
+				newLayouts[i$6] = prevLayout;
+				includeLayoutWidth(prevLayout);
+			}
+			let scanSkipUntil = hasCollapsed && collapsedBlockEnds ? getCollapsedSkipUntilBeforeLine(collapsedLines, collapsedBlockEnds, recomputeStart) : -1;
+			const processedEnd = Math.max(recomputeStart - 1, Math.min(tokenLines.length - 1, tokenChange.tokenProcessedEndLine));
+			let scannedLine = recomputeStart;
+			for (; scannedLine <= processedEnd; scannedLine++) {
+				const lineIndex = scannedLine;
+				const tokenRef = tokenLines[lineIndex] ?? EMPTY_TOKENS;
+				const y$6 = getLineStartY(lineIndex);
+				if (lineIndex <= scanSkipUntil) {
+					setLayoutWithHeightUpdate(lineIndex, createSkippedLineLayout(tokenRef, y$6));
+					continue;
+				}
+				const lineWidgets = widgetsByLogicalLine.get(lineIndex) ?? EMPTY_WIDGETS;
+				const lineErrors = errorsByLogicalLine.get(lineIndex) ?? EMPTY_DOC_ERRORS;
+				const wrapped = wrapTokens(canvas.c, settings$1, caches, tokenLines, tokenRef, lineIndex, y$6, maxWidth, lineWidgets, lineErrors);
+				const metricsForLine = getVisualLineBlockMetrics(wrapped, y$6);
+				setLayoutWithHeightUpdate(lineIndex, {
+					tokenRef,
+					visualLines: wrapped,
+					startY: y$6,
+					height: metricsForLine.height,
+					width: metricsForLine.width,
+					pendingYShift: 0,
+					pendingLogicalShift: 0
+				});
+				if (hasCollapsed && collapsedBlockEnds && collapsedLines.has(lineIndex)) scanSkipUntil = collapsedBlockEnds.get(lineIndex) ?? scanSkipUntil;
+			}
+			let firstUnfilled = Math.max(recomputeStart, processedEnd + 1);
+			if (firstUnfilled < tokenLines.length) {
+				const boundaryNew = firstUnfilled;
+				const boundaryOld = boundaryNew - delta;
+				if (boundaryOld >= 0 && boundaryOld < prev.lineLayouts.length) {
+					const oldBoundary = prev.lineLayouts[boundaryOld];
+					if (oldBoundary) {
+						const yDelta = getLineStartY(boundaryNew) - oldBoundary.startY;
+						const logicalDelta = boundaryNew - boundaryOld;
+						const maxMapCount = Math.min(tokenLines.length - boundaryNew, prev.lineLayouts.length - boundaryOld);
+						let mappedCount = 0;
+						for (let offset = 0; offset < maxMapCount; offset++) {
+							const oldLayout = prev.lineLayouts[boundaryOld + offset];
+							if (!oldLayout) break;
+							const mappedLineIndex = boundaryNew + offset;
+							const mappedTokenRef = tokenLines[mappedLineIndex] ?? EMPTY_TOKENS;
+							if (mappedTokenRef === EMPTY_TOKENS || mappedTokenRef !== oldLayout.tokenRef) break;
+							oldLayout.startY += yDelta;
+							oldLayout.pendingYShift += yDelta;
+							oldLayout.pendingLogicalShift += logicalDelta;
+							newLayouts[mappedLineIndex] = oldLayout;
+							includeLayoutWidth(oldLayout);
+							mappedCount++;
+						}
+						firstUnfilled = boundaryNew + mappedCount;
+					}
+				}
+			}
+			let fillSkipUntil = hasCollapsed && collapsedBlockEnds ? getCollapsedSkipUntilBeforeLine(collapsedLines, collapsedBlockEnds, firstUnfilled) : -1;
+			for (let lineIndex = firstUnfilled; lineIndex < tokenLines.length; lineIndex++) {
+				const tokenRef = tokenLines[lineIndex] ?? EMPTY_TOKENS;
+				const y$6 = getLineStartY(lineIndex);
+				if (lineIndex <= fillSkipUntil) {
+					setLayoutWithHeightUpdate(lineIndex, createSkippedLineLayout(tokenRef, y$6));
+					continue;
+				}
+				const lineWidgets = widgetsByLogicalLine.get(lineIndex) ?? EMPTY_WIDGETS;
+				const lineErrors = errorsByLogicalLine.get(lineIndex) ?? EMPTY_DOC_ERRORS;
+				const wrapped = wrapTokens(canvas.c, settings$1, caches, tokenLines, tokenRef, lineIndex, y$6, maxWidth, lineWidgets, lineErrors);
+				const metricsForLine = getVisualLineBlockMetrics(wrapped, y$6);
+				setLayoutWithHeightUpdate(lineIndex, {
+					tokenRef,
+					visualLines: wrapped,
+					startY: y$6,
+					height: metricsForLine.height,
+					width: metricsForLine.width,
+					pendingYShift: 0,
+					pendingLogicalShift: 0
+				});
+				if (hasCollapsed && collapsedBlockEnds && collapsedLines.has(lineIndex)) fillSkipUntil = collapsedBlockEnds.get(lineIndex) ?? fillSkipUntil;
+			}
+			const nextTotalHeight$1 = nextHeightIndex.total();
+			const nextTotalWidth$1 = settings$1.wordWrap ? Math.min(maxLineWidth$1, baseAvailableWidth - 12) : maxLineWidth$1;
+			let outputVisualLines = [];
+			let outputVisualLinesByLogicalLine = [];
+			let outputLineLayouts = newLayouts;
+			let outputLineHeights = nextLineHeights;
+			let outputHeightIndex = nextHeightIndex;
+			let outputTotalHeight = nextTotalHeight$1;
+			if (hasAboveOrFullWidgets) {
+				const flattenedVisualLines = [];
+				for (let i$6 = 0; i$6 < newLayouts.length; i$6++) {
+					const layout = newLayouts[i$6];
+					if (!layout) continue;
+					const yShift = layout.pendingYShift;
+					const logicalShift = layout.pendingLogicalShift;
+					if (yShift !== 0 || logicalShift !== 0) {
+						const shifted = layout.visualLines;
+						for (let j$4 = 0; j$4 < shifted.length; j$4++) {
+							const visualLine = shifted[j$4];
+							visualLine.logicalLine += logicalShift;
+							visualLine.y += yShift;
+						}
+						layout.pendingYShift = 0;
+						layout.pendingLogicalShift = 0;
+					}
+					const lineVisuals = layout.visualLines;
+					if (!lineVisuals || lineVisuals.length === 0) continue;
+					for (let j$4 = 0; j$4 < lineVisuals.length; j$4++) flattenedVisualLines.push(lineVisuals[j$4]);
+				}
+				outputVisualLines = applyAboveWidgetSpace(doc, flattenedVisualLines, widgetsByLogicalLine);
+				outputTotalHeight = outputVisualLines.length > 0 ? outputVisualLines[outputVisualLines.length - 1].y + outputVisualLines[outputVisualLines.length - 1].height : 0;
+				outputVisualLinesByLogicalLine = new Array(tokenLines.length);
+				for (let i$6 = 0; i$6 < outputVisualLines.length; i$6++) {
+					const line = outputVisualLines[i$6];
+					const existing = outputVisualLinesByLogicalLine[line.logicalLine];
+					if (existing) existing.push(line);
+					else outputVisualLinesByLogicalLine[line.logicalLine] = [line];
+				}
+				outputLineLayouts = new Array(tokenLines.length);
+				outputLineHeights = new Array(tokenLines.length).fill(0);
+				for (let logicalLine = 0; logicalLine < tokenLines.length; logicalLine++) {
+					const wrapped = outputVisualLinesByLogicalLine[logicalLine] ?? EMPTY_VISUAL_LINES;
+					const startY = wrapped[0]?.y ?? (logicalLine > 0 ? (outputLineLayouts[logicalLine - 1]?.startY ?? 0) + (outputLineLayouts[logicalLine - 1]?.height ?? 0) : 0);
+					const metricsForLine = getVisualLineBlockMetrics(wrapped, startY);
+					outputLineLayouts[logicalLine] = {
+						tokenRef: tokenLines[logicalLine] ?? EMPTY_TOKENS,
+						visualLines: wrapped,
+						startY,
+						height: metricsForLine.height,
+						width: metricsForLine.width,
+						pendingYShift: 0,
+						pendingLogicalShift: 0
+					};
+					outputLineHeights[logicalLine] = metricsForLine.height;
+				}
+				outputHeightIndex = FenwickTree.from(outputLineHeights);
+			}
+			latestCaretLayoutSnapshot = {
+				lineLayouts: outputLineLayouts,
+				heightIndex: outputHeightIndex,
+				totalWidth: nextTotalWidth$1,
+				totalHeight: outputTotalHeight
+			};
+			previousLayout = {
+				maxWidth,
+				baseAvailableWidth,
+				lineHeight: settings$1.lineHeight,
+				fontSize: settings$1.fontSize,
+				wordWrap: settings$1.wordWrap,
+				lineLayouts: outputLineLayouts,
+				lineHeights: outputLineHeights,
+				heightIndex: outputHeightIndex
+			};
+			return {
+				visualLines: outputVisualLines,
+				visualLinesByLogicalLine: outputVisualLinesByLogicalLine,
+				lineLayouts: outputLineLayouts,
+				lineHeights: outputLineHeights,
+				heightIndex: outputHeightIndex,
+				hasAboveOrFullWidgets,
+				totalWidth: nextTotalWidth$1,
+				totalHeight: outputTotalHeight
+			};
+		}
+		const visualLinesByLogicalLine$1 = hasAboveOrFullWidgets ? new Array(tokenLines.length) : [];
+		const lineLayouts = new Array(tokenLines.length);
+		const lineHeights = new Array(tokenLines.length).fill(0);
 		let maxLineWidth = 0;
 		let y$5 = 0;
-		const collapsedLines = doc.collapsed;
 		let skipUntil = -1;
-		for (const tokens of tokenLines) {
+		for (let logicalLine = 0; logicalLine < tokenLines.length; logicalLine++) {
+			const tokens = tokenLines[logicalLine] ?? EMPTY_TOKENS;
 			if (logicalLine > skipUntil) {
-				const lineWidgets = widgetsByLogicalLine.get(logicalLine) ?? [];
-				const lineErrors = errorsByLogicalLine.get(logicalLine) ?? [];
+				const lineWidgets = widgetsByLogicalLine.get(logicalLine) ?? EMPTY_WIDGETS;
+				const lineErrors = errorsByLogicalLine.get(logicalLine) ?? EMPTY_DOC_ERRORS;
 				const wrapped = wrapTokens(canvas.c, settings$1, caches, tokenLines, tokens, logicalLine, y$5, maxWidth, lineWidgets, lineErrors);
-				for (let i$6 = 0; i$6 < wrapped.length; i$6++) visualLines$1.push(wrapped[i$6]);
+				if (hasAboveOrFullWidgets && wrapped.length > 0) visualLinesByLogicalLine$1[logicalLine] = wrapped;
+				const metricsForLine = getVisualLineBlockMetrics(wrapped, y$5);
+				lineLayouts[logicalLine] = {
+					tokenRef: tokens,
+					visualLines: wrapped,
+					startY: y$5,
+					height: metricsForLine.height,
+					width: metricsForLine.width,
+					pendingYShift: 0,
+					pendingLogicalShift: 0
+				};
+				lineHeights[logicalLine] = metricsForLine.height;
 				const last = wrapped[wrapped.length - 1];
 				y$5 = (last?.y ?? y$5) + (last?.height ?? 0);
 				for (let i$6 = 0; i$6 < wrapped.length; i$6++) if (wrapped[i$6].width > maxLineWidth) maxLineWidth = wrapped[i$6].width;
-				if (collapsedLines.has(logicalLine)) skipUntil = blocks.blockEnds.value.get(logicalLine) ?? -1;
+				if (hasCollapsed && collapsedBlockEnds && collapsedLines.has(logicalLine)) skipUntil = collapsedBlockEnds.get(logicalLine) ?? -1;
+			} else {
+				lineLayouts[logicalLine] = createSkippedLineLayout(tokens, y$5);
+				lineHeights[logicalLine] = 0;
 			}
-			logicalLine++;
 		}
-		if (settings$1.wordWrap) totalWidth.value = Math.min(maxLineWidth, baseAvailableWidth - 12);
-		else totalWidth.value = maxLineWidth;
-		const processedLines = applyAboveWidgetSpace(doc, visualLines$1, widgetsByLogicalLine);
-		totalHeight.value = processedLines.length > 0 ? processedLines[processedLines.length - 1].y + processedLines[processedLines.length - 1].height : y$5;
-		return processedLines;
+		const nextTotalWidth = settings$1.wordWrap ? Math.min(maxLineWidth, baseAvailableWidth - 12) : maxLineWidth;
+		let processedLines = [];
+		let processedVisualLinesByLogicalLine = hasAboveOrFullWidgets ? visualLinesByLogicalLine$1 : [];
+		let processedLineLayouts = lineLayouts;
+		let processedLineHeights = lineHeights;
+		let processedHeightIndex = FenwickTree.from(lineHeights);
+		let nextTotalHeight = y$5;
+		if (hasAboveOrFullWidgets) {
+			const flattenedVisualLines = [];
+			for (let i$6 = 0; i$6 < lineLayouts.length; i$6++) {
+				const lineVisuals = lineLayouts[i$6]?.visualLines;
+				if (!lineVisuals || lineVisuals.length === 0) continue;
+				for (let j$4 = 0; j$4 < lineVisuals.length; j$4++) flattenedVisualLines.push(lineVisuals[j$4]);
+			}
+			processedLines = applyAboveWidgetSpace(doc, flattenedVisualLines, widgetsByLogicalLine);
+			nextTotalHeight = processedLines.length > 0 ? processedLines[processedLines.length - 1].y + processedLines[processedLines.length - 1].height : 0;
+			processedVisualLinesByLogicalLine = new Array(tokenLines.length);
+			for (let i$6 = 0; i$6 < processedLines.length; i$6++) {
+				const line = processedLines[i$6];
+				const existing = processedVisualLinesByLogicalLine[line.logicalLine];
+				if (existing) existing.push(line);
+				else processedVisualLinesByLogicalLine[line.logicalLine] = [line];
+			}
+			processedLineLayouts = new Array(tokenLines.length);
+			processedLineHeights = new Array(tokenLines.length).fill(0);
+			for (let logicalLine = 0; logicalLine < tokenLines.length; logicalLine++) {
+				const wrapped = processedVisualLinesByLogicalLine[logicalLine] ?? [];
+				const startY = wrapped[0]?.y ?? (logicalLine > 0 ? (processedLineLayouts[logicalLine - 1]?.startY ?? 0) + (processedLineLayouts[logicalLine - 1]?.height ?? 0) : 0);
+				const metricsForLine = getVisualLineBlockMetrics(wrapped, startY);
+				processedLineLayouts[logicalLine] = {
+					tokenRef: tokenLines[logicalLine] ?? EMPTY_TOKENS,
+					visualLines: wrapped,
+					startY,
+					height: metricsForLine.height,
+					width: metricsForLine.width,
+					pendingYShift: 0,
+					pendingLogicalShift: 0
+				};
+				processedLineHeights[logicalLine] = metricsForLine.height;
+			}
+			processedHeightIndex = FenwickTree.from(processedLineHeights);
+		}
+		if (!hasAboveOrFullWidgets) previousLayout = {
+			maxWidth,
+			baseAvailableWidth,
+			lineHeight: settings$1.lineHeight,
+			fontSize: settings$1.fontSize,
+			wordWrap: settings$1.wordWrap,
+			lineLayouts: processedLineLayouts,
+			lineHeights: processedLineHeights,
+			heightIndex: processedHeightIndex
+		};
+		else previousLayout = null;
+		latestCaretLayoutSnapshot = {
+			lineLayouts: processedLineLayouts,
+			heightIndex: processedHeightIndex,
+			totalWidth: nextTotalWidth,
+			totalHeight: nextTotalHeight
+		};
+		return {
+			visualLines: processedLines,
+			visualLinesByLogicalLine: processedVisualLinesByLogicalLine,
+			lineLayouts: processedLineLayouts,
+			lineHeights: processedLineHeights,
+			heightIndex: processedHeightIndex,
+			hasAboveOrFullWidgets,
+			totalWidth: nextTotalWidth,
+			totalHeight: nextTotalHeight
+		};
+	});
+	const materializeLayoutVisualLines = (layout) => {
+		if (!layout) return void 0;
+		const yShift = layout.pendingYShift;
+		const logicalShift = layout.pendingLogicalShift;
+		if (yShift !== 0 || logicalShift !== 0) {
+			const shifted = layout.visualLines;
+			for (let i$6 = 0; i$6 < shifted.length; i$6++) {
+				const visualLine = shifted[i$6];
+				visualLine.logicalLine += logicalShift;
+				visualLine.y += yShift;
+			}
+			layout.pendingYShift = 0;
+			layout.pendingLogicalShift = 0;
+		}
+		return layout.visualLines;
+	};
+	const visualLinesByLogicalLineProxy = new Proxy([], { get(_target, prop) {
+		if (prop === "length") return visualData.value.lineLayouts.length;
+		if (typeof prop === "string") {
+			const lineIndex = Number(prop);
+			if (Number.isInteger(lineIndex) && lineIndex >= 0) return materializeLayoutVisualLines(visualData.value.lineLayouts[lineIndex]);
+		}
+		return visualData.value.visualLinesByLogicalLine[prop];
+	} });
+	const visualLines = b(() => {
+		const data = visualData.value;
+		if (data.visualLines.length > 0) return data.visualLines;
+		const flattened = [];
+		const lineLayouts = data.lineLayouts;
+		for (let i$6 = 0; i$6 < lineLayouts.length; i$6++) {
+			const lineVisuals = materializeLayoutVisualLines(lineLayouts[i$6]);
+			if (!lineVisuals || lineVisuals.length === 0) continue;
+			for (let j$4 = 0; j$4 < lineVisuals.length; j$4++) flattened.push(lineVisuals[j$4]);
+		}
+		return flattened;
 	});
 	const visualLinesByLogicalLine = b(() => {
-		const map = /* @__PURE__ */ new Map();
-		for (const line of visualLines.value) {
-			const existing = map.get(line.logicalLine);
-			if (existing) existing.push(line);
-			else map.set(line.logicalLine, [line]);
+		visualData.value;
+		return visualLinesByLogicalLineProxy;
+	});
+	const totalWidth = b(() => visualData.value.totalWidth);
+	const totalHeight = b(() => visualData.value.totalHeight);
+	const getVisibleVisualLines = (visibleTop, visibleBottom, scrollY) => {
+		const data = visualData.value;
+		const contentTop = visibleTop - scrollY;
+		const contentBottom = visibleBottom - scrollY;
+		const margin = settings$1.lineHeight;
+		if (data.visualLines.length > 0) {
+			const allLines = data.visualLines;
+			if (allLines.length === 0) return [];
+			const out$1 = [];
+			const startIndex = lowerBoundVisualLineBottomAtLeast(allLines, contentTop);
+			for (let i$6 = startIndex; i$6 < allLines.length; i$6++) {
+				const line = allLines[i$6];
+				if (line.y - (line.aboveHeight ?? 0) > contentBottom + margin) break;
+				if (line.y + line.height >= contentTop) out$1.push(line);
+			}
+			return out$1;
 		}
-		return map;
-	});
-	m(() => {
-		settings$1.wordWrap;
-		totalWidth.value = 0;
-	});
+		const lineLayouts = data.lineLayouts;
+		if (lineLayouts.length === 0) return [];
+		let lineIndex = data.heightIndex.lowerBound(Math.max(0, contentTop));
+		if (lineIndex > 0) lineIndex--;
+		if (lineIndex < 0) lineIndex = 0;
+		const out = [];
+		for (; lineIndex < lineLayouts.length; lineIndex++) {
+			const layout = lineLayouts[lineIndex];
+			if (!layout) continue;
+			if (layout.startY > contentBottom + margin) break;
+			const lineVisuals = materializeLayoutVisualLines(layout);
+			if (!lineVisuals) continue;
+			for (let j$4 = 0; j$4 < lineVisuals.length; j$4++) {
+				const line = lineVisuals[j$4];
+				if (line.y - (line.aboveHeight ?? 0) > contentBottom + margin) return out;
+				if (line.y + line.height >= contentTop) out.push(line);
+			}
+		}
+		return out;
+	};
+	const getLastVisualLine$1 = () => {
+		const data = visualData.value;
+		if (data.visualLines.length > 0) return data.visualLines.at(-1) ?? null;
+		const lineLayouts = data.lineLayouts;
+		for (let i$6 = lineLayouts.length - 1; i$6 >= 0; i$6--) {
+			const lineVisuals = materializeLayoutVisualLines(lineLayouts[i$6]);
+			if (lineVisuals && lineVisuals.length > 0) return lineVisuals[lineVisuals.length - 1] ?? null;
+		}
+		return null;
+	};
+	const getFirstVisualLine = () => {
+		const data = visualData.value;
+		if (data.visualLines.length > 0) return data.visualLines[0] ?? null;
+		const lineLayouts = data.lineLayouts;
+		for (let i$6 = 0; i$6 < lineLayouts.length; i$6++) {
+			const lineVisuals = materializeLayoutVisualLines(lineLayouts[i$6]);
+			if (lineVisuals && lineVisuals.length > 0) return lineVisuals[0] ?? null;
+		}
+		return null;
+	};
+	const getApproxCaretMetrics = (logicalLine, column, tokenLines) => {
+		const layoutState = latestCaretLayoutSnapshot;
+		if (!layoutState) return null;
+		if (logicalLine < 0) return null;
+		if (logicalLine >= layoutState.lineLayouts.length) {
+			if (logicalLine !== layoutState.lineLayouts.length) return null;
+			return {
+				targetY: layoutState.totalHeight + settings$1.lineHeight + 1.5,
+				caretX: 0
+			};
+		}
+		const logicalLayout = layoutState.lineLayouts[logicalLine];
+		if (!logicalLayout) return null;
+		const yShift = logicalLayout.pendingYShift;
+		const lineVisuals = logicalLayout.visualLines;
+		if (lineVisuals.length === 0) return {
+			targetY: logicalLayout.startY + yShift + settings$1.lineHeight + 1.5,
+			caretX: 0
+		};
+		let targetVisual = lineVisuals[lineVisuals.length - 1];
+		for (let i$6 = 0; i$6 < lineVisuals.length; i$6++) {
+			const visualLine = lineVisuals[i$6];
+			const lineStartColumn = getCharOffsetForVisualLine(logicalLine, visualLine, tokenLines);
+			let lineEndColumn = lineStartColumn;
+			for (let j$4 = 0; j$4 < visualLine.tokens.length; j$4++) lineEndColumn += visualLine.tokens[j$4].token.text.length;
+			const isLast = i$6 === lineVisuals.length - 1;
+			if (column >= lineStartColumn && (column < lineEndColumn || isLast)) {
+				targetVisual = visualLine;
+				break;
+			}
+		}
+		let caretX = 0;
+		if (targetVisual.tokens.length > 0) {
+			let currentColumn = getCharOffsetForVisualLine(logicalLine, targetVisual, tokenLines);
+			for (let i$6 = 0; i$6 < targetVisual.tokens.length; i$6++) {
+				const visualToken = targetVisual.tokens[i$6];
+				const tokenStartColumn = currentColumn;
+				const tokenEndColumn = currentColumn + visualToken.token.text.length;
+				if (column >= tokenStartColumn && column <= tokenEndColumn) {
+					const relativePos = column - tokenStartColumn;
+					const tokenWidth = visualToken.tokenEndX - visualToken.x;
+					const charWidth = visualToken.token.text.length > 0 ? tokenWidth / visualToken.token.text.length : 0;
+					caretX = visualToken.x + relativePos * charWidth;
+					break;
+				}
+				if (column > tokenEndColumn && i$6 === targetVisual.tokens.length - 1) caretX = visualToken.endX;
+				currentColumn = tokenEndColumn;
+			}
+		}
+		return {
+			targetY: targetVisual.y + yShift + settings$1.lineHeight + 1.5,
+			caretX
+		};
+	};
+	const getApproxContentMetrics = () => {
+		const snapshot = latestCaretLayoutSnapshot;
+		if (!snapshot) return null;
+		return {
+			totalWidth: snapshot.totalWidth,
+			totalHeight: snapshot.totalHeight
+		};
+	};
+	const getApproxVisibleLogicalRange = (visibleTop, visibleBottom, scrollY) => {
+		const snapshot = latestCaretLayoutSnapshot;
+		if (!snapshot) return null;
+		const lineCount = snapshot.lineLayouts.length;
+		if (lineCount === 0) return {
+			start: 0,
+			end: 0
+		};
+		const contentTop = visibleTop - scrollY;
+		const contentBottom = visibleBottom - scrollY;
+		if (!Number.isFinite(contentTop) || !Number.isFinite(contentBottom)) return null;
+		const heightIndex = snapshot.heightIndex;
+		const epsilon = .001;
+		const margin = settings$1.lineHeight;
+		let start = heightIndex.lowerBound(Math.max(0, contentTop - epsilon));
+		if (start < 0) start = 0;
+		if (start >= lineCount) start = lineCount - 1;
+		let end = heightIndex.lowerBound(Math.max(0, contentBottom + margin));
+		if (end < start) end = start;
+		if (end >= lineCount) end = lineCount - 1;
+		return {
+			start,
+			end
+		};
+	};
 	return {
 		visualLines,
 		visualLinesByLogicalLine,
 		totalWidth,
-		totalHeight
+		totalHeight,
+		getVisibleVisualLines,
+		getLastVisualLine: getLastVisualLine$1,
+		getFirstVisualLine,
+		getApproxCaretMetrics,
+		getApproxContentMetrics,
+		getApproxVisibleLogicalRange
 	};
 }
 function createMetrics() {
@@ -10867,7 +13296,7 @@ function createSelection() {
 		getOffscreenCanvas
 	};
 }
-function memoizeByRef$1(fn$1, map = /* @__PURE__ */ new Map()) {
+function memoizeByRef$2(fn$1, map = /* @__PURE__ */ new Map()) {
 	function wrapped(arg, ...args) {
 		if (map.has(arg)) return map.get(arg);
 		let res;
@@ -10879,15 +13308,15 @@ function memoizeByRef$1(fn$1, map = /* @__PURE__ */ new Map()) {
 function isObject(v$4) {
 	return typeof v$4 === "object" && v$4 !== null && !Array.isArray(v$4);
 }
-var typedArrayCtor$1 = Int8Array.__proto__;
+var typedArrayCtor$2 = Int8Array.__proto__;
 function isArrayLike(v$4) {
-	return Array.isArray(v$4) || v$4 instanceof typedArrayCtor$1;
+	return Array.isArray(v$4) || v$4 instanceof typedArrayCtor$2;
 }
-function isFunction$1(x$4) {
+function isFunction$2(x$4) {
 	return typeof x$4 === "function";
 }
-memoizeByRef$1(function isCtor$2(v$4) {
-	return isFunction$1(v$4) && v$4.toString().startsWith("class");
+memoizeByRef$2(function isCtor$3(v$4) {
+	return isFunction$2(v$4) && v$4.toString().startsWith("class");
 });
 function deepMerge(dst, src, depth = Infinity, exclude) {
 	src ??= {};
@@ -11026,7 +13455,8 @@ var defaultSettings = {
 	lineComment: "//",
 	blockComment: ["/*", "*/"],
 	minGutterDigits: 2,
-	showGutter: true
+	showGutter: true,
+	performanceMode: "normal"
 };
 function createSettings(editorSettings$1 = {}) {
 	return signalify$1({
@@ -11036,8 +13466,8 @@ function createSettings(editorSettings$1 = {}) {
 				background: this.colors.black,
 				blockColors: [
 					this.colors.brightYellow,
-					this.colors.brightBlue,
-					this.colors.brightPurple
+					this.colors.brightPurple,
+					this.colors.brightBlue
 				]
 			};
 		},
@@ -11134,7 +13564,7 @@ function createContext(editorSettings$1, doc, activeEditorOpts) {
 		dispose
 	};
 }
-function debounce$1(ms, fn$1, options$2) {
+function debounce$2(ms, fn$1, options$2) {
 	let resolving = false;
 	let timeToResolve;
 	let now;
@@ -11164,16 +13594,183 @@ function debounce$1(ms, fn$1, options$2) {
 	}
 	return wrapper;
 }
-function tokenize$3(code) {
-	return code.split("\n").map((x$4) => [...x$4.matchAll(/\s+|.+/g)].filter((x$5) => x$5[0] !== "").map((text) => ({
+var warnedLegacyTokenizers = /* @__PURE__ */ new WeakSet();
+function isIncrementalTokenizer(tokenizer$1) {
+	return typeof tokenizer$1 !== "function" && typeof tokenizer$1.tokenizeLine === "function";
+}
+function tokenizeLineWithRegex(line) {
+	return [...line.matchAll(/\s+|.+/g)].filter((x$4) => x$4[0] !== "").map((text) => ({
 		text: text[0],
 		type: "text"
-	})));
+	}));
 }
-function createDoc(tokenize$4 = tokenize$3) {
+function areTokensEqual(a$35, b$4) {
+	if (!a$35) return false;
+	if (a$35.length !== b$4.length) return false;
+	for (let i$6 = 0; i$6 < a$35.length; i$6++) if (a$35[i$6].text !== b$4[i$6].text || a$35[i$6].type !== b$4[i$6].type) return false;
+	return true;
+}
+function tokenizeAll(tokenizer$1, lines) {
+	if (isIncrementalTokenizer(tokenizer$1)) {
+		const tokenLines$1 = new Array(lines.length);
+		const states = new Array(lines.length);
+		let prevState = null;
+		for (let i$6 = 0; i$6 < lines.length; i$6++) {
+			const result = tokenizer$1.tokenizeLine(lines[i$6] ?? "", i$6, prevState);
+			const state = result.state ?? null;
+			tokenLines$1[i$6] = result.tokens;
+			states[i$6] = state;
+			prevState = state;
+		}
+		return {
+			tokenLines: tokenLines$1,
+			states
+		};
+	}
+	const tokenLines = tokenizer$1(lines.join("\n"));
+	return {
+		tokenLines,
+		states: new Array(tokenLines.length).fill(null)
+	};
+}
+function tokenizeIncremental(tokenizer$1, lines, prevTokenLines, prevStates, startLine, endLine, maxLines = Number.POSITIVE_INFINITY) {
+	if (!isIncrementalTokenizer(tokenizer$1)) {
+		if (!warnedLegacyTokenizers.has(tokenizer$1)) {
+			warnedLegacyTokenizers.add(tokenizer$1);
+			console.warn("[editor] Legacy tokenize(code) adapter path in use. Migrate to incremental tokenizeLine API for 100k-scale performance.");
+		}
+		const tokenLines = tokenizer$1(lines.join("\n"));
+		return {
+			tokenLines,
+			states: new Array(tokenLines.length).fill(null),
+			processedStartLine: 0,
+			processedEndLine: Math.max(0, tokenLines.length - 1),
+			converged: true,
+			changed: true
+		};
+	}
+	const nextTokenLines = prevTokenLines;
+	const nextStates = prevStates;
+	const prevLength = nextTokenLines.length;
+	nextTokenLines.length = lines.length;
+	nextStates.length = lines.length;
+	for (let i$6 = prevLength; i$6 < lines.length; i$6++) {
+		nextTokenLines[i$6] = [];
+		nextStates[i$6] = void 0;
+	}
+	let line = Math.max(0, startLine);
+	const targetEnd = Math.max(line, endLine);
+	let processed = 0;
+	let converged = false;
+	let anyChanged = false;
+	const processedStartLine = line;
+	let prevState = line > 0 ? nextStates[line - 1] ?? null : null;
+	while (line < lines.length && processed < maxLines) {
+		const result = tokenizer$1.tokenizeLine(lines[line] ?? "", line, prevState);
+		const state = result.state ?? null;
+		const tokensChanged = !areTokensEqual(nextTokenLines[line], result.tokens);
+		const stateChanged = nextStates[line] !== state;
+		const changed = tokensChanged || stateChanged;
+		if (tokensChanged) nextTokenLines[line] = result.tokens;
+		if (stateChanged) nextStates[line] = state;
+		if (changed) anyChanged = true;
+		prevState = state;
+		processed++;
+		line++;
+		if (line > targetEnd && !changed) {
+			converged = true;
+			break;
+		}
+	}
+	if (!converged && line >= lines.length) converged = true;
+	return {
+		tokenLines: nextTokenLines,
+		states: nextStates,
+		processedStartLine,
+		processedEndLine: Math.max(processedStartLine, line - 1),
+		converged,
+		changed: anyChanged
+	};
+}
+const defaultIncrementalTokenizer = { tokenizeLine(line) {
+	return {
+		tokens: tokenizeLineWithRegex(line),
+		state: null
+	};
+} };
+function countNewlines(text) {
+	let count = 0;
+	for (let i$6 = 0; i$6 < text.length; i$6++) if (text[i$6] === "\n") count++;
+	return count;
+}
+function lineFromIndexInLines(lines, index) {
+	if (lines.length === 0) return 0;
+	let remaining = Math.max(0, index);
+	for (let i$6 = 0; i$6 < lines.length; i$6++) {
+		const lineLength = lines[i$6]?.length ?? 0;
+		if (remaining <= lineLength) return i$6;
+		remaining -= lineLength + 1;
+	}
+	return Math.max(0, lines.length - 1);
+}
+function getSyncTokenizationBudget(lineCount) {
+	if (lineCount >= 1e5) return 32;
+	if (lineCount >= 5e4) return 64;
+	if (lineCount >= 2e4) return 128;
+	return Number.POSITIVE_INFINITY;
+}
+var LEGACY_DEFERRED_TOKENIZE_DELAY_MS = 75;
+function alignTokenSnapshotsForSpliceInPlace(tokenLines, tokenStates, nextLineCount, endLineBefore, endLineAfter) {
+	const delta = endLineAfter - endLineBefore;
+	if (delta === 0 && tokenLines.length === nextLineCount && tokenStates.length === nextLineCount) return false;
+	let changed = false;
+	if (delta > 0) {
+		const insertCount = delta;
+		const insertAt = Math.max(0, Math.min(endLineBefore + 1, tokenLines.length));
+		const tokenLinePlaceholders = new Array(insertCount);
+		const tokenStatePlaceholders = new Array(insertCount);
+		tokenLines.splice(insertAt, 0, ...tokenLinePlaceholders);
+		tokenStates.splice(insertAt, 0, ...tokenStatePlaceholders);
+		changed = true;
+	} else if (delta < 0) {
+		const removeAt = Math.max(0, Math.min(endLineAfter + 1, tokenLines.length));
+		const removeCount = Math.min(-delta, Math.max(0, tokenLines.length - removeAt));
+		if (removeCount > 0) {
+			tokenLines.splice(removeAt, removeCount);
+			tokenStates.splice(removeAt, removeCount);
+			changed = true;
+		}
+	}
+	if (tokenLines.length > nextLineCount) {
+		tokenLines.length = nextLineCount;
+		changed = true;
+	}
+	if (tokenLines.length < nextLineCount) {
+		tokenLines.length = nextLineCount;
+		changed = true;
+	}
+	if (tokenStates.length > nextLineCount) {
+		tokenStates.length = nextLineCount;
+		changed = true;
+	}
+	if (tokenStates.length < nextLineCount) {
+		tokenStates.length = nextLineCount;
+		changed = true;
+	}
+	return changed;
+}
+function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 	const buffer = createBuffer("");
+	const incrementalChangeListeners = /* @__PURE__ */ new Set();
+	let revision = 0;
+	let deferredTokenizationTimer = null;
+	let pendingDeferredRange = null;
+	let tokenizerWorker = null;
+	let workerJobId = 0;
+	let activeWorkerJob = null;
 	const doc = signalify$1({
 		epoch: 0,
+		revision: 0,
 		get code() {
 			return buffer.code.value;
 		},
@@ -11205,24 +13802,301 @@ function createDoc(tokenize$4 = tokenize$3) {
 		}),
 		errors: [],
 		widgets: [],
-		tokenize: tokenize$4,
+		tokenize: tokenize$3,
+		tokenLines: [],
+		tokenStates: [],
+		tokenVersion: 0,
+		tokenizationPending: false,
+		keyHoldActive: false,
+		onIncrementalChange(listener) {
+			incrementalChangeListeners.add(listener);
+			return () => incrementalChangeListeners.delete(listener);
+		},
 		get lines() {
 			return buffer.lines.value;
-		},
-		get tokenLines() {
-			return this.tokenize(buffer.code.value);
 		},
 		replace(index, length, text) {
 			buffer.replace(index, length, text);
 		}
 	});
+	const emitIncrementalChange = (change) => {
+		const payload = {
+			revision,
+			...change
+		};
+		for (const listener of incrementalChangeListeners) listener(payload);
+	};
+	const bumpTokenVersion = () => {
+		doc.tokenVersion++;
+	};
+	const shouldUseTokenizerWorker = () => {
+		return typeof window !== "undefined" && typeof Worker !== "undefined" && doc.tokenize === defaultIncrementalTokenizer && buffer.lines.value.length >= 5e4;
+	};
+	const ensureTokenizerWorker = () => {
+		if (!shouldUseTokenizerWorker()) return null;
+		if (tokenizerWorker) return tokenizerWorker;
+		tokenizerWorker = new Worker(new URL(
+			/* @vite-ignore */
+			"/assets/tokenizer-worker-k12IpgVT.js",
+			"" + import.meta.url
+		), { type: "module" });
+		tokenizerWorker.onmessage = (event) => {
+			const message = event.data;
+			if (!message || message.type !== "tokenizeChunkResult") return;
+			if (!activeWorkerJob || activeWorkerJob.jobId !== message.jobId) return;
+			const job = activeWorkerJob;
+			activeWorkerJob = null;
+			if (message.revision !== doc.revision) {
+				if (pendingDeferredRange) pendingDeferredRange.startLine = Math.max(0, pendingDeferredRange.startLine);
+				return;
+			}
+			const nextTokenLines = doc.tokenLines;
+			const nextTokenStates = doc.tokenStates;
+			let changed = false;
+			for (let i$6 = 0; i$6 < message.tokenLines.length; i$6++) {
+				const line = message.startLine + i$6;
+				if (line >= nextTokenLines.length) break;
+				const nextLineTokens = message.tokenLines[i$6];
+				if (nextTokenLines[line] !== nextLineTokens) {
+					nextTokenLines[line] = nextLineTokens;
+					changed = true;
+				}
+				if (nextTokenStates[line] !== null) {
+					nextTokenStates[line] = null;
+					changed = true;
+				}
+			}
+			if (changed) bumpTokenVersion();
+			emitIncrementalChange({
+				source: "deferred",
+				startLine: job.startLine,
+				endLineBefore: job.endLine,
+				endLineAfter: job.endLine,
+				tokenProcessedStartLine: job.startLine,
+				tokenProcessedEndLine: job.endLine,
+				tokenConverged: pendingDeferredRange === null || pendingDeferredRange.startLine > pendingDeferredRange.endLine
+			});
+			if (pendingDeferredRange) {
+				pendingDeferredRange.startLine = job.endLine + 1;
+				if (pendingDeferredRange.startLine > pendingDeferredRange.endLine) {
+					pendingDeferredRange = null;
+					doc.tokenizationPending = false;
+					return;
+				}
+			}
+			if (pendingDeferredRange) queueDeferredTokenization();
+			else doc.tokenizationPending = false;
+		};
+		return tokenizerWorker;
+	};
+	const queueDeferredTokenization = () => {
+		if (!pendingDeferredRange) return;
+		if (!isIncrementalTokenizer(doc.tokenize)) {
+			if (deferredTokenizationTimer !== null) clearTimeout(deferredTokenizationTimer);
+			deferredTokenizationTimer = setTimeout(() => {
+				deferredTokenizationTimer = null;
+				if (!pendingDeferredRange) return;
+				const lines = buffer.lines.value;
+				const tokenLines = doc.tokenize(lines.join("\n"));
+				doc.tokenLines = tokenLines;
+				doc.tokenStates = new Array(tokenLines.length).fill(null);
+				bumpTokenVersion();
+				pendingDeferredRange = null;
+				doc.tokenizationPending = false;
+				emitIncrementalChange({
+					source: "deferred",
+					startLine: 0,
+					endLineBefore: Math.max(0, lines.length - 1),
+					endLineAfter: Math.max(0, lines.length - 1),
+					tokenProcessedStartLine: 0,
+					tokenProcessedEndLine: Math.max(0, tokenLines.length - 1),
+					tokenConverged: true
+				});
+			}, LEGACY_DEFERRED_TOKENIZE_DELAY_MS);
+			return;
+		}
+		if (shouldUseTokenizerWorker()) {
+			const worker = ensureTokenizerWorker();
+			if (!worker) return;
+			if (activeWorkerJob) return;
+			const lines = buffer.lines.value;
+			const startLine = Math.max(0, pendingDeferredRange.startLine);
+			const endLine = Math.min(lines.length - 1, pendingDeferredRange.endLine, startLine + 2047);
+			if (endLine < startLine) {
+				pendingDeferredRange = null;
+				doc.tokenizationPending = false;
+				return;
+			}
+			const linesChunk = lines.slice(startLine, endLine + 1);
+			const jobId = ++workerJobId;
+			activeWorkerJob = {
+				jobId,
+				startLine,
+				endLine,
+				revision: doc.revision
+			};
+			worker.postMessage({
+				type: "tokenizeChunk",
+				jobId,
+				revision: doc.revision,
+				startLine,
+				lines: linesChunk
+			});
+			return;
+		}
+		if (deferredTokenizationTimer !== null) return;
+		deferredTokenizationTimer = setTimeout(() => {
+			deferredTokenizationTimer = null;
+			if (!pendingDeferredRange) return;
+			const lines = buffer.lines.value;
+			const startLine = Math.max(0, pendingDeferredRange.startLine);
+			const endLine = Math.min(lines.length - 1, pendingDeferredRange.endLine);
+			if (endLine < startLine) {
+				pendingDeferredRange = null;
+				doc.tokenizationPending = false;
+				return;
+			}
+			const tokenized = tokenizeIncremental(doc.tokenize, lines, doc.tokenLines, doc.tokenStates, startLine, endLine + 1, Math.max(512, getSyncTokenizationBudget(lines.length) * 8));
+			if (tokenized.changed) bumpTokenVersion();
+			emitIncrementalChange({
+				source: "deferred",
+				startLine,
+				endLineBefore: endLine,
+				endLineAfter: endLine,
+				tokenProcessedStartLine: tokenized.processedStartLine,
+				tokenProcessedEndLine: tokenized.processedEndLine,
+				tokenConverged: tokenized.converged
+			});
+			if (tokenized.converged) {
+				pendingDeferredRange = null;
+				doc.tokenizationPending = false;
+				return;
+			}
+			pendingDeferredRange.startLine = tokenized.processedEndLine + 1;
+			if (pendingDeferredRange.startLine > pendingDeferredRange.endLine) {
+				pendingDeferredRange = null;
+				doc.tokenizationPending = false;
+				return;
+			}
+			queueDeferredTokenization();
+		}, 0);
+	};
+	const applyTokenization = (source, startLine, endLineBefore, endLineAfter, maxLines = Number.POSITIVE_INFINITY, linesOverride, prealignedChanged = false) => {
+		const currentLines = linesOverride ?? buffer.lines.value;
+		if (source === "reset") {
+			pendingDeferredRange = null;
+			if (deferredTokenizationTimer !== null) {
+				clearTimeout(deferredTokenizationTimer);
+				deferredTokenizationTimer = null;
+			}
+			activeWorkerJob = null;
+			const full = tokenizeAll(doc.tokenize, currentLines);
+			doc.tokenLines = full.tokenLines;
+			doc.tokenStates = full.states;
+			bumpTokenVersion();
+			doc.tokenizationPending = false;
+			emitIncrementalChange({
+				source,
+				startLine: 0,
+				endLineBefore,
+				endLineAfter,
+				tokenProcessedStartLine: 0,
+				tokenProcessedEndLine: Math.max(0, full.tokenLines.length - 1),
+				tokenConverged: true
+			});
+			return;
+		}
+		if (!isIncrementalTokenizer(doc.tokenize)) {
+			const nextTokenLines = doc.tokenLines;
+			const nextTokenStates = doc.tokenStates;
+			let changed = prealignedChanged;
+			if (nextTokenLines.length > currentLines.length) {
+				nextTokenLines.length = currentLines.length;
+				changed = true;
+			}
+			if (nextTokenStates.length > currentLines.length) {
+				nextTokenStates.length = currentLines.length;
+				changed = true;
+			}
+			for (let i$6 = nextTokenLines.length; i$6 < currentLines.length; i$6++) {
+				nextTokenLines[i$6] = [];
+				changed = true;
+			}
+			for (let i$6 = nextTokenStates.length; i$6 < currentLines.length; i$6++) {
+				nextTokenStates[i$6] = void 0;
+				changed = true;
+			}
+			if (changed) bumpTokenVersion();
+			doc.tokenizationPending = true;
+			emitIncrementalChange({
+				source,
+				startLine,
+				endLineBefore,
+				endLineAfter,
+				tokenProcessedStartLine: Math.max(0, startLine),
+				tokenProcessedEndLine: Math.max(0, Math.max(endLineBefore, endLineAfter)),
+				tokenConverged: false
+			});
+			pendingDeferredRange = {
+				startLine: 0,
+				endLine: Math.max(0, currentLines.length - 1)
+			};
+			queueDeferredTokenization();
+			return;
+		}
+		const tokenized = tokenizeIncremental(doc.tokenize, currentLines, doc.tokenLines, doc.tokenStates, Math.max(0, startLine), Math.max(endLineBefore, endLineAfter) + 1, maxLines);
+		if (tokenized.changed || prealignedChanged) bumpTokenVersion();
+		doc.tokenizationPending = !tokenized.converged;
+		emitIncrementalChange({
+			source,
+			startLine,
+			endLineBefore,
+			endLineAfter,
+			tokenProcessedStartLine: tokenized.processedStartLine,
+			tokenProcessedEndLine: tokenized.processedEndLine,
+			tokenConverged: tokenized.converged
+		});
+		if (!tokenized.converged) {
+			pendingDeferredRange = {
+				startLine: Math.max(0, tokenized.processedEndLine + 1),
+				endLine: Math.max(0, currentLines.length - 1)
+			};
+			doc.tokenizationPending = true;
+			queueDeferredTokenization();
+		}
+	};
+	const initial = tokenizeAll(doc.tokenize, buffer.lines.value);
+	doc.tokenLines = initial.tokenLines;
+	doc.tokenStates = initial.states;
+	bumpTokenVersion();
+	buffer.onChange((change) => {
+		revision++;
+		doc.revision = revision;
+		if (change.type === "reset") {
+			const nextLines$1 = change.nextCode.split("\n");
+			applyTokenization("reset", 0, 0, Math.max(0, nextLines$1.length - 1), Number.POSITIVE_INFINITY, nextLines$1);
+			return;
+		}
+		const deletedLineCount = countNewlines(change.deletedText);
+		const insertedLineCount = countNewlines(change.insertedText);
+		const nextLines = buffer.lines.value;
+		const lineCount = nextLines.length;
+		const maxLine = Math.max(0, lineCount - 1);
+		let startLine;
+		if (change.startLine !== void 0) startLine = Math.max(0, Math.min(change.startLine, maxLine));
+		else startLine = lineFromIndexInLines(nextLines, change.start);
+		const endLineBefore = startLine + deletedLineCount;
+		const endLineAfter = startLine + insertedLineCount;
+		const snapshotsAligned = alignTokenSnapshotsForSpliceInPlace(doc.tokenLines, doc.tokenStates, lineCount, endLineBefore, endLineAfter);
+		applyTokenization("sync", startLine, endLineBefore, endLineAfter, getSyncTokenizationBudget(lineCount), void 0, snapshotsAligned);
+	});
 	m(() => {
-		doc.code;
+		buffer.lines.value;
 		o$24(() => doc.epoch++);
 	});
 	return doc;
 }
-var debouncedSetItem$1 = debounce$1(50, (key, json) => {
+var debouncedSetItem$1 = debounce$2(50, (key, json) => {
 	localStorage.setItem(key, JSON.stringify(json()));
 });
 function persist$1(key, watch, json, read) {
@@ -11232,7 +14106,7 @@ function persist$1(key, watch, json, read) {
 		debouncedSetItem$1(key, json);
 	});
 }
-function createPersistedDoc(key, tokenize$4 = tokenize$3, doc = createDoc(tokenize$4)) {
+function createPersistedDoc(key, tokenize$3 = defaultIncrementalTokenizer, doc = createDoc(tokenize$3)) {
 	persist$1(key, () => {
 		doc.code;
 		doc.caret.line;
@@ -11333,7 +14207,7 @@ async function warmup(context, tokenLines) {
 }
 const activeEditor = activeEditor$1;
 function createEditor(settings$1 = {}) {
-	const doc = createDoc(tokenize$3);
+	const doc = createDoc(defaultIncrementalTokenizer);
 	const editorRef = { current: null };
 	const context = createContext(settings$1, doc, {
 		editorRef,
@@ -26722,10 +29596,10 @@ function compilePoints(points) {
 		endTokenStart: -1,
 		endTokenLength: -1
 	};
-	const pts = points.map((p$7) => ({
-		...p$7,
-		bar: p$7.bar
-	})).filter((p$7) => p$7.bar >= 0);
+	const pts = points.map((p$8) => ({
+		...p$8,
+		bar: p$8.bar
+	})).filter((p$8) => p$8.bar >= 0);
 	if (pts.length === 0) return {
 		segments: [],
 		totalBars: 0,
@@ -26734,7 +29608,7 @@ function compilePoints(points) {
 		endTokenStart: -1,
 		endTokenLength: -1
 	};
-	if (!pts.some((p$7) => p$7.bar === 0)) pts.unshift({
+	if (!pts.some((p$8) => p$8.bar === 0)) pts.unshift({
 		bar: 0,
 		value: 0,
 		exp: null,
@@ -26760,23 +29634,23 @@ function compilePoints(points) {
 	let endTokenStart = activeTokenStart;
 	let endTokenLength = activeTokenLength;
 	for (; i$6 < pts.length; i$6++) {
-		const p$7 = pts[i$6];
-		const nextT = p$7.bar;
-		const nextV = p$7.value;
+		const p$8 = pts[i$6];
+		const nextT = p$8.bar;
+		const nextV = p$8.value;
 		const dt = nextT - t$12;
 		if (dt < 0) continue;
 		if (dt === 0) {
 			t$12 = nextT;
 			v$4 = nextV;
-			activeTokenIndex = p$7.tokenIndex;
-			activeTokenStart = p$7.tokenStart;
-			activeTokenLength = p$7.tokenLength;
+			activeTokenIndex = p$8.tokenIndex;
+			activeTokenStart = p$8.tokenStart;
+			activeTokenLength = p$8.tokenLength;
 			endTokenIndex = activeTokenIndex;
 			endTokenStart = activeTokenStart;
 			endTokenLength = activeTokenLength;
 			continue;
 		}
-		const exp = p$7.exp ?? 1;
+		const exp = p$8.exp ?? 1;
 		const kind = v$4 === nextV ? 0 : 1;
 		segments.push({
 			kind,
@@ -26787,15 +29661,15 @@ function compilePoints(points) {
 			fromTokenIndex: activeTokenIndex,
 			fromTokenStart: activeTokenStart,
 			fromTokenLength: activeTokenLength,
-			toTokenIndex: p$7.tokenIndex,
-			toTokenStart: p$7.tokenStart,
-			toTokenLength: p$7.tokenLength
+			toTokenIndex: p$8.tokenIndex,
+			toTokenStart: p$8.tokenStart,
+			toTokenLength: p$8.tokenLength
 		});
 		t$12 = nextT;
 		v$4 = nextV;
-		activeTokenIndex = p$7.tokenIndex;
-		activeTokenStart = p$7.tokenStart;
-		activeTokenLength = p$7.tokenLength;
+		activeTokenIndex = p$8.tokenIndex;
+		activeTokenStart = p$8.tokenStart;
+		activeTokenLength = p$8.tokenLength;
 		endTokenIndex = activeTokenIndex;
 		endTokenStart = activeTokenStart;
 		endTokenLength = activeTokenLength;
@@ -27051,9 +29925,9 @@ function getTimelineValue(segs, si, sample) {
 		v: s$4.a,
 		si
 	};
-	const p$7 = applyCurve$1((sample - s$4.startSample) / (s$4.endSample - s$4.startSample), s$4.exp);
+	const p$8 = applyCurve$1((sample - s$4.startSample) / (s$4.endSample - s$4.startSample), s$4.exp);
 	return {
-		v: s$4.a + (s$4.b - s$4.a) * p$7,
+		v: s$4.a + (s$4.b - s$4.a) * p$8,
 		si
 	};
 }
@@ -27062,8 +29936,8 @@ function getTimelineValueAtSample(segs, sample) {
 		const ss = segs[k$4];
 		if (sample >= ss.startSample && sample < ss.endSample) {
 			if (ss.kind !== 1 || ss.endSample <= ss.startSample) return ss.a;
-			const p$7 = applyCurve$1((sample - ss.startSample) / (ss.endSample - ss.startSample), ss.exp);
-			return ss.a + (ss.b - ss.a) * p$7;
+			const p$8 = applyCurve$1((sample - ss.startSample) / (ss.endSample - ss.startSample), ss.exp);
+			return ss.a + (ss.b - ss.a) * p$8;
 		}
 	}
 	for (let k$4 = 0; k$4 < segs.length; k$4++) {
@@ -28909,7 +31783,7 @@ function createTypedHistories(histories, sourceMap) {
 		const arr = sourceMapByPc.get(entry.pc);
 		if (arr) arr.push(entry);
 		else sourceMapByPc.set(entry.pc, [entry]);
-		if (entry.callSite && entry.funcName) {
+		if (entry.callSite && entry.funcName && entry.__fromMainProgram !== false) {
 			const e$61 = entry;
 			callSiteByPc.set(entry.pc, e$61);
 			callSiteEntries.push(e$61);
@@ -28920,7 +31794,8 @@ function createTypedHistories(histories, sourceMap) {
 	for (const history$1 of histories) {
 		const frames = getFrames(history$1);
 		for (const pc of frames) {
-			const sm = sourceMapByPc.get(pc)?.find((e$61) => !e$61.callSite && outSoloMatch(e$61.genName, history$1.genName));
+			const candidates = sourceMapByPc.get(pc)?.filter((e$61) => !e$61.callSite && outSoloMatch(e$61.genName, history$1.genName));
+			const sm = candidates?.find((e$61) => e$61.__fromMainProgram !== false) ?? candidates?.[0];
 			if (sm) {
 				matches.push({
 					history: history$1,
@@ -29573,27 +32448,37 @@ var SampleManager = class {
 const sampleManager = new SampleManager();
 function collectParamNames(params) {
 	const names = /* @__PURE__ */ new Set();
-	for (const p$7 of params) if (p$7.type === "param") names.add(p$7.name);
-	else if (p$7.type === "param-destructure") for (const n$4 of p$7.names) names.add(n$4);
-	else if (p$7.type === "param-named-destructure") {
-		names.add(p$7.paramName);
-		for (const n$4 of p$7.names) names.add(n$4);
+	for (const p$8 of params) if (p$8.type === "param") names.add(p$8.name);
+	else if (p$8.type === "param-destructure") for (const n$4 of p$8.names) names.add(n$4);
+	else if (p$8.type === "param-named-destructure") {
+		names.add(p$8.paramName);
+		for (const n$4 of p$8.names) names.add(n$4);
 	}
 	return names;
 }
 function collectClosureVarNames(fnExpr, outerLocals, opts) {
+	if (outerLocals.length === 0) return [];
 	const out = /* @__PURE__ */ new Set();
 	const params = collectParamNames(fnExpr.params);
-	const inOuterLocals = (name) => {
-		for (const scope of outerLocals) if (scope.has(name)) return true;
-		return false;
+	let outerLocalNames = null;
+	const hasOuterLocalName = (name) => {
+		if (outerLocalNames === null) {
+			const names = /* @__PURE__ */ new Set();
+			for (let i$6 = 0; i$6 < outerLocals.length; i$6++) for (const key of outerLocals[i$6].keys()) names.add(key);
+			outerLocalNames = names;
+		}
+		return outerLocalNames.has(name);
+	};
+	const maybeCapture = (name) => {
+		if (params.has(name) || opts.systemVars.has(name)) return;
+		if (hasOuterLocalName(name)) out.add(name);
 	};
 	const walkExpr = (e$61) => {
 		switch (e$61.type) {
 			case "number":
 			case "string": return;
 			case "identifier":
-				if (!params.has(e$61.name) && !opts.systemVars.has(e$61.name) && inOuterLocals(e$61.name)) out.add(e$61.name);
+				maybeCapture(e$61.name);
 				return;
 			case "array":
 				for (const it$1 of e$61.items) walkExpr(it$1);
@@ -29622,17 +32507,17 @@ function collectClosureVarNames(fnExpr, outerLocals, opts) {
 				return;
 			case "call":
 				walkExpr(e$61.callee);
-				for (const a$35 of e$61.args) if (a$35.type === "arg") walkExpr(a$35.value);
+				for (let i$6 = 0; i$6 < e$61.args.length; i$6++) walkExpr(e$61.args[i$6].value);
 				return;
 			case "assign":
 				if (e$61.left.type === "identifier") {
 					walkExpr(e$61.right);
-					if (e$61.op !== ":=" && !params.has(e$61.left.name) && !opts.systemVars.has(e$61.left.name) && inOuterLocals(e$61.left.name)) out.add(e$61.left.name);
+					if (e$61.op !== ":=") maybeCapture(e$61.left.name);
 					return;
 				}
 				if (e$61.left.type === "destructure") {
 					walkExpr(e$61.right);
-					for (const name of e$61.left.names) if (e$61.op !== ":=" && !params.has(name) && !opts.systemVars.has(name) && inOuterLocals(name)) out.add(name);
+					for (const name of e$61.left.names) if (e$61.op !== ":=") maybeCapture(name);
 					return;
 				}
 				walkExpr(e$61.left);
@@ -29717,259 +32602,135 @@ function assignRecordCallIds(program) {
 	const getLocKey = (loc) => {
 		return `${loc.line}:${loc.column}:${loc.start}:${loc.end}`;
 	};
-	const functionsWithRecord = /* @__PURE__ */ new Set();
 	const functionToRecordCall = /* @__PURE__ */ new Map();
-	const checkForRecord = (expr) => {
-		if (expr.type === "call" && expr.callee.type === "identifier" && expr.callee.name === "record") return true;
-		switch (expr.type) {
+	const functionsWithRecord = /* @__PURE__ */ new Set();
+	const functionContext = [];
+	const currentFunctionContext = () => {
+		if (functionContext.length === 0) return null;
+		return functionContext[functionContext.length - 1] ?? null;
+	};
+	const discoverExpr = (e$61) => {
+		switch (e$61.type) {
 			case "number":
 			case "string":
-			case "identifier": return false;
-			case "destructure": return false;
+			case "identifier":
+			case "destructure": return;
 			case "array":
-				for (const it$1 of expr.items) if (checkForRecord(it$1)) return true;
-				return false;
+				for (const it$1 of e$61.items) discoverExpr(it$1);
+				return;
 			case "object":
-				for (const entry of expr.entries) if (checkForRecord(entry.value)) return true;
-				return false;
-			case "index": return checkForRecord(expr.object) || checkForRecord(expr.index);
-			case "member": return checkForRecord(expr.object);
-			case "unary": return checkForRecord(expr.expr);
-			case "binary": return checkForRecord(expr.left) || checkForRecord(expr.right);
-			case "ternary": return checkForRecord(expr.test) || checkForRecord(expr.then) || checkForRecord(expr.else);
+				for (const entry of e$61.entries) discoverExpr(entry.value);
+				return;
+			case "index":
+				discoverExpr(e$61.object);
+				discoverExpr(e$61.index);
+				return;
+			case "member":
+				discoverExpr(e$61.object);
+				return;
+			case "unary":
+				discoverExpr(e$61.expr);
+				return;
+			case "binary":
+				discoverExpr(e$61.left);
+				discoverExpr(e$61.right);
+				return;
+			case "ternary":
+				discoverExpr(e$61.test);
+				discoverExpr(e$61.then);
+				discoverExpr(e$61.else);
+				return;
 			case "call":
-				if (checkForRecord(expr.callee)) return true;
-				for (const a$35 of expr.args) if (a$35.type === "arg" && checkForRecord(a$35.value)) return true;
-				return false;
-			case "assign": return checkForRecord(expr.left) || checkForRecord(expr.right);
-			case "fn": return false;
+				if (e$61.callee.type === "identifier" && e$61.callee.name === "record") {
+					const functionName = currentFunctionContext();
+					if (functionName !== null && !functionToRecordCall.has(functionName)) {
+						const locKey = getLocKey(e$61.loc);
+						functionToRecordCall.set(functionName, locKey);
+						functionsWithRecord.add(functionName);
+					}
+				}
+				discoverExpr(e$61.callee);
+				for (const a$35 of e$61.args) discoverExpr(a$35.value);
+				return;
+			case "assign":
+				if (e$61.left.type === "identifier" && e$61.right.type === "fn") {
+					functionContext.push(e$61.left.name);
+					if (e$61.right.body.type === "block") discoverStmt(e$61.right.body);
+					else discoverExpr(e$61.right.body);
+					functionContext.pop();
+					return;
+				}
+				if (e$61.left.type !== "identifier" && e$61.left.type !== "destructure") discoverExpr(e$61.left);
+				discoverExpr(e$61.right);
+				return;
 			case "switch":
-				if (checkForRecord(expr.test)) return true;
-				for (const c$7 of expr.cases) {
-					if (c$7.test && checkForRecord(c$7.test)) return true;
-					for (const st of c$7.body) if (checkStmtForRecord(st)) return true;
+				discoverExpr(e$61.test);
+				for (const c$7 of e$61.cases) {
+					if (c$7.test) discoverExpr(c$7.test);
+					for (const st of c$7.body) discoverStmt(st);
 				}
-				return false;
+				return;
+			case "fn":
+				functionContext.push(null);
+				if (e$61.body.type === "block") discoverStmt(e$61.body);
+				else discoverExpr(e$61.body);
+				functionContext.pop();
+				return;
 		}
 	};
-	const checkStmtForRecord = (s$4) => {
+	const discoverStmt = (s$4) => {
 		switch (s$4.type) {
-			case "expr": return checkForRecord(s$4.expr);
+			case "expr":
+				discoverExpr(s$4.expr);
+				return;
 			case "block":
-				for (const it$1 of s$4.body) if (checkStmtForRecord(it$1)) return true;
-				return false;
-			case "if": return checkForRecord(s$4.test) || checkStmtForRecord(s$4.then) || (s$4.else ? checkStmtForRecord(s$4.else) : false);
-			case "while": return checkForRecord(s$4.test) || checkStmtForRecord(s$4.body);
-			case "do": return checkStmtForRecord(s$4.body) || checkForRecord(s$4.test);
-			case "for": return checkForRecord(s$4.from) || checkForRecord(s$4.to) || checkStmtForRecord(s$4.body);
-			case "for-of": return checkForRecord(s$4.iterable) || checkStmtForRecord(s$4.body);
-			case "switch": return checkForRecord(s$4.test) || s$4.cases.some((c$7) => c$7.body.some((st) => checkStmtForRecord(st)));
-			case "return": return s$4.value ? checkForRecord(s$4.value) : false;
-			case "throw": return s$4.value ? checkForRecord(s$4.value) : false;
-			case "try": return checkStmtForRecord(s$4.body) || (s$4.catch ? checkStmtForRecord(s$4.catch.body) : false) || (s$4.finally ? checkStmtForRecord(s$4.finally) : false);
-			case "label": return checkStmtForRecord(s$4.stmt);
+				for (const it$1 of s$4.body) discoverStmt(it$1);
+				return;
+			case "if":
+				discoverExpr(s$4.test);
+				discoverStmt(s$4.then);
+				if (s$4.else) discoverStmt(s$4.else);
+				return;
+			case "while":
+				discoverExpr(s$4.test);
+				discoverStmt(s$4.body);
+				return;
+			case "do":
+				discoverStmt(s$4.body);
+				discoverExpr(s$4.test);
+				return;
+			case "for":
+				discoverExpr(s$4.from);
+				discoverExpr(s$4.to);
+				discoverStmt(s$4.body);
+				return;
+			case "for-of":
+				discoverExpr(s$4.iterable);
+				discoverStmt(s$4.body);
+				return;
+			case "switch":
+				discoverExpr(s$4.test);
+				for (const c$7 of s$4.cases) for (const st of c$7.body) discoverStmt(st);
+				return;
+			case "return":
+				if (s$4.value) discoverExpr(s$4.value);
+				return;
+			case "throw":
+				if (s$4.value) discoverExpr(s$4.value);
+				return;
+			case "try":
+				discoverStmt(s$4.body);
+				if (s$4.catch) discoverStmt(s$4.catch.body);
+				if (s$4.finally) discoverStmt(s$4.finally);
+				return;
+			case "label":
+				discoverStmt(s$4.stmt);
+				return;
 			case "break":
-			case "continue": return false;
+			case "continue": return;
 		}
 	};
-	const findRecordCallLoc = (expr) => {
-		if (expr.type === "call" && expr.callee.type === "identifier" && expr.callee.name === "record") return getLocKey(expr.loc);
-		switch (expr.type) {
-			case "number":
-			case "string":
-			case "identifier": return null;
-			case "array":
-				for (const it$1 of expr.items) {
-					const loc = findRecordCallLoc(it$1);
-					if (loc) return loc;
-				}
-				return null;
-			case "object":
-				for (const entry of expr.entries) {
-					const loc = findRecordCallLoc(entry.value);
-					if (loc) return loc;
-				}
-				return null;
-			case "index": return findRecordCallLoc(expr.object) || findRecordCallLoc(expr.index);
-			case "member": return findRecordCallLoc(expr.object);
-			case "unary": return findRecordCallLoc(expr.expr);
-			case "binary": return findRecordCallLoc(expr.left) || findRecordCallLoc(expr.right);
-			case "ternary": return findRecordCallLoc(expr.test) || findRecordCallLoc(expr.then) || findRecordCallLoc(expr.else);
-			case "call":
-				const calleeLoc = findRecordCallLoc(expr.callee);
-				if (calleeLoc) return calleeLoc;
-				for (const a$35 of expr.args) if (a$35.type === "arg") {
-					const argLoc = findRecordCallLoc(a$35.value);
-					if (argLoc) return argLoc;
-				}
-				return null;
-			case "assign": return findRecordCallLoc(expr.left) || findRecordCallLoc(expr.right);
-			case "destructure": return null;
-			case "fn": return null;
-			case "switch": {
-				const testLoc = findRecordCallLoc(expr.test);
-				if (testLoc) return testLoc;
-				for (const c$7 of expr.cases) {
-					if (c$7.test) {
-						const loc = findRecordCallLoc(c$7.test);
-						if (loc) return loc;
-					}
-					for (const st of c$7.body) {
-						const loc = findRecordCallLocInStmt(st);
-						if (loc) return loc;
-					}
-				}
-				return null;
-			}
-		}
-	};
-	const findRecordCallLocInStmt = (s$4) => {
-		switch (s$4.type) {
-			case "expr": return findRecordCallLoc(s$4.expr);
-			case "block":
-				for (const it$1 of s$4.body) {
-					const loc = findRecordCallLocInStmt(it$1);
-					if (loc) return loc;
-				}
-				return null;
-			case "if": return findRecordCallLoc(s$4.test) || findRecordCallLocInStmt(s$4.then) || (s$4.else ? findRecordCallLocInStmt(s$4.else) : null);
-			case "while": return findRecordCallLoc(s$4.test) || findRecordCallLocInStmt(s$4.body);
-			case "do": return findRecordCallLocInStmt(s$4.body) || findRecordCallLoc(s$4.test);
-			case "for": return findRecordCallLoc(s$4.from) || findRecordCallLoc(s$4.to) || findRecordCallLocInStmt(s$4.body);
-			case "for-of": return findRecordCallLoc(s$4.iterable) || findRecordCallLocInStmt(s$4.body);
-			case "switch": {
-				const loc = findRecordCallLoc(s$4.test);
-				if (loc) return loc;
-				for (const c$7 of s$4.cases) for (const st of c$7.body) {
-					const stLoc = findRecordCallLocInStmt(st);
-					if (stLoc) return stLoc;
-				}
-				return null;
-			}
-			case "return": return s$4.value ? findRecordCallLoc(s$4.value) : null;
-			case "throw": return s$4.value ? findRecordCallLoc(s$4.value) : null;
-			case "try": return findRecordCallLocInStmt(s$4.body) || (s$4.catch ? findRecordCallLocInStmt(s$4.catch.body) : null) || (s$4.finally ? findRecordCallLocInStmt(s$4.finally) : null);
-			case "label": return findRecordCallLocInStmt(s$4.stmt);
-			case "break":
-			case "continue": return null;
-		}
-	};
-	const discoverRecordFunctions = () => {
-		const walkExpr$1 = (e$61) => {
-			if (e$61.type === "assign" && e$61.left.type === "identifier" && e$61.right.type === "fn") {
-				const funcName = e$61.left.name;
-				if (e$61.right.body.type === "block" ? checkStmtForRecord(e$61.right.body) : checkForRecord(e$61.right.body)) {
-					functionsWithRecord.add(funcName);
-					const recordLocKey = e$61.right.body.type === "block" ? findRecordCallLocInStmt(e$61.right.body) : findRecordCallLoc(e$61.right.body);
-					if (recordLocKey) functionToRecordCall.set(funcName, recordLocKey);
-				}
-			}
-			switch (e$61.type) {
-				case "number":
-				case "string":
-				case "identifier":
-				case "destructure": return;
-				case "array":
-					for (const it$1 of e$61.items) walkExpr$1(it$1);
-					return;
-				case "object":
-					for (const entry of e$61.entries) walkExpr$1(entry.value);
-					return;
-				case "index":
-					walkExpr$1(e$61.object);
-					walkExpr$1(e$61.index);
-					return;
-				case "member":
-					walkExpr$1(e$61.object);
-					return;
-				case "unary":
-					walkExpr$1(e$61.expr);
-					return;
-				case "binary":
-					walkExpr$1(e$61.left);
-					walkExpr$1(e$61.right);
-					return;
-				case "ternary":
-					walkExpr$1(e$61.test);
-					walkExpr$1(e$61.then);
-					walkExpr$1(e$61.else);
-					return;
-				case "call":
-					walkExpr$1(e$61.callee);
-					for (const a$35 of e$61.args) if (a$35.type === "arg") walkExpr$1(a$35.value);
-					return;
-				case "assign":
-					walkExpr$1(e$61.left);
-					walkExpr$1(e$61.right);
-					return;
-				case "fn":
-					if (e$61.body.type === "block") walkStmt$1(e$61.body);
-					else walkExpr$1(e$61.body);
-					return;
-				case "switch":
-					walkExpr$1(e$61.test);
-					for (const c$7 of e$61.cases) {
-						if (c$7.test) walkExpr$1(c$7.test);
-						for (const st of c$7.body) walkStmt$1(st);
-					}
-					return;
-			}
-		};
-		const walkStmt$1 = (s$4) => {
-			switch (s$4.type) {
-				case "expr":
-					walkExpr$1(s$4.expr);
-					return;
-				case "block":
-					for (const it$1 of s$4.body) walkStmt$1(it$1);
-					return;
-				case "if":
-					walkExpr$1(s$4.test);
-					walkStmt$1(s$4.then);
-					if (s$4.else) walkStmt$1(s$4.else);
-					return;
-				case "while":
-					walkExpr$1(s$4.test);
-					walkStmt$1(s$4.body);
-					return;
-				case "do":
-					walkStmt$1(s$4.body);
-					walkExpr$1(s$4.test);
-					return;
-				case "for":
-					walkExpr$1(s$4.from);
-					walkExpr$1(s$4.to);
-					walkStmt$1(s$4.body);
-					return;
-				case "for-of":
-					walkExpr$1(s$4.iterable);
-					walkStmt$1(s$4.body);
-					return;
-				case "switch":
-					walkExpr$1(s$4.test);
-					for (const c$7 of s$4.cases) for (const st of c$7.body) walkStmt$1(st);
-					return;
-				case "return":
-					if (s$4.value) walkExpr$1(s$4.value);
-					return;
-				case "throw":
-					if (s$4.value) walkExpr$1(s$4.value);
-					return;
-				case "try":
-					walkStmt$1(s$4.body);
-					if (s$4.catch) walkStmt$1(s$4.catch.body);
-					if (s$4.finally) walkStmt$1(s$4.finally);
-					return;
-				case "label":
-					walkStmt$1(s$4.stmt);
-					return;
-				case "break":
-				case "continue": return;
-			}
-		};
-		for (const stmt of program.body) walkStmt$1(stmt);
-	};
-	discoverRecordFunctions();
+	for (const stmt of program.body) discoverStmt(stmt);
 	let inFunctionBody = false;
 	const walkExpr = (e$61) => {
 		switch (e$61.type) {
@@ -30012,12 +32773,11 @@ function assignRecordCallIds(program) {
 						const callSiteLocKey = getLocKey(e$61.loc);
 						if (!recordCallIds.has(callSiteLocKey)) recordCallIds.set(callSiteLocKey, nextRecordId++);
 					}
-				}
-				walkExpr(e$61.callee);
-				for (const a$35 of e$61.args) if (a$35.type === "arg") walkExpr(a$35.value);
+				} else walkExpr(e$61.callee);
+				for (const a$35 of e$61.args) walkExpr(a$35.value);
 				return;
 			case "assign":
-				walkExpr(e$61.left);
+				if (e$61.left.type !== "identifier" && e$61.left.type !== "destructure") walkExpr(e$61.left);
 				walkExpr(e$61.right);
 				return;
 			case "destructure": return;
@@ -30420,7 +33180,7 @@ var Y = (H$3, A$3) => 0 != (H$3 & A$3), r$9 = (H$3) => {
 }, B = (A$3) => {
 	var H$3 = e$20.findIndex((H$4) => H$4 === A$3 + "*");
 	return -1 !== H$3 && H$3;
-}, p$1 = (r$13, t$12, O$3) => {
+}, p$2 = (r$13, t$12, O$3) => {
 	for (let e$61 = 0; e$61 < r$13.length; e$61++) {
 		let H$3 = r$13[e$61], A$3 = r$13[e$61 + 1] || "", E$4;
 		if (!1 !== (E$4 = g(H$3, A$3))) e$61++, t$12(E$4);
@@ -32478,7 +35238,7 @@ function d$1(H$3) {
 		}, r$14 = (H$5) => 0 | O$4[H$5], t$13 = (H$5) => 0 | R$2[H$5], e$62 = (H$5, A$5) => {
 			R$2[H$5] = A$5;
 		}, O$4 = [], R$2 = [], I$2 = [], Y$1 = 0;
-		return p$1(H$4, (H$5) => {
+		return p$2(H$4, (H$5) => {
 			O$4[Y$1] = 0, R$2[Y$1] = 0, I$2[Y$1++] = H$5;
 		}, (H$5) => {
 			O$4[Y$1 - 1] = H$5;
@@ -32738,6 +35498,11 @@ function sameObjectKeySequence$1(a$35, b$4) {
 	for (let i$6 = 0; i$6 < a$35.length; i$6++) if (a$35[i$6] !== b$4[i$6]) return false;
 	return true;
 }
+function buildObjectKeyIndexMap$1(objectKeys) {
+	const indexByKey = /* @__PURE__ */ new Map();
+	for (let i$6 = 0; i$6 < objectKeys.length; i$6++) indexByKey.set(objectKeys[i$6], i$6);
+	return indexByKey;
+}
 function inferImplicitReturnObjectKeys(block) {
 	if (block.body.length === 0) return null;
 	const last = block.body[block.body.length - 1];
@@ -32802,13 +35567,14 @@ function inferFunctionReturnObjectKeys(expr) {
 	return implicit ? [...implicit] : void 0;
 }
 function normalizeTopOfStackObjectToArrayInFunction(state, sourceExpr, objectKeys, names) {
+	const keyIndexByName = buildObjectKeyIndexMap$1(objectKeys);
 	const tempIndex = state.nextLocalIndex++;
 	state.ops.push(AudioVmOp.SetLocal, tempIndex);
 	state.stack.pop();
 	const stackExpr = { expr: sourceExpr };
 	for (const name of names) {
-		const keyIndex = objectKeys.indexOf(name);
-		if (keyIndex < 0) continue;
+		const keyIndex = keyIndexByName.get(name);
+		if (keyIndex === void 0) continue;
 		state.ops.push(AudioVmOp.GetLocal, tempIndex);
 		state.stack.push(stackExpr);
 		state.ops.push(AudioVmOp.PushScalar, keyIndex);
@@ -32883,6 +35649,7 @@ function compileFunction(state, expr, name) {
 		state.locals[0].set(closureVarNames[i$6], closureInfo);
 	}
 	const destructuredParams = new Array(paramCount);
+	const paramVarInfos = new Array(paramCount);
 	const paramNameToLocalIndex = /* @__PURE__ */ new Map();
 	for (let i$6 = 0; i$6 < paramCount; i$6++) {
 		const param = params[i$6];
@@ -32896,6 +35663,7 @@ function compileFunction(state, expr, name) {
 				names: param.names,
 				tempVar: tempVarInfo
 			};
+			paramVarInfos[i$6] = tempVarInfo;
 			const hint = parameterHints?.get(i$6);
 			if (hint) {
 				if (hint.objectKeys?.length) setVariableObjectShape(state, tempVarInfo, hint.objectKeys);
@@ -32912,6 +35680,7 @@ function compileFunction(state, expr, name) {
 				names: param.names,
 				tempVar: tempVarInfo
 			};
+			paramVarInfos[i$6] = tempVarInfo;
 			paramNameToLocalIndex.set(param.paramName, tempVarInfo.index);
 			const hint = parameterHints?.get(i$6);
 			if (hint) {
@@ -32925,8 +35694,9 @@ function compileFunction(state, expr, name) {
 				index: state.nextLocalIndex++
 			};
 			state.locals[0].set(param.name, paramInfo);
+			paramVarInfos[i$6] = paramInfo;
 			destructuredParams[i$6] = null;
-			paramNameToLocalIndex.set(param.name, i$6);
+			paramNameToLocalIndex.set(param.name, paramInfo.index);
 			const hint = parameterHints?.get(i$6);
 			if (hint) {
 				if (hint.functionId !== void 0) setVariableFunctionBinding(state, paramInfo, hint.functionId);
@@ -32937,8 +35707,8 @@ function compileFunction(state, expr, name) {
 		}
 	}
 	state.paramNameToLocalIndex = paramNameToLocalIndex;
-	const defaultParamFunctionIds = /* @__PURE__ */ new Map();
-	const defaultParamFunctionIdsByName = /* @__PURE__ */ new Map();
+	let defaultParamFunctionIds = null;
+	let defaultParamFunctionIdsByName = null;
 	let hasDefaultCalls = false;
 	for (let i$6 = 0; i$6 < paramCount; i$6++) {
 		const defaultExpr = defaults[i$6];
@@ -32947,15 +35717,13 @@ function compileFunction(state, expr, name) {
 			const param = params[i$6];
 			const destructInfo = destructuredParams[i$6];
 			const paramName = param.type === "param" ? param.name : null;
-			const paramInfo = destructInfo ? destructInfo.tempVar : {
-				scope: "local",
-				index: i$6
-			};
+			const paramInfo = paramVarInfos[i$6];
+			const defaultStackExpr = { expr: defaultExpr };
 			compileGetVariable(state, paramInfo);
-			state.stack.push({ expr: defaultExpr });
+			state.stack.push(defaultStackExpr);
 			state.ops.push(AudioVmOp.IsUndefined);
 			state.stack.pop();
-			state.stack.push({ expr: defaultExpr });
+			state.stack.push(defaultStackExpr);
 			state.ops.push(AudioVmOp.JumpIfFalse);
 			const jumpToSkipIndex = state.ops.length;
 			state.ops.push(0);
@@ -32963,8 +35731,8 @@ function compileFunction(state, expr, name) {
 			if (paramName) state.locals[0].delete(paramName);
 			if (defaultExpr.type === "fn") {
 				const innerId = compileFunction(state, defaultExpr, null);
-				defaultParamFunctionIds.set(i$6, innerId);
-				if (paramName) defaultParamFunctionIdsByName.set(paramName, innerId);
+				(defaultParamFunctionIds ??= /* @__PURE__ */ new Map()).set(i$6, innerId);
+				if (paramName) (defaultParamFunctionIdsByName ??= /* @__PURE__ */ new Map()).set(paramName, innerId);
 			} else compileExpr(state, defaultExpr);
 			if (paramName) state.locals[0].set(paramName, paramInfo);
 			if (destructInfo?.kind === "object") {
@@ -32977,17 +35745,20 @@ function compileFunction(state, expr, name) {
 			state.ops[jumpToSkipIndex] = skipTarget;
 		}
 	}
-	if (defaultParamFunctionIdsByName.size > 0) state.functionIdToDefaultParamFunctions.set(functionId, defaultParamFunctionIdsByName);
+	if (defaultParamFunctionIdsByName && defaultParamFunctionIdsByName.size > 0) state.functionIdToDefaultParamFunctions.set(functionId, defaultParamFunctionIdsByName);
 	for (let i$6 = 0; i$6 < paramCount; i$6++) {
 		const destructInfo = destructuredParams[i$6];
 		if (destructInfo) {
 			const { kind, names, tempVar } = destructInfo;
+			const paramExpr = params[i$6];
+			const stackExpr = { expr: paramExpr };
 			const objectKeys = kind === "object" ? getObjectKeysForVarInfo(state, tempVar) : null;
+			const objectKeyIndexByName = objectKeys ? buildObjectKeyIndexMap$1(objectKeys) : null;
 			for (let j$4 = 0; j$4 < names.length; j$4++) {
 				let sourceIndex = j$4;
-				if (objectKeys) {
-					const keyIndex = objectKeys.indexOf(names[j$4]);
-					if (keyIndex >= 0) sourceIndex = keyIndex;
+				if (objectKeyIndexByName) {
+					const keyIndex = objectKeyIndexByName.get(names[j$4]);
+					if (keyIndex !== void 0) sourceIndex = keyIndex;
 				}
 				const localInfo = {
 					scope: "local",
@@ -32995,15 +35766,15 @@ function compileFunction(state, expr, name) {
 				};
 				state.locals[0].set(names[j$4], localInfo);
 				compileGetVariable(state, tempVar);
-				state.stack.push({ expr: params[i$6] });
+				state.stack.push(stackExpr);
 				state.ops.push(AudioVmOp.PushScalar);
 				state.ops.push(sourceIndex);
-				state.stack.push({ expr: params[i$6] });
+				state.stack.push(stackExpr);
 				state.ops.push(AudioVmOp.ArrayGet, 0);
 				state.stack.pop();
 				state.stack.pop();
-				state.stack.push({ expr: params[i$6] });
-				compileSetVariable(state, localInfo, params[i$6]);
+				state.stack.push(stackExpr);
+				compileSetVariable(state, localInfo, paramExpr);
 				state.stack.pop();
 			}
 		}
@@ -33024,17 +35795,17 @@ function compileFunction(state, expr, name) {
 	const paramDestructureNames = new Array(paramCount).fill(null);
 	let firstParamIn = 0;
 	for (let i$6 = 0; i$6 < paramCount; i$6++) {
-		const p$7 = params[i$6];
-		paramTypes[i$6] = p$7.type;
-		if (p$7.type === "param") paramNames[i$6] = p$7.name;
-		else if (p$7.type === "param-named-destructure") {
-			paramNames[i$6] = p$7.paramName;
-			paramDestructureKinds[i$6] = p$7.kind;
-			paramDestructureNames[i$6] = [...p$7.names];
+		const p$8 = params[i$6];
+		paramTypes[i$6] = p$8.type;
+		if (p$8.type === "param") paramNames[i$6] = p$8.name;
+		else if (p$8.type === "param-named-destructure") {
+			paramNames[i$6] = p$8.paramName;
+			paramDestructureKinds[i$6] = p$8.kind;
+			paramDestructureNames[i$6] = [...p$8.names];
 		} else {
-			paramNames[i$6] = p$7.names[0] || "_";
-			paramDestructureKinds[i$6] = p$7.kind;
-			paramDestructureNames[i$6] = [...p$7.names];
+			paramNames[i$6] = p$8.names[0] || "_";
+			paramDestructureKinds[i$6] = p$8.kind;
+			paramDestructureNames[i$6] = [...p$8.names];
 		}
 	}
 	if (paramCount > 0 && paramNames[0] === "in") {
@@ -33057,7 +35828,7 @@ function compileFunction(state, expr, name) {
 		bytecodeLength,
 		closureVars: closureVarNames,
 		definitionLine: expr.loc.line,
-		defaultParamFunctionIds: defaultParamFunctionIds.size > 0 ? defaultParamFunctionIds : void 0,
+		defaultParamFunctionIds: defaultParamFunctionIds && defaultParamFunctionIds.size > 0 ? defaultParamFunctionIds : void 0,
 		defaultParamExprs: hasDefaultCalls ? defaults : void 0,
 		returnObjectKeys: inferFunctionReturnObjectKeys(expr)
 	};
@@ -33110,7 +35881,7 @@ function compileFunction(state, expr, name) {
 	}
 	let returnIndex;
 	let maxPc = -1;
-	for (let i$6 = 0; i$6 < state.historySourceMap.length; i$6++) {
+	for (let i$6 = historyStartIndex; i$6 < state.historySourceMap.length; i$6++) {
 		const entry = state.historySourceMap[i$6];
 		if (entry.__finalFunctionId === functionId && entry.pc > maxPc) {
 			maxPc = entry.pc;
@@ -33153,6 +35924,21 @@ var COMPOUND_ASSIGN_OP_TO_OPCODE = {
 };
 function variableBindingKey(scope, index) {
 	return `${scope}:${index}`;
+}
+function clearVariableInferenceByBindingKey(state, bindingKey, includeFunctionBinding) {
+	if (includeFunctionBinding) state.variableFunctionIds.delete(bindingKey);
+	state.objectKeysByBinding.delete(bindingKey);
+	state.objectPropertyStoreShapesByBinding.delete(bindingKey);
+	state.arrayElementObjectKeysByBinding.delete(bindingKey);
+	state.arrayElementObjectPropertyStoreShapesByBinding.delete(bindingKey);
+	state.storeShapesByBinding.delete(bindingKey);
+}
+function clearVariableInferenceMetadata(state, varInfo, opts = {}) {
+	const includeFunctionBinding = opts.includeFunctionBinding !== false;
+	clearVariableInferenceByBindingKey(state, variableBindingKey(varInfo.scope, varInfo.index), includeFunctionBinding);
+	if (varInfo.scope !== "closure") return;
+	clearVariableInferenceByBindingKey(state, variableBindingKey("local", varInfo.index), includeFunctionBinding);
+	clearVariableInferenceByBindingKey(state, variableBindingKey("global", varInfo.index), includeFunctionBinding);
 }
 function clearVariableFunctionBinding(state, varInfo) {
 	state.variableFunctionIds.delete(variableBindingKey(varInfo.scope, varInfo.index));
@@ -33253,8 +36039,13 @@ function clearVariableArrayElementObjectPropertyStoreShapes(state, varInfo) {
 		state.arrayElementObjectPropertyStoreShapesByBinding.delete(variableBindingKey("global", varInfo.index));
 	}
 }
-function getFunctionInfoById$1(state, functionId) {
-	for (const info of state.functions) if (info.id === functionId) return info;
+function getFunctionInfoById$2(state, functionId) {
+	const byIndex = state.functions[functionId];
+	if (byIndex && byIndex.id === functionId) return byIndex;
+	for (let i$6 = 0; i$6 < state.functions.length; i$6++) {
+		const info = state.functions[i$6];
+		if (info.id === functionId) return info;
+	}
 }
 function resolveFunctionInfoByAlias(state, funcName) {
 	let info = getFunctionByName(state, funcName);
@@ -33347,7 +36138,7 @@ function getFunctionReturnObjectKeysForIdentifier(state, calleeName) {
 	if (varInfo) {
 		const functionId = getFunctionIdForVarInfo(state, varInfo);
 		if (functionId !== void 0) {
-			const infoById = getFunctionInfoById$1(state, functionId);
+			const infoById = getFunctionInfoById$2(state, functionId);
 			if (infoById?.returnObjectKeys) return [...infoById.returnObjectKeys];
 		}
 	}
@@ -33363,6 +36154,11 @@ function sameObjectKeySequence(a$35, b$4) {
 	if (a$35.length !== b$4.length) return false;
 	for (let i$6 = 0; i$6 < a$35.length; i$6++) if (a$35[i$6] !== b$4[i$6]) return false;
 	return true;
+}
+function buildObjectKeyIndexMap(keys) {
+	const out = /* @__PURE__ */ new Map();
+	for (let i$6 = 0; i$6 < keys.length; i$6++) out.set(keys[i$6], i$6);
+	return out;
 }
 function getNthPositionalArgValue(args, ordinal) {
 	let index = 0;
@@ -33758,10 +36554,11 @@ function compileAssign(state, expr) {
 				error(state, "Object destructuring assignment requires known object shape", expr.loc);
 				return;
 			}
+			const objectKeyIndexByName = buildObjectKeyIndexMap(objectKeys);
 			elementIndexes = [];
 			for (const name of names) {
-				const propertyIndex = objectKeys.indexOf(name);
-				if (propertyIndex < 0) {
+				const propertyIndex = objectKeyIndexByName.get(name);
+				if (propertyIndex === void 0) {
 					error(state, `Unknown object property: ${name}`, left.loc);
 					return;
 				}
@@ -33787,12 +36584,7 @@ function compileAssign(state, expr) {
 			stack.pop();
 			stack.push(stackRight);
 			const varInfo = declareVariable(state, name, left.loc, shadow);
-			clearVariableFunctionBinding(state, varInfo);
-			clearVariableObjectShape(state, varInfo);
-			clearVariableObjectPropertyStoreShapes(state, varInfo);
-			clearVariableArrayElementObjectKeys(state, varInfo);
-			clearVariableArrayElementObjectPropertyStoreShapes(state, varInfo);
-			clearVariableStoreShape(state, varInfo);
+			if (!shadow) clearVariableInferenceMetadata(state, varInfo);
 			compileSetVariable(state, varInfo, left);
 			stack.pop();
 		}
@@ -33837,11 +36629,7 @@ function compileAssign(state, expr) {
 		if (stack.length === 0) return;
 		const varInfo = declareVariable(state, leftName, expr.loc);
 		setVariableFunctionBinding(state, varInfo, functionId);
-		clearVariableObjectShape(state, varInfo);
-		clearVariableObjectPropertyStoreShapes(state, varInfo);
-		clearVariableArrayElementObjectKeys(state, varInfo);
-		clearVariableArrayElementObjectPropertyStoreShapes(state, varInfo);
-		clearVariableStoreShape(state, varInfo);
+		clearVariableInferenceMetadata(state, varInfo, { includeFunctionBinding: false });
 		ops.push(AudioVmOp.Dup);
 		stack.push({ expr: right });
 		compileSetVariable(state, varInfo, left);
@@ -33893,8 +36681,8 @@ function compileAssign(state, expr) {
 			return;
 		}
 		if (storeShape?.kind === "object") {
-			const propertyIndex$1 = storeShape.keys.indexOf(left.property);
-			if (propertyIndex$1 < 0) {
+			const propertyIndex$1 = buildObjectKeyIndexMap(storeShape.keys).get(left.property);
+			if (propertyIndex$1 === void 0) {
 				error(state, `Unknown store object property: ${left.property}`, left.loc);
 				return;
 			}
@@ -33919,8 +36707,8 @@ function compileAssign(state, expr) {
 			error(state, `Property write requires known object shape: ${left.property}`, left.loc);
 			return;
 		}
-		const propertyIndex = objectKeys.indexOf(left.property);
-		if (propertyIndex < 0) {
+		const propertyIndex = buildObjectKeyIndexMap(objectKeys).get(left.property);
+		if (propertyIndex === void 0) {
 			error(state, `Unknown object property: ${left.property}`, left.loc);
 			return;
 		}
@@ -34046,11 +36834,7 @@ function compileAssign(state, expr) {
 		const functionId = compileFunction(state, right, leftName);
 		if (stack.length === 0) return;
 		setVariableFunctionBinding(state, varInfo, functionId);
-		clearVariableObjectShape(state, varInfo);
-		clearVariableObjectPropertyStoreShapes(state, varInfo);
-		clearVariableArrayElementObjectKeys(state, varInfo);
-		clearVariableArrayElementObjectPropertyStoreShapes(state, varInfo);
-		clearVariableStoreShape(state, varInfo);
+		if (!shadow) clearVariableInferenceMetadata(state, varInfo, { includeFunctionBinding: false });
 		ops.push(AudioVmOp.Dup);
 		stack.push({ expr: right });
 		compileSetVariable(state, varInfo, left);
@@ -34059,15 +36843,21 @@ function compileAssign(state, expr) {
 		return;
 	}
 	if (op === "=" || op === ":=") {
-		const aliasFunctionId = left.type === "identifier" && right.type === "identifier" && hasFunctionByName(state, right.name) ? getFunctionByName(state, right.name)?.id : void 0;
-		const inferredObjectKeys = left.type === "identifier" ? getObjectKeysForExpr(state, right) : null;
-		const inferredObjectPropertyStoreShapes = left.type === "identifier" ? getObjectPropertyStoreShapesForExpr(state, right) : null;
-		const inferredArrayElementObjectKeys = left.type === "identifier" ? getArrayElementObjectKeysForExpr(state, right) : null;
-		const inferredArrayElementObjectPropertyStoreShapes = left.type === "identifier" ? getArrayElementObjectPropertyStoreShapesForExpr(state, right) : null;
-		const inferredStoreShape = left.type === "identifier" ? getStoreShapeForExpr(state, right) : null;
+		let aliasFunctionId;
+		if (left.type === "identifier" && right.type === "identifier") {
+			const rightVarInfo = lookupVariable(state, right.name);
+			if (rightVarInfo) aliasFunctionId = getFunctionIdForVarInfo(state, rightVarInfo);
+			if (aliasFunctionId === void 0) aliasFunctionId = getFunctionByName(state, right.name)?.id;
+		}
+		const canInferShapes = left.type === "identifier" && right.type !== "number" && right.type !== "string" && right.type !== "fn";
+		const inferredObjectKeys = canInferShapes ? getObjectKeysForExpr(state, right) : null;
+		const inferredObjectPropertyStoreShapes = canInferShapes ? getObjectPropertyStoreShapesForExpr(state, right) : null;
+		const inferredArrayElementObjectKeys = canInferShapes ? getArrayElementObjectKeysForExpr(state, right) : null;
+		const inferredArrayElementObjectPropertyStoreShapes = canInferShapes ? getArrayElementObjectPropertyStoreShapesForExpr(state, right) : null;
+		const inferredStoreShape = canInferShapes ? getStoreShapeForExpr(state, right) : null;
 		if (left.type === "identifier" && right.type === "array") state.varToArrayLiteral.set(left.name, right);
 		if (left.type === "identifier" && right.type === "object") state.varToObjectLiteral.set(left.name, right);
-		if (left.type === "identifier" && right.type === "identifier" && hasFunctionByName(state, right.name)) state.functionAliases.set(left.name, right.name);
+		if (left.type === "identifier" && right.type === "identifier" && aliasFunctionId !== void 0) state.functionAliases.set(left.name, right.name);
 		compileExpr(state, right);
 		if (stack.length === 0) {
 			error(state, "Assignment has no value", expr.loc);
@@ -34075,12 +36865,7 @@ function compileAssign(state, expr) {
 		}
 		const shadow = op === ":=";
 		const varInfo = declareVariable(state, left.name, expr.loc, shadow);
-		clearVariableFunctionBinding(state, varInfo);
-		clearVariableObjectShape(state, varInfo);
-		clearVariableObjectPropertyStoreShapes(state, varInfo);
-		clearVariableArrayElementObjectKeys(state, varInfo);
-		clearVariableArrayElementObjectPropertyStoreShapes(state, varInfo);
-		clearVariableStoreShape(state, varInfo);
+		if (!shadow) clearVariableInferenceMetadata(state, varInfo);
 		if (aliasFunctionId !== void 0) setVariableFunctionBinding(state, varInfo, aliasFunctionId);
 		if (inferredObjectKeys) setVariableObjectShape(state, varInfo, inferredObjectKeys);
 		if (inferredObjectPropertyStoreShapes) setVariableObjectPropertyStoreShapes(state, varInfo, inferredObjectPropertyStoreShapes);
@@ -34114,12 +36899,7 @@ function compileAssign(state, expr) {
 		}
 		ops.push(AudioVmOp.Dup);
 		stack.push(stackExpr);
-		clearVariableFunctionBinding(state, varInfo);
-		clearVariableObjectShape(state, varInfo);
-		clearVariableObjectPropertyStoreShapes(state, varInfo);
-		clearVariableArrayElementObjectKeys(state, varInfo);
-		clearVariableArrayElementObjectPropertyStoreShapes(state, varInfo);
-		clearVariableStoreShape(state, varInfo);
+		clearVariableInferenceMetadata(state, varInfo);
 		compileSetVariable(state, varInfo, left);
 		stack.pop();
 		stack.push(stackExpr);
@@ -35046,8 +37826,8 @@ function tokensToNodesInternal(tokens, input, fallbackRootMidi, fallbackScaleInd
 				nodes.pop();
 				const safeSteps = Number.isFinite(steps) && steps > 0 ? steps : 0;
 				for (let si = 0; si < safeSteps; si++) {
-					const on$2 = euclidHit(pulses, steps, si, offset);
-					nodes.push(cloneEventNode(last, spanSource, on$2 ? last.values.slice() : []));
+					const on$3 = euclidHit(pulses, steps, si, offset);
+					nodes.push(cloneEventNode(last, spanSource, on$3 ? last.values.slice() : []));
 				}
 				continue;
 			}
@@ -35170,7 +37950,7 @@ function tokensToNodesInternal(tokens, input, fallbackRootMidi, fallbackScaleInd
 			}
 		}
 		if (/^\d+(?:,\d+)*$/.test(valueText)) {
-			const values$1 = valueText.split(",").filter(Boolean).map((p$7) => -parseInt(p$7, 10));
+			const values$1 = valueText.split(",").filter(Boolean).map((p$8) => -parseInt(p$8, 10));
 			const modifiers$1 = parseModifiers(mods);
 			nodes.push({
 				type: "event",
@@ -35447,6 +38227,54 @@ function hashFunctionBytecodeSegment(ops, startPc, segLen) {
 	}
 	return `${segLen},${h1 >>> 0},${h2 >>> 0}`;
 }
+function scanToNextOp(ops, pc, limit) {
+	if (pc >= limit) return pc;
+	const value = ops[pc];
+	if (!isOpcode(value)) return pc + 1;
+	const info = getOpcodeInfo(value);
+	pc++;
+	switch (info.kind) {
+		case "pc-param":
+		case "param": return pc < limit ? pc + 1 : pc;
+		case "three-param": return Math.min(limit, pc + 3);
+		case "table":
+			if (pc >= limit) return pc;
+			return Math.min(limit, pc + 1 + Math.max(0, Math.round(ops[pc])));
+		case "define-function":
+			if (pc + 5 >= limit) return limit;
+			return Math.min(limit, pc + 6 + Math.max(0, Math.round(ops[pc + 5])));
+		case "none": return pc;
+	}
+}
+function buildEncodedDefineFunctionSegmentCache(ops) {
+	const out = /* @__PURE__ */ new Map();
+	const limit = ops.length;
+	let pc = 0;
+	while (pc < limit) {
+		const value = ops[pc];
+		if (!isOpcode(value)) {
+			pc++;
+			continue;
+		}
+		if (getOpcodeInfo(value).kind !== "define-function") {
+			pc = scanToNextOp(ops, pc, limit);
+			continue;
+		}
+		const headerPc = pc + 1;
+		if (headerPc + 5 >= limit) break;
+		const functionId = Math.round(ops[headerPc]);
+		const segLen = 6 + Math.max(0, Math.round(ops[headerPc + 5]));
+		const segEnd = headerPc + segLen;
+		if (segEnd > limit) break;
+		const segOps = ops.slice(headerPc, segEnd);
+		const buffer = /* @__PURE__ */ new ArrayBuffer(segLen * 4);
+		const u32View = new Uint32Array(buffer);
+		encodeFunctionBytecode(segOps, u32View, new Float32Array(buffer), 0, segLen);
+		out.set(functionId, u32View);
+		pc = segEnd;
+	}
+	return out;
+}
 function patchPcParamsInRange(ops, startIndex, delta) {
 	let pc = startIndex;
 	const limit = ops.length;
@@ -35491,8 +38319,20 @@ function getVal(ops, pc, patchMap, add) {
 	const v$4 = patchMap.get(pc);
 	return v$4 !== void 0 ? v$4 : ops[pc] + add;
 }
-function encodeFunctionBytecode(ops, u32View, f32View, pc, limit, outputOffset = 0, jumpTargetAdd = 0, patchMap) {
+function encodeFunctionBytecode(ops, u32View, f32View, pc, limit, outputOffset = 0, jumpTargetAdd = 0, patchMap, preencodedDefineFunctionSegmentsById) {
 	const startPc = pc;
+	if (patchMap == null && preencodedDefineFunctionSegmentsById && pc + 6 <= limit) {
+		const functionId = Math.round(ops[pc]);
+		const segLen = 6 + Math.max(0, Math.round(ops[pc + 5]));
+		const segEnd = pc + segLen;
+		if (segEnd <= limit) {
+			const preencoded = preencodedDefineFunctionSegmentsById.get(functionId);
+			if (preencoded && preencoded.length === segLen) {
+				u32View.set(preencoded, outputOffset + pc);
+				return segEnd;
+			}
+		}
+	}
 	const canCache = patchMap == null && pc + 6 <= limit;
 	let cacheKey = null;
 	let cacheSegLen = 0;
@@ -35566,7 +38406,7 @@ function encodeFunctionBytecode(ops, u32View, f32View, pc, limit, outputOffset =
 				break;
 			}
 			case "define-function":
-				pc = encodeFunctionBytecode(ops, u32View, f32View, pc, Math.min(limit, bodyEnd), outputOffset, jumpTargetAdd, patchMap);
+				pc = encodeFunctionBytecode(ops, u32View, f32View, pc, Math.min(limit, bodyEnd), outputOffset, jumpTargetAdd, patchMap, preencodedDefineFunctionSegmentsById);
 				break;
 		}
 	}
@@ -35576,7 +38416,7 @@ function encodeFunctionBytecode(ops, u32View, f32View, pc, limit, outputOffset =
 	}
 	return pc;
 }
-function encodeToBuffer(ops, u32View, f32View, outputOffset, jumpTargetAdd, patchMap) {
+function encodeToBuffer(ops, u32View, f32View, outputOffset, jumpTargetAdd, patchMap, preencodedDefineFunctionSegmentsById) {
 	const limit = ops.length;
 	let pc = 0;
 	while (pc < limit) {
@@ -35624,7 +38464,7 @@ function encodeToBuffer(ops, u32View, f32View, outputOffset, jumpTargetAdd, patc
 				break;
 			}
 			case "define-function":
-				pc = encodeFunctionBytecode(ops, u32View, f32View, pc, limit, outputOffset, jumpTargetAdd, patchMap);
+				pc = encodeFunctionBytecode(ops, u32View, f32View, pc, limit, outputOffset, jumpTargetAdd, patchMap, preencodedDefineFunctionSegmentsById);
 				break;
 		}
 	}
@@ -35638,6 +38478,24 @@ function encodeCallbackBytecode(ops) {
 	const f32View = new Float32Array(buffer);
 	encodeBytecode(ops, u32View, f32View);
 	return f32View;
+}
+var preludeFunctionIdsCache = /* @__PURE__ */ new WeakMap();
+function getPreludeFunctionIds(state) {
+	const cached = preludeFunctionIdsCache.get(state);
+	if (cached && cached.preludeLines === state.preludeLines && cached.functionCount === state.functions.length) return cached.ids;
+	const ids = /* @__PURE__ */ new Set();
+	for (const fn$1 of state.functions) if (fn$1.definitionLine != null && fn$1.definitionLine <= state.preludeLines) ids.add(fn$1.id);
+	preludeFunctionIdsCache.set(state, {
+		preludeLines: state.preludeLines,
+		functionCount: state.functions.length,
+		ids
+	});
+	return ids;
+}
+function getFunctionInfoById$1(state, functionId) {
+	const byIndex = state.functions[functionId];
+	if (byIndex && byIndex.id === functionId) return byIndex;
+	for (const info of state.functions) if (info.id === functionId) return info;
 }
 function collectGlobalIndicesFromOps(ops, start, end, out) {
 	let pc = start;
@@ -35757,25 +38615,37 @@ function collectCalleeNamesFromStmt(stmt, out) {
 	const withValue = stmt;
 	if (withValue.value && typeof withValue.value === "object" && "type" in withValue.value) collectCalleeNamesFromBody(withValue.value, out);
 }
+function findParamIndexByPrefix$1(params, prefix) {
+	for (let i$6 = 0; i$6 < params.length; i$6++) if (params[i$6].startsWith(prefix)) return i$6;
+	return -1;
+}
+function hasOwnEnumerableKeys(value) {
+	if (!value) return false;
+	for (const _key in value) return true;
+	return false;
+}
 function matchCallArgsToParams(callExpr, params) {
 	const paramCount = params.length;
 	const matchedArgs = new Array(paramCount).fill(null);
+	const paramIndexByName = /* @__PURE__ */ new Map();
+	for (let i$6 = 0; i$6 < paramCount; i$6++) paramIndexByName.set(params[i$6], i$6);
+	const prefixMatchCache = /* @__PURE__ */ new Map();
 	let positionalIndex = 0;
 	for (let i$6 = 0; i$6 < callExpr.args.length; i$6++) {
 		const arg = callExpr.args[i$6];
 		if (!arg || arg.type !== "arg") continue;
 		if (arg.name) {
-			let matchedParamIndex = -1;
-			for (let j$4 = 0; j$4 < params.length; j$4++) if (params[j$4].startsWith(arg.name)) {
-				matchedParamIndex = j$4;
-				break;
+			let matchedParamIndex = prefixMatchCache.get(arg.name);
+			if (matchedParamIndex === void 0) {
+				matchedParamIndex = findParamIndexByPrefix$1(params, arg.name);
+				prefixMatchCache.set(arg.name, matchedParamIndex);
 			}
 			if (matchedParamIndex === -1 || matchedArgs[matchedParamIndex] !== null) continue;
 			matchedArgs[matchedParamIndex] = arg.value;
 			continue;
 		}
 		if (arg.shorthand && arg.value.type === "identifier") {
-			const shorthandParamIndex = params.indexOf(arg.value.name);
+			const shorthandParamIndex = paramIndexByName.get(arg.value.name) ?? -1;
 			if (shorthandParamIndex !== -1 && matchedArgs[shorthandParamIndex] === null) {
 				matchedArgs[shorthandParamIndex] = arg.value;
 				continue;
@@ -35875,9 +38745,8 @@ function processRecordCall(state, callExpr, callbackId, templateLocKey) {
 	const savedStack = state.stack;
 	const savedLocals = state.locals;
 	const savedClosureVars = state.closureVars;
-	const savedGlobals = new Map(state.globals);
+	const savedGlobals = state.globals;
 	const resolveToCanonical = (n$4) => state.functionAliases.get(n$4) ?? n$4;
-	const isPreludeFunction = (info) => info.definitionLine != null && info.definitionLine <= state.preludeLines;
 	const hasGlobalFnCache = /* @__PURE__ */ new Map();
 	const hasGlobalFn = (name) => {
 		if (hasGlobalFnCache.has(name)) return hasGlobalFnCache.get(name);
@@ -35888,6 +38757,7 @@ function processRecordCall(state, callExpr, callbackId, templateLocKey) {
 	const globalFnMap = state.functionsByNameStack[0];
 	const funcIdToGlobalName = /* @__PURE__ */ new Map();
 	for (const [name, info] of globalFnMap) funcIdToGlobalName.set(info.id, name);
+	const preludeFunctionIds = getPreludeFunctionIds(state);
 	const canonicalToAliases = /* @__PURE__ */ new Map();
 	for (const [alias, target] of state.functionAliases) {
 		const existing = canonicalToAliases.get(target);
@@ -35907,12 +38777,15 @@ function processRecordCall(state, callExpr, callbackId, templateLocKey) {
 		const canonical = resolveToCanonical(name);
 		if (canonical !== name && hasGlobalFn(canonical)) enqueueRequired(canonical);
 	};
+	const requiredGlobalFunctionIds = /* @__PURE__ */ new Set();
 	const tmpCallees = /* @__PURE__ */ new Set();
+	const indices = /* @__PURE__ */ new Set();
 	while (requiredQueue.length > 0) {
 		const name = requiredQueue.pop();
 		enqueueCanonicalIfGlobal(name);
 		const funcInfo = globalFnMap.get(name);
 		if (!funcInfo) continue;
+		requiredGlobalFunctionIds.add(funcInfo.id);
 		for (const defaultExpr of funcInfo.defaultParamExprs ?? []) {
 			if (!defaultExpr) continue;
 			tmpCallees.clear();
@@ -35924,7 +38797,7 @@ function processRecordCall(state, callExpr, callbackId, templateLocKey) {
 		}
 		const bytecode$1 = state.functionBytecodes.get(funcInfo.id);
 		if (!bytecode$1) continue;
-		const indices = /* @__PURE__ */ new Set();
+		indices.clear();
 		collectGlobalIndicesFromOps(bytecode$1, 0, bytecode$1.length, indices);
 		for (const idx of indices) {
 			const refName = indexToName.get(idx);
@@ -35941,12 +38814,10 @@ function processRecordCall(state, callExpr, callbackId, templateLocKey) {
 		defaultParamFnToRecordGlobal.set(defaultFnId, recordGlobalIdx);
 		enclosingDefaultParamNameToSlot.set(paramName, recordGlobalIdx);
 	}
-	for (const funcInfo of state.functions) {
-		const fnName = funcIdToGlobalName.get(funcInfo.id);
-		const isRequired = fnName !== void 0 && requiredNames.has(fnName);
-		const isPrelude = isPreludeFunction(funcInfo);
-		if (!isRequired && !isPrelude) continue;
-		const thisDefaultParams = state.functionIdToDefaultParamFunctions.get(funcInfo.id);
+	const defaultParamSourceFunctionIds = new Set(preludeFunctionIds);
+	for (const fnId of requiredGlobalFunctionIds) defaultParamSourceFunctionIds.add(fnId);
+	for (const fnId of defaultParamSourceFunctionIds) {
+		const thisDefaultParams = state.functionIdToDefaultParamFunctions.get(fnId);
 		if (!thisDefaultParams) continue;
 		for (const [paramName, defaultFnId] of thisDefaultParams) {
 			if (defaultParamFnToRecordGlobal.has(defaultFnId)) continue;
@@ -35961,9 +38832,12 @@ function processRecordCall(state, callExpr, callbackId, templateLocKey) {
 	const requiredLocalFunctionIds = /* @__PURE__ */ new Set();
 	const localFunctionTargetGlobals = /* @__PURE__ */ new Map();
 	const scalarCaptureSources = [];
-	const functionInfoById = /* @__PURE__ */ new Map();
-	for (const fn$1 of state.functions) functionInfoById.set(fn$1.id, fn$1);
 	const toCaptureSourceIndex = (scope, sourceIndex, closureIndex) => scope === "closure" ? closureIndex ?? sourceIndex : sourceIndex;
+	const addLocalFunctionTargetGlobal = (functionId, recordGlobalIdx) => {
+		const existing = localFunctionTargetGlobals.get(functionId);
+		if (existing) existing.add(recordGlobalIdx);
+		else localFunctionTargetGlobals.set(functionId, new Set([recordGlobalIdx]));
+	};
 	for (const { name, info } of capturedVars) capturedInfoByName.set(name, info);
 	const resolveCapturedInfo = (name) => {
 		const cached = capturedInfoByName.get(name);
@@ -36021,9 +38895,7 @@ function processRecordCall(state, callExpr, callbackId, templateLocKey) {
 		const capturedFunctionId = calleeNames.has(name) ? getFunctionIdForVarInfo(state, info) : void 0;
 		if (capturedFunctionId !== void 0) {
 			requiredLocalFunctionIds.add(capturedFunctionId);
-			const existing = localFunctionTargetGlobals.get(capturedFunctionId);
-			if (existing) existing.push(recordGlobalIdx);
-			else localFunctionTargetGlobals.set(capturedFunctionId, [recordGlobalIdx]);
+			addLocalFunctionTargetGlobal(capturedFunctionId, recordGlobalIdx);
 			continue;
 		}
 		scalarCaptureSources.push({
@@ -36033,15 +38905,14 @@ function processRecordCall(state, callExpr, callbackId, templateLocKey) {
 	}
 	const closureFnQueue = [];
 	const closureFnSeen = /* @__PURE__ */ new Set();
-	for (const funcInfo of state.functions) {
-		const fnName = funcIdToGlobalName.get(funcInfo.id);
-		if (fnName !== void 0 && requiredNames.has(fnName) || defaultParamFnToRecordGlobal.has(funcInfo.id) || requiredLocalFunctionIds.has(funcInfo.id)) closureFnQueue.push(funcInfo.id);
-	}
+	for (const fnId of requiredGlobalFunctionIds) closureFnQueue.push(fnId);
+	for (const fnId of defaultParamFnToRecordGlobal.keys()) closureFnQueue.push(fnId);
+	for (const fnId of requiredLocalFunctionIds) closureFnQueue.push(fnId);
 	while (closureFnQueue.length > 0) {
 		const fnId = closureFnQueue.pop();
 		if (closureFnSeen.has(fnId)) continue;
 		closureFnSeen.add(fnId);
-		const funcInfo = functionInfoById.get(fnId);
+		const funcInfo = getFunctionInfoById$1(state, fnId);
 		if (!funcInfo || !(funcInfo.closureVars?.length ?? 0)) continue;
 		for (const name of funcInfo.closureVars) {
 			if (capturedVarMapping.has(name)) continue;
@@ -36060,9 +38931,7 @@ function processRecordCall(state, callExpr, callbackId, templateLocKey) {
 			const capturedFunctionId = getFunctionIdForVarInfo(state, info);
 			if (capturedFunctionId !== void 0) {
 				requiredLocalFunctionIds.add(capturedFunctionId);
-				const existing = localFunctionTargetGlobals.get(capturedFunctionId);
-				if (existing) existing.push(recordGlobalIdx);
-				else localFunctionTargetGlobals.set(capturedFunctionId, [recordGlobalIdx]);
+				addLocalFunctionTargetGlobal(capturedFunctionId, recordGlobalIdx);
 				if (!closureFnSeen.has(capturedFunctionId)) closureFnQueue.push(capturedFunctionId);
 				continue;
 			}
@@ -36118,9 +38987,13 @@ function processRecordCall(state, callExpr, callbackId, templateLocKey) {
 	const setupOps = [];
 	state.stack = [];
 	let maxSetupGlobalIndex = -1;
+	const setupFunctionIds = new Set(preludeFunctionIds);
+	for (const fnId of requiredGlobalFunctionIds) setupFunctionIds.add(fnId);
+	for (const fnId of defaultParamFnToRecordGlobal.keys()) setupFunctionIds.add(fnId);
+	for (const fnId of requiredLocalFunctionIds) setupFunctionIds.add(fnId);
 	for (const funcInfo of state.functions) {
+		if (!setupFunctionIds.has(funcInfo.id)) continue;
 		const fnName = funcIdToGlobalName.get(funcInfo.id);
-		if (!(fnName !== void 0 && requiredNames.has(fnName) || defaultParamFnToRecordGlobal.has(funcInfo.id) || requiredLocalFunctionIds.has(funcInfo.id)) && !isPreludeFunction(funcInfo)) continue;
 		const funcBytecode = state.functionBytecodes.get(funcInfo.id);
 		if (!funcBytecode) continue;
 		const closureCount = funcInfo.closureVars ? funcInfo.closureVars.length : 0;
@@ -36150,28 +39023,39 @@ function processRecordCall(state, callExpr, callbackId, templateLocKey) {
 		for (let k$4 = 0; k$4 < funcBytecode.length; k$4++) setupOps.push(funcBytecode[k$4]);
 		const recordGlobalForDefaultParam = defaultParamFnToRecordGlobal.get(funcInfo.id);
 		if (!fnName) {
-			const indicesToSet$1 = [...localFunctionTargetGlobals.get(funcInfo.id) ?? []];
-			if (recordGlobalForDefaultParam !== void 0 && !indicesToSet$1.includes(recordGlobalForDefaultParam)) indicesToSet$1.push(recordGlobalForDefaultParam);
-			if (indicesToSet$1.length === 0) {
+			const indicesToSet$1 = localFunctionTargetGlobals.get(funcInfo.id);
+			if (recordGlobalForDefaultParam !== void 0) if (indicesToSet$1) indicesToSet$1.add(recordGlobalForDefaultParam);
+			else localFunctionTargetGlobals.set(funcInfo.id, new Set([recordGlobalForDefaultParam]));
+			const targetGlobals = localFunctionTargetGlobals.get(funcInfo.id);
+			if (!targetGlobals || targetGlobals.size === 0) {
 				setupOps.push(AudioVmOp.Pop);
 				continue;
 			}
-			for (let i$6 = 0; i$6 < indicesToSet$1.length; i$6++) {
-				if (i$6 < indicesToSet$1.length - 1) setupOps.push(AudioVmOp.Dup);
-				const idx = indicesToSet$1[i$6];
+			let targetIndex = 0;
+			const lastTargetIndex = targetGlobals.size - 1;
+			for (const idx of targetGlobals) {
+				if (targetIndex < lastTargetIndex) setupOps.push(AudioVmOp.Dup);
 				if (idx > maxSetupGlobalIndex) maxSetupGlobalIndex = idx;
 				setupOps.push(AudioVmOp.SetGlobal);
 				setupOps.push(idx);
+				targetIndex++;
 			}
 			continue;
 		}
 		const targetNames = [fnName].concat(canonicalToAliases.get(fnName) ?? []);
 		const indicesToSet = [];
+		const seenTargetIndices = /* @__PURE__ */ new Set();
 		for (const name of targetNames) {
 			const globalInfo = savedGlobals.get(name);
-			if (globalInfo?.scope === "global") indicesToSet.push(globalInfo.index);
+			if (globalInfo?.scope === "global" && !seenTargetIndices.has(globalInfo.index)) {
+				seenTargetIndices.add(globalInfo.index);
+				indicesToSet.push(globalInfo.index);
+			}
 			const capturedIdx = capturedVarMapping.get(name);
-			if (capturedIdx !== void 0) indicesToSet.push(capturedIdx);
+			if (capturedIdx !== void 0 && !seenTargetIndices.has(capturedIdx)) {
+				seenTargetIndices.add(capturedIdx);
+				indicesToSet.push(capturedIdx);
+			}
 		}
 		for (let i$6 = 0; i$6 < indicesToSet.length; i$6++) {
 			if (i$6 < indicesToSet.length - 1) setupOps.push(AudioVmOp.Dup);
@@ -36240,7 +39124,7 @@ function processRecordCallSite(state, callExpr, funcName, funcInfo, callSiteId) 
 	let setupBytecode = template.setup;
 	const defaultParamSlotsByName = template.defaultParamRecordGlobalsByName;
 	const capturedSlotsByName = template.capturedRecordGlobalsByName;
-	if (defaultParamSlotsByName && Object.keys(defaultParamSlotsByName).length > 0 || capturedSlotsByName && Object.keys(capturedSlotsByName).length > 0) {
+	if (hasOwnEnumerableKeys(defaultParamSlotsByName) || hasOwnEnumerableKeys(capturedSlotsByName)) {
 		const matchedArgs = matchCallArgsToParams(callExpr, funcInfo.params);
 		const overrideOps = [];
 		for (let i$6 = 0; i$6 < funcInfo.params.length; i$6++) {
@@ -36625,6 +39509,7 @@ var primarySpecByGenKey = Object.create(null);
 var opCodeByGenKey = Object.create(null);
 var paramHasByGenKey = Object.create(null);
 var defaultsByGenName = Object.create(null);
+var primaryGeneratorByCallNameCache = /* @__PURE__ */ new Map();
 var typePredOpByName = {
 	isundefined: AudioVmOp.IsUndefined,
 	isscalar: AudioVmOp.IsScalar,
@@ -36635,7 +39520,7 @@ var typePredOpByName = {
 var PLAY_CALLBACK_OBJECT_KEYS = ["hz", "trig"];
 for (const [genName, desc] of Object.entries(gens)) {
 	const out = Object.create(null);
-	for (const p$7 of desc.parameters) if (p$7.default !== void 0) out[p$7.name] = p$7.default;
+	for (const p$8 of desc.parameters) if (p$8.default !== void 0) out[p$8.name] = p$8.default;
 	defaultsByGenName[genName] = out;
 }
 for (const s$4 of genSpecs) {
@@ -36649,6 +39534,19 @@ for (const s$4 of genSpecs) {
 	const opCode = AudioVmOp[`Gen${s$4.genName}_${s$4.variantName}`];
 	if (opCode !== void 0) opCodeByGenKey[key] = opCode;
 }
+function resolvePrimaryGeneratorByCallName(funcName) {
+	const cached = primaryGeneratorByCallNameCache.get(funcName);
+	if (cached !== void 0) return cached;
+	const variantGenName = primaryGenNameByVariantName[funcName];
+	const genKey = `${variantGenName ?? funcName.charAt(0).toUpperCase() + funcName.slice(1)}${GEN_KEY_SEP}${variantGenName ? funcName : "default"}`;
+	const spec = primarySpecByGenKey[genKey];
+	const resolved = spec ? {
+		genKey,
+		spec
+	} : null;
+	primaryGeneratorByCallNameCache.set(funcName, resolved);
+	return resolved;
+}
 function callNameFromCallee(callee) {
 	if (callee.type === "identifier") return callee.name;
 	if (callee.type === "member") return callee.property;
@@ -36658,13 +39556,39 @@ function callNameFromCallee(callee) {
 function bestEffortArgs(args) {
 	const out = {};
 	let pos = 0;
-	for (const a$35 of args) {
-		if (a$35.type !== "arg" || !a$35.value) continue;
+	for (let i$6 = 0; i$6 < args.length; i$6++) {
+		const a$35 = args[i$6];
 		const key = a$35.name ?? String(pos++);
 		if (!out[key]) out[key] = [];
 		out[key].push(a$35.value);
 	}
 	return out;
+}
+function countProvidedArgs(args) {
+	return args.length;
+}
+function hasNamedArgument(args) {
+	for (let i$6 = 0; i$6 < args.length; i$6++) {
+		const arg = args[i$6];
+		if (arg.name) return true;
+		if (arg.shorthand && arg.value.type === "identifier") return true;
+	}
+	return false;
+}
+function getArgValue(args, index) {
+	return args[index]?.value ?? null;
+}
+function shouldUseNamedMatchingForGeneratorArgs(args, paramHas) {
+	for (let i$6 = 0; i$6 < args.length; i$6++) {
+		const arg = args[i$6];
+		if (arg.name) return true;
+		if (arg.shorthand && arg.value.type === "identifier" && paramHas[arg.value.name]) return true;
+	}
+	return false;
+}
+function findParamIndexByPrefix(params, prefix) {
+	for (let i$6 = 0; i$6 < params.length; i$6++) if (params[i$6].startsWith(prefix)) return i$6;
+	return -1;
 }
 function exprContainsArrayOrObjectLiteral(expr) {
 	switch (expr.type) {
@@ -36675,7 +39599,7 @@ function exprContainsArrayOrObjectLiteral(expr) {
 		case "ternary": return exprContainsArrayOrObjectLiteral(expr.test) || exprContainsArrayOrObjectLiteral(expr.then) || exprContainsArrayOrObjectLiteral(expr.else);
 		case "call":
 			if (exprContainsArrayOrObjectLiteral(expr.callee)) return true;
-			for (const arg of expr.args) if (arg.type === "arg" && arg.value && exprContainsArrayOrObjectLiteral(arg.value)) return true;
+			for (const arg of expr.args) if (exprContainsArrayOrObjectLiteral(arg.value)) return true;
 			return false;
 		case "index": return exprContainsArrayOrObjectLiteral(expr.object) || exprContainsArrayOrObjectLiteral(expr.index);
 		case "member": return exprContainsArrayOrObjectLiteral(expr.object);
@@ -36687,7 +39611,7 @@ function getValidatedStoreInitExpr(state, callExpr, args) {
 		error(state, "store(init) requires exactly 1 argument", callExpr.loc);
 		return null;
 	}
-	const initArg = args[0]?.type === "arg" ? args[0].value : null;
+	const initArg = getArgValue(args, 0);
 	if (!initArg) {
 		error(state, "store(init) requires an initializer argument", callExpr.loc);
 		return null;
@@ -36709,43 +39633,35 @@ function getValidatedStoreInitExpr(state, callExpr, args) {
 }
 function matchFixedArgs(state, callExpr, funcName, args, paramNames) {
 	const matched = new Array(paramNames.length).fill(null);
+	const paramIndexByName = /* @__PURE__ */ new Map();
+	for (let i$6 = 0; i$6 < paramNames.length; i$6++) paramIndexByName.set(paramNames[i$6], i$6);
+	const prefixMatchCache = /* @__PURE__ */ new Map();
 	let positionalIndex = 0;
-	for (const arg of args) {
-		if (arg.type !== "arg" || !arg.value) continue;
-		if (arg.name) {
-			const argName = arg.name;
-			let matchedParamIndex = -1;
-			for (let j$4 = 0; j$4 < paramNames.length; j$4++) if (paramNames[j$4].startsWith(argName)) {
-				matchedParamIndex = j$4;
-				break;
-			}
-			if (matchedParamIndex === -1) {
-				error(state, `No parameter matches '${argName}' in ${funcName}()`, callExpr.loc);
-				return null;
-			}
+	for (const arg of args) if (arg.name) {
+		const argName = arg.name;
+		let matchedParamIndex = prefixMatchCache.get(argName);
+		if (matchedParamIndex === void 0) {
+			matchedParamIndex = findParamIndexByPrefix(paramNames, argName);
+			prefixMatchCache.set(argName, matchedParamIndex);
+		}
+		if (matchedParamIndex === -1) {
+			error(state, `No parameter matches '${argName}' in ${funcName}()`, callExpr.loc);
+			return null;
+		}
+		if (matched[matchedParamIndex] !== null) {
+			error(state, `Parameter '${paramNames[matchedParamIndex]}' already provided in ${funcName}()`, callExpr.loc);
+			return null;
+		}
+		matched[matchedParamIndex] = arg.value;
+	} else if (arg.shorthand && arg.value.type === "identifier") {
+		const shorthandName = arg.value.name;
+		const matchedParamIndex = paramIndexByName.get(shorthandName) ?? -1;
+		if (matchedParamIndex !== -1) {
 			if (matched[matchedParamIndex] !== null) {
 				error(state, `Parameter '${paramNames[matchedParamIndex]}' already provided in ${funcName}()`, callExpr.loc);
 				return null;
 			}
 			matched[matchedParamIndex] = arg.value;
-		} else if (arg.shorthand && arg.value.type === "identifier") {
-			const shorthandName = arg.value.name;
-			const matchedParamIndex = paramNames.indexOf(shorthandName);
-			if (matchedParamIndex !== -1) {
-				if (matched[matchedParamIndex] !== null) {
-					error(state, `Parameter '${paramNames[matchedParamIndex]}' already provided in ${funcName}()`, callExpr.loc);
-					return null;
-				}
-				matched[matchedParamIndex] = arg.value;
-			} else {
-				while (positionalIndex < paramNames.length && matched[positionalIndex] !== null) positionalIndex++;
-				if (positionalIndex >= paramNames.length) {
-					error(state, `Too many arguments for ${funcName}()`, callExpr.loc);
-					return null;
-				}
-				matched[positionalIndex] = arg.value;
-				positionalIndex++;
-			}
 		} else {
 			while (positionalIndex < paramNames.length && matched[positionalIndex] !== null) positionalIndex++;
 			if (positionalIndex >= paramNames.length) {
@@ -36755,15 +39671,24 @@ function matchFixedArgs(state, callExpr, funcName, args, paramNames) {
 			matched[positionalIndex] = arg.value;
 			positionalIndex++;
 		}
+	} else {
+		while (positionalIndex < paramNames.length && matched[positionalIndex] !== null) positionalIndex++;
+		if (positionalIndex >= paramNames.length) {
+			error(state, `Too many arguments for ${funcName}()`, callExpr.loc);
+			return null;
+		}
+		matched[positionalIndex] = arg.value;
+		positionalIndex++;
 	}
 	return matched;
 }
 function pushCallMeta(state, callExpr, name, args) {
 	if (callExpr.loc.line <= state.preludeLines) return;
+	const resolvedArgs = Array.isArray(args) ? bestEffortArgs(args) : args;
 	state.functionCallsMeta.push({
 		name,
 		astNode: callExpr,
-		args
+		args: resolvedArgs
 	});
 }
 function pushArrayGetHistoryForArrayExpr(state, arrayExpr, loc) {
@@ -36827,6 +39752,169 @@ function pushCallSiteSourceMap(state, callExpr, funcName) {
 		entryWithPending.__relativePc = pc;
 	} else entry.pc = pc;
 }
+function shouldUseSpecialCallDispatch(funcName) {
+	switch (funcName) {
+		case "dtof":
+		case "get":
+		case "out":
+		case "solo":
+		case "outs":
+		case "sout":
+		case "oversample":
+		case "espeak":
+		case "sam":
+		case "freesound":
+		case "record":
+		case "tram":
+		case "mini":
+		case "label":
+		case "timeline":
+		case "store":
+		case "alloc":
+		case "append":
+		case "write":
+		case "advance":
+		case "read":
+		case "isundefined":
+		case "isscalar":
+		case "isaudio":
+		case "isarray":
+		case "isfunction":
+		case "slicer":
+		case "Fit":
+		case "Walk":
+		case "Glide":
+		case "Step":
+		case "Random": return true;
+		default: return false;
+	}
+}
+function compileGeneratorCallFromSpec(state, callExpr, args, dollarIndex, genKey, spec) {
+	const paramCount = spec.paramNames.length;
+	const usesInput = spec.usesInput;
+	const totalArgs = paramCount + (usesInput ? 1 : 0);
+	const stackBefore = state.stack.length;
+	if (args.length + (dollarIndex >= 0 ? 1 : 0) > totalArgs) {
+		error(state, `Too many arguments for function '${callNameFromCallee(callExpr.callee)}'`, callExpr.loc);
+		return;
+	}
+	const opCode = opCodeByGenKey[genKey];
+	if (opCode === void 0) {
+		error(state, `Unknown opcode for generator: ${spec.genName}_${spec.variantName}`, callExpr.loc);
+		return;
+	}
+	const paramHas = paramHasByGenKey[genKey];
+	const resolvedArgs = callExpr.loc.line <= state.preludeLines ? null : {};
+	const defaults = defaultsByGenName[spec.genName];
+	if (!shouldUseNamedMatchingForGeneratorArgs(args, paramHas)) {
+		let positionalIndex = 0;
+		for (let i$6 = 0; i$6 < totalArgs; i$6++) {
+			if (i$6 === dollarIndex) {
+				if (state.stack.length === 0) {
+					error(state, "$ used without a value on the stack", callExpr.loc);
+					return;
+				}
+				positionalIndex++;
+				continue;
+			}
+			const paramIndex = usesInput ? i$6 - 1 : i$6;
+			const paramName = paramIndex >= 0 ? spec.paramNames[paramIndex] : null;
+			const argExpr = positionalIndex < args.length ? args[positionalIndex++].value : null;
+			if (resolvedArgs && paramName && argExpr) (resolvedArgs[paramName] ??= []).push(argExpr);
+			if (argExpr) compileExpr(state, argExpr);
+			else {
+				const defaultValue = (paramName ? defaults?.[paramName] : void 0) ?? 0;
+				state.ops.push(AudioVmOp.PushScalar);
+				state.ops.push(defaultValue);
+				state.stack.push({ expr: {
+					type: "number",
+					value: defaultValue,
+					loc: callExpr.loc
+				} });
+			}
+		}
+	} else {
+		const namedByName = Object.create(null);
+		const namedOrder = [];
+		const positionalArgs = [];
+		for (let i$6 = 0; i$6 < args.length; i$6++) {
+			const arg = args[i$6];
+			if (arg.name) {
+				if (!(arg.name in namedByName)) namedOrder.push(arg.name);
+				namedByName[arg.name] = arg.value;
+				continue;
+			}
+			if (arg.shorthand && arg.value.type === "identifier") {
+				const shorthandName = arg.value.name;
+				if (paramHas[shorthandName]) {
+					if (!(shorthandName in namedByName)) namedOrder.push(shorthandName);
+					namedByName[shorthandName] = arg.value;
+					continue;
+				}
+			}
+			positionalArgs.push(arg.value);
+		}
+		let positionalIndex = 0;
+		const namedUsed = new Array(namedOrder.length).fill(false);
+		for (let i$6 = 0; i$6 < totalArgs; i$6++) {
+			if (i$6 === dollarIndex) {
+				if (state.stack.length === 0) {
+					error(state, "$ used without a value on the stack", callExpr.loc);
+					return;
+				}
+				positionalIndex++;
+				continue;
+			}
+			const paramIndex = usesInput ? i$6 - 1 : i$6;
+			const paramName = paramIndex >= 0 ? spec.paramNames[paramIndex] : null;
+			let argExpr = null;
+			if (paramName) for (let j$4 = 0; j$4 < namedOrder.length; j$4++) {
+				if (namedUsed[j$4]) continue;
+				const argName = namedOrder[j$4];
+				if (!paramName.startsWith(argName)) continue;
+				namedUsed[j$4] = true;
+				argExpr = namedByName[argName] ?? null;
+				break;
+			}
+			if (!argExpr) {
+				argExpr = positionalArgs[positionalIndex] ?? null;
+				positionalIndex++;
+			}
+			if (resolvedArgs && paramName && argExpr) (resolvedArgs[paramName] ??= []).push(argExpr);
+			if (argExpr) compileExpr(state, argExpr);
+			else {
+				const defaultValue = (paramName ? defaults?.[paramName] : void 0) ?? 0;
+				state.ops.push(AudioVmOp.PushScalar);
+				state.ops.push(defaultValue);
+				state.stack.push({ expr: {
+					type: "number",
+					value: defaultValue,
+					loc: callExpr.loc
+				} });
+			}
+		}
+	}
+	const pc = state.ops.length;
+	if (callExpr.loc.line > state.preludeLines) {
+		const historyEntry = {
+			line: callExpr.loc.line - state.preludeLines,
+			column: callExpr.loc.column,
+			genName: spec.genName,
+			pc: state.inFunction ? 0 : pc,
+			inFunction: state.inFunction,
+			__fromMainProgram: !state.isDeferredPass
+		};
+		state.historySourceMap.push(historyEntry);
+		if (state.inFunction && state.currentFunctionId !== null) {
+			historyEntry.__functionId = state.currentFunctionId;
+			historyEntry.__relativePc = pc;
+		} else historyEntry.pc = pc;
+	}
+	state.ops.push(opCode);
+	state.stack.length = stackBefore;
+	state.stack.push({ expr: callExpr });
+	pushCallMeta(state, callExpr, spec.genName, resolvedArgs ?? {});
+}
 function compileGetCall(state, arrayExpr, indexExpr, loc, resultExpr) {
 	const stackBefore = state.stack.length;
 	const storeShape = getStoreShapeForExpr(state, arrayExpr);
@@ -36857,8 +39945,8 @@ function compileCall(state, expr) {
 				error(state, `Unknown store object method: ${memberExpr.property}`, expr.loc);
 				return;
 			}
-			pushCallMeta(state, expr, memberExpr.property, bestEffortArgs(expr.args));
-			for (const arg of expr.args) if (arg.type === "arg" && arg.value) compileExpr(state, arg.value);
+			pushCallMeta(state, expr, memberExpr.property, expr.args);
+			for (const arg of expr.args) compileExpr(state, arg.value);
 			const indexExpr = {
 				type: "number",
 				value: propertyIndex,
@@ -36883,8 +39971,8 @@ function compileCall(state, expr) {
 				error(state, `Unknown object method: ${memberExpr.property}`, expr.loc);
 				return;
 			}
-			pushCallMeta(state, expr, memberExpr.property, bestEffortArgs(expr.args));
-			for (const arg of expr.args) if (arg.type === "arg" && arg.value) compileExpr(state, arg.value);
+			pushCallMeta(state, expr, memberExpr.property, expr.args);
+			for (const arg of expr.args) compileExpr(state, arg.value);
 			const indexExpr = {
 				type: "number",
 				value: propertyIndex,
@@ -37130,7 +40218,6 @@ function compileCall(state, expr) {
 			const methodArgs = {};
 			let positionalIndex = 0;
 			for (const arg of expr.args) {
-				if (arg.type !== "arg" || !arg.value) continue;
 				if (arg.name) {
 					const matchedName$1 = methodParamNames.find((name) => name.startsWith(arg.name));
 					if (!matchedName$1) {
@@ -37223,22 +40310,22 @@ function compileCall(state, expr) {
 			compileGetCall(state, memberExpr.object, markovCall, expr.loc, expr);
 			return;
 		}
-		pushCallMeta(state, expr, memberExpr.property, bestEffortArgs(expr.args));
+		pushCallMeta(state, expr, memberExpr.property, expr.args);
 		compileExpr(state, memberExpr.object);
 		if (state.stack.length === 0) {
 			error(state, "Method call requires an object", expr.loc);
 			return;
 		}
 		if (memberExpr.property === "push") {
-			const args = expr.args.map((arg) => arg.type === "arg" ? arg.value : null).filter((a$35) => a$35 !== null);
-			if (args.length === 0) {
+			const argCount = expr.args.length;
+			for (let i$6 = 0; i$6 < argCount; i$6++) compileExpr(state, expr.args[i$6].value);
+			if (argCount === 0) {
 				error(state, "push() requires at least one argument", expr.loc);
 				return;
 			}
-			for (const arg of args) compileExpr(state, arg);
 			state.ops.push(AudioVmOp.ArrayPush);
-			state.ops.push(args.length);
-			state.stack.length -= args.length;
+			state.ops.push(argCount);
+			state.stack.length -= argCount;
 			state.stack.push({ expr });
 			return;
 		} else error(state, `Unknown method: ${memberExpr.property}`, expr.loc);
@@ -37249,8 +40336,8 @@ function compileCall(state, expr) {
 function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 	const callee = callExpr.callee;
 	if (callee.type === "index") {
-		pushCallMeta(state, callExpr, "[]", bestEffortArgs(args));
-		for (const arg of args) if (arg.type === "arg" && arg.value) compileExpr(state, arg.value);
+		pushCallMeta(state, callExpr, "[]", args);
+		for (let i$6 = 0; i$6 < args.length; i$6++) compileExpr(state, args[i$6].value);
 		const idxCallee = callee;
 		compileGetCall(state, idxCallee.object, idxCallee.index, idxCallee.loc, idxCallee);
 		state.ops.push(AudioVmOp.CallFunction);
@@ -37259,14 +40346,33 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		return;
 	}
 	if (callee.type !== "identifier") {
-		pushCallMeta(state, callExpr, callNameFromCallee(callee), bestEffortArgs(args));
+		pushCallMeta(state, callExpr, callNameFromCallee(callee), args);
 		error(state, "Only simple function calls are supported", callExpr.loc);
 		return;
 	}
 	const funcName = callee.name;
+	const useSpecialDispatch = shouldUseSpecialCallDispatch(funcName);
+	const mathUnaryId = getMathUnaryId(funcName);
+	const mathBinaryId = mathUnaryId >= 0 ? -1 : getMathBinaryId(funcName);
+	const mathTernaryId = mathUnaryId >= 0 || mathBinaryId >= 0 ? -1 : getMathTernaryId(funcName);
+	if (!useSpecialDispatch && mathUnaryId < 0 && mathBinaryId < 0 && mathTernaryId < 0) {
+		const generator$1 = resolvePrimaryGeneratorByCallName(funcName);
+		if (generator$1) {
+			compileGeneratorCallFromSpec(state, callExpr, args, dollarIndex, generator$1.genKey, generator$1.spec);
+			return;
+		}
+		const varInfo$1 = lookupVariable(state, funcName);
+		if (varInfo$1) {
+			compileUserFunctionCall(state, callExpr, funcName, varInfo$1, args, dollarIndex);
+			return;
+		}
+		pushCallMeta(state, callExpr, funcName, args);
+		error(state, `Unknown generator: ${funcName}`, callExpr.loc);
+		return;
+	}
 	if (funcName === "dtof") {
-		pushCallMeta(state, callExpr, "dtof", bestEffortArgs(args));
-		const degreeArg = args[0]?.type === "arg" ? args[0].value : null;
+		pushCallMeta(state, callExpr, "dtof", args);
+		const degreeArg = getArgValue(args, 0);
 		if (!degreeArg || degreeArg.type !== "number") {
 			error(state, "dtof(degree) requires a literal number (scale degree 1-based)", callExpr.loc);
 			return;
@@ -37277,14 +40383,14 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 	}
 	if (funcName === "get") {
 		if (args.length < 2) {
-			pushCallMeta(state, callExpr, "get", bestEffortArgs(args));
+			pushCallMeta(state, callExpr, "get", args);
 			error(state, "get(array, index) requires two arguments", callExpr.loc);
 			return;
 		}
-		const arrayArg = args[0]?.type === "arg" ? args[0].value : null;
-		const indexArg = args[1]?.type === "arg" ? args[1].value : null;
+		const arrayArg = getArgValue(args, 0);
+		const indexArg = getArgValue(args, 1);
 		if (!arrayArg || !indexArg) {
-			pushCallMeta(state, callExpr, "get", bestEffortArgs(args));
+			pushCallMeta(state, callExpr, "get", args);
 			error(state, "get(array, index) requires two arguments", callExpr.loc);
 			return;
 		}
@@ -37296,22 +40402,16 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		return;
 	}
 	if (funcName === "out" || funcName === "solo" || funcName === "outs" || funcName === "sout") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		const isSolo = funcName !== "out";
-		let argCount$1 = 0;
-		for (let i$6 = 0; i$6 < args.length; i$6++) {
-			const arg = args[i$6];
-			if (arg.type === "arg" && arg.value) {
-				compileExpr(state, arg.value);
-				argCount$1++;
-			}
-		}
-		if (argCount$1 === 0) {
+		const argCount = args.length;
+		for (let i$6 = 0; i$6 < argCount; i$6++) compileExpr(state, args[i$6].value);
+		if (argCount === 0) {
 			error(state, `${funcName} requires at least one argument`, callExpr.loc);
 			return;
 		}
-		if (argCount$1 > 2) {
-			error(state, `${funcName} accepts 1 or 2 arguments, got ${argCount$1}`, callExpr.loc);
+		if (argCount > 2) {
+			error(state, `${funcName} accepts 1 or 2 arguments, got ${argCount}`, callExpr.loc);
 			return;
 		}
 		const userLine = Math.max(1, callExpr.loc.line - state.preludeLines);
@@ -37330,18 +40430,18 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 			outSoloHistoryEntry.__relativePc = outSoloPc;
 		} else outSoloHistoryEntry.pc = outSoloPc;
 		state.ops.push(isSolo ? AudioVmOp.Solo : AudioVmOp.Out);
-		state.ops.push(argCount$1);
-		for (let i$6 = 0; i$6 < argCount$1; i$6++) state.stack.pop();
+		state.ops.push(argCount);
+		for (let i$6 = 0; i$6 < argCount; i$6++) state.stack.pop();
 		return;
 	}
 	if (funcName === "oversample") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		if (args.length !== 2) {
 			error(state, "oversample() requires exactly 2 arguments: factor and callback", callExpr.loc);
 			return;
 		}
-		const factorArg = args[0]?.type === "arg" ? args[0].value : null;
-		const callbackArg = args[1]?.type === "arg" ? args[1].value : null;
+		const factorArg = getArgValue(args, 0);
+		const callbackArg = getArgValue(args, 1);
 		if (!factorArg || !callbackArg) {
 			error(state, "oversample() requires factor and callback arguments", callExpr.loc);
 			return;
@@ -37362,7 +40462,7 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		return;
 	}
 	if (funcName === "espeak") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		if (args.length < 1) {
 			error(state, "espeak() requires at least 1 argument: text", callExpr.loc);
 			return;
@@ -37410,7 +40510,7 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		return;
 	}
 	if (funcName === "sam") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		if (args.length < 1) {
 			error(state, "sam() requires at least 1 argument: text", callExpr.loc);
 			return;
@@ -37512,12 +40612,12 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		}
 	}
 	if (funcName === "freesound") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		if (args.length !== 1) {
 			error(state, "freesound() requires exactly 1 argument: id", callExpr.loc);
 			return;
 		}
-		const idArg = args[0]?.type === "arg" ? args[0].value : null;
+		const idArg = getArgValue(args, 0);
 		if (!idArg || idArg.type !== "number") {
 			error(state, "freesound() id must be a literal number", callExpr.loc);
 			return;
@@ -37535,24 +40635,24 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		return;
 	}
 	if (funcName === "record") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		compileRecord(state, callExpr);
 		return;
 	}
 	if (funcName === "tram") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		compileTram(state, callExpr, args);
 		return;
 	}
 	if (funcName === "mini") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		compileMini(state, callExpr, args);
 		return;
 	}
 	if (funcName === "label") {
-		const a0 = args[0]?.type === "arg" ? args[0].value : null;
-		const a1 = args[1]?.type === "arg" ? args[1].value : null;
-		const a2 = args[2]?.type === "arg" ? args[2].value : null;
+		const a0 = getArgValue(args, 0);
+		const a1 = getArgValue(args, 1);
+		const a2 = getArgValue(args, 2);
 		if (a0?.type === "number" && a1?.type === "string") {
 			const bar = Math.max(0, Math.floor(Number(a0.value)) - 1);
 			let colorIndex = 1;
@@ -37569,132 +40669,130 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		return;
 	}
 	if (funcName === "timeline") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		compileTimeline(state, callExpr, args);
 		return;
 	}
 	if (funcName === "store") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		const initExpr = getValidatedStoreInitExpr(state, callExpr, args);
 		if (!initExpr) return;
-		const stackBefore$1 = state.stack.length;
+		const stackBefore = state.stack.length;
 		compileExpr(state, initExpr);
-		if (state.stack.length === stackBefore$1) {
+		if (state.stack.length === stackBefore) {
 			error(state, "store(init) initializer did not produce a value", callExpr.loc);
 			return;
 		}
 		state.ops.push(AudioVmOp.StoreInit);
 		state.ops.push(state.nextStoreCallSiteId++);
-		state.stack.length = stackBefore$1;
+		state.stack.length = stackBefore;
 		state.stack.push({ expr: callExpr });
 		return;
 	}
 	if (funcName === "alloc") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		if (args.length !== 1) {
 			error(state, "alloc() requires 1 argument: seconds", callExpr.loc);
 			return;
 		}
-		const secondsArg = args[0]?.type === "arg" ? args[0].value : null;
+		const secondsArg = getArgValue(args, 0);
 		if (!secondsArg) {
 			error(state, "alloc() requires seconds argument", callExpr.loc);
 			return;
 		}
-		const stackBefore$1 = state.stack.length;
+		const stackBefore = state.stack.length;
 		compileExpr(state, secondsArg);
 		state.ops.push(AudioVmOp.Alloc);
 		state.ops.push(state.nextAllocCallSiteId++);
-		state.stack.length = stackBefore$1;
+		state.stack.length = stackBefore;
 		state.stack.push({ expr: callExpr });
 		return;
 	}
 	if (funcName === "append") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		if (args.length !== 2) {
 			error(state, "append() requires 2 arguments: input and buf", callExpr.loc);
 			return;
 		}
-		const inputArg = args[0]?.type === "arg" ? args[0].value : null;
-		const bufArg = args[1]?.type === "arg" ? args[1].value : null;
+		const inputArg = getArgValue(args, 0);
+		const bufArg = getArgValue(args, 1);
 		if (!inputArg || !bufArg) {
 			error(state, "append() requires input and buf arguments", callExpr.loc);
 			return;
 		}
-		const stackBefore$1 = state.stack.length;
+		const stackBefore = state.stack.length;
 		compileExpr(state, inputArg);
 		compileExpr(state, bufArg);
 		state.ops.push(AudioVmOp.Append);
-		state.stack.length = stackBefore$1;
+		state.stack.length = stackBefore;
 		state.stack.push({ expr: callExpr });
 		return;
 	}
 	if (funcName === "write") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		if (args.length !== 2) {
 			error(state, "write() requires 2 arguments: input and buf", callExpr.loc);
 			return;
 		}
-		const inputArg = args[0]?.type === "arg" ? args[0].value : null;
-		const bufArg = args[1]?.type === "arg" ? args[1].value : null;
+		const inputArg = getArgValue(args, 0);
+		const bufArg = getArgValue(args, 1);
 		if (!inputArg || !bufArg) {
 			error(state, "write() requires input and buf arguments", callExpr.loc);
 			return;
 		}
-		const stackBefore$1 = state.stack.length;
+		const stackBefore = state.stack.length;
 		compileExpr(state, inputArg);
 		compileExpr(state, bufArg);
 		state.ops.push(AudioVmOp.Write);
-		state.stack.length = stackBefore$1;
+		state.stack.length = stackBefore;
 		state.stack.push({ expr: callExpr });
 		return;
 	}
 	if (funcName === "advance") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		if (args.length !== 1) {
 			error(state, "advance() requires 1 argument: buf", callExpr.loc);
 			return;
 		}
-		const bufArg = args[0]?.type === "arg" ? args[0].value : null;
+		const bufArg = getArgValue(args, 0);
 		if (!bufArg) {
 			error(state, "advance() requires buf argument", callExpr.loc);
 			return;
 		}
-		const stackBefore$1 = state.stack.length;
+		const stackBefore = state.stack.length;
 		compileExpr(state, bufArg);
 		state.ops.push(AudioVmOp.Advance);
-		state.stack.length = stackBefore$1;
+		state.stack.length = stackBefore;
 		state.stack.push({ expr: callExpr });
 		return;
 	}
 	if (funcName === "read") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
+		pushCallMeta(state, callExpr, funcName, args);
 		if (args.length !== 2) {
 			error(state, "read() requires 2 arguments: buf and offset (seconds)", callExpr.loc);
 			return;
 		}
-		const bufArg = args[0]?.type === "arg" ? args[0].value : null;
-		const offsetArg = args[1]?.type === "arg" ? args[1].value : null;
+		const bufArg = getArgValue(args, 0);
+		const offsetArg = getArgValue(args, 1);
 		if (!bufArg || !offsetArg) {
 			error(state, "read() requires buf and offset arguments", callExpr.loc);
 			return;
 		}
-		const stackBefore$1 = state.stack.length;
+		const stackBefore = state.stack.length;
 		compileExpr(state, bufArg);
 		compileExpr(state, offsetArg);
 		state.ops.push(AudioVmOp.Read);
-		state.stack.length = stackBefore$1;
+		state.stack.length = stackBefore;
 		state.stack.push({ expr: callExpr });
 		return;
 	}
 	if (funcName === "isundefined" || funcName === "isscalar" || funcName === "isaudio" || funcName === "isarray" || funcName === "isfunction") {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
-		let argCount$1 = dollarIndex >= 0 ? 1 : 0;
-		for (const a$35 of args) if (a$35.type === "arg" && a$35.value) argCount$1++;
-		if (argCount$1 > 1) {
+		pushCallMeta(state, callExpr, funcName, args);
+		if (args.length + (dollarIndex >= 0 ? 1 : 0) > 1) {
 			error(state, `Too many arguments for function '${funcName}'`, callExpr.loc);
 			return;
 		}
-		const argExpr = dollarIndex === 0 ? null : args[0]?.type === "arg" ? args[0].value : null;
+		const argExpr = dollarIndex === 0 ? null : getArgValue(args, 0);
 		if (argExpr) compileExpr(state, argExpr);
 		if (state.stack.length === 0) {
 			error(state, `${funcName} requires a value`, callExpr.loc);
@@ -37706,16 +40804,13 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		state.stack.push({ expr: callExpr });
 		return;
 	}
-	const mathUnaryId = getMathUnaryId(funcName);
 	if (mathUnaryId >= 0) {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
-		let argCount$1 = 0;
-		for (const a$35 of args) if (a$35.type === "arg" && a$35.value) argCount$1++;
-		if (argCount$1 > 1) {
+		pushCallMeta(state, callExpr, funcName, args);
+		if (args.length > 1) {
 			error(state, `Too many arguments for function '${funcName}'`, callExpr.loc);
 			return;
 		}
-		const argExpr = args[0]?.type === "arg" ? args[0].value : null;
+		const argExpr = getArgValue(args, 0);
 		if (!argExpr) {
 			error(state, `${funcName}(x) requires one argument`, callExpr.loc);
 			return;
@@ -37731,17 +40826,14 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		state.stack.push({ expr: callExpr });
 		return;
 	}
-	const mathBinaryId = getMathBinaryId(funcName);
 	if (mathBinaryId >= 0) {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
-		let argCount$1 = 0;
-		for (const a$35 of args) if (a$35.type === "arg" && a$35.value) argCount$1++;
-		if (argCount$1 > 2) {
+		pushCallMeta(state, callExpr, funcName, args);
+		if (args.length > 2) {
 			error(state, `Too many arguments for function '${funcName}'`, callExpr.loc);
 			return;
 		}
-		const left = args[0]?.type === "arg" ? args[0].value : null;
-		const right = args[1]?.type === "arg" ? args[1].value : null;
+		const left = getArgValue(args, 0);
+		const right = getArgValue(args, 1);
 		if (!left || !right) {
 			error(state, `${funcName}(x, y) requires two arguments`, callExpr.loc);
 			return;
@@ -37759,18 +40851,15 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		state.stack.push({ expr: callExpr });
 		return;
 	}
-	const mathTernaryId = getMathTernaryId(funcName);
 	if (mathTernaryId >= 0) {
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
-		let argCount$1 = 0;
-		for (const a$36 of args) if (a$36.type === "arg" && a$36.value) argCount$1++;
-		if (argCount$1 > 3) {
+		pushCallMeta(state, callExpr, funcName, args);
+		if (args.length > 3) {
 			error(state, `Too many arguments for function '${funcName}'`, callExpr.loc);
 			return;
 		}
-		const a$35 = args[0]?.type === "arg" ? args[0].value : null;
-		const b$4 = args[1]?.type === "arg" ? args[1].value : null;
-		const c$7 = args[2]?.type === "arg" ? args[2].value : null;
+		const a$35 = getArgValue(args, 0);
+		const b$4 = getArgValue(args, 1);
+		const c$7 = getArgValue(args, 2);
 		if (!a$35 || !b$4 || !c$7) {
 			error(state, `${funcName}(a, b, c) requires three arguments`, callExpr.loc);
 			return;
@@ -37791,22 +40880,22 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		return;
 	}
 	if (funcName === "slicer") {
-		const thresholdArg = args.find((a$35) => a$35.type === "arg" && a$35.name === "threshold" && a$35.value);
-		if (thresholdArg && thresholdArg.type === "arg" && thresholdArg.value?.type !== "number") {
+		const thresholdArg = args.find((a$35) => a$35.name === "threshold");
+		if (thresholdArg && thresholdArg.value.type !== "number") {
 			error(state, "slicer() threshold parameter must be a scalar value", callExpr.loc);
 			return;
 		}
 	}
 	if (funcName === "Fit") {
-		pushCallMeta(state, callExpr, "Fit", bestEffortArgs(args));
+		pushCallMeta(state, callExpr, "Fit", args);
 		if (args.length < 2) {
 			error(state, "Fit(array, bars, swing?, offset?) requires at least array and bars", callExpr.loc);
 			return;
 		}
-		const arrayArg = args[0]?.type === "arg" ? args[0].value : null;
-		const barsArg = args[1]?.type === "arg" ? args[1].value : null;
-		const swingArg = args.length > 2 && args[2]?.type === "arg" ? args[2].value : null;
-		const offsetArg = args.length > 3 && args[3]?.type === "arg" ? args[3].value : null;
+		const arrayArg = getArgValue(args, 0);
+		const barsArg = getArgValue(args, 1);
+		const swingArg = getArgValue(args, 2);
+		const offsetArg = getArgValue(args, 3);
 		if (!arrayArg || !barsArg) {
 			error(state, "Fit requires array and bars arguments", callExpr.loc);
 			return;
@@ -37844,15 +40933,15 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		return;
 	}
 	if (funcName === "Walk") {
-		pushCallMeta(state, callExpr, "Walk", bestEffortArgs(args));
+		pushCallMeta(state, callExpr, "Walk", args);
 		if (args.length < 2) {
 			error(state, "Walk(array, bar, swing?, offset?) requires at least array and bar", callExpr.loc);
 			return;
 		}
-		const arrayArg = args[0]?.type === "arg" ? args[0].value : null;
-		const barArg = args[1]?.type === "arg" ? args[1].value : null;
-		const swingArg = args.length > 2 && args[2]?.type === "arg" ? args[2].value : null;
-		const offsetArg = args.length > 3 && args[3]?.type === "arg" ? args[3].value : null;
+		const arrayArg = getArgValue(args, 0);
+		const barArg = getArgValue(args, 1);
+		const swingArg = getArgValue(args, 2);
+		const offsetArg = getArgValue(args, 3);
 		if (!arrayArg || !barArg) {
 			error(state, "Walk requires array and bar arguments", callExpr.loc);
 			return;
@@ -37878,14 +40967,14 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		return;
 	}
 	if (funcName === "Glide") {
-		pushCallMeta(state, callExpr, "Glide", bestEffortArgs(args));
+		pushCallMeta(state, callExpr, "Glide", args);
 		if (args.length < 2) {
 			error(state, "Glide(array, bar, exponent?) requires at least array and bar", callExpr.loc);
 			return;
 		}
-		const arrayArg = args[0]?.type === "arg" ? args[0].value : null;
-		const barArg = args[1]?.type === "arg" ? args[1].value : null;
-		const exponentArg = args.length > 2 && args[2]?.type === "arg" ? args[2].value : null;
+		const arrayArg = getArgValue(args, 0);
+		const barArg = getArgValue(args, 1);
+		const exponentArg = getArgValue(args, 2);
 		if (!arrayArg || !barArg) {
 			error(state, "Glide requires array and bar arguments", callExpr.loc);
 			return;
@@ -37904,13 +40993,13 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		return;
 	}
 	if (funcName === "Step") {
-		pushCallMeta(state, callExpr, "Step", bestEffortArgs(args));
+		pushCallMeta(state, callExpr, "Step", args);
 		if (args.length < 2) {
 			error(state, "Step(array, trig) requires array and trigger", callExpr.loc);
 			return;
 		}
-		const arrayArg = args[0]?.type === "arg" ? args[0].value : null;
-		const trigArg = args[1]?.type === "arg" ? args[1].value : null;
+		const arrayArg = getArgValue(args, 0);
+		const trigArg = getArgValue(args, 1);
 		if (!arrayArg || !trigArg) {
 			error(state, "Step requires array and trig arguments", callExpr.loc);
 			return;
@@ -37925,14 +41014,14 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		return;
 	}
 	if (funcName === "Random") {
-		pushCallMeta(state, callExpr, "Random", bestEffortArgs(args));
+		pushCallMeta(state, callExpr, "Random", args);
 		if (args.length < 2) {
 			error(state, "Random(array, trig, seed?) requires array and trigger", callExpr.loc);
 			return;
 		}
-		const arrayArg = args[0]?.type === "arg" ? args[0].value : null;
-		const trigArg = args[1]?.type === "arg" ? args[1].value : null;
-		const seedArg = args[2]?.type === "arg" ? args[2].value : null;
+		const arrayArg = getArgValue(args, 0);
+		const trigArg = getArgValue(args, 1);
+		const seedArg = getArgValue(args, 2);
 		if (!arrayArg || !trigArg) {
 			error(state, "Random requires array and trig arguments", callExpr.loc);
 			return;
@@ -37952,116 +41041,18 @@ function compileCallWithArgs(state, callExpr, args, dollarIndex) {
 		state.stack.push({ expr: callExpr });
 		return;
 	}
-	const variantGenName = primaryGenNameByVariantName[funcName];
-	const genName = variantGenName ?? funcName.charAt(0).toUpperCase() + funcName.slice(1);
-	const genKey = `${genName}${GEN_KEY_SEP}${variantGenName ? funcName : "default"}`;
-	const spec = primarySpecByGenKey[genKey];
-	if (!spec) {
-		const varInfo = lookupVariable(state, funcName);
-		if (varInfo) {
-			compileUserFunctionCall(state, callExpr, funcName, varInfo, args, dollarIndex);
-			return;
-		}
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
-		error(state, `Unknown generator: ${funcName}`, callExpr.loc);
+	const generator = resolvePrimaryGeneratorByCallName(funcName);
+	if (generator) {
+		compileGeneratorCallFromSpec(state, callExpr, args, dollarIndex, generator.genKey, generator.spec);
 		return;
 	}
-	const paramCount = spec.paramNames.length;
-	const usesInput = spec.usesInput;
-	const totalArgs = paramCount + (usesInput ? 1 : 0);
-	const stackBefore = state.stack.length;
-	const paramHas = paramHasByGenKey[genKey];
-	const namedByName = Object.create(null);
-	const namedOrder = [];
-	const positionalArgs = [];
-	let argCount = 0;
-	for (const a$35 of args) {
-		if (a$35.type !== "arg" || !a$35.value) continue;
-		argCount++;
-		if (a$35.name) {
-			if (!(a$35.name in namedByName)) namedOrder.push(a$35.name);
-			namedByName[a$35.name] = a$35.value;
-			continue;
-		}
-		if (a$35.value.type === "identifier") {
-			const n$4 = a$35.value.name;
-			if (paramHas[n$4]) {
-				if (!(n$4 in namedByName)) namedOrder.push(n$4);
-				namedByName[n$4] = a$35.value;
-				continue;
-			}
-		}
-		positionalArgs.push(a$35.value);
-	}
-	argCount += dollarIndex >= 0 ? 1 : 0;
-	if (argCount > totalArgs) {
-		error(state, `Too many arguments for function '${funcName}'`, callExpr.loc);
+	const varInfo = lookupVariable(state, funcName);
+	if (varInfo) {
+		compileUserFunctionCall(state, callExpr, funcName, varInfo, args, dollarIndex);
 		return;
 	}
-	const opCode = opCodeByGenKey[genKey];
-	if (opCode === void 0) {
-		error(state, `Unknown opcode for generator: ${spec.genName}_${spec.variantName}`, callExpr.loc);
-		return;
-	}
-	let positionalIndex = 0;
-	const resolvedArgs = callExpr.loc.line <= state.preludeLines ? null : {};
-	const namedUsed = new Array(namedOrder.length).fill(false);
-	const defaults = defaultsByGenName[genName];
-	for (let i$6 = 0; i$6 < totalArgs; i$6++) if (i$6 === dollarIndex) {
-		if (state.stack.length === 0) {
-			error(state, "$ used without a value on the stack", callExpr.loc);
-			return;
-		}
-		positionalIndex++;
-	} else {
-		const paramIndex = usesInput ? i$6 - 1 : i$6;
-		const paramName = paramIndex >= 0 ? spec.paramNames[paramIndex] : null;
-		let argExpr = null;
-		if (paramName) for (let j$4 = 0; j$4 < namedOrder.length; j$4++) {
-			if (namedUsed[j$4]) continue;
-			const argName = namedOrder[j$4];
-			if (!paramName.startsWith(argName)) continue;
-			namedUsed[j$4] = true;
-			argExpr = namedByName[argName] ?? null;
-			break;
-		}
-		if (!argExpr) {
-			argExpr = positionalArgs[positionalIndex] ?? null;
-			positionalIndex++;
-		}
-		if (resolvedArgs && paramName && argExpr) (resolvedArgs[paramName] ??= []).push(argExpr);
-		if (argExpr) compileExpr(state, argExpr);
-		else {
-			const defaultValue = (paramName ? defaults?.[paramName] : void 0) ?? 0;
-			state.ops.push(AudioVmOp.PushScalar);
-			state.ops.push(defaultValue);
-			state.stack.push({ expr: {
-				type: "number",
-				value: defaultValue,
-				loc: callExpr.loc
-			} });
-		}
-	}
-	const pc = state.ops.length;
-	if (callExpr.loc.line > state.preludeLines) {
-		const historyEntry = {
-			line: callExpr.loc.line - state.preludeLines,
-			column: callExpr.loc.column,
-			genName: spec.genName,
-			pc: state.inFunction ? 0 : pc,
-			inFunction: state.inFunction,
-			__fromMainProgram: !state.isDeferredPass
-		};
-		state.historySourceMap.push(historyEntry);
-		if (state.inFunction && state.currentFunctionId !== null) {
-			historyEntry.__functionId = state.currentFunctionId;
-			historyEntry.__relativePc = pc;
-		} else historyEntry.pc = pc;
-	}
-	state.ops.push(opCode);
-	state.stack.length = stackBefore;
-	state.stack.push({ expr: callExpr });
-	pushCallMeta(state, callExpr, spec.genName, resolvedArgs ?? {});
+	pushCallMeta(state, callExpr, funcName, args);
+	error(state, `Unknown generator: ${funcName}`, callExpr.loc);
 }
 function resolveFunctionInfo(state, funcName) {
 	let info = getFunctionByName(state, funcName);
@@ -38074,6 +41065,8 @@ function resolveFunctionInfo(state, funcName) {
 	}
 }
 function getFunctionInfoById(state, functionId) {
+	const byIndex = state.functions[functionId];
+	if (byIndex && byIndex.id === functionId) return byIndex;
 	for (const info of state.functions) if (info.id === functionId) return info;
 }
 function resolveFunctionInfoForVarInfo(state, varInfo) {
@@ -38103,7 +41096,6 @@ function maybeHintFunctionParamBindingsFromPositionalArgs(state, resolvedFuncInf
 			continue;
 		}
 		const arg = args[i$6];
-		if (arg.type !== "arg" || !arg.value) continue;
 		const paramIndex = positionalParamIndex++;
 		if (paramIndex >= paramCount) break;
 		const functionId = resolveFunctionIdFromExpr(state, arg.value);
@@ -38143,13 +41135,10 @@ function maybeHintInlineMapCallbackParam(state, resolvedFuncInfo, args) {
 	let arrayArg = null;
 	let callbackArg = null;
 	const positional = [];
-	for (const arg of args) {
-		if (arg.type !== "arg" || !arg.value) continue;
-		if (arg.name) {
-			if (!arrayArg && "array".startsWith(arg.name)) arrayArg = arg.value;
-			if (!callbackArg && "fn".startsWith(arg.name)) callbackArg = arg.value;
-		} else positional.push(arg.value);
-	}
+	for (const arg of args) if (arg.name) {
+		if (!arrayArg && "array".startsWith(arg.name)) arrayArg = arg.value;
+		if (!callbackArg && "fn".startsWith(arg.name)) callbackArg = arg.value;
+	} else positional.push(arg.value);
 	if (!arrayArg) arrayArg = positional[0] ?? null;
 	if (!callbackArg) callbackArg = positional[1] ?? null;
 	if (!arrayArg || !callbackArg || callbackArg.type !== "fn") return;
@@ -38202,7 +41191,6 @@ function maybeHintPlayCallbackParamFromPositionalArgs(state, resolvedFuncInfo, a
 			continue;
 		}
 		const arg = args[i$6];
-		if (arg.type !== "arg" || !arg.value) continue;
 		if (positionalParamIndex === callbackParamIndex) {
 			maybeHintFunctionValueFirstParamObjectKeys(state, arg.value, PLAY_CALLBACK_OBJECT_KEYS);
 			return;
@@ -38218,10 +41206,12 @@ function maybeHintPlayCallbackParamFromMatchedArgs(state, resolvedFuncInfo, matc
 	maybeHintFunctionValueFirstParamObjectKeys(state, callbackArg, PLAY_CALLBACK_OBJECT_KEYS);
 }
 function compileObjectDestructureArgumentForParam(state, callExpr, argExpr, objectKeys, destructureNames) {
+	const keyIndexByName = /* @__PURE__ */ new Map();
+	for (let i$6 = 0; i$6 < objectKeys.length; i$6++) keyIndexByName.set(objectKeys[i$6], i$6);
 	const keyIndexes = [];
 	for (const keyName of destructureNames) {
-		const keyIndex = objectKeys.indexOf(keyName);
-		if (keyIndex < 0) {
+		const keyIndex = keyIndexByName.get(keyName);
+		if (keyIndex === void 0) {
 			error(state, `Unknown object property: ${keyName}`, callExpr.loc);
 			return false;
 		}
@@ -38275,12 +41265,12 @@ function compileUserFunctionCall(state, callExpr, funcName, varInfo, args, dolla
 	const callSiteLocKey = `${callExpr.loc.line}:${callExpr.loc.column}:${callExpr.loc.start}:${callExpr.loc.end}`;
 	const callSiteId = state.recordCallIds.get(callSiteLocKey);
 	if (!state.compilingRecordCallback && funcInfo && state.functionToRecordCall.has(funcName) && callSiteId !== void 0) processRecordCallSite(state, callExpr, funcName, funcInfo, callSiteId);
-	const hasNamedArgs = args.some((arg) => arg.type === "arg" && (arg.name || arg.shorthand && arg.value.type === "identifier"));
+	const hasNamedArgs = hasNamedArgument(args);
 	if (!resolvedFuncInfo || !hasNamedArgs) {
 		maybeHintPlayCallbackParamFromPositionalArgs(state, resolvedFuncInfo, args, dollarIndex);
 		maybeHintFunctionParamBindingsFromPositionalArgs(state, resolvedFuncInfo, args, dollarIndex);
-		pushCallMeta(state, callExpr, funcName, bestEffortArgs(args));
-		const argsProvided = args.filter((a$35) => a$35.type === "arg" && a$35.value).length + (dollarIndex >= 0 ? 1 : 0);
+		pushCallMeta(state, callExpr, funcName, args);
+		const argsProvided = countProvidedArgs(args) + (dollarIndex >= 0 ? 1 : 0);
 		const paramCount$1 = resolvedFuncInfo?.params.length ?? 0;
 		if (resolvedFuncInfo && argsProvided > paramCount$1) {
 			error(state, `Too many arguments for function '${funcName}'`, callExpr.loc);
@@ -38293,10 +41283,8 @@ function compileUserFunctionCall(state, callExpr, funcName, varInfo, args, dolla
 				continue;
 			}
 			const arg = args[i$6];
-			if (arg.type === "arg" && arg.value) {
-				const paramIndex = positionalParamIndex++;
-				if (!compileUserFunctionArgument(state, callExpr, resolvedFuncInfo, paramIndex, arg.value)) return;
-			}
+			const paramIndex = positionalParamIndex++;
+			if (!compileUserFunctionArgument(state, callExpr, resolvedFuncInfo, paramIndex, arg.value)) return;
 		}
 		const missingCount = Math.max(0, paramCount$1 - argsProvided);
 		for (let i$6 = 0; i$6 < missingCount; i$6++) {
@@ -38313,6 +41301,9 @@ function compileUserFunctionCall(state, callExpr, funcName, varInfo, args, dolla
 	}
 	const params = resolvedFuncInfo.params;
 	const paramCount = params.length;
+	const paramIndexByName = /* @__PURE__ */ new Map();
+	for (let i$6 = 0; i$6 < paramCount; i$6++) paramIndexByName.set(params[i$6], i$6);
+	const prefixMatchCache = /* @__PURE__ */ new Map();
 	const matchedArgs = new Array(paramCount).fill(null);
 	let positionalIndex = 0;
 	let dollarParamIndex = -1;
@@ -38321,10 +41312,10 @@ function compileUserFunctionCall(state, callExpr, funcName, varInfo, args, dolla
 		if (arg.type !== "arg") continue;
 		if (arg.name) {
 			const argName = arg.name;
-			let matchedParamIndex = -1;
-			for (let j$4 = 0; j$4 < params.length; j$4++) if (params[j$4].startsWith(argName)) {
-				matchedParamIndex = j$4;
-				break;
+			let matchedParamIndex = prefixMatchCache.get(argName);
+			if (matchedParamIndex === void 0) {
+				matchedParamIndex = findParamIndexByPrefix(params, argName);
+				prefixMatchCache.set(argName, matchedParamIndex);
 			}
 			if (matchedParamIndex === -1) {
 				error(state, `No parameter matches '${argName}' in function '${funcName}'`, callExpr.loc);
@@ -38337,7 +41328,7 @@ function compileUserFunctionCall(state, callExpr, funcName, varInfo, args, dolla
 			matchedArgs[matchedParamIndex] = arg.value;
 		} else if (arg.shorthand && arg.value.type === "identifier") {
 			const shorthandName = arg.value.name;
-			const matchedParamIndex = params.indexOf(shorthandName);
+			const matchedParamIndex = paramIndexByName.get(shorthandName) ?? -1;
 			if (matchedParamIndex !== -1) {
 				if (matchedArgs[matchedParamIndex] !== null) {
 					error(state, `Parameter '${params[matchedParamIndex]}' already provided`, callExpr.loc);
@@ -39175,6 +42166,76 @@ function compilePipe(state, expr) {
 	state.pipeVars.pop();
 	popScope(state);
 }
+var State = class {
+	arrayInitOps = [];
+	arrayInitPcOffset = 0;
+	arrayInitRequests = [];
+	callSiteIdToHandle = /* @__PURE__ */ new Map();
+	captureGlobalsInClosures = false;
+	scopeCaptureGlobals = /* @__PURE__ */ new Map();
+	nextRecordScopeId = 0;
+	closureVars = [];
+	compilingRecordCallback = false;
+	currentFunctionId = null;
+	deferredGlobalFunctions = [];
+	errors = [];
+	functionCallsMeta = [];
+	functionBytecodes = /* @__PURE__ */ new Map();
+	functionBytecodeStarts = /* @__PURE__ */ new Map();
+	functionParamHintsByFnLoc = /* @__PURE__ */ new Map();
+	functionDepth = 0;
+	functions = [];
+	functionAliases = /* @__PURE__ */ new Map();
+	functionsByNameStack = [/* @__PURE__ */ new Map()];
+	functionToRecordCall = /* @__PURE__ */ new Map();
+	functionIdToDefaultParamFunctions = /* @__PURE__ */ new Map();
+	globals = /* @__PURE__ */ new Map();
+	historySourceMap = [];
+	labels = [];
+	mixDefinitionLoc = null;
+	isDeferredPass = false;
+	inFunction = false;
+	paramNameToLocalIndex = null;
+	locals = [];
+	loopStack = [];
+	nextFunctionId = 0;
+	nextGlobalIndex = 0;
+	nextLocalIndex = 0;
+	nextRecordGlobalIdx = 1e3;
+	nextAllocCallSiteId = 0;
+	nextStepCallSiteId = 0;
+	nextStoreCallSiteId = 0;
+	nextTempId = 0;
+	ops = [];
+	oversampleCallbackFunctionIds = /* @__PURE__ */ new Set();
+	pipeVars = [];
+	preludeLines = 0;
+	recordCallbacks = /* @__PURE__ */ new Map();
+	recordCallbackTemplates = /* @__PURE__ */ new Map();
+	recordCallExprs = /* @__PURE__ */ new Map();
+	recordCallIds = /* @__PURE__ */ new Map();
+	preencodedDefineFunctionSegmentsById = null;
+	recordHandleByScopeGlobal = null;
+	currentRecordScopeIdGlobal = null;
+	recordCaptureStoresByScopeGlobal = null;
+	sampleRegistrations = [];
+	projectId = null;
+	seenCallSites = /* @__PURE__ */ new Set();
+	stack = [];
+	stringExpressions = /* @__PURE__ */ new Map();
+	bpm = 120;
+	varToArrayLiteral = /* @__PURE__ */ new Map();
+	varToObjectLiteral = /* @__PURE__ */ new Map();
+	objectKeysByBinding = /* @__PURE__ */ new Map();
+	objectPropertyStoreShapesByBinding = /* @__PURE__ */ new Map();
+	arrayElementObjectKeysByBinding = /* @__PURE__ */ new Map();
+	arrayElementObjectPropertyStoreShapesByBinding = /* @__PURE__ */ new Map();
+	storeShapesByBinding = /* @__PURE__ */ new Map();
+	variableFunctionIds = /* @__PURE__ */ new Map();
+	scale = "major";
+	scaleIndex = 0;
+	rootMidi = 0;
+};
 var ARRAY_METHOD_PROPERTIES = new Set([
 	"avg",
 	"sum",
@@ -39312,50 +42373,50 @@ function collectDeferredGlobalFunctions(state, body, atTopLevel = true) {
 			continue;
 		}
 		if (stmt.type === "expr" && stmt.expr.type === "assign") {
-			const assign$1 = stmt.expr;
-			const existedBefore = atTopLevel && assign$1.left.type === "identifier" ? lookupVariable(state, assign$1.left.name) : null;
-			declareAssignLhs(state, assign$1);
+			const assign$2 = stmt.expr;
+			const existedBefore = atTopLevel && assign$2.left.type === "identifier" ? lookupVariable(state, assign$2.left.name) : null;
+			declareAssignLhs(state, assign$2);
 			if (atTopLevel && isTopLevelFnAssign(state, stmt)) {
-				if (assign$1.left.type !== "identifier") continue;
-				const name = assign$1.left.name;
+				if (assign$2.left.type !== "identifier") continue;
+				const name = assign$2.left.name;
 				if (existedBefore) continue;
-				if (name === "mix") state.mixDefinitionLoc = assign$1.loc;
+				if (name === "mix") state.mixDefinitionLoc = assign$2.loc;
 				const varInfo = lookupVariable(state, name);
 				if (!varInfo || varInfo.scope !== "global") continue;
 				const globalIndex = varInfo.index;
 				let fnExpr;
-				if (assign$1.op === "=>") {
+				if (assign$2.op === "=>") {
 					const x$4 = {
 						type: "identifier",
 						name: "x",
-						loc: assign$1.left.loc
+						loc: assign$2.left.loc
 					};
 					fnExpr = {
 						type: "fn",
 						params: [{
 							type: "param",
 							name: "x",
-							loc: assign$1.left.loc
+							loc: assign$2.left.loc
 						}],
 						defaults: [null],
 						body: {
 							type: "binary",
 							op: "|>",
 							left: x$4,
-							right: assign$1.right,
-							loc: assign$1.right.loc
+							right: assign$2.right,
+							loc: assign$2.right.loc
 						},
-						loc: assign$1.loc
+						loc: assign$2.loc
 					};
 				} else {
-					if (assign$1.right.type !== "fn") continue;
-					fnExpr = assign$1.right;
+					if (assign$2.right.type !== "fn") continue;
+					fnExpr = assign$2.right;
 				}
 				state.deferredGlobalFunctions.push({
 					name,
 					fnExpr,
 					globalIndex,
-					loc: assign$1.loc
+					loc: assign$2.loc
 				});
 			}
 		}
@@ -39401,7 +42462,278 @@ function mergeFunctionParamHintsByFnLoc(into, from) {
 		into.set(fnLocKey, targetByIndex);
 	}
 }
-function compile$2(state, program, preludeLines = 0, seedFunctionParamHintsByFnLoc = /* @__PURE__ */ new Map(), allowDeferredFunctionHintRecompile = true) {
+function cloneVariableInfo(info) {
+	if (info.closureIndex === void 0) return {
+		scope: info.scope,
+		index: info.index
+	};
+	return {
+		scope: info.scope,
+		index: info.index,
+		closureIndex: info.closureIndex
+	};
+}
+function cloneVariableMap(source) {
+	const cloned = /* @__PURE__ */ new Map();
+	for (const [name, info] of source.entries()) cloned.set(name, cloneVariableInfo(info));
+	return cloned;
+}
+function cloneVariableScopeStack(source) {
+	return source.map((scope) => cloneVariableMap(scope));
+}
+function cloneStringArrayMap(source) {
+	const cloned = /* @__PURE__ */ new Map();
+	for (const [key, values] of source.entries()) cloned.set(key, [...values]);
+	return cloned;
+}
+function cloneStoreShapeMap(source) {
+	const cloned = /* @__PURE__ */ new Map();
+	for (const [key, shape] of source.entries()) cloned.set(key, cloneStoreShape(shape));
+	return cloned;
+}
+function cloneObjectPropertyStoreShapeMap(source) {
+	const cloned = /* @__PURE__ */ new Map();
+	for (const [bindingKey, propertyShapes] of source.entries()) {
+		const clonedPropertyShapes = /* @__PURE__ */ new Map();
+		for (const [propertyKey, shape] of propertyShapes.entries()) clonedPropertyShapes.set(propertyKey, cloneStoreShape(shape));
+		cloned.set(bindingKey, clonedPropertyShapes);
+	}
+	return cloned;
+}
+function cloneArrayInitRequests(requests) {
+	return requests.map((req) => ({
+		capacity: req.capacity,
+		globalIdx: req.globalIdx
+	}));
+}
+function cloneSampleRegistrations(registrations) {
+	return registrations.map((registration) => {
+		if (registration.type !== "inline" || !registration.inlineChannels) return { ...registration };
+		return {
+			...registration,
+			inlineChannels: registration.inlineChannels.map((channel) => channel.slice())
+		};
+	});
+}
+function cloneProgramWithBody(program, body) {
+	return {
+		type: "program",
+		body,
+		loc: { ...program.loc }
+	};
+}
+function splitProgramByPreludeLines(program, preludeLines) {
+	if (preludeLines <= 0) return {
+		prelude: cloneProgramWithBody(program, []),
+		user: cloneProgramWithBody(program, [...program.body])
+	};
+	const preludeBody = [];
+	const userBody = [];
+	for (const stmt of program.body) if (stmt.loc.line <= preludeLines) preludeBody.push(stmt);
+	else userBody.push(stmt);
+	return {
+		prelude: cloneProgramWithBody(program, preludeBody),
+		user: cloneProgramWithBody(program, userBody)
+	};
+}
+function collectAliasesFromAst(state, body, deferredNames, includeExistingFunctionTargets) {
+	for (const stmt of body) {
+		if (stmt.type === "block") {
+			collectAliasesFromAst(state, stmt.body, deferredNames, includeExistingFunctionTargets);
+			continue;
+		}
+		if (stmt.type !== "expr" || stmt.expr.type !== "assign") continue;
+		const assign$2 = stmt.expr;
+		if (assign$2.left.type !== "identifier" || assign$2.right.type !== "identifier") continue;
+		const target = assign$2.right.name;
+		if (deferredNames.has(target) || includeExistingFunctionTargets && hasFunctionByName(state, target)) state.functionAliases.set(assign$2.left.name, target);
+	}
+}
+function compileBodyPasses(state, body, opts = {}) {
+	state.deferredGlobalFunctions = [];
+	collectDeferredGlobalFunctions(state, body);
+	collectAliasesFromAst(state, body, new Set(state.deferredGlobalFunctions.map((d$5) => d$5.name)), !!opts.includeExistingFunctionAliasTargets);
+	state.ops = opts.seedDeferredOpsPrefix ? [...opts.seedDeferredOpsPrefix] : [];
+	state.isDeferredPass = true;
+	for (const { name, fnExpr, globalIndex, loc } of state.deferredGlobalFunctions) {
+		const prevCaptureGlobals = state.captureGlobalsInClosures;
+		if (loc.line <= state.preludeLines) state.captureGlobalsInClosures = true;
+		compileFunction(state, fnExpr, name);
+		state.captureGlobalsInClosures = prevCaptureGlobals;
+		state.ops.push(AudioVmOp.SetGlobal, globalIndex);
+		state.stack.pop();
+	}
+	const deferredOpsRaw = state.ops.slice();
+	const deferredLength = deferredOpsRaw.length;
+	state.ops = opts.seedMainOpsPrefix ? [...opts.seedMainOpsPrefix] : [];
+	state.isDeferredPass = false;
+	for (const stmt of body) {
+		if (isDeferredDefStmt(state, stmt)) continue;
+		compileStmt(state, stmt);
+	}
+	const mainOpsRaw = state.ops.slice();
+	state.ops = deferredOpsRaw.concat(mainOpsRaw);
+	patchPcParamsInRange(state.ops, deferredLength, deferredLength);
+	state.arrayInitPcOffset = deferredLength;
+	return {
+		deferredLocKeys: new Set(state.deferredGlobalFunctions.map((d$5) => `${d$5.fnExpr.loc.start}:${d$5.fnExpr.loc.end}`)),
+		deferredOpsRaw,
+		mainOpsRaw,
+		deferredLength
+	};
+}
+function collectPendingDeferredHints(state, deferredLocKeys) {
+	const pendingDeferredHints = /* @__PURE__ */ new Map();
+	for (const [fnLocKey, paramHints] of state.functionParamHintsByFnLoc.entries()) {
+		if (!deferredLocKeys.has(fnLocKey)) continue;
+		const clonedByIndex = /* @__PURE__ */ new Map();
+		for (const [paramIndex, hint] of paramHints.entries()) clonedByIndex.set(paramIndex, cloneFunctionParamHint(hint));
+		pendingDeferredHints.set(fnLocKey, clonedByIndex);
+	}
+	return pendingDeferredHints;
+}
+function dedupeArrayInitRequests(state) {
+	if (state.arrayInitRequests.length <= 1) return;
+	const byGlobal = /* @__PURE__ */ new Map();
+	for (const req of state.arrayInitRequests) {
+		const prev = byGlobal.get(req.globalIdx) ?? 0;
+		byGlobal.set(req.globalIdx, Math.max(prev, req.capacity));
+	}
+	state.arrayInitRequests = Array.from(byGlobal.entries()).map(([globalIdx, capacity]) => ({
+		globalIdx,
+		capacity
+	}));
+}
+function finalizeCompileResult(state) {
+	dedupeArrayInitRequests(state);
+	const arrayInitOps = [];
+	for (const { capacity, globalIdx } of state.arrayInitRequests) {
+		for (let j$4 = 0; j$4 < capacity; j$4++) arrayInitOps.push(AudioVmOp.PushUndefined);
+		arrayInitOps.push(AudioVmOp.MakeArray, capacity, AudioVmOp.SetGlobal, globalIdx);
+	}
+	if (state.recordCaptureStoresByScopeGlobal !== null && state.recordCallbacks.size > 0) {
+		const maxScopeId = Math.max(...state.recordCallbacks.keys(), -1);
+		for (let scopeId = 0; scopeId <= maxScopeId; scopeId++) {
+			const cb = state.recordCallbacks.get(scopeId);
+			const numDeps = cb ? cb.recordGlobalIndices.length : 1;
+			const capacity = Math.max(1, numDeps);
+			for (let j$4 = 0; j$4 < capacity; j$4++) arrayInitOps.push(AudioVmOp.PushUndefined);
+			arrayInitOps.push(AudioVmOp.MakeArray, capacity);
+		}
+		arrayInitOps.push(AudioVmOp.MakeArray, maxScopeId + 1, AudioVmOp.SetGlobal, state.recordCaptureStoresByScopeGlobal);
+	}
+	state.arrayInitRequests = [];
+	const arrayInitOffset = arrayInitOps.length;
+	if (arrayInitOffset > 0) for (let i$6 = 0; i$6 < state.historySourceMap.length; i$6++) {
+		const entry = state.historySourceMap[i$6];
+		if (entry.inFunction && entry.__finalFunctionId !== void 0) {
+			if (state.oversampleCallbackFunctionIds.has(entry.__finalFunctionId)) continue;
+		}
+	}
+	if (state.errors.length > 0) return {
+		bytecode: null,
+		errors: state.errors,
+		sampleRegistrations: [],
+		recordCallbacks: /* @__PURE__ */ new Map(),
+		historySourceMap: [],
+		labels: [],
+		functionCalls: [],
+		bpm: state.bpm
+	};
+	const postPc = state.ops.length;
+	const mixDef = state.mixDefinitionLoc;
+	if (mixDef !== null) {
+		const mixLine = Math.max(1, mixDef.line - state.preludeLines);
+		state.historySourceMap.push({
+			line: mixLine,
+			column: mixDef.column,
+			genName: "Mix",
+			pc: postPc,
+			inFunction: false
+		});
+	}
+	state.ops.push(AudioVmOp.Post);
+	const mixVarInfo = lookupVariable(state, "mix");
+	if (mixVarInfo && mixVarInfo.scope === "global") {
+		state.ops.push(AudioVmOp.GetGlobal);
+		state.ops.push(mixVarInfo.index);
+	} else {
+		state.ops.push(AudioVmOp.GetGlobal);
+		state.ops.push(0);
+	}
+	state.ops.push(AudioVmOp.CallFunction);
+	state.ops.push(1);
+	if (state.stack.length > 0) state.stack.pop();
+	state.stack.push({ expr: {
+		type: "array",
+		items: [],
+		loc: {
+			start: 0,
+			end: 0,
+			line: 0,
+			column: 0
+		}
+	} });
+	const totalLen = arrayInitOffset + state.ops.length;
+	const buffer = /* @__PURE__ */ new ArrayBuffer(totalLen * 4);
+	const u32View = new Uint32Array(buffer);
+	const f32View = new Float32Array(buffer);
+	if (arrayInitOffset > 0) {
+		encodeToBuffer(arrayInitOps, u32View, f32View, 0, 0);
+		encodeToBuffer(state.ops, u32View, f32View, arrayInitOffset, arrayInitOffset, void 0, state.preencodedDefineFunctionSegmentsById ?? void 0);
+	} else encodeToBuffer(state.ops, u32View, f32View, 0, 0, void 0, state.preencodedDefineFunctionSegmentsById ?? void 0);
+	for (const [funcName, recordCallLocKey] of state.functionToRecordCall.entries()) {
+		if (!hasFunctionByName(state, funcName)) continue;
+		const recordCallExpr = state.recordCallExprs.get(recordCallLocKey);
+		if (recordCallExpr) {
+			const args = recordCallExpr.args;
+			const secondsArg = args[0]?.type === "arg" ? args[0].value : null;
+			if (secondsArg && secondsArg.type === "number") {
+				const seconds = Math.max(0, Math.min(10, secondsArg.value));
+				const directRecordCallIds = /* @__PURE__ */ new Set();
+				for (const [locKey, id] of state.recordCallIds.entries()) if (state.recordCallExprs.has(locKey)) directRecordCallIds.add(id);
+				for (const [, callSiteId] of state.recordCallIds.entries()) {
+					if (directRecordCallIds.has(callSiteId)) continue;
+					if (!state.recordCallbacks.has(callSiteId)) continue;
+					if (!state.sampleRegistrations.some((reg) => reg.type === "record" && reg.recordCallbackId === callSiteId)) {
+						const handle = sampleManager.registerRecord(state.projectId, seconds, callSiteId);
+						state.sampleRegistrations.push({
+							handle,
+							type: "record",
+							recordSeconds: seconds,
+							recordCallbackId: callSiteId,
+							recordProjectId: state.projectId
+						});
+					}
+				}
+			}
+		}
+	}
+	const historySourceMap = state.historySourceMap.map((entry) => ({
+		...entry,
+		pc: entry.pc + arrayInitOffset + (entry.__fromMainProgram ? state.arrayInitPcOffset : 0)
+	}));
+	const functionReturnPcs = {};
+	for (const [name, funcInfo] of functionsByNameEntries(state)) {
+		const idx = funcInfo.returnHistorySourceMapIndex;
+		if (idx != null) {
+			const entry = historySourceMap[idx];
+			if (entry) functionReturnPcs[name] = entry.pc;
+		}
+	}
+	return {
+		bytecode: f32View,
+		errors: [],
+		sampleRegistrations: state.sampleRegistrations,
+		historySourceMap,
+		labels: state.labels,
+		recordCallbacks: state.recordCallbacks,
+		functionReturnPcs,
+		functionCalls: state.functionCallsMeta,
+		bpm: state.bpm
+	};
+}
+function initializeStateForCompile(state, preludeLines, seedFunctionParamHintsByFnLoc, recordMapping) {
 	state.preludeLines = preludeLines;
 	state.ops = [];
 	state.errors = [];
@@ -39456,185 +42788,285 @@ function compile$2(state, program, preludeLines = 0, seedFunctionParamHintsByFnL
 	state.deferredGlobalFunctions = [];
 	state.functionsByNameStack = [/* @__PURE__ */ new Map()];
 	state.oversampleCallbackFunctionIds = /* @__PURE__ */ new Set();
-	const recordMapping = assignRecordCallIds(program);
+	state.functionCallsMeta = [];
+	state.seenCallSites = /* @__PURE__ */ new Set();
+	state.paramNameToLocalIndex = null;
+	state.compilingRecordCallback = false;
+	state.captureGlobalsInClosures = false;
+	state.functionDepth = 0;
 	state.recordCallIds = recordMapping.recordCallIds;
 	state.functionToRecordCall = recordMapping.functionToRecordCall;
 	state.recordCallExprs = /* @__PURE__ */ new Map();
-	collectDeferredGlobalFunctions(state, program.body);
-	const deferredNames = new Set(state.deferredGlobalFunctions.map((d$5) => d$5.name));
-	const collectAliasesFromAst = (body) => {
-		for (const stmt of body) {
-			if (stmt.type === "block") {
-				collectAliasesFromAst(stmt.body);
-				continue;
-			}
-			if (stmt.type === "expr" && stmt.expr.type === "assign") {
-				const assign$1 = stmt.expr;
-				if (assign$1.left.type === "identifier" && assign$1.right.type === "identifier") {
-					const target = assign$1.right.name;
-					if (deferredNames.has(target)) state.functionAliases.set(assign$1.left.name, target);
-				}
-			}
-		}
-	};
-	collectAliasesFromAst(program.body);
-	state.ops = [];
-	state.isDeferredPass = true;
-	for (const { name, fnExpr, globalIndex, loc } of state.deferredGlobalFunctions) {
-		const prevCaptureGlobals = state.captureGlobalsInClosures;
-		if (loc.line <= state.preludeLines) state.captureGlobalsInClosures = true;
-		compileFunction(state, fnExpr, name);
-		state.captureGlobalsInClosures = prevCaptureGlobals;
-		state.ops.push(AudioVmOp.SetGlobal, globalIndex);
-		state.stack.pop();
+	state.preencodedDefineFunctionSegmentsById = null;
+}
+function isSameStoreShape(a$35, b$4) {
+	if (!a$35 && !b$4) return true;
+	if (!a$35 || !b$4) return false;
+	if (a$35.kind !== b$4.kind) return false;
+	if (a$35.kind === "array" && b$4.kind === "array") return a$35.length === b$4.length;
+	if (a$35.kind === "object" && b$4.kind === "object") {
+		if (a$35.keys.length !== b$4.keys.length) return false;
+		for (let i$6 = 0; i$6 < a$35.keys.length; i$6++) if (a$35.keys[i$6] !== b$4.keys[i$6]) return false;
+		return true;
 	}
-	const deferredOps = state.ops.slice();
-	const deferredLength = deferredOps.length;
-	state.ops = [];
-	state.isDeferredPass = false;
-	for (const stmt of program.body) {
-		if (isDeferredDefStmt(state, stmt)) continue;
-		compileStmt(state, stmt);
+	return false;
+}
+function isSameObjectPropertyStoreShapes(a$35, b$4) {
+	if (!a$35 && !b$4) return true;
+	if (!a$35 || !b$4) return false;
+	if (a$35.size !== b$4.size) return false;
+	for (const [key, shape] of a$35.entries()) if (!isSameStoreShape(shape, b$4.get(key))) return false;
+	return true;
+}
+function isSameFunctionParamHint(a$35, b$4) {
+	if (!a$35 && !b$4) return true;
+	if (!a$35 || !b$4) return false;
+	const aKeys = a$35.objectKeys ?? [];
+	const bKeys = b$4.objectKeys ?? [];
+	if (aKeys.length !== bKeys.length) return false;
+	for (let i$6 = 0; i$6 < aKeys.length; i$6++) if (aKeys[i$6] !== bKeys[i$6]) return false;
+	if (!isSameObjectPropertyStoreShapes(a$35.objectPropertyStoreShapes, b$4.objectPropertyStoreShapes)) return false;
+	if (!isSameStoreShape(a$35.storeShape, b$4.storeShape)) return false;
+	return a$35.functionId === b$4.functionId;
+}
+function isSameFunctionParamHintsByIndex(a$35, b$4) {
+	if (!a$35 && !b$4) return true;
+	if (!a$35 || !b$4) return false;
+	if (a$35.size !== b$4.size) return false;
+	for (const [idx, hint] of a$35.entries()) if (!isSameFunctionParamHint(hint, b$4.get(idx))) return false;
+	return true;
+}
+function hasPreludeHintInvalidation(baselineHints, currentHints, preludeDeferredLocKeys) {
+	for (const locKey of preludeDeferredLocKeys.values()) if (!isSameFunctionParamHintsByIndex(baselineHints.get(locKey), currentHints.get(locKey))) return true;
+	return false;
+}
+function ensureRecordHandleArrayCapacity(state) {
+	if (state.recordHandleByScopeGlobal === null) return;
+	let maxScopeId = -1;
+	for (const callbackId of state.recordCallIds.values()) if (callbackId > maxScopeId) maxScopeId = callbackId;
+	const requiredCapacity = Math.max(100, maxScopeId + 1);
+	let found = false;
+	for (const req of state.arrayInitRequests) {
+		if (req.globalIdx !== state.recordHandleByScopeGlobal) continue;
+		req.capacity = Math.max(req.capacity, requiredCapacity);
+		found = true;
 	}
-	state.ops = deferredOps.concat(state.ops);
-	patchPcParamsInRange(state.ops, deferredLength, deferredLength);
-	state.arrayInitPcOffset = deferredLength;
-	const arrayInitOps = [];
-	for (const { capacity, globalIdx } of state.arrayInitRequests) {
-		for (let j$4 = 0; j$4 < capacity; j$4++) arrayInitOps.push(AudioVmOp.PushUndefined);
-		arrayInitOps.push(AudioVmOp.MakeArray, capacity, AudioVmOp.SetGlobal, globalIdx);
-	}
-	if (state.recordCaptureStoresByScopeGlobal !== null && state.recordCallbacks.size > 0) {
-		const maxScopeId = Math.max(...state.recordCallbacks.keys(), -1);
-		for (let scopeId = 0; scopeId <= maxScopeId; scopeId++) {
-			const cb = state.recordCallbacks.get(scopeId);
-			const numDeps = cb ? cb.recordGlobalIndices.length : 1;
-			const capacity = Math.max(1, numDeps);
-			for (let j$4 = 0; j$4 < capacity; j$4++) arrayInitOps.push(AudioVmOp.PushUndefined);
-			arrayInitOps.push(AudioVmOp.MakeArray, capacity);
-		}
-		arrayInitOps.push(AudioVmOp.MakeArray, maxScopeId + 1, AudioVmOp.SetGlobal, state.recordCaptureStoresByScopeGlobal);
-	}
-	state.arrayInitRequests = [];
-	const arrayInitOffset = arrayInitOps.length;
-	if (arrayInitOffset > 0) for (let i$6 = 0; i$6 < state.historySourceMap.length; i$6++) {
-		const entry = state.historySourceMap[i$6];
-		if (entry.inFunction && entry.__finalFunctionId !== void 0) {
-			if (state.oversampleCallbackFunctionIds.has(entry.__finalFunctionId)) continue;
-		}
-	}
-	if (allowDeferredFunctionHintRecompile) {
-		const deferredLocKeys = new Set(state.deferredGlobalFunctions.map((d$5) => `${d$5.fnExpr.loc.start}:${d$5.fnExpr.loc.end}`));
-		const pendingDeferredHints = /* @__PURE__ */ new Map();
-		for (const [fnLocKey, paramHints] of state.functionParamHintsByFnLoc.entries()) {
-			if (!deferredLocKeys.has(fnLocKey)) continue;
-			pendingDeferredHints.set(fnLocKey, paramHints);
-		}
-		if (pendingDeferredHints.size > 0) {
-			const mergedHints = cloneFunctionParamHintsByFnLoc(seedFunctionParamHintsByFnLoc);
+	if (!found) state.arrayInitRequests.push({
+		capacity: requiredCapacity,
+		globalIdx: state.recordHandleByScopeGlobal
+	});
+}
+function buildPreludeSnapshot(preludeProgram, preludeLines) {
+	const preludeState = new State();
+	let seedHints = /* @__PURE__ */ new Map();
+	let preludeDeferredLocKeys = /* @__PURE__ */ new Set();
+	let preludeDeferredOpsRaw = [];
+	let preludeMainOpsRaw = [];
+	const recordMapping = assignRecordCallIds(preludeProgram);
+	const maxAttempts = 2;
+	for (let attempt = 0; attempt < maxAttempts; attempt++) {
+		initializeStateForCompile(preludeState, preludeLines, seedHints, recordMapping);
+		const pass = compileBodyPasses(preludeState, preludeProgram.body);
+		preludeDeferredLocKeys = pass.deferredLocKeys;
+		preludeDeferredOpsRaw = [...pass.deferredOpsRaw];
+		preludeMainOpsRaw = [...pass.mainOpsRaw];
+		const pendingDeferredHints = collectPendingDeferredHints(preludeState, pass.deferredLocKeys);
+		if (attempt === 0 && pendingDeferredHints.size > 0) {
+			const mergedHints = cloneFunctionParamHintsByFnLoc(seedHints);
 			mergeFunctionParamHintsByFnLoc(mergedHints, pendingDeferredHints);
-			return compile$2(state, program, preludeLines, mergedHints, false);
+			seedHints = mergedHints;
+			continue;
 		}
+		break;
 	}
-	if (state.errors.length > 0) return {
-		bytecode: null,
-		errors: state.errors,
-		sampleRegistrations: [],
-		recordCallbacks: /* @__PURE__ */ new Map(),
-		historySourceMap: [],
-		labels: [],
-		functionCalls: [],
-		bpm: state.bpm
+	const preencodedDefineFunctionSegmentsById = buildEncodedDefineFunctionSegmentCache(preludeState.ops);
+	return {
+		preludeLines,
+		preludeDeferredOpsRaw,
+		preludeMainOpsRaw,
+		preencodedDefineFunctionSegmentsById,
+		baseState: preludeState,
+		preludeSampleRegistrations: cloneSampleRegistrations(preludeState.sampleRegistrations),
+		seedFunctionParamHintsByFnLoc: cloneFunctionParamHintsByFnLoc(preludeState.functionParamHintsByFnLoc),
+		preludeDeferredLocKeys
 	};
-	const postPc = state.ops.length;
-	const mixDef = state.mixDefinitionLoc;
-	if (mixDef !== null) {
-		const mixLine = Math.max(1, mixDef.line - state.preludeLines);
-		state.historySourceMap.push({
-			line: mixLine,
-			column: mixDef.column,
-			genName: "Mix",
-			pc: postPc,
-			inFunction: false
+}
+function restoreStateFromPreludeSnapshot(state, snapshot, seedFunctionParamHintsByFnLoc, recordMapping) {
+	const projectId = state.projectId;
+	const baseState = snapshot.baseState;
+	state.preludeLines = snapshot.preludeLines;
+	state.ops = [];
+	state.errors = [];
+	state.stack = [];
+	state.functionAliases = new Map(baseState.functionAliases);
+	state.globals = cloneVariableMap(baseState.globals);
+	state.locals = cloneVariableScopeStack(baseState.locals);
+	state.closureVars = cloneVariableScopeStack(baseState.closureVars);
+	state.functions = [...baseState.functions];
+	state.stringExpressions = new Map(baseState.stringExpressions);
+	state.functionBytecodes = new Map(baseState.functionBytecodes);
+	state.functionIdToDefaultParamFunctions = new Map(Array.from(baseState.functionIdToDefaultParamFunctions.entries()).map(([functionId, mapping]) => [functionId, new Map(mapping)]));
+	state.loopStack = [];
+	state.pipeVars = [];
+	state.nextGlobalIndex = baseState.nextGlobalIndex;
+	state.nextLocalIndex = baseState.nextLocalIndex;
+	state.nextFunctionId = baseState.nextFunctionId;
+	state.nextAllocCallSiteId = baseState.nextAllocCallSiteId;
+	state.nextStepCallSiteId = baseState.nextStepCallSiteId;
+	state.nextStoreCallSiteId = baseState.nextStoreCallSiteId;
+	state.nextTempId = baseState.nextTempId;
+	state.inFunction = false;
+	state.sampleRegistrations = [];
+	state.recordCallbacks = new Map(baseState.recordCallbacks);
+	state.recordCallbackTemplates = new Map(baseState.recordCallbackTemplates);
+	state.nextRecordScopeId = baseState.nextRecordScopeId;
+	state.scopeCaptureGlobals = new Map(baseState.scopeCaptureGlobals);
+	state.arrayInitOps = [];
+	state.arrayInitRequests = cloneArrayInitRequests(baseState.arrayInitRequests);
+	state.arrayInitPcOffset = 0;
+	state.nextRecordGlobalIdx = baseState.nextRecordGlobalIdx;
+	state.recordHandleByScopeGlobal = baseState.recordHandleByScopeGlobal;
+	state.currentRecordScopeIdGlobal = baseState.currentRecordScopeIdGlobal;
+	state.recordCaptureStoresByScopeGlobal = baseState.recordCaptureStoresByScopeGlobal;
+	state.callSiteIdToHandle = /* @__PURE__ */ new Map();
+	state.historySourceMap = baseState.historySourceMap.slice();
+	state.labels = [...baseState.labels];
+	state.varToArrayLiteral = new Map(baseState.varToArrayLiteral);
+	state.varToObjectLiteral = new Map(baseState.varToObjectLiteral);
+	state.objectKeysByBinding = cloneStringArrayMap(baseState.objectKeysByBinding);
+	state.objectPropertyStoreShapesByBinding = cloneObjectPropertyStoreShapeMap(baseState.objectPropertyStoreShapesByBinding);
+	state.arrayElementObjectKeysByBinding = cloneStringArrayMap(baseState.arrayElementObjectKeysByBinding);
+	state.arrayElementObjectPropertyStoreShapesByBinding = cloneObjectPropertyStoreShapeMap(baseState.arrayElementObjectPropertyStoreShapesByBinding);
+	state.storeShapesByBinding = cloneStoreShapeMap(baseState.storeShapesByBinding);
+	state.variableFunctionIds = new Map(baseState.variableFunctionIds);
+	state.functionParamHintsByFnLoc = cloneFunctionParamHintsByFnLoc(seedFunctionParamHintsByFnLoc);
+	state.mixDefinitionLoc = baseState.mixDefinitionLoc ? { ...baseState.mixDefinitionLoc } : null;
+	state.scale = baseState.scale;
+	state.scaleIndex = baseState.scaleIndex;
+	state.rootMidi = baseState.rootMidi;
+	state.functionBytecodeStarts = new Map(baseState.functionBytecodeStarts);
+	state.currentFunctionId = null;
+	state.deferredGlobalFunctions = [];
+	state.functionsByNameStack = baseState.functionsByNameStack.map((scope) => new Map(scope));
+	state.oversampleCallbackFunctionIds = new Set(baseState.oversampleCallbackFunctionIds);
+	state.functionCallsMeta = [...baseState.functionCallsMeta];
+	state.seenCallSites = /* @__PURE__ */ new Set();
+	state.paramNameToLocalIndex = null;
+	state.compilingRecordCallback = false;
+	state.captureGlobalsInClosures = false;
+	state.functionDepth = 0;
+	state.recordCallIds = recordMapping.recordCallIds;
+	state.functionToRecordCall = recordMapping.functionToRecordCall;
+	state.recordCallExprs = new Map(baseState.recordCallExprs);
+	state.preencodedDefineFunctionSegmentsById = snapshot.preencodedDefineFunctionSegmentsById;
+	state.projectId = projectId;
+}
+function userBodyIntroducesGlobalDeclarations(snapshot, userBody) {
+	if (userBody.length === 0) return false;
+	const knownGlobals = snapshot.baseState.globals;
+	for (const stmt of userBody) {
+		if (stmt.type !== "expr" || stmt.expr.type !== "assign") continue;
+		const expr = stmt.expr;
+		if (expr.left.type === "identifier") {
+			const name = expr.left.name;
+			if (SYSTEM_VARS.has(name)) continue;
+			if (expr.op === ":=") return true;
+			if (!knownGlobals.has(name)) return true;
+			continue;
+		}
+		if (expr.left.type !== "destructure") continue;
+		if (expr.op === ":=") {
+			for (const name of expr.left.names) if (!SYSTEM_VARS.has(name)) return true;
+			continue;
+		}
+		for (const name of expr.left.names) if (!SYSTEM_VARS.has(name) && !knownGlobals.has(name)) return true;
+	}
+	return false;
+}
+function replayPreludeSampleRegistrations(state, snapshot) {
+	state.sampleRegistrations = [];
+	let mismatch = false;
+	for (const registration of snapshot.preludeSampleRegistrations) {
+		if (registration.type === "record" && registration.recordSeconds !== void 0 && registration.recordCallbackId !== void 0) {
+			const handle = sampleManager.registerRecord(state.projectId, registration.recordSeconds, registration.recordCallbackId);
+			if (handle !== registration.handle) mismatch = true;
+			state.sampleRegistrations.push({
+				...registration,
+				handle,
+				recordProjectId: state.projectId
+			});
+			continue;
+		}
+		if (registration.type === "freesound" && registration.freesoundId !== void 0) {
+			const handle = sampleManager.registerFreesound(registration.freesoundId);
+			if (handle !== registration.handle) mismatch = true;
+			state.sampleRegistrations.push({
+				...registration,
+				handle
+			});
+			continue;
+		}
+		mismatch = true;
+	}
+	return mismatch;
+}
+function compileWithPreludeSnapshot(state, program, userBody, snapshot) {
+	const recordMapping = assignRecordCallIds(program);
+	if (userBodyIntroducesGlobalDeclarations(snapshot, userBody)) return {
+		result: null,
+		fallbackToFullCompile: true
+	};
+	let seedHints = cloneFunctionParamHintsByFnLoc(snapshot.seedFunctionParamHintsByFnLoc);
+	const maxAttempts = 2;
+	for (let attempt = 0; attempt < maxAttempts; attempt++) {
+		restoreStateFromPreludeSnapshot(state, snapshot, seedHints, recordMapping);
+		if (replayPreludeSampleRegistrations(state, snapshot)) return {
+			result: null,
+			fallbackToFullCompile: true
+		};
+		ensureRecordHandleArrayCapacity(state);
+		const pass = compileBodyPasses(state, userBody, {
+			seedDeferredOpsPrefix: snapshot.preludeDeferredOpsRaw,
+			seedMainOpsPrefix: snapshot.preludeMainOpsRaw,
+			includeExistingFunctionAliasTargets: true
 		});
-	}
-	state.ops.push(AudioVmOp.Post);
-	const mixVarInfo = lookupVariable(state, "mix");
-	if (mixVarInfo && mixVarInfo.scope === "global") {
-		state.ops.push(AudioVmOp.GetGlobal);
-		state.ops.push(mixVarInfo.index);
-	} else {
-		state.ops.push(AudioVmOp.GetGlobal);
-		state.ops.push(0);
-	}
-	state.ops.push(AudioVmOp.CallFunction);
-	state.ops.push(1);
-	if (state.stack.length > 0) state.stack.pop();
-	state.stack.push({ expr: {
-		type: "array",
-		items: [],
-		loc: {
-			start: 0,
-			end: 0,
-			line: 0,
-			column: 0
+		if (hasPreludeHintInvalidation(snapshot.seedFunctionParamHintsByFnLoc, state.functionParamHintsByFnLoc, snapshot.preludeDeferredLocKeys)) return {
+			result: null,
+			fallbackToFullCompile: true
+		};
+		const pendingDeferredHints = collectPendingDeferredHints(state, pass.deferredLocKeys);
+		if (attempt === 0 && pendingDeferredHints.size > 0) {
+			const mergedHints = cloneFunctionParamHintsByFnLoc(seedHints);
+			mergeFunctionParamHintsByFnLoc(mergedHints, pendingDeferredHints);
+			seedHints = mergedHints;
+			continue;
 		}
-	} });
-	const totalLen = arrayInitOffset + state.ops.length;
-	const buffer = /* @__PURE__ */ new ArrayBuffer(totalLen * 4);
-	const u32View = new Uint32Array(buffer);
-	const f32View = new Float32Array(buffer);
-	if (arrayInitOffset > 0) {
-		encodeToBuffer(arrayInitOps, u32View, f32View, 0, 0);
-		encodeToBuffer(state.ops, u32View, f32View, arrayInitOffset, arrayInitOffset);
-	} else encodeToBuffer(state.ops, u32View, f32View, 0, 0);
-	for (const [funcName, recordCallLocKey] of state.functionToRecordCall.entries()) {
-		if (!hasFunctionByName(state, funcName)) continue;
-		const recordCallExpr = state.recordCallExprs.get(recordCallLocKey);
-		if (recordCallExpr) {
-			const args = recordCallExpr.args;
-			const secondsArg = args[0]?.type === "arg" ? args[0].value : null;
-			if (secondsArg && secondsArg.type === "number") {
-				const seconds = Math.max(0, Math.min(10, secondsArg.value));
-				const directRecordCallIds = /* @__PURE__ */ new Set();
-				for (const [locKey, id] of state.recordCallIds.entries()) if (state.recordCallExprs.has(locKey)) directRecordCallIds.add(id);
-				for (const [callSiteLocKey, callSiteId] of state.recordCallIds.entries()) {
-					if (directRecordCallIds.has(callSiteId)) continue;
-					if (!state.recordCallbacks.has(callSiteId)) continue;
-					if (!state.sampleRegistrations.some((reg) => reg.type === "record" && reg.recordCallbackId === callSiteId)) {
-						const handle = sampleManager.registerRecord(state.projectId, seconds, callSiteId);
-						state.sampleRegistrations.push({
-							handle,
-							type: "record",
-							recordSeconds: seconds,
-							recordCallbackId: callSiteId,
-							recordProjectId: state.projectId
-						});
-					}
-				}
-			}
-		}
-	}
-	for (const entry of state.historySourceMap) entry.pc += arrayInitOffset + (entry.__fromMainProgram ? state.arrayInitPcOffset : 0);
-	const functionReturnPcs = {};
-	for (const [name, funcInfo] of functionsByNameEntries(state)) {
-		const idx = funcInfo.returnHistorySourceMapIndex;
-		if (idx != null) {
-			const entry = state.historySourceMap[idx];
-			if (entry) functionReturnPcs[name] = entry.pc;
-		}
+		return {
+			result: finalizeCompileResult(state),
+			fallbackToFullCompile: false
+		};
 	}
 	return {
-		bytecode: f32View,
-		errors: [],
-		sampleRegistrations: state.sampleRegistrations,
-		historySourceMap: state.historySourceMap,
-		labels: state.labels,
-		recordCallbacks: state.recordCallbacks,
-		functionReturnPcs,
-		functionCalls: state.functionCallsMeta,
-		bpm: state.bpm
+		result: finalizeCompileResult(state),
+		fallbackToFullCompile: false
 	};
+}
+function compile$2(state, program, preludeLines = 0, seedFunctionParamHintsByFnLoc = /* @__PURE__ */ new Map(), allowDeferredFunctionHintRecompile = true) {
+	const recordMapping = assignRecordCallIds(program);
+	let seedHints = cloneFunctionParamHintsByFnLoc(seedFunctionParamHintsByFnLoc);
+	const maxAttempts = allowDeferredFunctionHintRecompile ? 2 : 1;
+	for (let attempt = 0; attempt < maxAttempts; attempt++) {
+		initializeStateForCompile(state, preludeLines, seedHints, recordMapping);
+		const pendingDeferredHints = collectPendingDeferredHints(state, compileBodyPasses(state, program.body).deferredLocKeys);
+		if (attempt === 0 && allowDeferredFunctionHintRecompile && pendingDeferredHints.size > 0) {
+			const mergedHints = cloneFunctionParamHintsByFnLoc(seedHints);
+			mergeFunctionParamHintsByFnLoc(mergedHints, pendingDeferredHints);
+			seedHints = mergedHints;
+			continue;
+		}
+		return finalizeCompileResult(state);
+	}
+	return finalizeCompileResult(state);
 }
 function compileStmt(state, stmt) {
 	switch (stmt.type) {
@@ -39705,14 +43137,20 @@ var BUFFER_BUILTIN_PARAMS = {
 	advance: ["buf"],
 	read: ["buf", "offset"]
 };
+var BUILTIN_SPEC_BY_VARIANT = /* @__PURE__ */ new Map();
+var BUILTIN_DEFAULT_SPEC_BY_GEN_NAME = /* @__PURE__ */ new Map();
+for (const spec of genSpecs) {
+	if (!BUILTIN_SPEC_BY_VARIANT.has(spec.variantName)) BUILTIN_SPEC_BY_VARIANT.set(spec.variantName, spec);
+	if (spec.variantName === "default" && !BUILTIN_DEFAULT_SPEC_BY_GEN_NAME.has(spec.genName)) BUILTIN_DEFAULT_SPEC_BY_GEN_NAME.set(spec.genName, spec);
+}
 function isKnownBuiltinName(name) {
 	return getBuiltinSpec(name) !== null || OUT_SOLO_BUILTINS.has(name) || name in BUFFER_BUILTIN_PARAMS;
 }
 function getBuiltinSpec(name) {
-	const byVariant = genSpecs.find((s$4) => s$4.variantName === name);
+	const byVariant = BUILTIN_SPEC_BY_VARIANT.get(name);
 	if (byVariant) return byVariant;
 	const genName = name.charAt(0).toUpperCase() + name.slice(1);
-	return genSpecs.find((s$4) => s$4.genName === genName && s$4.variantName === "default") ?? null;
+	return BUILTIN_DEFAULT_SPEC_BY_GEN_NAME.get(genName) ?? null;
 }
 function compileBuiltinAsValue(state, builtinName, loc) {
 	if (OUT_SOLO_BUILTINS.has(builtinName)) {
@@ -39939,75 +43377,6 @@ function popScope(state) {
 function getCurrentScope(state) {
 	return state.locals.length > 0 ? state.locals[state.locals.length - 1] : null;
 }
-var State = class {
-	arrayInitOps = [];
-	arrayInitPcOffset = 0;
-	arrayInitRequests = [];
-	callSiteIdToHandle = /* @__PURE__ */ new Map();
-	captureGlobalsInClosures = false;
-	scopeCaptureGlobals = /* @__PURE__ */ new Map();
-	nextRecordScopeId = 0;
-	closureVars = [];
-	compilingRecordCallback = false;
-	currentFunctionId = null;
-	deferredGlobalFunctions = [];
-	errors = [];
-	functionCallsMeta = [];
-	functionBytecodes = /* @__PURE__ */ new Map();
-	functionBytecodeStarts = /* @__PURE__ */ new Map();
-	functionParamHintsByFnLoc = /* @__PURE__ */ new Map();
-	functionDepth = 0;
-	functions = [];
-	functionAliases = /* @__PURE__ */ new Map();
-	functionsByNameStack = [/* @__PURE__ */ new Map()];
-	functionToRecordCall = /* @__PURE__ */ new Map();
-	functionIdToDefaultParamFunctions = /* @__PURE__ */ new Map();
-	globals = /* @__PURE__ */ new Map();
-	historySourceMap = [];
-	labels = [];
-	mixDefinitionLoc = null;
-	isDeferredPass = false;
-	inFunction = false;
-	paramNameToLocalIndex = null;
-	locals = [];
-	loopStack = [];
-	nextFunctionId = 0;
-	nextGlobalIndex = 0;
-	nextLocalIndex = 0;
-	nextRecordGlobalIdx = 1e3;
-	nextAllocCallSiteId = 0;
-	nextStepCallSiteId = 0;
-	nextStoreCallSiteId = 0;
-	nextTempId = 0;
-	ops = [];
-	oversampleCallbackFunctionIds = /* @__PURE__ */ new Set();
-	pipeVars = [];
-	preludeLines = 0;
-	recordCallbacks = /* @__PURE__ */ new Map();
-	recordCallbackTemplates = /* @__PURE__ */ new Map();
-	recordCallExprs = /* @__PURE__ */ new Map();
-	recordCallIds = /* @__PURE__ */ new Map();
-	recordHandleByScopeGlobal = null;
-	currentRecordScopeIdGlobal = null;
-	recordCaptureStoresByScopeGlobal = null;
-	sampleRegistrations = [];
-	projectId = null;
-	seenCallSites = /* @__PURE__ */ new Set();
-	stack = [];
-	stringExpressions = /* @__PURE__ */ new Map();
-	bpm = 120;
-	varToArrayLiteral = /* @__PURE__ */ new Map();
-	varToObjectLiteral = /* @__PURE__ */ new Map();
-	objectKeysByBinding = /* @__PURE__ */ new Map();
-	objectPropertyStoreShapesByBinding = /* @__PURE__ */ new Map();
-	arrayElementObjectKeysByBinding = /* @__PURE__ */ new Map();
-	arrayElementObjectPropertyStoreShapesByBinding = /* @__PURE__ */ new Map();
-	storeShapesByBinding = /* @__PURE__ */ new Map();
-	variableFunctionIds = /* @__PURE__ */ new Map();
-	scale = "major";
-	scaleIndex = 0;
-	rootMidi = 0;
-};
 function disassembleBytecode(bytecode$1, indent = 0) {
 	const lines = [];
 	const u32 = new Uint32Array(bytecode$1.buffer, bytecode$1.byteOffset, bytecode$1.length);
@@ -40057,10 +43426,21 @@ function disassembleBytecode(bytecode$1, indent = 0) {
 	}
 	return lines;
 }
+var preludeSnapshot = null;
+var preludeSnapshotPreludeLines = -1;
 function compile$1(program, preludeLines = 0, opts) {
 	const state = new State();
 	if (opts?.projectId !== void 0) state.projectId = opts.projectId;
-	return compile$2(state, program, preludeLines);
+	if (preludeLines <= 0) return compile$2(state, program, preludeLines);
+	const split = splitProgramByPreludeLines(program, preludeLines);
+	if (split.prelude.body.length === 0) return compile$2(state, program, preludeLines);
+	if (!preludeSnapshot || preludeSnapshotPreludeLines !== preludeLines) {
+		preludeSnapshot = buildPreludeSnapshot(split.prelude, preludeLines);
+		preludeSnapshotPreludeLines = preludeLines;
+	}
+	const incremental = compileWithPreludeSnapshot(state, program, split.user.body, preludeSnapshot);
+	if (incremental.fallbackToFullCompile || !incremental.result) return compile$2(state, program, preludeLines);
+	return incremental.result;
 }
 var ASSIGN_OPS = new Set([
 	"=",
@@ -40103,16 +43483,16 @@ var BIN_PREC = {
 	}
 };
 function parseTokens(input, tokens) {
-	const p$7 = new Parser(input, tokens);
+	const p$8 = new Parser(input, tokens);
 	let program = null;
 	try {
-		program = p$7.parseProgram();
+		program = p$8.parseProgram();
 	} catch (e$61) {
-		if (p$7.errors.length === 0) p$7.error("Parse error: " + (e$61 instanceof Error ? e$61.message : String(e$61)));
+		if (p$8.errors.length === 0) p$8.error("Parse error: " + (e$61 instanceof Error ? e$61.message : String(e$61)));
 	}
 	return {
 		program,
-		errors: p$7.errors
+		errors: p$8.errors
 	};
 }
 function collectNumberLiterals(program) {
@@ -42189,14 +45569,14 @@ function createControlPipeline(preludeSrc) {
 	}
 	function compileSource(src, opts) {
 		const l$10 = lex(src);
-		const p$7 = parse(src, l$10);
-		if (p$7.errors.length > 0 || !p$7.program) {
+		const p$8 = parse(src, l$10);
+		if (p$8.errors.length > 0 || !p$8.program) {
 			const formattedErrors$1 = [];
 			for (const e$61 of l$10.errors) formattedErrors$1.push(`Lex ${e$61.loc.line}:${e$61.loc.column} ${e$61.message}`);
-			for (const e$61 of p$7.errors) formattedErrors$1.push(`Parse ${e$61.loc.line}:${e$61.loc.column} ${e$61.message}`);
+			for (const e$61 of p$8.errors) formattedErrors$1.push(`Parse ${e$61.loc.line}:${e$61.loc.column} ${e$61.message}`);
 			return {
 				lex: l$10,
-				parse: p$7,
+				parse: p$8,
 				compile: {
 					bytecode: null,
 					errors: [],
@@ -42208,12 +45588,12 @@ function createControlPipeline(preludeSrc) {
 				errors: formattedErrors$1
 			};
 		}
-		const c0 = compileProgram(p$7.program, opts);
-		const errors = c0.errors.map((e$61) => e$61.loc.line > p$7.preludeLines ? {
+		const c0 = compileProgram(p$8.program, opts);
+		const errors = c0.errors.map((e$61) => e$61.loc.line > p$8.preludeLines ? {
 			...e$61,
 			loc: {
 				...e$61.loc,
-				line: e$61.loc.line - p$7.preludeLines
+				line: e$61.loc.line - p$8.preludeLines
 			}
 		} : e$61);
 		const c$7 = {
@@ -42222,11 +45602,11 @@ function createControlPipeline(preludeSrc) {
 		};
 		const formattedErrors = [];
 		for (const e$61 of l$10.errors) formattedErrors.push(`Lex ${e$61.loc.line}:${e$61.loc.column} ${e$61.message}`);
-		for (const e$61 of p$7.errors) formattedErrors.push(`Parse ${e$61.loc.line}:${e$61.loc.column} ${e$61.message}`);
+		for (const e$61 of p$8.errors) formattedErrors.push(`Parse ${e$61.loc.line}:${e$61.loc.column} ${e$61.message}`);
 		for (const e$61 of c$7.errors) formattedErrors.push(`Compile ${e$61.loc.line}:${e$61.loc.column} ${e$61.message}`);
 		return {
 			lex: l$10,
-			parse: p$7,
+			parse: p$8,
 			compile: c$7,
 			errors: formattedErrors
 		};
@@ -43092,12 +46472,12 @@ async function createDspState(opts) {
 const Getter = (cb, target = {}) => new Proxy(target, { get: (_$5, key) => cb(key) });
 var defaultTransferables$1 = [typeof OffscreenCanvas !== "undefined" ? OffscreenCanvas : void 0, typeof MessagePort !== "undefined" ? MessagePort : void 0].filter(Boolean);
 const rpc = (port, api$1 = {}, transferables = defaultTransferables$1) => {
-	const xfer = (args, transferables$1) => args.reduce((p$7, n$4) => {
+	const xfer = (args, transferables$1) => args.reduce((p$8, n$4) => {
 		if (typeof n$4 === "object") {
-			if (transferables$1.some((ctor) => n$4 instanceof ctor)) p$7.push(n$4);
-			else for (const key in n$4) if (n$4[key] && transferables$1.some((ctor) => n$4[key] instanceof ctor)) p$7.push(n$4[key]);
+			if (transferables$1.some((ctor) => n$4 instanceof ctor)) p$8.push(n$4);
+			else for (const key in n$4) if (n$4[key] && transferables$1.some((ctor) => n$4[key] instanceof ctor)) p$8.push(n$4[key]);
 		}
-		return p$7;
+		return p$8;
 	}, []);
 	let callbackId = 0;
 	const calls = /* @__PURE__ */ new Map();
@@ -43380,6 +46760,384 @@ async function wasmSetup({ binary, sourcemapUrl, config, imports }) {
 		memory
 	};
 }
+function debounce$1(ms, fn$1, options$2) {
+	let resolving = false;
+	let timeToResolve;
+	let now;
+	let delta;
+	let callThis;
+	let callArgs;
+	function resolver() {
+		now = performance.now();
+		delta = timeToResolve - now;
+		if (delta > 5) setTimeout(resolver, delta);
+		else if (callArgs) {
+			fn$1.apply(callThis, callArgs);
+			resolving = false;
+		}
+	}
+	function wrapper(...args) {
+		callThis = this;
+		callArgs = args;
+		timeToResolve = performance.now() + ms;
+		if (resolving) return;
+		if (options$2?.first) {
+			fn$1.apply(callThis, callArgs);
+			if (!options$2.last) callArgs = void 0;
+		}
+		resolving = true;
+		setTimeout(resolver, ms);
+	}
+	return wrapper;
+}
+function memoizeByRef$1(fn$1, map = /* @__PURE__ */ new Map()) {
+	function wrapped(arg, ...args) {
+		if (map.has(arg)) return map.get(arg);
+		let res;
+		map.set(arg, res = fn$1.call(this, arg, ...args));
+		return res;
+	}
+	return wrapped;
+}
+Int8Array.__proto__;
+function isFunction$1(x$4) {
+	return typeof x$4 === "function";
+}
+memoizeByRef$1(function isCtor$3(v$4) {
+	return isFunction$1(v$4) && v$4.toString().startsWith("class");
+});
+var EventEmitter$1 = class {
+	#listeners = {};
+	get listeners() {
+		return this.#listeners;
+	}
+	set listeners(listeners) {
+		this.#listeners = Object.fromEntries(Object.entries(listeners).map(([id, listeners$1]) => [id, listeners$1.filter((listener) => listener.callback != null)]).filter(([, listeners$1]) => listeners$1.length));
+	}
+	constructor(data) {
+		Object.assign(this, data);
+	}
+	emit(eventName, ...args) {
+		if (this.listeners[eventName]) this.listeners[eventName].forEach((item) => {
+			if (typeof item.callback === "function") item.callback(...args);
+			if (item.once === true) this.off(eventName, item.callback);
+		});
+		return this;
+	}
+	on(eventName, callback, options$2) {
+		if (!callback) return () => {};
+		if (!this.listeners[eventName]) this.listeners[eventName] = [];
+		if (!this.listeners[eventName].some((item) => item.callback === callback)) this.listeners[eventName].push({
+			...options$2,
+			callback
+		});
+		return () => {
+			this.off(eventName, callback);
+		};
+	}
+	off(eventName, callback) {
+		if (!this.listeners[eventName]) return;
+		const index = this.listeners[eventName].findIndex((item) => item.callback === callback);
+		if (index >= 0) this.listeners[eventName].splice(index, 1);
+		if (this.listeners[eventName].length === 0) delete this.listeners[eventName];
+		return this;
+	}
+	once(eventName, callback) {
+		return this.on(eventName, callback, { once: true });
+	}
+};
+function iterify$1(fn$1, options$2) {
+	const deferreds = [];
+	const queued = [];
+	const cb = (arg) => {
+		if (deferreds.length) {
+			const d$5 = deferreds.shift();
+			if (arg instanceof Error) d$5.reject(arg);
+			else d$5.resolve(arg);
+		} else queued.push(arg);
+	};
+	const off = fn$1(cb);
+	const dispose = () => {
+		off?.();
+		const disposed = /* @__PURE__ */ new Error("Disposed.");
+		let d$5;
+		while (d$5 = deferreds.shift()) d$5.reject(disposed);
+	};
+	if (options$2?.unsafeInitial && !queued.length) cb();
+	return {
+		dispose,
+		async *[Symbol.asyncIterator]() {
+			try {
+				while (true) if (queued.length) {
+					const arg = queued.shift();
+					if (arg instanceof Error) yield Promise.reject(arg);
+					else yield Promise.resolve(arg);
+				} else {
+					const deferred = Deferred$1();
+					deferreds.push(deferred);
+					yield deferred.promise;
+				}
+			} catch (error$1) {
+				throw error$1;
+			} finally {
+				dispose();
+			}
+		}
+	};
+}
+var { getPrototypeOf: getPrototypeOf$1, getOwnPropertyDescriptor: getOwnPropertyDescriptor$1, getOwnPropertyDescriptors: getOwnPropertyDescriptors$1 } = Object;
+function assign$1(o$33, ...p$8) {
+	return Object.assign(o$33, ...p$8);
+}
+var emptyObject$1 = { __proto__: null };
+function getAllPropertyDescriptors$1(object) {
+	if (object === Object.prototype) return emptyObject$1;
+	else return Object.assign({ __proto__: null }, getAllPropertyDescriptorsMemoized$1(getPrototypeOf$1(object)), getOwnPropertyDescriptors$1(object));
+}
+const getAllPropertyDescriptorsMemoized$1 = memoizeByRef$1(getAllPropertyDescriptors$1);
+function onEvent$1(t$12, e$61, h$5, options$2) {
+	if (!h$5 || typeof h$5 === "object") return iterify$1((cb) => onEvent$1(t$12, e$61, cb, h$5));
+	if (t$12 instanceof EventTarget) {
+		t$12.addEventListener(e$61, h$5, options$2);
+		if (options$2?.unsafeInitial) h$5();
+		return () => t$12.removeEventListener(e$61, h$5, options$2);
+	} else if (t$12 instanceof EventEmitter$1) {
+		if (options$2?.unsafeInitial) h$5();
+		return t$12.on(e$61, h$5, options$2);
+	} else throw new TypeError("Cannot listen for events, object is neither an EventTarget nor an EventEmitter.");
+}
+assign$1(onEvent$1, { once: function onEventOnce(t$12, e$61, h$5, options$2) {
+	options$2 = {
+		...options$2,
+		once: true
+	};
+	const deferred = Deferred$1();
+	const inner = function(e$62) {
+		const retValue = h$5.call(this, e$62);
+		deferred.resolve(e$62);
+		return retValue;
+	};
+	const off = onEvent$1(e$61, inner, options$2);
+	return Object.assign(off, {
+		then: deferred.promise.then.bind(deferred.promise),
+		catch: deferred.promise.catch.bind(deferred.promise)
+	});
+} });
+Object.assign((e$61) => {
+	e$61?.preventDefault?.();
+}, { stop: (e$61) => {
+	e$61?.preventDefault?.();
+	e$61?.stopPropagation?.();
+} });
+Object.assign((e$61) => {
+	e$61?.stopPropagation?.();
+}, { prevent: (e$61) => {
+	e$61?.preventDefault?.();
+	e$61?.stopPropagation?.();
+} });
+let FastJson$1;
+(function(_FastJson) {
+	const Literal = _FastJson.Literal = Symbol();
+	const OPEN = "\n";
+	const CLOSE = "\n";
+	const CLOSE_1 = "";
+	function stringify(schema, input) {
+		let s$4 = "";
+		let i$6, k$4, key;
+		if (schema.length === 1) {
+			if (typeof (key = schema[0]) === "object") {
+				if (input?.length) for (i$6 = 0; i$6 < input.length; i$6++) s$4 += OPEN + stringify(key, input[i$6]);
+				s$4 += CLOSE;
+				return s$4;
+			} else if (key === Literal) {
+				if (input?.length) for (i$6 = 0; i$6 < input.length; i$6++) s$4 += input[i$6] + "\n";
+				s$4 += CLOSE;
+				return s$4;
+			}
+		}
+		if (schema.length > 1 && schema.every((x$4) => typeof x$4 !== "string")) {
+			for (i$6 = 0; i$6 < schema.length; i$6++) {
+				key = schema[i$6];
+				if (key === Literal) s$4 += input[i$6] + "\n";
+				else s$4 += stringify(key, input[i$6]);
+			}
+			return s$4;
+		}
+		for (i$6 = 0; i$6 < schema.length; i$6++) {
+			key = schema[i$6];
+			if (typeof key === "object") s$4 += stringify(key[1], input[key[0]]);
+			else if (key === "*") if (++i$6 < schema.length) {
+				key = schema[i$6];
+				for (const k$5 in input) s$4 += k$5 + "\n" + stringify(key, input[k$5]);
+				s$4 += CLOSE;
+			} else {
+				for (k$4 in input) s$4 += `${k$4},${input[k$4]}
+`;
+				s$4 += CLOSE;
+			}
+			else s$4 += (input[key] ?? "") + "\n";
+		}
+		return s$4;
+	}
+	_FastJson.stringify = stringify;
+	function parse(schema, input) {
+		return parseLines(schema, Object.assign(input.split("\n"), { index: 0 }));
+	}
+	_FastJson.parse = parse;
+	function parseLines(schema, input) {
+		let key, out;
+		if (schema.length === 1) {
+			if (typeof (key = schema[0]) === "object") {
+				out = [];
+				for (; input.index < input.length;) {
+					if (input[input.index++] === CLOSE_1) break;
+					out.push(parseLines(key, input));
+				}
+				return out;
+			} else if (key === Literal) {
+				out = [];
+				for (let item; input.index < input.length;) {
+					item = input[input.index++];
+					if (item === CLOSE_1) break;
+					out.push(item);
+				}
+				return out;
+			}
+		}
+		if (schema.length > 1 && schema.every((x$4) => typeof x$4 !== "string")) {
+			out = Array.from({ length: schema.length });
+			for (let key$1, i$6 = 0; i$6 < schema.length; i$6++) {
+				key$1 = schema[i$6];
+				if (key$1 === Literal) out[i$6] = input[input.index++];
+				else out[i$6] = parseLines(key$1, input);
+			}
+			return out;
+		}
+		out = {};
+		for (let key$1, line, i$6 = 0; i$6 < schema.length; i$6++) {
+			key$1 = schema[i$6];
+			if (typeof key$1 === "object") out[key$1[0]] = parseLines(key$1[1], input);
+			else if (key$1 === "*") if (++i$6 < schema.length) {
+				key$1 = schema[i$6];
+				for (let k$4; input.index < input.length;) {
+					k$4 = input[input.index++];
+					if (k$4 === CLOSE_1) break;
+					out[k$4] = parseLines(key$1, input);
+				}
+			} else for (let kv; input.index < input.length;) {
+				kv = input[input.index++];
+				if (kv === CLOSE_1) break;
+				const comma = kv.indexOf(",");
+				out[kv.slice(0, comma)] = kv.slice(comma + 1);
+			}
+			else {
+				line = input[input.index++];
+				out[key$1] = line != "" ? line : void 0;
+			}
+		}
+		return out;
+	}
+	_FastJson.parseLines = parseLines;
+})(FastJson$1 || (FastJson$1 = {}));
+var p$1 = {
+	x: 0,
+	y: 0
+};
+let Point$1;
+(function(_Point) {
+	function distance(a$35, b$4) {
+		diff(a$35, b$4, p$1);
+		return mag(p$1);
+	}
+	_Point.distance = distance;
+	function mag(a$35) {
+		return Math.hypot(a$35.x, a$35.y);
+	}
+	_Point.mag = mag;
+	function diff(a$35, b$4, o$33) {
+		o$33.x = a$35.x - b$4.x;
+		o$33.y = a$35.y - b$4.y;
+	}
+	_Point.diff = diff;
+	function add(a$35, b$4) {
+		a$35.x += b$4.x;
+		a$35.y += b$4.y;
+	}
+	_Point.add = add;
+	function set(a$35, x$4, y$5) {
+		a$35.x = x$4;
+		a$35.y = y$5;
+	}
+	_Point.set = set;
+})(Point$1 || (Point$1 = {}));
+Symbol.dispose ||= Symbol.for("Symbol.dispose");
+Symbol.asyncDispose ||= Symbol.for("Symbol.asyncDispose");
+new EventEmitter$1();
+var scriptRel = "modulepreload";
+var assetsURL = function(dep) {
+	return "/" + dep;
+};
+var seen = {};
+const __vitePreload = function preload(baseModule, deps, importerUrl) {
+	let promise = Promise.resolve();
+	if (deps && deps.length > 0) {
+		const links = document.getElementsByTagName("link");
+		const cspNonceMeta = document.querySelector("meta[property=csp-nonce]");
+		const cspNonce = cspNonceMeta?.nonce || cspNonceMeta?.getAttribute("nonce");
+		function allSettled(promises$2) {
+			return Promise.all(promises$2.map((p$8) => Promise.resolve(p$8).then((value$1) => ({
+				status: "fulfilled",
+				value: value$1
+			}), (reason) => ({
+				status: "rejected",
+				reason
+			}))));
+		}
+		promise = allSettled(deps.map((dep) => {
+			dep = assetsURL(dep, importerUrl);
+			if (dep in seen) return;
+			seen[dep] = true;
+			const isCss = dep.endsWith(".css");
+			const cssSelector = isCss ? "[rel=\"stylesheet\"]" : "";
+			if (!!importerUrl) for (let i$1$1 = links.length - 1; i$1$1 >= 0; i$1$1--) {
+				const link$1 = links[i$1$1];
+				if (link$1.href === dep && (!isCss || link$1.rel === "stylesheet")) return;
+			}
+			else if (document.querySelector(`link[href="${dep}"]${cssSelector}`)) return;
+			const link = document.createElement("link");
+			link.rel = isCss ? "stylesheet" : scriptRel;
+			if (!isCss) link.as = "script";
+			link.crossOrigin = "";
+			link.href = dep;
+			if (cspNonce) link.setAttribute("nonce", cspNonce);
+			document.head.appendChild(link);
+			if (isCss) return new Promise((res, rej) => {
+				link.addEventListener("load", res);
+				link.addEventListener("error", () => rej(/* @__PURE__ */ new Error(`Unable to preload CSS for ${dep}`)));
+			});
+		}));
+	}
+	function handlePreloadError(err$2) {
+		const e$1$1 = new Event("vite:preloadError", { cancelable: true });
+		e$1$1.payload = err$2;
+		window.dispatchEvent(e$1$1);
+		if (!e$1$1.defaultPrevented) throw err$2;
+	}
+	return promise.then((res) => {
+		for (const item of res || []) {
+			if (item.status !== "rejected") continue;
+			handlePreloadError(item.reason);
+		}
+		return baseModule().catch(handlePreloadError);
+	});
+};
+DataView.prototype.getUint8, DataView.prototype.setUint8, DataView.prototype.getUint8, DataView.prototype.setUint8, DataView.prototype.getUint16, DataView.prototype.setUint16, DataView.prototype.getUint32, DataView.prototype.setUint32, DataView.prototype.getBigUint64, DataView.prototype.setBigUint64, DataView.prototype.getInt8, DataView.prototype.setInt8, DataView.prototype.getInt16, DataView.prototype.setInt16, DataView.prototype.getInt32, DataView.prototype.setInt32, DataView.prototype.getBigInt64, DataView.prototype.setBigInt64, DataView.prototype.getFloat32, DataView.prototype.setFloat32, DataView.prototype.getFloat64, DataView.prototype.setFloat64, DataView.prototype.getUint32, DataView.prototype.setUint32;
+Uint8Array, Uint16Array, Uint32Array, BigUint64Array, Int8Array, Int16Array, Int32Array, BigInt64Array, Float32Array, Float64Array;
+Object.assign(function validateType$2(obj) {
+	return obj;
+}, { assignable: function assignable(obj) {
+	return obj;
+} });
 var DEBUG_PREVIEW_TIMING$1 = typeof process !== "undefined" && {}?.DEBUG_PREVIEW_TIMING === "1";
 function ensureMiniEntryPool(pool, size) {
 	while (pool.length < size) pool.push({
@@ -43442,6 +47200,9 @@ function createDspPreview(runtime) {
 			}
 		}
 	}
+	const gc = debounce$1(1e3, () => {
+		runtime.gc();
+	});
 	return {
 		setControlCompileSnapshot(ccs) {
 			state.result = ccs;
@@ -43466,7 +47227,7 @@ function createDspPreview(runtime) {
 			const audioOpsPtr = state.audioOpsPtr;
 			new Float32Array(runtime.buffer, audioOpsPtr, len).set(state.bytecode);
 			runtime.runAudioVmAt(vmId$1, audioOpsPtr, len, bufferLength, sampleCount, state.sampleRate, nyquist, piOverNyquist, bpm$1);
-			runtime.gc();
+			gc();
 			const infoPtr = runtime.getAudioVmInfoPtr(vmId$1);
 			if (!state.vmView || state.structureHash !== state.lastBuiltStructureHash) {
 				state.vmView = new AudioVmView(runtime.memory, infoPtr);
@@ -43570,7 +47331,7 @@ function createDspPreview(runtime) {
 		}
 	};
 }
-var record_worker_default = "/assets/record-worker-D3TZ7V5F.js";
+var record_worker_default = "/assets/record-worker-Nes5Tl5U.js";
 async function createRecordWorker(wasmBinary, worklet) {
 	const url = new URL(record_worker_default, window.location.origin).toString();
 	const worker = new Worker(url, { type: "module" });
@@ -43637,29 +47398,29 @@ async function createDsp(state) {
 	function start(programs$1) {
 		return control(async () => {
 			await state.audioContext.resume();
-			await rebindAllPrograms(await core.worklet.start(programs$1.map((p$7) => p$7.id)));
+			await rebindAllPrograms(await core.worklet.start(programs$1.map((p$8) => p$8.id)));
 		});
 	}
 	function startSync(programs$1) {
 		return control(async () => {
-			await rebindAllPrograms(await core.worklet.startSync(programs$1.map((p$7) => p$7.id)));
+			await rebindAllPrograms(await core.worklet.startSync(programs$1.map((p$8) => p$8.id)));
 		});
 	}
 	function pause(programs$1) {
 		return control(async () => {
-			await rebindAllPrograms(await core.worklet.pause(programs$1.map((p$7) => p$7.id)));
+			await rebindAllPrograms(await core.worklet.pause(programs$1.map((p$8) => p$8.id)));
 		});
 	}
-	function stop$1(programs$1) {
+	function stop$2(programs$1) {
 		return control(async () => {
-			await rebindAllPrograms(await core.worklet.stop(programs$1.map((p$7) => p$7.id)));
+			await rebindAllPrograms(await core.worklet.stop(programs$1.map((p$8) => p$8.id)));
 		});
 	}
 	function seek(sampleCount, programs$1, preview) {
 		return control(async () => {
 			await rebindAllPrograms(await core.worklet.seek({
 				sampleCount,
-				programIds: programs$1.map((p$7) => p$7.id),
+				programIds: programs$1.map((p$8) => p$8.id),
 				preview
 			}));
 		});
@@ -43668,7 +47429,7 @@ async function createDsp(state) {
 		return control(async () => {
 			await rebindAllPrograms(await core.worklet.seekPrograms({
 				sampleCount,
-				programIds: programs$1.map((p$7) => p$7.id),
+				programIds: programs$1.map((p$8) => p$8.id),
 				preview
 			}));
 		});
@@ -43774,7 +47535,7 @@ async function createDsp(state) {
 		start,
 		startSync,
 		pause,
-		stop: stop$1,
+		stop: stop$2,
 		seek,
 		seekPrograms,
 		setProgramGain,
@@ -44059,19 +47820,19 @@ function hslToRgb([h$5, s$4, l$10]) {
 	let r$13, g$5, b$4;
 	if (s$4 == 0) r$13 = g$5 = b$4 = l$10;
 	else {
-		const hue2rgb = function hue2rgb$1(p$8, q$6, t$12) {
+		const hue2rgb = function hue2rgb$1(p$9, q$6, t$12) {
 			if (t$12 < 0) t$12 += 1;
 			if (t$12 > 1) t$12 -= 1;
-			if (t$12 < 1 / 6) return p$8 + (q$6 - p$8) * 6 * t$12;
+			if (t$12 < 1 / 6) return p$9 + (q$6 - p$9) * 6 * t$12;
 			if (t$12 < 1 / 2) return q$6;
-			if (t$12 < 2 / 3) return p$8 + (q$6 - p$8) * (2 / 3 - t$12) * 6;
-			return p$8;
+			if (t$12 < 2 / 3) return p$9 + (q$6 - p$9) * (2 / 3 - t$12) * 6;
+			return p$9;
 		};
 		const q$5 = l$10 < .5 ? l$10 * (1 + s$4) : l$10 + s$4 - l$10 * s$4;
-		const p$7 = 2 * l$10 - q$5;
-		r$13 = hue2rgb(p$7, q$5, h$5 + 1 / 3);
-		g$5 = hue2rgb(p$7, q$5, h$5);
-		b$4 = hue2rgb(p$7, q$5, h$5 - 1 / 3);
+		const p$8 = 2 * l$10 - q$5;
+		r$13 = hue2rgb(p$8, q$5, h$5 + 1 / 3);
+		g$5 = hue2rgb(p$8, q$5, h$5);
+		b$4 = hue2rgb(p$8, q$5, h$5 - 1 / 3);
 	}
 	return [
 		r$13,
@@ -44129,64 +47890,6 @@ function hexToRgb(hex) {
 function rgbToHex(rgb) {
 	return `#${rgb.map((x$4) => Math.max(0, Math.min(255, Math.round(x$4 * 255))).toString(16).padStart(2, "0")).join("")}`;
 }
-var scriptRel = "modulepreload";
-var assetsURL = function(dep) {
-	return "/" + dep;
-};
-var seen = {};
-const __vitePreload = function preload(baseModule, deps, importerUrl) {
-	let promise = Promise.resolve();
-	if (deps && deps.length > 0) {
-		const links = document.getElementsByTagName("link");
-		const cspNonceMeta = document.querySelector("meta[property=csp-nonce]");
-		const cspNonce = cspNonceMeta?.nonce || cspNonceMeta?.getAttribute("nonce");
-		function allSettled(promises$2) {
-			return Promise.all(promises$2.map((p$7) => Promise.resolve(p$7).then((value$1) => ({
-				status: "fulfilled",
-				value: value$1
-			}), (reason) => ({
-				status: "rejected",
-				reason
-			}))));
-		}
-		promise = allSettled(deps.map((dep) => {
-			dep = assetsURL(dep, importerUrl);
-			if (dep in seen) return;
-			seen[dep] = true;
-			const isCss = dep.endsWith(".css");
-			const cssSelector = isCss ? "[rel=\"stylesheet\"]" : "";
-			if (!!importerUrl) for (let i$1$1 = links.length - 1; i$1$1 >= 0; i$1$1--) {
-				const link$1 = links[i$1$1];
-				if (link$1.href === dep && (!isCss || link$1.rel === "stylesheet")) return;
-			}
-			else if (document.querySelector(`link[href="${dep}"]${cssSelector}`)) return;
-			const link = document.createElement("link");
-			link.rel = isCss ? "stylesheet" : scriptRel;
-			if (!isCss) link.as = "script";
-			link.crossOrigin = "";
-			link.href = dep;
-			if (cspNonce) link.setAttribute("nonce", cspNonce);
-			document.head.appendChild(link);
-			if (isCss) return new Promise((res, rej) => {
-				link.addEventListener("load", res);
-				link.addEventListener("error", () => rej(/* @__PURE__ */ new Error(`Unable to preload CSS for ${dep}`)));
-			});
-		}));
-	}
-	function handlePreloadError(err$2) {
-		const e$1$1 = new Event("vite:preloadError", { cancelable: true });
-		e$1$1.payload = err$2;
-		window.dispatchEvent(e$1$1);
-		if (!e$1$1.defaultPrevented) throw err$2;
-	}
-	return promise.then((res) => {
-		for (const item of res || []) {
-			if (item.status !== "rejected") continue;
-			handlePreloadError(item.reason);
-		}
-		return baseModule().catch(handlePreloadError);
-	});
-};
 var fft_default = (() => {
 	return (async function(moduleArg = {}) {
 		var moduleRtn;
@@ -44201,7 +47904,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DmC_MMWA.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-Ckc-83Ea.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -44945,174 +48648,189 @@ function isPunctuationCode(code) {
 		default: return false;
 	}
 }
-const tokenize = (input) => {
-	const lines = [];
-	let currentLine = [];
-	let i$6 = 0;
+var MODE_NORMAL = 0;
+var MODE_BLOCK_COMMENT = 1;
+var MODE_SINGLE_QUOTE = 2;
+var MODE_DOUBLE_QUOTE = 3;
+var MODE_BACKTICK = 4;
+function decodeMode(prevState) {
+	const mode = typeof prevState === "number" ? prevState : MODE_NORMAL;
+	if (mode < MODE_NORMAL || mode > MODE_BACKTICK) return MODE_NORMAL;
+	return mode;
+}
+function quoteFromMode(mode) {
+	if (mode === MODE_SINGLE_QUOTE) return codeSingleQuote;
+	if (mode === MODE_DOUBLE_QUOTE) return codeDoubleQuote;
+	if (mode === MODE_BACKTICK) return codeBacktick;
+	return 0;
+}
+function modeFromQuote(quoteCode) {
+	if (quoteCode === codeSingleQuote) return MODE_SINGLE_QUOTE;
+	if (quoteCode === codeDoubleQuote) return MODE_DOUBLE_QUOTE;
+	if (quoteCode === codeBacktick) return MODE_BACKTICK;
+	return MODE_NORMAL;
+}
+function tokenizeLineInternal(input, lineIndex, prevState) {
+	const tokens = [];
+	const line = lineIndex + 1;
 	const n$4 = input.length;
-	let lineNum = 1;
-	let column = 1;
+	let i$6 = 0;
+	let mode = decodeMode(prevState);
+	if (mode === MODE_BLOCK_COMMENT) {
+		const startColumn = 1;
+		let closed = false;
+		while (i$6 < n$4) {
+			if (input.charCodeAt(i$6) === codeStar && input.charCodeAt(i$6 + 1) === codeSlash) {
+				i$6 += 2;
+				closed = true;
+				break;
+			}
+			i$6++;
+		}
+		tokens.push({
+			text: input.slice(0, i$6),
+			type: "comment",
+			line,
+			column: startColumn
+		});
+		if (!closed) return {
+			tokens,
+			state: MODE_BLOCK_COMMENT
+		};
+		mode = MODE_NORMAL;
+	} else if (mode !== MODE_NORMAL) {
+		const quote = quoteFromMode(mode);
+		const startColumn = 1;
+		let escaped = false;
+		let closed = false;
+		while (i$6 < n$4) {
+			const c$7 = input.charCodeAt(i$6);
+			if (escaped) {
+				escaped = false;
+				i$6++;
+				continue;
+			}
+			if (c$7 === codeBackslash) {
+				escaped = true;
+				i$6++;
+				continue;
+			}
+			i$6++;
+			if (c$7 === quote) {
+				closed = true;
+				break;
+			}
+		}
+		tokens.push({
+			text: input.slice(0, i$6),
+			type: "string",
+			line,
+			column: startColumn
+		});
+		if (!closed) return {
+			tokens,
+			state: mode
+		};
+		mode = MODE_NORMAL;
+	}
 	while (i$6 < n$4) {
+		const start = i$6;
+		const startColumn = i$6 + 1;
 		const code = input.charCodeAt(i$6);
-		const startLine = lineNum;
-		const startColumn = column;
 		if (code === codeDollar) {
-			currentLine.push({
+			tokens.push({
 				text: "$",
 				type: "special",
-				line: startLine,
+				line,
 				column: startColumn
 			});
 			i$6++;
-			column++;
 			continue;
 		}
 		if (isWhitespaceCode(code)) {
-			let segStart = i$6;
-			let segLine = lineNum;
-			let segColumn = column;
-			while (i$6 < n$4 && isWhitespaceCode(input.charCodeAt(i$6))) if (input.charCodeAt(i$6) === codeLf) {
-				if (segStart < i$6) currentLine.push({
-					text: input.slice(segStart, i$6),
-					type: "text",
-					line: segLine,
-					column: segColumn
-				});
-				lines.push(currentLine);
-				currentLine = [];
-				i$6++;
-				lineNum++;
-				column = 1;
-				segStart = i$6;
-				segLine = lineNum;
-				segColumn = column;
-			} else {
-				i$6++;
-				column++;
-			}
-			if (segStart < i$6) currentLine.push({
-				text: input.slice(segStart, i$6),
+			i$6++;
+			while (i$6 < n$4 && isWhitespaceCode(input.charCodeAt(i$6))) i$6++;
+			tokens.push({
+				text: input.slice(start, i$6),
 				type: "text",
-				line: segLine,
-				column: segColumn
+				line,
+				column: startColumn
 			});
 			continue;
 		}
 		if (code === codeSlash && input.charCodeAt(i$6 + 1) === codeSlash) {
-			const start = i$6;
-			const end = input.indexOf("\n", i$6 + 2);
-			i$6 = end === -1 ? n$4 : end;
-			column += i$6 - start;
-			currentLine.push({
-				text: input.slice(start, i$6),
+			tokens.push({
+				text: input.slice(i$6),
 				type: "comment",
-				line: startLine,
+				line,
 				column: startColumn
 			});
-			continue;
+			break;
 		}
 		if (code === codeSlash && input.charCodeAt(i$6 + 1) === codeStar) {
-			let segStart = i$6;
 			i$6 += 2;
-			column += 2;
+			let closed = false;
 			while (i$6 < n$4) {
-				const c$7 = input.charCodeAt(i$6);
-				if (c$7 === codeLf) {
-					currentLine.push({
-						text: input.slice(segStart, i$6 + 1),
-						type: "comment",
-						line: startLine,
-						column: startColumn
-					});
-					lines.push(currentLine);
-					currentLine = [];
-					i$6++;
-					lineNum++;
-					column = 1;
-					segStart = i$6;
-					continue;
-				}
-				if (c$7 === codeStar && input.charCodeAt(i$6 + 1) === codeSlash) {
+				if (input.charCodeAt(i$6) === codeStar && input.charCodeAt(i$6 + 1) === codeSlash) {
 					i$6 += 2;
-					column += 2;
-					currentLine.push({
-						text: input.slice(segStart, i$6),
-						type: "comment",
-						line: startLine,
-						column: startColumn
-					});
-					segStart = i$6;
+					closed = true;
 					break;
 				}
 				i$6++;
-				column++;
 			}
-			if (segStart < i$6) currentLine.push({
-				text: input.slice(segStart, i$6),
+			tokens.push({
+				text: input.slice(start, i$6),
 				type: "comment",
-				line: startLine,
+				line,
 				column: startColumn
 			});
+			if (!closed) {
+				mode = MODE_BLOCK_COMMENT;
+				break;
+			}
 			continue;
 		}
 		if (code === codeBacktick || code === codeSingleQuote || code === codeDoubleQuote) {
 			const quote = code;
-			let segStart = i$6;
 			i$6++;
-			column++;
 			let escaped = false;
+			let closed = false;
 			while (i$6 < n$4) {
 				const c$7 = input.charCodeAt(i$6);
 				if (escaped) {
 					escaped = false;
 					i$6++;
-					column++;
-				} else if (c$7 === codeBackslash) {
+					continue;
+				}
+				if (c$7 === codeBackslash) {
 					escaped = true;
 					i$6++;
-					column++;
-				} else if (c$7 === codeLf) {
-					currentLine.push({
-						text: input.slice(segStart, i$6 + 1),
-						type: "string",
-						line: startLine,
-						column: startColumn
-					});
-					lines.push(currentLine);
-					currentLine = [];
-					i$6++;
-					lineNum++;
-					column = 1;
-					segStart = i$6;
-				} else {
-					i$6++;
-					column++;
-					if (c$7 === quote) {
-						currentLine.push({
-							text: input.slice(segStart, i$6),
-							type: "string",
-							line: startLine,
-							column: startColumn
-						});
-						segStart = i$6;
-						break;
-					}
+					continue;
+				}
+				i$6++;
+				if (c$7 === quote) {
+					closed = true;
+					break;
 				}
 			}
-			if (segStart < i$6) currentLine.push({
-				text: input.slice(segStart, i$6),
+			tokens.push({
+				text: input.slice(start, i$6),
 				type: "string",
-				line: startLine,
+				line,
 				column: startColumn
 			});
+			if (!closed) {
+				mode = modeFromQuote(quote);
+				break;
+			}
 			continue;
 		}
 		if (isDigitCode(code) || code === codeDot && isDigitCode(input.charCodeAt(i$6 + 1))) {
-			const start = i$6;
 			if (code === codeDot) {
 				i$6++;
 				while (i$6 < n$4 && isDigitCode(input.charCodeAt(i$6))) i$6++;
 			} else {
+				i$6++;
 				while (i$6 < n$4 && isDigitCode(input.charCodeAt(i$6))) i$6++;
 				if (input.charCodeAt(i$6) === codeDot && isDigitCode(input.charCodeAt(i$6 + 1))) {
 					i$6++;
@@ -45127,74 +48845,84 @@ const tokenize = (input) => {
 				while (i$6 < n$4 && isDigitCode(input.charCodeAt(i$6))) i$6++;
 			}
 			if (input.charCodeAt(i$6) === codeLowerK) i$6++;
-			currentLine.push({
+			tokens.push({
 				text: input.slice(start, i$6),
 				type: "number",
-				line: startLine,
+				line,
 				column: startColumn
 			});
-			column += i$6 - start;
 			continue;
 		}
 		const ops = operatorsByFirstChar.get(code);
 		if (ops) {
 			let matched = false;
 			for (const op of ops) if (input.startsWith(op, i$6)) {
-				currentLine.push({
+				tokens.push({
 					text: op,
 					type: "operator",
-					line: startLine,
+					line,
 					column: startColumn
 				});
 				i$6 += op.length;
-				column += op.length;
 				matched = true;
 				break;
 			}
 			if (matched) continue;
 		}
 		if (isPunctuationCode(code)) {
-			currentLine.push({
+			tokens.push({
 				text: input[i$6],
 				type: "punctuation",
-				line: startLine,
+				line,
 				column: startColumn
 			});
 			i$6++;
-			column++;
 			continue;
 		}
 		if (isLetterCode(code) || code === codeHash) {
-			const start = i$6;
 			i$6++;
 			while (i$6 < n$4 && isIdentifierCode(input.charCodeAt(i$6))) i$6++;
 			const identifier = input.slice(start, i$6);
-			column += i$6 - start;
 			let type = "identifier";
 			if (keywords.has(identifier)) type = "keyword";
 			else if (identifier === "true" || identifier === "false") type = "boolean";
 			else if (identifier === "null" || identifier === "undefined") type = "null";
-			else if (i$6 < n$4 && input.charCodeAt(i$6) === codeLParen) type = "function";
-			currentLine.push({
+			else if (input.charCodeAt(i$6) === codeLParen) type = "function";
+			tokens.push({
 				text: identifier,
 				type,
-				line: startLine,
+				line,
 				column: startColumn
 			});
 			continue;
 		}
-		currentLine.push({
+		tokens.push({
 			text: input[i$6],
 			type: "text",
-			line: startLine,
+			line,
 			column: startColumn
 		});
 		i$6++;
-		column++;
 	}
-	lines.push(currentLine);
-	return lines;
-};
+	return {
+		tokens,
+		state: mode
+	};
+}
+const tokenizer = { tokenizeLine(line, lineIndex, prevState) {
+	return tokenizeLineInternal(line, lineIndex, prevState);
+} };
+function tokenize(input) {
+	const lines = input.split("\n");
+	const result = new Array(lines.length);
+	let state = MODE_NORMAL;
+	for (let i$6 = 0; i$6 < lines.length; i$6++) {
+		const lineResult = tokenizeLineInternal(lines[i$6] ?? "", i$6, state);
+		result[i$6] = lineResult.tokens;
+		state = lineResult.state;
+	}
+	return result;
+}
 const projectsLoading = c(false);
 var profileImageCache = /* @__PURE__ */ new Map();
 var API = class {
@@ -45453,15 +49181,15 @@ queueMicrotask(() => {
 			api.fetchProjects().then((result) => {
 				n(() => {
 					for (const project of result) {
-						const found = projects.value.find((p$8) => p$8.serverId === project.id);
+						const found = projects.value.find((p$9) => p$9.serverId === project.id);
 						if (found) {
 							found.doc.code = project.code;
 							if (!found.scratch.code) found.scratch.code = project.code;
 							continue;
 						}
-						const doc = createDoc(tokenize);
+						const doc = createDoc(tokenizer);
 						doc.code = project.code;
-						const p$7 = createProject({
+						const p$8 = createProject({
 							serverId: project.id,
 							userId: project.userId,
 							id: project.id,
@@ -45471,11 +49199,11 @@ queueMicrotask(() => {
 							isPublic: project.isPublic,
 							isSaved: true
 						});
-						if (!p$7.scratch.code) p$7.scratch.code = p$7.doc.code;
-						projects.value.push(p$7);
+						if (!p$8.scratch.code) p$8.scratch.code = p$8.doc.code;
+						projects.value.push(p$8);
 					}
 					for (const project of projects.value) {
-						if (result.find((p$7) => p$7.id === project.serverId)) continue;
+						if (result.find((p$8) => p$8.id === project.serverId)) continue;
 						project.serverId = null;
 					}
 					projects.value = [...projects.value];
@@ -46176,7 +49904,7 @@ function createAdsrWidget(adsr, target, doc, latency, cache) {
 function createArrayGetWidgets(history$1, target, doc, latency, cache) {
 	const mapping = history$1.elementMapping;
 	if (!mapping || mapping.length === 0) return [];
-	const line = target.source.line;
+	const line = history$1.source.line > 0 ? history$1.source.line : target.source.line;
 	const widgets = [];
 	const historyRef = { current: history$1 };
 	const reader = createHistoryReader(history$1.size, history$1.mask, /* @__PURE__ */ new Map(), (state) => {
@@ -46971,11 +50699,11 @@ function createFilterWidget(filter, target, doc, latency, cache) {
 		gain: 0,
 		k: 0
 	}, (state) => {}, () => latency.value.state, () => historyRef.current.writeIndex, (index) => historyRef.current.sampleCounts[index], (state, index) => {
-		const p$7 = historyRef.current.params;
-		state.cutoff = p$7.cutoff?.at(index) ?? state.cutoff;
-		state.q = p$7.q?.at(index) ?? state.q;
-		state.gain = p$7.gain?.at(index) ?? state.gain;
-		state.k = p$7.k?.at(index) ?? state.k;
+		const p$8 = historyRef.current.params;
+		state.cutoff = p$8.cutoff?.at(index) ?? state.cutoff;
+		state.q = p$8.q?.at(index) ?? state.q;
+		state.gain = p$8.gain?.at(index) ?? state.gain;
+		state.k = p$8.k?.at(index) ?? state.k;
 	});
 	let epoch = 0;
 	const draw$1 = (c$7, x$4, y$5, w$5, h$5) => {
@@ -47307,7 +51035,7 @@ function createKnobWidgets(doc, result, cache) {
 		const gen = gens[call.name];
 		if (!gen) continue;
 		for (const name in call.args) {
-			const param = gen.parameters.find((p$7) => p$7.name === name);
+			const param = gen.parameters.find((p$8) => p$8.name === name);
 			if (param) traverse(gen, call.args[name], param);
 		}
 	}
@@ -47319,15 +51047,15 @@ function fract(n$4) {
 	return n$4 - Math.floor(n$4);
 }
 function lfoValue(type, phase01) {
-	const p$7 = fract(phase01);
-	if (type === "sine") return .5 + .5 * Math.sin(p$7 * Math.PI * 2);
+	const p$8 = fract(phase01);
+	if (type === "sine") return .5 + .5 * Math.sin(p$8 * Math.PI * 2);
 	if (type === "tri") {
-		const q$5 = fract(p$7 + .25);
+		const q$5 = fract(p$8 + .25);
 		return .5 + .5 * (q$5 < .5 ? 4 * q$5 - 1 : 3 - 4 * q$5);
 	}
-	if (type === "saw") return fract(p$7 + .5);
-	if (type === "ramp") return 1 - fract(p$7 + .5);
-	if (type === "sqr") return p$7 < .5 ? phase01 >= 1 ? 0 : 1 : 0;
+	if (type === "saw") return fract(p$8 + .5);
+	if (type === "ramp") return 1 - fract(p$8 + .5);
+	if (type === "sqr") return p$8 < .5 ? phase01 >= 1 ? 0 : 1 : 0;
 	return 0;
 }
 function createLfoWidget(lfo, target, doc, latency, lfoType, cache) {
@@ -48724,7 +52452,7 @@ function createWaveWidget(history$1, target, doc, type, buffers, animatedHeights
 }
 async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRefreshed) {
 	const program = await dsp.createProgram();
-	const doc = opts.doc ?? createDoc(tokenize);
+	const doc = opts.doc ?? createDoc(tokenizer);
 	let compiledSubmitVersion = -1;
 	let submittedCode = doc.code;
 	const result = c(null);
@@ -48808,7 +52536,7 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 		submittedCode = doc.code;
 		submitVersion.value = submitVersion.peek() + 1;
 	};
-	const p$7 = {
+	const p$8 = {
 		opts,
 		program,
 		doc,
@@ -48912,7 +52640,7 @@ async function createDspProgramContextImpl(dsp, createWidgets, opts, historiesRe
 			}
 		});
 	});
-	return p$7;
+	return p$8;
 }
 async function createDspContext() {
 	await new Promise(queueMicrotask);
@@ -49039,7 +52767,7 @@ function getDocPath(def) {
 const definitions = /* @__PURE__ */ new Map();
 function definitionToCode(def, withReturn = true) {
 	if (def.parameters?.length) {
-		const params = (def.arrayMethod ? def.parameters.filter((p$7) => p$7.name !== "array") : def.parameters).map((p$7) => p$7.default !== void 0 && !p$7.name.endsWith("?") ? `${p$7.name}?` : p$7.name);
+		const params = (def.arrayMethod ? def.parameters.filter((p$8) => p$8.name !== "array") : def.parameters).map((p$8) => p$8.default !== void 0 && !p$8.name.endsWith("?") ? `${p$8.name}?` : p$8.name);
 		return `${def.arrayMethod ? `[].${def.name.toLowerCase()}(${params.join(", ")})` : `${def.name}(${params.join(", ")})`}${withReturn ? ` -> ${def.return ?? "signal"}` : ""}`;
 	}
 	return def.arrayMethod ? `[].${def.name.toLowerCase()}` : def.name;
@@ -49050,13 +52778,13 @@ var getDefinitionFromGen = (name, description, g$5) => {
 		name,
 		category: g$5.category ?? "misc",
 		description: [description],
-		parameters: g$5.parameters.map((p$7) => ({
-			name: p$7.name,
-			default: p$7.default,
-			min: p$7.min,
-			max: p$7.max,
-			unit: p$7.unit,
-			description: [p$7.description ?? ""]
+		parameters: g$5.parameters.map((p$8) => ({
+			name: p$8.name,
+			default: p$8.default,
+			min: p$8.min,
+			max: p$8.max,
+			unit: p$8.unit,
+			description: [p$8.description ?? ""]
 		}))
 	}];
 };
@@ -51160,9 +54888,9 @@ queueMicrotask(() => {
 		name: def.name,
 		category: def.category,
 		description: def.description.join("\n"),
-		parameters: def.parameters?.map((p$7) => ({
-			name: p$7.name,
-			description: p$7.description.join("\n")
+		parameters: def.parameters?.map((p$8) => ({
+			name: p$8.name,
+			description: p$8.description.join("\n")
 		})) ?? []
 	};
 	gens$1.value = Object.fromEntries(Object.entries(gens$1.value).filter(([, g$5]) => (g$5.category ?? "misc") !== "test"));
@@ -51920,12 +55648,12 @@ function createDefinitionTooltipHandlers(editor$1, getInline) {
 		const definition = definitions.get(definitionKey);
 		let resolvedParamIndex = tokenDef ? -1 : parameterIndex;
 		if (!tokenDef && definition?.parameters && isFunctionCall && parameterIndex >= 0 && !isTokenNestedInCall(callBlock, token)) {
-			const exact = definition.parameters.findIndex((p$7) => p$7.name === token.text);
+			const exact = definition.parameters.findIndex((p$8) => p$8.name === token.text);
 			if (exact >= 0) {
 				const param = definition.parameters[exact];
 				if (!isParameterDeclaredBeforeToken(callBlock, token, param.name)) resolvedParamIndex = exact;
 			} else {
-				const labelMatch = definition.parameters.findIndex((p$7) => p$7.name.startsWith(token.text));
+				const labelMatch = definition.parameters.findIndex((p$8) => p$8.name.startsWith(token.text));
 				if (labelMatch >= 0) {
 					const param = definition.parameters[labelMatch];
 					if (!isParameterDeclaredBeforeToken(callBlock, token, param.name)) resolvedParamIndex = labelMatch;
@@ -52550,9 +56278,9 @@ const currentProjectId = c(null);
 const playingProjectId = c(null);
 const projects = c([]);
 function getNextUntitledName() {
-	const nums = projects.value.map((p$7) => {
-		if (p$7.name === "Untitled") return 1;
-		const m$5 = p$7.name.match(/^Untitled (\d+)$/);
+	const nums = projects.value.map((p$8) => {
+		if (p$8.name === "Untitled") return 1;
+		const m$5 = p$8.name.match(/^Untitled (\d+)$/);
 		return m$5 ? parseInt(m$5[1], 10) : 0;
 	}).filter((n$4) => n$4 > 0);
 	const next = (nums.length ? Math.max(...nums) : 0) + 1;
@@ -52565,8 +56293,8 @@ function createProject(data = {}) {
 		userId: data.userId ?? session.value?.userId ?? null,
 		id,
 		name: data.name ?? getNextUntitledName(),
-		doc: createPersistedDoc(id, tokenize, data.doc),
-		scratch: createPersistedDoc(`${id}-scratch`, tokenize, data.scratch),
+		doc: createPersistedDoc(id, tokenizer, data.doc),
+		scratch: createPersistedDoc(`${id}-scratch`, tokenizer, data.scratch),
 		sampleCount: data.sampleCount ?? 0,
 		remixOfId: data.remixOfId ?? null,
 		get isDirty() {
@@ -52952,7 +56680,7 @@ async function deleteProject(project) {
 		localStorage.removeItem(project.id);
 		localStorage.removeItem(`${project.id}-scratch`);
 		n(() => {
-			projects.value = projects.value.filter((p$7) => p$7.id !== project.id);
+			projects.value = projects.value.filter((p$8) => p$8.id !== project.id);
 			if (wasCurrent || wasPlaying) {
 				if (!projects.value.length) projects.value = [createProject()];
 				const next = projects.value[0];
@@ -53190,8 +56918,8 @@ m(() => {
 	}
 	transport.setProjectEndSamples(Math.round(end.bar * 4 * 60 / bpm.value * (playingProgramContext.value?.latency.value.state.sampleRate || 44100)));
 });
-const djDocA = c(createPersistedDoc("dj-doc-a", tokenize));
-const djDocB = c(createPersistedDoc("dj-doc-b", tokenize));
+const djDocA = c(createPersistedDoc("dj-doc-a", tokenizer));
+const djDocB = c(createPersistedDoc("dj-doc-b", tokenizer));
 const djProgramA = c(null);
 const djProgramB = c(null);
 const djHeaderA = c(null);
@@ -53238,65 +56966,65 @@ var createDjTransport = (deck) => ({
 		}
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts) return;
-		const p$7 = deck === "a" ? contexts.a : contexts.b;
-		playingDjContexts.value.add(p$7);
+		const p$8 = deck === "a" ? contexts.a : contexts.b;
+		playingDjContexts.value.add(p$8);
 		playingDjContexts.value = new Set(playingDjContexts.value);
-		if (deck === "a") await dsp.setProgramA(p$7.program);
-		else await dsp.setProgramB(p$7.program);
-		await dsp.startSync([p$7.program]);
-		await dsp.refreshUntilHistories(p$7.program, { maxTries: 60 });
+		if (deck === "a") await dsp.setProgramA(p$8.program);
+		else await dsp.setProgramB(p$8.program);
+		await dsp.startSync([p$8.program]);
+		await dsp.refreshUntilHistories(p$8.program, { maxTries: 60 });
 		deferDraw.value = true;
 	},
 	pause: async () => {
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts || !ctx.value) return;
-		const p$7 = deck === "a" ? contexts.a : contexts.b;
-		if (playingDjContexts.value.has(p$7)) {
-			playingDjContexts.value.delete(p$7);
+		const p$8 = deck === "a" ? contexts.a : contexts.b;
+		if (playingDjContexts.value.has(p$8)) {
+			playingDjContexts.value.delete(p$8);
 			playingDjContexts.value = new Set(playingDjContexts.value);
-			ctx.value.dsp.pause([p$7.program]);
+			ctx.value.dsp.pause([p$8.program]);
 		} else {
-			playingDjContexts.value.add(p$7);
+			playingDjContexts.value.add(p$8);
 			playingDjContexts.value = new Set(playingDjContexts.value);
-			ctx.value.dsp.startSync([p$7.program]);
+			ctx.value.dsp.startSync([p$8.program]);
 		}
 	},
 	stop: async () => {
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts || !ctx.value) return;
-		const p$7 = deck === "a" ? contexts.a : contexts.b;
-		playingDjContexts.value.delete(p$7);
+		const p$8 = deck === "a" ? contexts.a : contexts.b;
+		playingDjContexts.value.delete(p$8);
 		playingDjContexts.value = new Set(playingDjContexts.value);
-		await ctx.value.dsp.stop([p$7.program]);
+		await ctx.value.dsp.stop([p$8.program]);
 	},
 	restart: async () => {
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts || !ctx.value) return;
 		await ctx.value.dsp.state.audioContext.resume();
 		skipAnimations.value += 1;
-		const p$7 = deck === "a" ? contexts.a : contexts.b;
-		await ctx.value.dsp.seek(0, [p$7.program], false);
+		const p$8 = deck === "a" ? contexts.a : contexts.b;
+		await ctx.value.dsp.seek(0, [p$8.program], false);
 	},
 	beginSeek: async () => {
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts || !ctx.value) return;
-		const p$7 = deck === "a" ? contexts.a : contexts.b;
+		const p$8 = deck === "a" ? contexts.a : contexts.b;
 		if (deck === "a") {
 			djIsScrubbingA.value = true;
-			djScrubbingProgramStateA.value = p$7.program.state;
+			djScrubbingProgramStateA.value = p$8.program.state;
 		} else {
 			djIsScrubbingB.value = true;
-			djScrubbingProgramStateB.value = p$7.program.state;
+			djScrubbingProgramStateB.value = p$8.program.state;
 		}
-		ctx.value.dsp.pause([p$7.program]);
+		ctx.value.dsp.pause([p$8.program]);
 	},
 	endSeek: async () => {
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts || !ctx.value) return;
 		const dsp = ctx.value.dsp;
-		const p$7 = deck === "a" ? contexts.a : contexts.b;
-		if ((deck === "a" ? djScrubbingProgramStateA.value : djScrubbingProgramStateB.value) === DspProgramState.Start) dsp.startSync([p$7.program]);
-		else dsp.pause([p$7.program]);
+		const p$8 = deck === "a" ? contexts.a : contexts.b;
+		if ((deck === "a" ? djScrubbingProgramStateA.value : djScrubbingProgramStateB.value) === DspProgramState.Start) dsp.startSync([p$8.program]);
+		else dsp.pause([p$8.program]);
 		if (deck === "a") djIsScrubbingA.value = false;
 		else djIsScrubbingB.value = false;
 	},
@@ -53304,10 +57032,10 @@ var createDjTransport = (deck) => ({
 		const contexts = await ensureDjProgramContexts();
 		if (!contexts || !ctx.value) return;
 		const dsp = ctx.value.dsp;
-		const p$7 = deck === "a" ? contexts.a : contexts.b;
+		const p$8 = deck === "a" ? contexts.a : contexts.b;
 		if (deck === "a") djTargetSecondsA.value = seconds;
 		else djTargetSecondsB.value = seconds;
-		await dsp.seekPrograms(Math.round(seconds * (p$7.latency.value.state.sampleRate ?? 48e3)), [p$7.program], false);
+		await dsp.seekPrograms(Math.round(seconds * (p$8.latency.value.state.sampleRate ?? 48e3)), [p$8.program], false);
 	},
 	getLoopBeginSamples: () => {
 		if (!ctx.value) return;
@@ -53487,11 +57215,11 @@ var f = 0;
 Array.isArray;
 function u(e$61, t$12, n$4, o$33, i$6, u$5) {
 	t$12 || (t$12 = {});
-	var a$35, c$7, p$7 = t$12;
-	if ("ref" in p$7) for (c$7 in p$7 = {}, t$12) "ref" == c$7 ? a$35 = t$12[c$7] : p$7[c$7] = t$12[c$7];
+	var a$35, c$7, p$8 = t$12;
+	if ("ref" in p$8) for (c$7 in p$8 = {}, t$12) "ref" == c$7 ? a$35 = t$12[c$7] : p$8[c$7] = t$12[c$7];
 	var l$10 = {
 		type: e$61,
-		props: p$7,
+		props: p$8,
 		key: n$4,
 		ref: a$35,
 		__k: null,
@@ -53506,7 +57234,7 @@ function u(e$61, t$12, n$4, o$33, i$6, u$5) {
 		__source: i$6,
 		__self: u$5
 	};
-	if ("function" == typeof e$61 && (a$35 = e$61.defaultProps)) for (c$7 in a$35) void 0 === p$7[c$7] && (p$7[c$7] = a$35[c$7]);
+	if ("function" == typeof e$61 && (a$35 = e$61.defaultProps)) for (c$7 in a$35) void 0 === p$8[c$7] && (p$8[c$7] = a$35[c$7]);
 	return l.vnode && l.vnode(l$10), l$10;
 }
 const pathname = c(window.location.pathname);
@@ -53545,88 +57273,88 @@ window.addEventListener("popstate", (e$61) => {
 m(() => {
 	let side = null;
 	let main = "browse";
-	const p$7 = pathname.value;
-	if (p$7.startsWith("/docs")) {
+	const p$8 = pathname.value;
+	if (p$8.startsWith("/docs")) {
 		side = "docs";
 		main = "docs";
 		section.value = "Docs";
-	} else if (p$7.startsWith("/tutorials")) {
+	} else if (p$8.startsWith("/tutorials")) {
 		side = "tutorials";
 		main = "tutorials";
 		section.value = "Tutorials";
-	} else if (p$7.startsWith("/browse")) {
+	} else if (p$8.startsWith("/browse")) {
 		side = "browse";
 		main = "browse";
 		section.value = "Browse";
-	} else if (p$7.startsWith("/admin")) {
+	} else if (p$8.startsWith("/admin")) {
 		side = "admin";
 		main = "admin";
 		section.value = "Admin";
-	} else if (p$7.startsWith("/u/")) {
+	} else if (p$8.startsWith("/u/")) {
 		side = "artist";
 		main = "artist";
 		section.value = "Artist";
-	} else if (p$7.startsWith("/p/")) {
+	} else if (p$8.startsWith("/p/")) {
 		sidebarTab.value = null;
 		main = "project";
 		section.value = null;
-	} else if (p$7 === "/projects") {
+	} else if (p$8 === "/projects") {
 		side = "projects";
 		main = "editor";
 		section.value = "Projects";
-	} else if (p$7 === "/help") {
+	} else if (p$8 === "/help") {
 		side = "help";
 		main = "help";
 		section.value = "Help";
-	} else if (p$7 === "/about") {
+	} else if (p$8 === "/about") {
 		side = "help";
 		main = "about";
 		section.value = "About";
-	} else if (p$7 === "/themes") {
+	} else if (p$8 === "/themes") {
 		side = "themes";
 		main = mainPage.value;
 		section.value = "Themes";
-	} else if (p$7 === "/tools") {
+	} else if (p$8 === "/tools") {
 		side = "tools";
 		main = mainPage.value;
 		section.value = "Tools";
-	} else if (p$7 === "/settings") {
+	} else if (p$8 === "/settings") {
 		side = "settings";
 		main = mainPage.value;
 		section.value = "Settings";
-	} else if (p$7 === "/account") {
+	} else if (p$8 === "/account") {
 		side = "account";
 		main = mainPage.value;
 		section.value = "Account";
-	} else if (p$7 === "/export-audio") {
+	} else if (p$8 === "/export-audio") {
 		side = "export-audio";
 		main = mainPage.value;
 		section.value = "Export Audio";
-	} else if (p$7 === "/share-project") {
+	} else if (p$8 === "/share-project") {
 		side = "share-project";
 		main = mainPage.value;
 		section.value = "Share Project";
-	} else if (p$7 === "/bytecode") {
+	} else if (p$8 === "/bytecode") {
 		side = "bytecode";
 		main = mainPage.value;
 		section.value = "Bytecode";
-	} else if (p$7 === "/console") {
+	} else if (p$8 === "/console") {
 		side = "console";
 		main = mainPage.value;
 		section.value = "Console";
-	} else if (p$7 === "/ai") {
+	} else if (p$8 === "/ai") {
 		side = "ai";
 		main = mainPage.value;
 		section.value = "AI";
-	} else if (p$7 === "/dj") {
+	} else if (p$8 === "/dj") {
 		side = "dj";
 		main = "dj";
 		section.value = "DJ";
-	} else if (p$7 === "/wall-of-sounds") {
+	} else if (p$8 === "/wall-of-sounds") {
 		side = null;
 		main = "wall-of-sounds";
 		section.value = "Wall of Sounds";
-	} else if (p$7 === "/") {
+	} else if (p$8 === "/") {
 		sidebarTab.value = null;
 		main = null;
 		section.value = null;
@@ -54257,7 +57985,7 @@ var AdminActions = () => {
 				onClick: (e$61) => {
 					navigator.clipboard.writeText(e$61.target.value);
 				},
-				value: projects.value?.filter((p$7) => p$7.isSaved).map((p$7) => `${p$7.name}\n------\n${p$7.doc.code}`).join("\n======\n")
+				value: projects.value?.filter((p$8) => p$8.isSaved).map((p$8) => `${p$8.name}\n------\n${p$8.doc.code}`).join("\n======\n")
 			})
 		]
 	});
@@ -54836,7 +58564,7 @@ const InlineEditor = ({ code, doc, id, ready, header = null, headerHeight = 0, a
 	useReactiveEffect(() => {
 		if (!ctx.value || !inView.value) return;
 		getProgramContext(ctx.value, id, {
-			doc: doc ?? (persisted ? createPersistedDoc(id, tokenize) : createDoc(tokenize)),
+			doc: doc ?? (persisted ? createPersistedDoc(id, tokenizer) : createDoc(tokenizer)),
 			waveBackground
 		}).then((instance) => {
 			if (doc) code = doc.code ?? "";
@@ -55328,7 +59056,7 @@ const SpinnerLarge = () => /* @__PURE__ */ u("div", {
 	className: "w-7 h-6",
 	children: /* @__PURE__ */ u(Spinner, { lineWidth: 1.25 })
 });
-var oneLinerDoc = createPersistedDoc("one-liner", tokenize);
+var oneLinerDoc = createPersistedDoc("one-liner", tokenizer);
 const OneLiners = ({ oneLiners }) => {
 	const list = useSignal(oneLiners);
 	const doc = oneLinerDoc;
@@ -56125,7 +59853,7 @@ var categoriesList = [...new Set([...new Set([...definitions.values()])].map((d$
 var DocsGen = ({ name, category }) => {
 	const def = getDefinitionByDocPath(name);
 	if (!def) return null;
-	const params = (def.parameters ?? []).filter((p$7) => !(def.arrayMethod && p$7.name === "array"));
+	const params = (def.parameters ?? []).filter((p$8) => !(def.arrayMethod && p$8.name === "array"));
 	return /* @__PURE__ */ u(k, { children: [/* @__PURE__ */ u(Header, { children: [/* @__PURE__ */ u(Link$1, {
 		to: `/docs/${category}`,
 		class: `flex flex-row items-center gap-2 hover:text-[${primaryColor.value}]`,
@@ -56179,33 +59907,33 @@ var DocsGen = ({ name, category }) => {
 							class: "text-white/30 text-left",
 							children: "Description"
 						})
-					] }) }), /* @__PURE__ */ u("tbody", { children: params.map((p$7, i$6) => /* @__PURE__ */ u("tr", {
+					] }) }), /* @__PURE__ */ u("tbody", { children: params.map((p$8, i$6) => /* @__PURE__ */ u("tr", {
 						class: i$6 !== 0 ? "border-t border-white/20" : `border-t-2 border-[${primaryColor.value}]`,
 						children: [
 							/* @__PURE__ */ u("td", {
 								class: "pr-10 py-1 text-white font-[Liga_Space_Mono] whitespace-nowrap",
-								children: p$7.name
+								children: p$8.name
 							}),
 							/* @__PURE__ */ u("td", {
 								class: "pr-10 text-white/50 text-center",
-								children: p$7.type ?? unitsOverride[p$7.name] ?? units[p$7.unit] ?? p$7.unit ?? "number"
+								children: p$8.type ?? unitsOverride[p$8.name] ?? units[p$8.unit] ?? p$8.unit ?? "number"
 							}),
 							/* @__PURE__ */ u("td", {
 								class: "pr-10 text-white/50 text-center font-[Liga_Space_Mono] whitespace-nowrap",
-								children: p$7.default ?? "—"
+								children: p$8.default ?? "—"
 							}),
 							/* @__PURE__ */ u("td", {
 								class: "pr-10 text-white/50 text-center font-[Liga_Space_Mono] whitespace-nowrap",
-								children: p$7.type === "function" || p$7.type === "callback" ? "—" : p$7.min == null && p$7.max == null ? /* @__PURE__ */ u(o$19, {
+								children: p$8.type === "function" || p$8.type === "callback" ? "—" : p$8.min == null && p$8.max == null ? /* @__PURE__ */ u(o$19, {
 									size: 16,
 									class: "inline-block"
 								}) : /* @__PURE__ */ u(k, { children: [
-									p$7.min ?? /* @__PURE__ */ u(o$19, {
+									p$8.min ?? /* @__PURE__ */ u(o$19, {
 										size: 16,
 										class: "inline-block"
 									}),
 									"..",
-									p$7.max ?? /* @__PURE__ */ u(o$19, {
+									p$8.max ?? /* @__PURE__ */ u(o$19, {
 										size: 16,
 										class: "inline-block"
 									})
@@ -56213,10 +59941,10 @@ var DocsGen = ({ name, category }) => {
 							}),
 							/* @__PURE__ */ u("td", {
 								class: "text-white/50 w-[100%]",
-								children: withoutPeriod(p$7.description?.join(" ") ?? "")
+								children: withoutPeriod(p$8.description?.join(" ") ?? "")
 							})
 						]
-					}, p$7.name)) })]
+					}, p$8.name)) })]
 				})
 			}),
 			/* @__PURE__ */ u("div", {
@@ -58386,11 +62114,11 @@ var ShaderRenderer = class {
 		if (this.preset === "plasma") {
 			const phase = timeSeconds * 1.2;
 			for (let i$6 = 0; i$6 < n$4; i$6++) {
-				const p$7 = i$6 / (n$4 - 1) * TWO_PI;
+				const p$8 = i$6 / (n$4 - 1) * TWO_PI;
 				const l$10 = audioData[i$6 * 2] ?? 0;
 				const r$13 = audioData[i$6 * 2 + 1] ?? 0;
-				const sx = Math.sin(p$7 * 3 + phase) * .7 + Math.sin(p$7 * 11 - phase * 1.7) * .2;
-				const sy = Math.sin(p$7 * 4 + phase * 1.1) * .7 + Math.sin(p$7 * 9 + phase * .6) * .2;
+				const sx = Math.sin(p$8 * 3 + phase) * .7 + Math.sin(p$8 * 11 - phase * 1.7) * .2;
+				const sy = Math.sin(p$8 * 4 + phase * 1.1) * .7 + Math.sin(p$8 * 9 + phase * .6) * .2;
 				out[i$6 * 2] = clamp11(sx + r$13 * .18);
 				out[i$6 * 2 + 1] = clamp11(sy + l$10 * .18);
 			}
@@ -59182,10 +62910,10 @@ const AI = () => {
 			class: "py-1 px-2 w-full text-sm flex flex-col gap-2",
 			children: [/* @__PURE__ */ u(SidebarButton, {
 				onClick: () => {
-					api.generateAITrack(aiPromptNew.value, aiTemperature.value, aiTopP.value, aiModel.value).then((p$7) => {
-						if (p$7) {
-							const newProject = createProject({ name: p$7.title });
-							newProject.doc.code = newProject.scratch.code = p$7.code;
+					api.generateAITrack(aiPromptNew.value, aiTemperature.value, aiTopP.value, aiModel.value).then((p$8) => {
+						if (p$8) {
+							const newProject = createProject({ name: p$8.title });
+							newProject.doc.code = newProject.scratch.code = p$8.code;
 							projects.value = [...projects.value, newProject];
 						}
 					}).catch((error$1) => {
@@ -59268,15 +62996,15 @@ const DJ = () => {
 	return /* @__PURE__ */ u(SidebarMain, { children: useAsyncMemo(async () => {
 		if (location.href.includes("hn")) {
 			const projectsList = (await api.fetchBrowseNewest()).map((project) => {
-				const p$7 = createProject({
+				const p$8 = createProject({
 					serverId: project.id,
 					userId: project.userId,
 					id: project.id,
 					name: project.name,
 					isPublic: project.isPublic
 				});
-				p$7.doc.code = p$7.scratch.code = project.code;
-				return p$7;
+				p$8.doc.code = p$8.scratch.code = project.code;
+				return p$8;
 			});
 			n(() => {
 				djBpm.value = 144;
@@ -60065,8 +63793,8 @@ function memoizeByRef(fn$1, map = /* @__PURE__ */ new Map()) {
 	return wrapped;
 }
 var { getPrototypeOf, getOwnPropertyDescriptor, getOwnPropertyDescriptors } = Object;
-function assign(o$33, ...p$7) {
-	return Object.assign(o$33, ...p$7);
+function assign(o$33, ...p$8) {
+	return Object.assign(o$33, ...p$8);
 }
 function entries(obj) {
 	return Object.entries(obj);
@@ -60448,16 +64176,16 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 		}({
 			1: [function(e$61, t$12, r$13) {
 				"use strict";
-				var d$5 = e$61("./utils"), c$7 = e$61("./support"), p$7 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+				var d$5 = e$61("./utils"), c$7 = e$61("./support"), p$8 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 				r$13.encode = function(e$62) {
-					for (var t$13, r$14, n$4, i$6, s$4, a$35, o$33, h$5 = [], u$5 = 0, l$10 = e$62.length, f$5 = l$10, c$8 = "string" !== d$5.getTypeOf(e$62); u$5 < e$62.length;) f$5 = l$10 - u$5, n$4 = c$8 ? (t$13 = e$62[u$5++], r$14 = u$5 < l$10 ? e$62[u$5++] : 0, u$5 < l$10 ? e$62[u$5++] : 0) : (t$13 = e$62.charCodeAt(u$5++), r$14 = u$5 < l$10 ? e$62.charCodeAt(u$5++) : 0, u$5 < l$10 ? e$62.charCodeAt(u$5++) : 0), i$6 = t$13 >> 2, s$4 = (3 & t$13) << 4 | r$14 >> 4, a$35 = 1 < f$5 ? (15 & r$14) << 2 | n$4 >> 6 : 64, o$33 = 2 < f$5 ? 63 & n$4 : 64, h$5.push(p$7.charAt(i$6) + p$7.charAt(s$4) + p$7.charAt(a$35) + p$7.charAt(o$33));
+					for (var t$13, r$14, n$4, i$6, s$4, a$35, o$33, h$5 = [], u$5 = 0, l$10 = e$62.length, f$5 = l$10, c$8 = "string" !== d$5.getTypeOf(e$62); u$5 < e$62.length;) f$5 = l$10 - u$5, n$4 = c$8 ? (t$13 = e$62[u$5++], r$14 = u$5 < l$10 ? e$62[u$5++] : 0, u$5 < l$10 ? e$62[u$5++] : 0) : (t$13 = e$62.charCodeAt(u$5++), r$14 = u$5 < l$10 ? e$62.charCodeAt(u$5++) : 0, u$5 < l$10 ? e$62.charCodeAt(u$5++) : 0), i$6 = t$13 >> 2, s$4 = (3 & t$13) << 4 | r$14 >> 4, a$35 = 1 < f$5 ? (15 & r$14) << 2 | n$4 >> 6 : 64, o$33 = 2 < f$5 ? 63 & n$4 : 64, h$5.push(p$8.charAt(i$6) + p$8.charAt(s$4) + p$8.charAt(a$35) + p$8.charAt(o$33));
 					return h$5.join("");
 				}, r$13.decode = function(e$62) {
 					var t$13, r$14, n$4, i$6, s$4, a$35, o$33 = 0, h$5 = 0, u$5 = "data:";
 					if (e$62.substr(0, u$5.length) === u$5) throw new Error("Invalid base64 input, it looks like a data url.");
 					var l$10, f$5 = 3 * (e$62 = e$62.replace(/[^A-Za-z0-9+/=]/g, "")).length / 4;
-					if (e$62.charAt(e$62.length - 1) === p$7.charAt(64) && f$5--, e$62.charAt(e$62.length - 2) === p$7.charAt(64) && f$5--, f$5 % 1 != 0) throw new Error("Invalid base64 input, bad content length.");
-					for (l$10 = c$7.uint8array ? new Uint8Array(0 | f$5) : new Array(0 | f$5); o$33 < e$62.length;) t$13 = p$7.indexOf(e$62.charAt(o$33++)) << 2 | (i$6 = p$7.indexOf(e$62.charAt(o$33++))) >> 4, r$14 = (15 & i$6) << 4 | (s$4 = p$7.indexOf(e$62.charAt(o$33++))) >> 2, n$4 = (3 & s$4) << 6 | (a$35 = p$7.indexOf(e$62.charAt(o$33++))), l$10[h$5++] = t$13, 64 !== s$4 && (l$10[h$5++] = r$14), 64 !== a$35 && (l$10[h$5++] = n$4);
+					if (e$62.charAt(e$62.length - 1) === p$8.charAt(64) && f$5--, e$62.charAt(e$62.length - 2) === p$8.charAt(64) && f$5--, f$5 % 1 != 0) throw new Error("Invalid base64 input, bad content length.");
+					for (l$10 = c$7.uint8array ? new Uint8Array(0 | f$5) : new Array(0 | f$5); o$33 < e$62.length;) t$13 = p$8.indexOf(e$62.charAt(o$33++)) << 2 | (i$6 = p$8.indexOf(e$62.charAt(o$33++))) >> 4, r$14 = (15 & i$6) << 4 | (s$4 = p$8.indexOf(e$62.charAt(o$33++))) >> 2, n$4 = (3 & s$4) << 6 | (a$35 = p$8.indexOf(e$62.charAt(o$33++))), l$10[h$5++] = t$13, 64 !== s$4 && (l$10[h$5++] = r$14), 64 !== a$35 && (l$10[h$5++] = n$4);
 					return l$10;
 				};
 			}, {
@@ -60581,7 +64309,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 					return n$5;
 				}
 				function n$4(e$62, t$13, r$14, n$5, i$7, s$5) {
-					var a$35, o$33, h$5 = e$62.file, u$5 = e$62.compression, l$10 = s$5 !== O$3.utf8encode, f$5 = I$2.transformTo("string", s$5(h$5.name)), c$7 = I$2.transformTo("string", O$3.utf8encode(h$5.name)), d$5 = h$5.comment, p$7 = I$2.transformTo("string", s$5(d$5)), m$5 = I$2.transformTo("string", O$3.utf8encode(d$5)), _$5 = c$7.length !== h$5.name.length, g$5 = m$5.length !== d$5.length, b$4 = "", v$4 = "", y$5 = "", w$5 = h$5.dir, k$4 = h$5.date, x$4 = {
+					var a$35, o$33, h$5 = e$62.file, u$5 = e$62.compression, l$10 = s$5 !== O$3.utf8encode, f$5 = I$2.transformTo("string", s$5(h$5.name)), c$7 = I$2.transformTo("string", O$3.utf8encode(h$5.name)), d$5 = h$5.comment, p$8 = I$2.transformTo("string", s$5(d$5)), m$5 = I$2.transformTo("string", O$3.utf8encode(d$5)), _$5 = c$7.length !== h$5.name.length, g$5 = m$5.length !== d$5.length, b$4 = "", v$4 = "", y$5 = "", w$5 = h$5.dir, k$4 = h$5.date, x$4 = {
 						crc32: 0,
 						compressedSize: 0,
 						uncompressedSize: 0
@@ -60595,11 +64323,11 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 						return e$63 || (r$15 = t$14 ? 16893 : 33204), (65535 & r$15) << 16;
 					}(h$5.unixPermissions, w$5)) : (C$4 = 20, z$3 |= function(e$63) {
 						return 63 & (e$63 || 0);
-					}(h$5.dosPermissions)), a$35 = k$4.getUTCHours(), a$35 <<= 6, a$35 |= k$4.getUTCMinutes(), a$35 <<= 5, a$35 |= k$4.getUTCSeconds() / 2, o$33 = k$4.getUTCFullYear() - 1980, o$33 <<= 4, o$33 |= k$4.getUTCMonth() + 1, o$33 <<= 5, o$33 |= k$4.getUTCDate(), _$5 && (v$4 = A$3(1, 1) + A$3(B$4(f$5), 4) + c$7, b$4 += "up" + A$3(v$4.length, 2) + v$4), g$5 && (y$5 = A$3(1, 1) + A$3(B$4(p$7), 4) + m$5, b$4 += "uc" + A$3(y$5.length, 2) + y$5);
+					}(h$5.dosPermissions)), a$35 = k$4.getUTCHours(), a$35 <<= 6, a$35 |= k$4.getUTCMinutes(), a$35 <<= 5, a$35 |= k$4.getUTCSeconds() / 2, o$33 = k$4.getUTCFullYear() - 1980, o$33 <<= 4, o$33 |= k$4.getUTCMonth() + 1, o$33 <<= 5, o$33 |= k$4.getUTCDate(), _$5 && (v$4 = A$3(1, 1) + A$3(B$4(f$5), 4) + c$7, b$4 += "up" + A$3(v$4.length, 2) + v$4), g$5 && (y$5 = A$3(1, 1) + A$3(B$4(p$8), 4) + m$5, b$4 += "uc" + A$3(y$5.length, 2) + y$5);
 					var E$4 = "";
 					return E$4 += "\n\0", E$4 += A$3(S$3, 2), E$4 += u$5.magic, E$4 += A$3(a$35, 2), E$4 += A$3(o$33, 2), E$4 += A$3(x$4.crc32, 4), E$4 += A$3(x$4.compressedSize, 4), E$4 += A$3(x$4.uncompressedSize, 4), E$4 += A$3(f$5.length, 2), E$4 += A$3(b$4.length, 2), {
 						fileRecord: R$2.LOCAL_FILE_HEADER + E$4 + f$5 + b$4,
-						dirRecord: R$2.CENTRAL_FILE_HEADER + A$3(C$4, 2) + E$4 + A$3(p$7.length, 2) + "\0\0\0\0" + A$3(z$3, 4) + A$3(n$5, 4) + f$5 + b$4 + p$7
+						dirRecord: R$2.CENTRAL_FILE_HEADER + A$3(C$4, 2) + E$4 + A$3(p$8.length, 2) + "\0\0\0\0" + A$3(z$3, 4) + A$3(n$5, 4) + f$5 + b$4 + p$8
 					};
 				}
 				var I$2 = e$61("../utils"), i$6 = e$61("../stream/GenericWorker"), O$3 = e$61("../utf8"), B$4 = e$61("../crc32"), R$2 = e$61("../signature");
@@ -60867,11 +64595,11 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 					var a$36 = "string" === i$7 && !1 === s$5.binary && !1 === s$5.base64;
 					r$14 && void 0 !== r$14.binary || (s$5.binary = !a$36), (t$13 instanceof c$7 && 0 === t$13.uncompressedSize || s$5.dir || !t$13 || 0 === t$13.length) && (s$5.base64 = !1, s$5.binary = !0, t$13 = "", s$5.compression = "STORE", i$7 = "string");
 					var o$34 = null;
-					o$34 = t$13 instanceof c$7 || t$13 instanceof l$10 ? t$13 : p$7.isNode && p$7.isStream(t$13) ? new m$5(e$62, t$13) : u$5.prepareContent(e$62, t$13, s$5.binary, s$5.optimizedBinaryString, s$5.base64);
+					o$34 = t$13 instanceof c$7 || t$13 instanceof l$10 ? t$13 : p$8.isNode && p$8.isStream(t$13) ? new m$5(e$62, t$13) : u$5.prepareContent(e$62, t$13, s$5.binary, s$5.optimizedBinaryString, s$5.base64);
 					var h$6 = new d$5(e$62, o$34, s$5);
 					this.files[e$62] = h$6;
 				}
-				var i$6 = e$61("./utf8"), u$5 = e$61("./utils"), l$10 = e$61("./stream/GenericWorker"), a$35 = e$61("./stream/StreamHelper"), f$5 = e$61("./defaults"), c$7 = e$61("./compressedObject"), d$5 = e$61("./zipObject"), o$33 = e$61("./generate"), p$7 = e$61("./nodejsUtils"), m$5 = e$61("./nodejs/NodejsStreamInputAdapter"), _$5 = function(e$62) {
+				var i$6 = e$61("./utf8"), u$5 = e$61("./utils"), l$10 = e$61("./stream/GenericWorker"), a$35 = e$61("./stream/StreamHelper"), f$5 = e$61("./defaults"), c$7 = e$61("./compressedObject"), d$5 = e$61("./zipObject"), o$33 = e$61("./generate"), p$8 = e$61("./nodejsUtils"), m$5 = e$61("./nodejs/NodejsStreamInputAdapter"), _$5 = function(e$62) {
 					"/" === e$62.slice(-1) && (e$62 = e$62.substring(0, e$62.length - 1));
 					var t$13 = e$62.lastIndexOf("/");
 					return 0 < t$13 ? e$62.substring(0, t$13) : "";
@@ -61925,12 +65653,12 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 					function i$7(e$63) {
 						r$14 || (r$14 = !0, l$10.resolve(t$13, e$63));
 					}
-					var s$5 = p$7(function() {
+					var s$5 = p$8(function() {
 						e$62(i$7, n$5);
 					});
 					"error" === s$5.status && n$5(s$5.value);
 				}
-				function p$7(e$62, t$13) {
+				function p$8(e$62, t$13) {
 					var r$14 = {};
 					try {
 						r$14.value = e$62(t$13), r$14.status = "success";
@@ -61967,7 +65695,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				}, h$5.prototype.otherCallRejected = function(e$62) {
 					f$5(this.promise, this.onRejected, e$62);
 				}, l$10.resolve = function(e$62, t$13) {
-					var r$14 = p$7(c$7, t$13);
+					var r$14 = p$8(c$7, t$13);
 					if ("error" === r$14.status) return l$10.reject(e$62, r$14.value);
 					var n$5 = r$14.value;
 					if (n$5) d$5(e$62, n$5);
@@ -62029,8 +65757,8 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 			39: [function(e$61, t$12, r$13) {
 				"use strict";
 				var a$35 = e$61("./zlib/deflate"), o$33 = e$61("./utils/common"), h$5 = e$61("./utils/strings"), i$6 = e$61("./zlib/messages"), s$4 = e$61("./zlib/zstream"), u$5 = Object.prototype.toString, l$10 = 0, f$5 = -1, c$7 = 0, d$5 = 8;
-				function p$7(e$62) {
-					if (!(this instanceof p$7)) return new p$7(e$62);
+				function p$8(e$62) {
+					if (!(this instanceof p$8)) return new p$8(e$62);
 					this.options = o$33.assign({
 						level: f$5,
 						method: d$5,
@@ -62051,11 +65779,11 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 					}
 				}
 				function n$4(e$62, t$13) {
-					var r$14 = new p$7(t$13);
+					var r$14 = new p$8(t$13);
 					if (r$14.push(e$62, !0), r$14.err) throw r$14.msg || i$6[r$14.err];
 					return r$14.result;
 				}
-				p$7.prototype.push = function(e$62, t$13) {
+				p$8.prototype.push = function(e$62, t$13) {
 					var r$14, n$5, i$7 = this.strm, s$5 = this.options.chunkSize;
 					if (this.ended) return !1;
 					n$5 = t$13 === ~~t$13 ? t$13 : !0 === t$13 ? 4 : 0, "string" == typeof e$62 ? i$7.input = h$5.string2buf(e$62) : "[object ArrayBuffer]" === u$5.call(e$62) ? i$7.input = new Uint8Array(e$62) : i$7.input = e$62, i$7.next_in = 0, i$7.avail_in = i$7.input.length;
@@ -62064,11 +65792,11 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 						0 !== i$7.avail_out && (0 !== i$7.avail_in || 4 !== n$5 && 2 !== n$5) || ("string" === this.options.to ? this.onData(h$5.buf2binstring(o$33.shrinkBuf(i$7.output, i$7.next_out))) : this.onData(o$33.shrinkBuf(i$7.output, i$7.next_out)));
 					} while ((0 < i$7.avail_in || 0 === i$7.avail_out) && 1 !== r$14);
 					return 4 === n$5 ? (r$14 = a$35.deflateEnd(this.strm), this.onEnd(r$14), this.ended = !0, r$14 === l$10) : 2 !== n$5 || (this.onEnd(l$10), !(i$7.avail_out = 0));
-				}, p$7.prototype.onData = function(e$62) {
+				}, p$8.prototype.onData = function(e$62) {
 					this.chunks.push(e$62);
-				}, p$7.prototype.onEnd = function(e$62) {
+				}, p$8.prototype.onEnd = function(e$62) {
 					e$62 === l$10 && ("string" === this.options.to ? this.result = this.chunks.join("") : this.result = o$33.flattenChunks(this.chunks)), this.chunks = [], this.err = e$62, this.msg = this.strm.msg;
-				}, r$13.Deflate = p$7, r$13.deflate = n$4, r$13.deflateRaw = function(e$62, t$13) {
+				}, r$13.Deflate = p$8, r$13.deflate = n$4, r$13.deflateRaw = function(e$62, t$13) {
 					return (t$13 = t$13 || {}).raw = !0, n$4(e$62, t$13);
 				}, r$13.gzip = function(e$62, t$13) {
 					return (t$13 = t$13 || {}).gzip = !0, n$4(e$62, t$13);
@@ -62082,7 +65810,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 			}],
 			40: [function(e$61, t$12, r$13) {
 				"use strict";
-				var c$7 = e$61("./zlib/inflate"), d$5 = e$61("./utils/common"), p$7 = e$61("./utils/strings"), m$5 = e$61("./zlib/constants"), n$4 = e$61("./zlib/messages"), i$6 = e$61("./zlib/zstream"), s$4 = e$61("./zlib/gzheader"), _$5 = Object.prototype.toString;
+				var c$7 = e$61("./zlib/inflate"), d$5 = e$61("./utils/common"), p$8 = e$61("./utils/strings"), m$5 = e$61("./zlib/constants"), n$4 = e$61("./zlib/messages"), i$6 = e$61("./zlib/zstream"), s$4 = e$61("./zlib/gzheader"), _$5 = Object.prototype.toString;
 				function a$35(e$62) {
 					if (!(this instanceof a$35)) return new a$35(e$62);
 					this.options = d$5.assign({
@@ -62104,10 +65832,10 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 				a$35.prototype.push = function(e$62, t$13) {
 					var r$14, n$5, i$7, s$5, a$36, o$34, h$5 = this.strm, u$5 = this.options.chunkSize, l$10 = this.options.dictionary, f$5 = !1;
 					if (this.ended) return !1;
-					n$5 = t$13 === ~~t$13 ? t$13 : !0 === t$13 ? m$5.Z_FINISH : m$5.Z_NO_FLUSH, "string" == typeof e$62 ? h$5.input = p$7.binstring2buf(e$62) : "[object ArrayBuffer]" === _$5.call(e$62) ? h$5.input = new Uint8Array(e$62) : h$5.input = e$62, h$5.next_in = 0, h$5.avail_in = h$5.input.length;
+					n$5 = t$13 === ~~t$13 ? t$13 : !0 === t$13 ? m$5.Z_FINISH : m$5.Z_NO_FLUSH, "string" == typeof e$62 ? h$5.input = p$8.binstring2buf(e$62) : "[object ArrayBuffer]" === _$5.call(e$62) ? h$5.input = new Uint8Array(e$62) : h$5.input = e$62, h$5.next_in = 0, h$5.avail_in = h$5.input.length;
 					do {
-						if (0 === h$5.avail_out && (h$5.output = new d$5.Buf8(u$5), h$5.next_out = 0, h$5.avail_out = u$5), (r$14 = c$7.inflate(h$5, m$5.Z_NO_FLUSH)) === m$5.Z_NEED_DICT && l$10 && (o$34 = "string" == typeof l$10 ? p$7.string2buf(l$10) : "[object ArrayBuffer]" === _$5.call(l$10) ? new Uint8Array(l$10) : l$10, r$14 = c$7.inflateSetDictionary(this.strm, o$34)), r$14 === m$5.Z_BUF_ERROR && !0 === f$5 && (r$14 = m$5.Z_OK, f$5 = !1), r$14 !== m$5.Z_STREAM_END && r$14 !== m$5.Z_OK) return this.onEnd(r$14), !(this.ended = !0);
-						h$5.next_out && (0 !== h$5.avail_out && r$14 !== m$5.Z_STREAM_END && (0 !== h$5.avail_in || n$5 !== m$5.Z_FINISH && n$5 !== m$5.Z_SYNC_FLUSH) || ("string" === this.options.to ? (i$7 = p$7.utf8border(h$5.output, h$5.next_out), s$5 = h$5.next_out - i$7, a$36 = p$7.buf2string(h$5.output, i$7), h$5.next_out = s$5, h$5.avail_out = u$5 - s$5, s$5 && d$5.arraySet(h$5.output, h$5.output, i$7, s$5, 0), this.onData(a$36)) : this.onData(d$5.shrinkBuf(h$5.output, h$5.next_out)))), 0 === h$5.avail_in && 0 === h$5.avail_out && (f$5 = !0);
+						if (0 === h$5.avail_out && (h$5.output = new d$5.Buf8(u$5), h$5.next_out = 0, h$5.avail_out = u$5), (r$14 = c$7.inflate(h$5, m$5.Z_NO_FLUSH)) === m$5.Z_NEED_DICT && l$10 && (o$34 = "string" == typeof l$10 ? p$8.string2buf(l$10) : "[object ArrayBuffer]" === _$5.call(l$10) ? new Uint8Array(l$10) : l$10, r$14 = c$7.inflateSetDictionary(this.strm, o$34)), r$14 === m$5.Z_BUF_ERROR && !0 === f$5 && (r$14 = m$5.Z_OK, f$5 = !1), r$14 !== m$5.Z_STREAM_END && r$14 !== m$5.Z_OK) return this.onEnd(r$14), !(this.ended = !0);
+						h$5.next_out && (0 !== h$5.avail_out && r$14 !== m$5.Z_STREAM_END && (0 !== h$5.avail_in || n$5 !== m$5.Z_FINISH && n$5 !== m$5.Z_SYNC_FLUSH) || ("string" === this.options.to ? (i$7 = p$8.utf8border(h$5.output, h$5.next_out), s$5 = h$5.next_out - i$7, a$36 = p$8.buf2string(h$5.output, i$7), h$5.next_out = s$5, h$5.avail_out = u$5 - s$5, s$5 && d$5.arraySet(h$5.output, h$5.output, i$7, s$5, 0), this.onData(a$36)) : this.onData(d$5.shrinkBuf(h$5.output, h$5.next_out)))), 0 === h$5.avail_in && 0 === h$5.avail_out && (f$5 = !0);
 					} while ((0 < h$5.avail_in || 0 === h$5.avail_out) && r$14 !== m$5.Z_STREAM_END);
 					return r$14 === m$5.Z_STREAM_END && (n$5 = m$5.Z_FINISH), n$5 === m$5.Z_FINISH ? (r$14 = c$7.inflateEnd(this.strm), this.onEnd(r$14), this.ended = !0, r$14 === m$5.Z_OK) : n$5 !== m$5.Z_SYNC_FLUSH || (this.onEnd(m$5.Z_OK), !(h$5.avail_out = 0));
 				}, a$35.prototype.onData = function(e$62) {
@@ -62269,7 +65997,7 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 			}, {}],
 			46: [function(e$61, t$12, r$13) {
 				"use strict";
-				var h$5, c$7 = e$61("../utils/common"), u$5 = e$61("./trees"), d$5 = e$61("./adler32"), p$7 = e$61("./crc32"), n$4 = e$61("./messages"), l$10 = 0, f$5 = 4, m$5 = 0, _$5 = -2, g$5 = -1, b$4 = 4, i$6 = 2, v$4 = 8, y$5 = 9, s$4 = 286, a$35 = 30, o$33 = 19, w$5 = 2 * s$4 + 1, k$4 = 15, x$4 = 3, S$3 = 258, z$3 = S$3 + x$4 + 1, C$4 = 42, E$4 = 113, A$3 = 1, I$2 = 2, O$3 = 3, B$4 = 4;
+				var h$5, c$7 = e$61("../utils/common"), u$5 = e$61("./trees"), d$5 = e$61("./adler32"), p$8 = e$61("./crc32"), n$4 = e$61("./messages"), l$10 = 0, f$5 = 4, m$5 = 0, _$5 = -2, g$5 = -1, b$4 = 4, i$6 = 2, v$4 = 8, y$5 = 9, s$4 = 286, a$35 = 30, o$33 = 19, w$5 = 2 * s$4 + 1, k$4 = 15, x$4 = 3, S$3 = 258, z$3 = S$3 + x$4 + 1, C$4 = 42, E$4 = 113, A$3 = 1, I$2 = 2, O$3 = 3, B$4 = 4;
 				function R$2(e$62, t$13) {
 					return e$62.msg = n$4[t$13], t$13;
 				}
@@ -62293,16 +66021,16 @@ var import_jszip_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((
 					e$62.pending_buf[e$62.pending++] = t$13 >>> 8 & 255, e$62.pending_buf[e$62.pending++] = 255 & t$13;
 				}
 				function L$3(e$62, t$13) {
-					var r$14, n$5, i$7 = e$62.max_chain_length, s$5 = e$62.strstart, a$36 = e$62.prev_length, o$34 = e$62.nice_match, h$6 = e$62.strstart > e$62.w_size - z$3 ? e$62.strstart - (e$62.w_size - z$3) : 0, u$6 = e$62.window, l$11 = e$62.w_mask, f$6 = e$62.prev, c$8 = e$62.strstart + S$3, d$6 = u$6[s$5 + a$36 - 1], p$8 = u$6[s$5 + a$36];
+					var r$14, n$5, i$7 = e$62.max_chain_length, s$5 = e$62.strstart, a$36 = e$62.prev_length, o$34 = e$62.nice_match, h$6 = e$62.strstart > e$62.w_size - z$3 ? e$62.strstart - (e$62.w_size - z$3) : 0, u$6 = e$62.window, l$11 = e$62.w_mask, f$6 = e$62.prev, c$8 = e$62.strstart + S$3, d$6 = u$6[s$5 + a$36 - 1], p$9 = u$6[s$5 + a$36];
 					e$62.prev_length >= e$62.good_match && (i$7 >>= 2), o$34 > e$62.lookahead && (o$34 = e$62.lookahead);
 					do
-						if (u$6[(r$14 = t$13) + a$36] === p$8 && u$6[r$14 + a$36 - 1] === d$6 && u$6[r$14] === u$6[s$5] && u$6[++r$14] === u$6[s$5 + 1]) {
+						if (u$6[(r$14 = t$13) + a$36] === p$9 && u$6[r$14 + a$36 - 1] === d$6 && u$6[r$14] === u$6[s$5] && u$6[++r$14] === u$6[s$5 + 1]) {
 							s$5 += 2, r$14++;
 							do							;
 while (u$6[++s$5] === u$6[++r$14] && u$6[++s$5] === u$6[++r$14] && u$6[++s$5] === u$6[++r$14] && u$6[++s$5] === u$6[++r$14] && u$6[++s$5] === u$6[++r$14] && u$6[++s$5] === u$6[++r$14] && u$6[++s$5] === u$6[++r$14] && u$6[++s$5] === u$6[++r$14] && s$5 < c$8);
 							if (n$5 = S$3 - (c$8 - s$5), s$5 = c$8 - S$3, a$36 < n$5) {
 								if (e$62.match_start = t$13, o$34 <= (a$36 = n$5)) break;
-								d$6 = u$6[s$5 + a$36 - 1], p$8 = u$6[s$5 + a$36];
+								d$6 = u$6[s$5 + a$36 - 1], p$9 = u$6[s$5 + a$36];
 							}
 						}
 					while ((t$13 = f$6[t$13 & l$11]) > h$6 && 0 != --i$7);
@@ -62317,7 +66045,7 @@ while (u$6[++s$5] === u$6[++r$14] && u$6[++s$5] === u$6[++r$14] && u$6[++s$5] ==
 							i$7 += f$6;
 						}
 						if (0 === e$62.strm.avail_in) break;
-						if (a$36 = e$62.strm, o$34 = e$62.window, h$6 = e$62.strstart + e$62.lookahead, u$6 = i$7, l$11 = void 0, l$11 = a$36.avail_in, u$6 < l$11 && (l$11 = u$6), r$14 = 0 === l$11 ? 0 : (a$36.avail_in -= l$11, c$7.arraySet(o$34, a$36.input, a$36.next_in, l$11, h$6), 1 === a$36.state.wrap ? a$36.adler = d$5(a$36.adler, o$34, l$11, h$6) : 2 === a$36.state.wrap && (a$36.adler = p$7(a$36.adler, o$34, l$11, h$6)), a$36.next_in += l$11, a$36.total_in += l$11, l$11), e$62.lookahead += r$14, e$62.lookahead + e$62.insert >= x$4) for (s$5 = e$62.strstart - e$62.insert, e$62.ins_h = e$62.window[s$5], e$62.ins_h = (e$62.ins_h << e$62.hash_shift ^ e$62.window[s$5 + 1]) & e$62.hash_mask; e$62.insert && (e$62.ins_h = (e$62.ins_h << e$62.hash_shift ^ e$62.window[s$5 + x$4 - 1]) & e$62.hash_mask, e$62.prev[s$5 & e$62.w_mask] = e$62.head[e$62.ins_h], e$62.head[e$62.ins_h] = s$5, s$5++, e$62.insert--, !(e$62.lookahead + e$62.insert < x$4)););
+						if (a$36 = e$62.strm, o$34 = e$62.window, h$6 = e$62.strstart + e$62.lookahead, u$6 = i$7, l$11 = void 0, l$11 = a$36.avail_in, u$6 < l$11 && (l$11 = u$6), r$14 = 0 === l$11 ? 0 : (a$36.avail_in -= l$11, c$7.arraySet(o$34, a$36.input, a$36.next_in, l$11, h$6), 1 === a$36.state.wrap ? a$36.adler = d$5(a$36.adler, o$34, l$11, h$6) : 2 === a$36.state.wrap && (a$36.adler = p$8(a$36.adler, o$34, l$11, h$6)), a$36.next_in += l$11, a$36.total_in += l$11, l$11), e$62.lookahead += r$14, e$62.lookahead + e$62.insert >= x$4) for (s$5 = e$62.strstart - e$62.insert, e$62.ins_h = e$62.window[s$5], e$62.ins_h = (e$62.ins_h << e$62.hash_shift ^ e$62.window[s$5 + 1]) & e$62.hash_mask; e$62.insert && (e$62.ins_h = (e$62.ins_h << e$62.hash_shift ^ e$62.window[s$5 + x$4 - 1]) & e$62.hash_mask, e$62.prev[s$5 & e$62.w_mask] = e$62.head[e$62.ins_h], e$62.head[e$62.ins_h] = s$5, s$5++, e$62.insert--, !(e$62.lookahead + e$62.insert < x$4)););
 					} while (e$62.lookahead < z$3 && 0 !== e$62.strm.avail_in);
 				}
 				function Z$1(e$62, t$13) {
@@ -62406,36 +66134,36 @@ while (u$6[++s$5] === u$6[++r$14] && u$6[++s$5] === u$6[++r$14] && u$6[++s$5] ==
 					var r$14, n$5, i$7, s$5;
 					if (!e$62 || !e$62.state || 5 < t$13 || t$13 < 0) return e$62 ? R$2(e$62, _$5) : _$5;
 					if (n$5 = e$62.state, !e$62.output || !e$62.input && 0 !== e$62.avail_in || 666 === n$5.status && t$13 !== f$5) return R$2(e$62, 0 === e$62.avail_out ? -5 : _$5);
-					if (n$5.strm = e$62, r$14 = n$5.last_flush, n$5.last_flush = t$13, n$5.status === C$4) if (2 === n$5.wrap) e$62.adler = 0, U$2(n$5, 31), U$2(n$5, 139), U$2(n$5, 8), n$5.gzhead ? (U$2(n$5, (n$5.gzhead.text ? 1 : 0) + (n$5.gzhead.hcrc ? 2 : 0) + (n$5.gzhead.extra ? 4 : 0) + (n$5.gzhead.name ? 8 : 0) + (n$5.gzhead.comment ? 16 : 0)), U$2(n$5, 255 & n$5.gzhead.time), U$2(n$5, n$5.gzhead.time >> 8 & 255), U$2(n$5, n$5.gzhead.time >> 16 & 255), U$2(n$5, n$5.gzhead.time >> 24 & 255), U$2(n$5, 9 === n$5.level ? 2 : 2 <= n$5.strategy || n$5.level < 2 ? 4 : 0), U$2(n$5, 255 & n$5.gzhead.os), n$5.gzhead.extra && n$5.gzhead.extra.length && (U$2(n$5, 255 & n$5.gzhead.extra.length), U$2(n$5, n$5.gzhead.extra.length >> 8 & 255)), n$5.gzhead.hcrc && (e$62.adler = p$7(e$62.adler, n$5.pending_buf, n$5.pending, 0)), n$5.gzindex = 0, n$5.status = 69) : (U$2(n$5, 0), U$2(n$5, 0), U$2(n$5, 0), U$2(n$5, 0), U$2(n$5, 0), U$2(n$5, 9 === n$5.level ? 2 : 2 <= n$5.strategy || n$5.level < 2 ? 4 : 0), U$2(n$5, 3), n$5.status = E$4);
+					if (n$5.strm = e$62, r$14 = n$5.last_flush, n$5.last_flush = t$13, n$5.status === C$4) if (2 === n$5.wrap) e$62.adler = 0, U$2(n$5, 31), U$2(n$5, 139), U$2(n$5, 8), n$5.gzhead ? (U$2(n$5, (n$5.gzhead.text ? 1 : 0) + (n$5.gzhead.hcrc ? 2 : 0) + (n$5.gzhead.extra ? 4 : 0) + (n$5.gzhead.name ? 8 : 0) + (n$5.gzhead.comment ? 16 : 0)), U$2(n$5, 255 & n$5.gzhead.time), U$2(n$5, n$5.gzhead.time >> 8 & 255), U$2(n$5, n$5.gzhead.time >> 16 & 255), U$2(n$5, n$5.gzhead.time >> 24 & 255), U$2(n$5, 9 === n$5.level ? 2 : 2 <= n$5.strategy || n$5.level < 2 ? 4 : 0), U$2(n$5, 255 & n$5.gzhead.os), n$5.gzhead.extra && n$5.gzhead.extra.length && (U$2(n$5, 255 & n$5.gzhead.extra.length), U$2(n$5, n$5.gzhead.extra.length >> 8 & 255)), n$5.gzhead.hcrc && (e$62.adler = p$8(e$62.adler, n$5.pending_buf, n$5.pending, 0)), n$5.gzindex = 0, n$5.status = 69) : (U$2(n$5, 0), U$2(n$5, 0), U$2(n$5, 0), U$2(n$5, 0), U$2(n$5, 0), U$2(n$5, 9 === n$5.level ? 2 : 2 <= n$5.strategy || n$5.level < 2 ? 4 : 0), U$2(n$5, 3), n$5.status = E$4);
 					else {
 						var a$36 = v$4 + (n$5.w_bits - 8 << 4) << 8;
 						a$36 |= (2 <= n$5.strategy || n$5.level < 2 ? 0 : n$5.level < 6 ? 1 : 6 === n$5.level ? 2 : 3) << 6, 0 !== n$5.strstart && (a$36 |= 32), a$36 += 31 - a$36 % 31, n$5.status = E$4, P$3(n$5, a$36), 0 !== n$5.strstart && (P$3(n$5, e$62.adler >>> 16), P$3(n$5, 65535 & e$62.adler)), e$62.adler = 1;
 					}
 					if (69 === n$5.status) if (n$5.gzhead.extra) {
-						for (i$7 = n$5.pending; n$5.gzindex < (65535 & n$5.gzhead.extra.length) && (n$5.pending !== n$5.pending_buf_size || (n$5.gzhead.hcrc && n$5.pending > i$7 && (e$62.adler = p$7(e$62.adler, n$5.pending_buf, n$5.pending - i$7, i$7)), F$4(e$62), i$7 = n$5.pending, n$5.pending !== n$5.pending_buf_size));) U$2(n$5, 255 & n$5.gzhead.extra[n$5.gzindex]), n$5.gzindex++;
-						n$5.gzhead.hcrc && n$5.pending > i$7 && (e$62.adler = p$7(e$62.adler, n$5.pending_buf, n$5.pending - i$7, i$7)), n$5.gzindex === n$5.gzhead.extra.length && (n$5.gzindex = 0, n$5.status = 73);
+						for (i$7 = n$5.pending; n$5.gzindex < (65535 & n$5.gzhead.extra.length) && (n$5.pending !== n$5.pending_buf_size || (n$5.gzhead.hcrc && n$5.pending > i$7 && (e$62.adler = p$8(e$62.adler, n$5.pending_buf, n$5.pending - i$7, i$7)), F$4(e$62), i$7 = n$5.pending, n$5.pending !== n$5.pending_buf_size));) U$2(n$5, 255 & n$5.gzhead.extra[n$5.gzindex]), n$5.gzindex++;
+						n$5.gzhead.hcrc && n$5.pending > i$7 && (e$62.adler = p$8(e$62.adler, n$5.pending_buf, n$5.pending - i$7, i$7)), n$5.gzindex === n$5.gzhead.extra.length && (n$5.gzindex = 0, n$5.status = 73);
 					} else n$5.status = 73;
 					if (73 === n$5.status) if (n$5.gzhead.name) {
 						i$7 = n$5.pending;
 						do {
-							if (n$5.pending === n$5.pending_buf_size && (n$5.gzhead.hcrc && n$5.pending > i$7 && (e$62.adler = p$7(e$62.adler, n$5.pending_buf, n$5.pending - i$7, i$7)), F$4(e$62), i$7 = n$5.pending, n$5.pending === n$5.pending_buf_size)) {
+							if (n$5.pending === n$5.pending_buf_size && (n$5.gzhead.hcrc && n$5.pending > i$7 && (e$62.adler = p$8(e$62.adler, n$5.pending_buf, n$5.pending - i$7, i$7)), F$4(e$62), i$7 = n$5.pending, n$5.pending === n$5.pending_buf_size)) {
 								s$5 = 1;
 								break;
 							}
 							s$5 = n$5.gzindex < n$5.gzhead.name.length ? 255 & n$5.gzhead.name.charCodeAt(n$5.gzindex++) : 0, U$2(n$5, s$5);
 						} while (0 !== s$5);
-						n$5.gzhead.hcrc && n$5.pending > i$7 && (e$62.adler = p$7(e$62.adler, n$5.pending_buf, n$5.pending - i$7, i$7)), 0 === s$5 && (n$5.gzindex = 0, n$5.status = 91);
+						n$5.gzhead.hcrc && n$5.pending > i$7 && (e$62.adler = p$8(e$62.adler, n$5.pending_buf, n$5.pending - i$7, i$7)), 0 === s$5 && (n$5.gzindex = 0, n$5.status = 91);
 					} else n$5.status = 91;
 					if (91 === n$5.status) if (n$5.gzhead.comment) {
 						i$7 = n$5.pending;
 						do {
-							if (n$5.pending === n$5.pending_buf_size && (n$5.gzhead.hcrc && n$5.pending > i$7 && (e$62.adler = p$7(e$62.adler, n$5.pending_buf, n$5.pending - i$7, i$7)), F$4(e$62), i$7 = n$5.pending, n$5.pending === n$5.pending_buf_size)) {
+							if (n$5.pending === n$5.pending_buf_size && (n$5.gzhead.hcrc && n$5.pending > i$7 && (e$62.adler = p$8(e$62.adler, n$5.pending_buf, n$5.pending - i$7, i$7)), F$4(e$62), i$7 = n$5.pending, n$5.pending === n$5.pending_buf_size)) {
 								s$5 = 1;
 								break;
 							}
 							s$5 = n$5.gzindex < n$5.gzhead.comment.length ? 255 & n$5.gzhead.comment.charCodeAt(n$5.gzindex++) : 0, U$2(n$5, s$5);
 						} while (0 !== s$5);
-						n$5.gzhead.hcrc && n$5.pending > i$7 && (e$62.adler = p$7(e$62.adler, n$5.pending_buf, n$5.pending - i$7, i$7)), 0 === s$5 && (n$5.status = 103);
+						n$5.gzhead.hcrc && n$5.pending > i$7 && (e$62.adler = p$8(e$62.adler, n$5.pending_buf, n$5.pending - i$7, i$7)), 0 === s$5 && (n$5.status = 103);
 					} else n$5.status = 103;
 					if (103 === n$5.status && (n$5.gzhead.hcrc ? (n$5.pending + 2 > n$5.pending_buf_size && F$4(e$62), n$5.pending + 2 <= n$5.pending_buf_size && (U$2(n$5, 255 & e$62.adler), U$2(n$5, e$62.adler >> 8 & 255), e$62.adler = 0, n$5.status = E$4)) : n$5.status = E$4), 0 !== n$5.pending) {
 						if (F$4(e$62), 0 === e$62.avail_out) return n$5.last_flush = -1, m$5;
@@ -62500,12 +66228,12 @@ while (n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 
 			48: [function(e$61, t$12, r$13) {
 				"use strict";
 				t$12.exports = function(e$62, t$13) {
-					var r$14 = e$62.state, n$4 = e$62.next_in, i$6, s$4, a$35, o$33, h$5, u$5, l$10, f$5, c$7, d$5, p$7, m$5, _$5, g$5, b$4, v$4, y$5, w$5, k$4, x$4, S$3, z$3 = e$62.input, C$4;
-					i$6 = n$4 + (e$62.avail_in - 5), s$4 = e$62.next_out, C$4 = e$62.output, a$35 = s$4 - (t$13 - e$62.avail_out), o$33 = s$4 + (e$62.avail_out - 257), h$5 = r$14.dmax, u$5 = r$14.wsize, l$10 = r$14.whave, f$5 = r$14.wnext, c$7 = r$14.window, d$5 = r$14.hold, p$7 = r$14.bits, m$5 = r$14.lencode, _$5 = r$14.distcode, g$5 = (1 << r$14.lenbits) - 1, b$4 = (1 << r$14.distbits) - 1;
+					var r$14 = e$62.state, n$4 = e$62.next_in, i$6, s$4, a$35, o$33, h$5, u$5, l$10, f$5, c$7, d$5, p$8, m$5, _$5, g$5, b$4, v$4, y$5, w$5, k$4, x$4, S$3, z$3 = e$62.input, C$4;
+					i$6 = n$4 + (e$62.avail_in - 5), s$4 = e$62.next_out, C$4 = e$62.output, a$35 = s$4 - (t$13 - e$62.avail_out), o$33 = s$4 + (e$62.avail_out - 257), h$5 = r$14.dmax, u$5 = r$14.wsize, l$10 = r$14.whave, f$5 = r$14.wnext, c$7 = r$14.window, d$5 = r$14.hold, p$8 = r$14.bits, m$5 = r$14.lencode, _$5 = r$14.distcode, g$5 = (1 << r$14.lenbits) - 1, b$4 = (1 << r$14.distbits) - 1;
 					e: do {
-						p$7 < 15 && (d$5 += z$3[n$4++] << p$7, p$7 += 8, d$5 += z$3[n$4++] << p$7, p$7 += 8), v$4 = m$5[d$5 & g$5];
+						p$8 < 15 && (d$5 += z$3[n$4++] << p$8, p$8 += 8, d$5 += z$3[n$4++] << p$8, p$8 += 8), v$4 = m$5[d$5 & g$5];
 						t: for (;;) {
-							if (d$5 >>>= y$5 = v$4 >>> 24, p$7 -= y$5, 0 === (y$5 = v$4 >>> 16 & 255)) C$4[s$4++] = 65535 & v$4;
+							if (d$5 >>>= y$5 = v$4 >>> 24, p$8 -= y$5, 0 === (y$5 = v$4 >>> 16 & 255)) C$4[s$4++] = 65535 & v$4;
 							else {
 								if (!(16 & y$5)) {
 									if (0 == (64 & y$5)) {
@@ -62519,9 +66247,9 @@ while (n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 
 									e$62.msg = "invalid literal/length code", r$14.mode = 30;
 									break e;
 								}
-								w$5 = 65535 & v$4, (y$5 &= 15) && (p$7 < y$5 && (d$5 += z$3[n$4++] << p$7, p$7 += 8), w$5 += d$5 & (1 << y$5) - 1, d$5 >>>= y$5, p$7 -= y$5), p$7 < 15 && (d$5 += z$3[n$4++] << p$7, p$7 += 8, d$5 += z$3[n$4++] << p$7, p$7 += 8), v$4 = _$5[d$5 & b$4];
+								w$5 = 65535 & v$4, (y$5 &= 15) && (p$8 < y$5 && (d$5 += z$3[n$4++] << p$8, p$8 += 8), w$5 += d$5 & (1 << y$5) - 1, d$5 >>>= y$5, p$8 -= y$5), p$8 < 15 && (d$5 += z$3[n$4++] << p$8, p$8 += 8, d$5 += z$3[n$4++] << p$8, p$8 += 8), v$4 = _$5[d$5 & b$4];
 								r: for (;;) {
-									if (d$5 >>>= y$5 = v$4 >>> 24, p$7 -= y$5, !(16 & (y$5 = v$4 >>> 16 & 255))) {
+									if (d$5 >>>= y$5 = v$4 >>> 24, p$8 -= y$5, !(16 & (y$5 = v$4 >>> 16 & 255))) {
 										if (0 == (64 & y$5)) {
 											v$4 = _$5[(65535 & v$4) + (d$5 & (1 << y$5) - 1)];
 											continue r;
@@ -62529,11 +66257,11 @@ while (n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 
 										e$62.msg = "invalid distance code", r$14.mode = 30;
 										break e;
 									}
-									if (k$4 = 65535 & v$4, p$7 < (y$5 &= 15) && (d$5 += z$3[n$4++] << p$7, (p$7 += 8) < y$5 && (d$5 += z$3[n$4++] << p$7, p$7 += 8)), h$5 < (k$4 += d$5 & (1 << y$5) - 1)) {
+									if (k$4 = 65535 & v$4, p$8 < (y$5 &= 15) && (d$5 += z$3[n$4++] << p$8, (p$8 += 8) < y$5 && (d$5 += z$3[n$4++] << p$8, p$8 += 8)), h$5 < (k$4 += d$5 & (1 << y$5) - 1)) {
 										e$62.msg = "invalid distance too far back", r$14.mode = 30;
 										break e;
 									}
-									if (d$5 >>>= y$5, p$7 -= y$5, (y$5 = s$4 - a$35) < k$4) {
+									if (d$5 >>>= y$5, p$8 -= y$5, (y$5 = s$4 - a$35) < k$4) {
 										if (l$10 < (y$5 = k$4 - y$5) && r$14.sane) {
 											e$62.msg = "invalid distance too far back", r$14.mode = 30;
 											break e;
@@ -62567,7 +66295,7 @@ while (n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 
 							break;
 						}
 					} while (n$4 < i$6 && s$4 < o$33);
-					n$4 -= w$5 = p$7 >> 3, d$5 &= (1 << (p$7 -= w$5 << 3)) - 1, e$62.next_in = n$4, e$62.next_out = s$4, e$62.avail_in = n$4 < i$6 ? i$6 - n$4 + 5 : 5 - (n$4 - i$6), e$62.avail_out = s$4 < o$33 ? o$33 - s$4 + 257 : 257 - (s$4 - o$33), r$14.hold = d$5, r$14.bits = p$7;
+					n$4 -= w$5 = p$8 >> 3, d$5 &= (1 << (p$8 -= w$5 << 3)) - 1, e$62.next_in = n$4, e$62.next_out = s$4, e$62.avail_in = n$4 < i$6 ? i$6 - n$4 + 5 : 5 - (n$4 - i$6), e$62.avail_out = s$4 < o$33 ? o$33 - s$4 + 257 : 257 - (s$4 - o$33), r$14.hold = d$5, r$14.bits = p$8;
 				};
 			}, {}],
 			49: [function(e$61, t$12, r$13) {
@@ -62615,7 +66343,7 @@ while (n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 
 				r$13.inflateReset = o$33, r$13.inflateReset2 = h$5, r$13.inflateResetKeep = a$35, r$13.inflateInit = function(e$62) {
 					return u$5(e$62, 15);
 				}, r$13.inflateInit2 = u$5, r$13.inflate = function(e$62, t$13) {
-					var r$14, n$5, i$7, s$5, a$36, o$34, h$6, u$6, l$11, f$6, c$8, d$5, p$7, m$5, _$5, g$5, b$4, v$4, y$5, w$5, k$4, x$4, S$3, z$3, C$4 = 0, E$4 = new I$2.Buf8(4), A$3 = [
+					var r$14, n$5, i$7, s$5, a$36, o$34, h$6, u$6, l$11, f$6, c$8, d$5, p$8, m$5, _$5, g$5, b$4, v$4, y$5, w$5, k$4, x$4, S$3, z$3, C$4 = 0, E$4 = new I$2.Buf8(4), A$3 = [
 						16,
 						17,
 						18,
@@ -62938,9 +66666,9 @@ while (n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 
 									e$62.msg = "invalid distance too far back", r$14.mode = 30;
 									break;
 								}
-								p$7 = d$5 > r$14.wnext ? (d$5 -= r$14.wnext, r$14.wsize - d$5) : r$14.wnext - d$5, d$5 > r$14.length && (d$5 = r$14.length), m$5 = r$14.window;
-							} else m$5 = i$7, p$7 = a$36 - r$14.offset, d$5 = r$14.length;
-							for (h$6 < d$5 && (d$5 = h$6), h$6 -= d$5, r$14.length -= d$5; i$7[a$36++] = m$5[p$7++], --d$5;);
+								p$8 = d$5 > r$14.wnext ? (d$5 -= r$14.wnext, r$14.wsize - d$5) : r$14.wnext - d$5, d$5 > r$14.length && (d$5 = r$14.length), m$5 = r$14.window;
+							} else m$5 = i$7, p$8 = a$36 - r$14.offset, d$5 = r$14.length;
+							for (h$6 < d$5 && (d$5 = h$6), h$6 -= d$5, r$14.length -= d$5; i$7[a$36++] = m$5[p$8++], --d$5;);
 							0 === r$14.length && (r$14.mode = 21);
 							break;
 						case 26:
@@ -63136,7 +66864,7 @@ while (n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 
 					64
 				];
 				t$12.exports = function(e$62, t$13, r$14, n$4, i$6, s$4, a$35, o$33) {
-					var h$5, u$5, l$10, f$5, c$7, d$5, p$7, m$5, _$5, g$5 = o$33.bits, b$4 = 0, v$4 = 0, y$5 = 0, w$5 = 0, k$4 = 0, x$4 = 0, S$3 = 0, z$3 = 0, C$4 = 0, E$4 = 0, A$3 = null, I$2 = 0, O$3 = new D$4.Buf16(16), B$4 = new D$4.Buf16(16), R$2 = null, T$4 = 0;
+					var h$5, u$5, l$10, f$5, c$7, d$5, p$8, m$5, _$5, g$5 = o$33.bits, b$4 = 0, v$4 = 0, y$5 = 0, w$5 = 0, k$4 = 0, x$4 = 0, S$3 = 0, z$3 = 0, C$4 = 0, E$4 = 0, A$3 = null, I$2 = 0, O$3 = new D$4.Buf16(16), B$4 = new D$4.Buf16(16), R$2 = null, T$4 = 0;
 					for (b$4 = 0; b$4 <= 15; b$4++) O$3[b$4] = 0;
 					for (v$4 = 0; v$4 < n$4; v$4++) O$3[t$13[r$14 + v$4]]++;
 					for (k$4 = g$5, w$5 = 15; 1 <= w$5 && 0 === O$3[w$5]; w$5--);
@@ -63148,7 +66876,7 @@ while (n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 
 					for (v$4 = 0; v$4 < n$4; v$4++) 0 !== t$13[r$14 + v$4] && (a$35[B$4[t$13[r$14 + v$4]]++] = v$4);
 					if (d$5 = 0 === e$62 ? (A$3 = R$2 = a$35, 19) : 1 === e$62 ? (A$3 = F$4, I$2 -= 257, R$2 = N$3, T$4 -= 257, 256) : (A$3 = U$2, R$2 = P$3, -1), b$4 = y$5, c$7 = s$4, S$3 = v$4 = E$4 = 0, l$10 = -1, f$5 = (C$4 = 1 << (x$4 = k$4)) - 1, 1 === e$62 && 852 < C$4 || 2 === e$62 && 592 < C$4) return 1;
 					for (;;) {
-						for (p$7 = b$4 - S$3, _$5 = a$35[v$4] < d$5 ? (m$5 = 0, a$35[v$4]) : a$35[v$4] > d$5 ? (m$5 = R$2[T$4 + a$35[v$4]], A$3[I$2 + a$35[v$4]]) : (m$5 = 96, 0), h$5 = 1 << b$4 - S$3, y$5 = u$5 = 1 << x$4; i$6[c$7 + (E$4 >> S$3) + (u$5 -= h$5)] = p$7 << 24 | m$5 << 16 | _$5 | 0, 0 !== u$5;);
+						for (p$8 = b$4 - S$3, _$5 = a$35[v$4] < d$5 ? (m$5 = 0, a$35[v$4]) : a$35[v$4] > d$5 ? (m$5 = R$2[T$4 + a$35[v$4]], A$3[I$2 + a$35[v$4]]) : (m$5 = 96, 0), h$5 = 1 << b$4 - S$3, y$5 = u$5 = 1 << x$4; i$6[c$7 + (E$4 >> S$3) + (u$5 -= h$5)] = p$8 << 24 | m$5 << 16 | _$5 | 0, 0 !== u$5;);
 						for (h$5 = 1 << b$4 - 1; E$4 & h$5;) h$5 >>= 1;
 						if (0 !== h$5 ? (E$4 &= h$5 - 1, E$4 += h$5) : E$4 = 0, v$4++, 0 == --O$3[b$4]) {
 							if (b$4 === w$5) break;
@@ -63183,7 +66911,7 @@ while (n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 
 				function n$4(e$62) {
 					for (var t$13 = e$62.length; 0 <= --t$13;) e$62[t$13] = 0;
 				}
-				var s$4 = 0, a$35 = 29, u$5 = 256, l$10 = u$5 + 1 + a$35, f$5 = 30, c$7 = 19, _$5 = 2 * l$10 + 1, g$5 = 15, d$5 = 16, p$7 = 7, m$5 = 256, b$4 = 16, v$4 = 17, y$5 = 18, w$5 = [
+				var s$4 = 0, a$35 = 29, u$5 = 256, l$10 = u$5 + 1 + a$35, f$5 = 30, c$7 = 19, _$5 = 2 * l$10 + 1, g$5 = 15, d$5 = 16, p$8 = 7, m$5 = 256, b$4 = 16, v$4 = 17, y$5 = 18, w$5 = [
 					0,
 					0,
 					0,
@@ -63355,15 +67083,15 @@ while (n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 
 					for (t$13.max_code = u$6, r$14 = e$62.heap_len >> 1; 1 <= r$14; r$14--) G$3(e$62, s$5, r$14);
 					for (i$7 = h$6; r$14 = e$62.heap[1], e$62.heap[1] = e$62.heap[e$62.heap_len--], G$3(e$62, s$5, 1), n$5 = e$62.heap[1], e$62.heap[--e$62.heap_max] = r$14, e$62.heap[--e$62.heap_max] = n$5, s$5[2 * i$7] = s$5[2 * r$14] + s$5[2 * n$5], e$62.depth[i$7] = (e$62.depth[r$14] >= e$62.depth[n$5] ? e$62.depth[r$14] : e$62.depth[n$5]) + 1, s$5[2 * r$14 + 1] = s$5[2 * n$5 + 1] = i$7, e$62.heap[1] = i$7++, G$3(e$62, s$5, 1), 2 <= e$62.heap_len;);
 					e$62.heap[--e$62.heap_max] = e$62.heap[1], function(e$63, t$14) {
-						var r$15, n$6, i$8, s$6, a$37, o$35, h$7 = t$14.dyn_tree, u$7 = t$14.max_code, l$11 = t$14.stat_desc.static_tree, f$6 = t$14.stat_desc.has_stree, c$8 = t$14.stat_desc.extra_bits, d$6 = t$14.stat_desc.extra_base, p$8 = t$14.stat_desc.max_length, m$6 = 0;
+						var r$15, n$6, i$8, s$6, a$37, o$35, h$7 = t$14.dyn_tree, u$7 = t$14.max_code, l$11 = t$14.stat_desc.static_tree, f$6 = t$14.stat_desc.has_stree, c$8 = t$14.stat_desc.extra_bits, d$6 = t$14.stat_desc.extra_base, p$9 = t$14.stat_desc.max_length, m$6 = 0;
 						for (s$6 = 0; s$6 <= g$5; s$6++) e$63.bl_count[s$6] = 0;
-						for (h$7[2 * e$63.heap[e$63.heap_max] + 1] = 0, r$15 = e$63.heap_max + 1; r$15 < _$5; r$15++) p$8 < (s$6 = h$7[2 * h$7[2 * (n$6 = e$63.heap[r$15]) + 1] + 1] + 1) && (s$6 = p$8, m$6++), h$7[2 * n$6 + 1] = s$6, u$7 < n$6 || (e$63.bl_count[s$6]++, a$37 = 0, d$6 <= n$6 && (a$37 = c$8[n$6 - d$6]), o$35 = h$7[2 * n$6], e$63.opt_len += o$35 * (s$6 + a$37), f$6 && (e$63.static_len += o$35 * (l$11[2 * n$6 + 1] + a$37)));
+						for (h$7[2 * e$63.heap[e$63.heap_max] + 1] = 0, r$15 = e$63.heap_max + 1; r$15 < _$5; r$15++) p$9 < (s$6 = h$7[2 * h$7[2 * (n$6 = e$63.heap[r$15]) + 1] + 1] + 1) && (s$6 = p$9, m$6++), h$7[2 * n$6 + 1] = s$6, u$7 < n$6 || (e$63.bl_count[s$6]++, a$37 = 0, d$6 <= n$6 && (a$37 = c$8[n$6 - d$6]), o$35 = h$7[2 * n$6], e$63.opt_len += o$35 * (s$6 + a$37), f$6 && (e$63.static_len += o$35 * (l$11[2 * n$6 + 1] + a$37)));
 						if (0 !== m$6) {
 							do {
-								for (s$6 = p$8 - 1; 0 === e$63.bl_count[s$6];) s$6--;
-								e$63.bl_count[s$6]--, e$63.bl_count[s$6 + 1] += 2, e$63.bl_count[p$8]--, m$6 -= 2;
+								for (s$6 = p$9 - 1; 0 === e$63.bl_count[s$6];) s$6--;
+								e$63.bl_count[s$6]--, e$63.bl_count[s$6 + 1] += 2, e$63.bl_count[p$9]--, m$6 -= 2;
 							} while (0 < m$6);
-							for (s$6 = p$8; 0 !== s$6; s$6--) for (n$6 = e$63.bl_count[s$6]; 0 !== n$6;) u$7 < (i$8 = e$63.heap[--r$15]) || (h$7[2 * i$8 + 1] !== s$6 && (e$63.opt_len += (s$6 - h$7[2 * i$8 + 1]) * h$7[2 * i$8], h$7[2 * i$8 + 1] = s$6), n$6--);
+							for (s$6 = p$9; 0 !== s$6; s$6--) for (n$6 = e$63.bl_count[s$6]; 0 !== n$6;) u$7 < (i$8 = e$63.heap[--r$15]) || (h$7[2 * i$8 + 1] !== s$6 && (e$63.opt_len += (s$6 - h$7[2 * i$8 + 1]) * h$7[2 * i$8], h$7[2 * i$8 + 1] = s$6), n$6--);
 						}
 					}(e$62, t$13), Z$1(s$5, u$6, e$62.bl_count);
 				}
@@ -63398,7 +67126,7 @@ while (n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 === a$37[++i$8] && n$6 
 						for (; e$63 <= 279;) z$3[2 * e$63 + 1] = 7, e$63++, s$5[7]++;
 						for (; e$63 <= 287;) z$3[2 * e$63 + 1] = 8, e$63++, s$5[8]++;
 						for (Z$1(z$3, l$10 + 1, s$5), e$63 = 0; e$63 < f$5; e$63++) C$4[2 * e$63 + 1] = 5, C$4[2 * e$63] = j$4(e$63, 5);
-						O$3 = new D$4(z$3, w$5, u$5 + 1, l$10, g$5), B$4 = new D$4(C$4, k$4, 0, f$5, g$5), R$2 = new D$4(new Array(0), x$4, 0, c$7, p$7);
+						O$3 = new D$4(z$3, w$5, u$5 + 1, l$10, g$5), B$4 = new D$4(C$4, k$4, 0, f$5, g$5), R$2 = new D$4(new Array(0), x$4, 0, c$7, p$8);
 					}(), q$5 = !0), e$62.l_desc = new F$4(e$62.dyn_ltree, O$3), e$62.d_desc = new F$4(e$62.dyn_dtree, B$4), e$62.bl_desc = new F$4(e$62.bl_tree, R$2), e$62.bi_buf = 0, e$62.bi_valid = 0, W$2(e$62);
 				}, r$13._tr_stored_block = J$3, r$13._tr_flush_block = function(e$62, t$13, r$14, n$5) {
 					var i$7, s$5, a$36 = 0;
@@ -64818,7 +68546,7 @@ Int8Array.__proto__;
 function isFunction(x$4) {
 	return typeof x$4 === "function";
 }
-memoizeByRef(function isCtor$2(v$4) {
+memoizeByRef(function isCtor$3(v$4) {
 	return isFunction(v$4) && v$4.toString().startsWith("class");
 });
 var EventEmitter = class {
@@ -65081,7 +68809,7 @@ new EventEmitter();
 [typeof OffscreenCanvas !== "undefined" ? OffscreenCanvas : void 0, typeof MessagePort !== "undefined" ? MessagePort : void 0].filter(Boolean);
 DataView.prototype.getUint8, DataView.prototype.setUint8, DataView.prototype.getUint8, DataView.prototype.setUint8, DataView.prototype.getUint16, DataView.prototype.setUint16, DataView.prototype.getUint32, DataView.prototype.setUint32, DataView.prototype.getBigUint64, DataView.prototype.setBigUint64, DataView.prototype.getInt8, DataView.prototype.setInt8, DataView.prototype.getInt16, DataView.prototype.setInt16, DataView.prototype.getInt32, DataView.prototype.setInt32, DataView.prototype.getBigInt64, DataView.prototype.setBigInt64, DataView.prototype.getFloat32, DataView.prototype.setFloat32, DataView.prototype.getFloat64, DataView.prototype.setFloat64, DataView.prototype.getUint32, DataView.prototype.setUint32;
 Uint8Array, Uint16Array, Uint32Array, BigUint64Array, Int8Array, Int16Array, Int32Array, BigInt64Array, Float32Array, Float64Array;
-Object.assign(function validateType$1(obj) {
+Object.assign(function validateType$2(obj) {
 	return obj;
 }, { assignable: function assignable(obj) {
 	return obj;
@@ -65117,7 +68845,7 @@ var getWallProgramId = (id) => `wall-sound-${id}`;
 var getWallDoc = (id) => {
 	let doc = wallDocs.get(id);
 	if (!doc) {
-		doc = createPersistedDoc(getWallProgramId(id), tokenize);
+		doc = createPersistedDoc(getWallProgramId(id), tokenizer);
 		wallDocs.set(id, doc);
 	}
 	return doc;
@@ -65434,4 +69162,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-DcCTe0YW.js.map
+//# sourceMappingURL=index-qNvliO-h.js.map

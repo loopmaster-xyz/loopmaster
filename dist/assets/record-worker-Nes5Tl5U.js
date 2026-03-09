@@ -19558,6 +19558,12 @@
 		const opCode = AudioVmOp[`Gen${s$1.genName}_${s$1.variantName}`];
 		if (opCode !== void 0) opCodeByGenKey[key] = opCode;
 	}
+	const BUILTIN_SPEC_BY_VARIANT = /* @__PURE__ */ new Map();
+	const BUILTIN_DEFAULT_SPEC_BY_GEN_NAME = /* @__PURE__ */ new Map();
+	for (const spec of genSpecs) {
+		if (!BUILTIN_SPEC_BY_VARIANT.has(spec.variantName)) BUILTIN_SPEC_BY_VARIANT.set(spec.variantName, spec);
+		if (spec.variantName === "default" && !BUILTIN_DEFAULT_SPEC_BY_GEN_NAME.has(spec.genName)) BUILTIN_DEFAULT_SPEC_BY_GEN_NAME.set(spec.genName, spec);
+	}
 	function disassembleBytecode(bytecode, indent = 0) {
 		const lines = [];
 		const u32 = new Uint32Array(bytecode.buffer, bytecode.byteOffset, bytecode.length);
@@ -20111,4 +20117,4 @@
 	};
 })();
 
-//# sourceMappingURL=record-worker-D3TZ7V5F.js.map
+//# sourceMappingURL=record-worker-Nes5Tl5U.js.map
