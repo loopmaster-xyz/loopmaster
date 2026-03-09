@@ -16,7 +16,7 @@ import {
   type ShaderDirectiveLocations,
   type ShaderDirectiveSources,
 } from './lib/shader-directives.ts'
-import { tokenize } from './lib/tokenizer.ts'
+import { tokenizer } from './lib/tokenizer.ts'
 import type { WaveformBuffer } from './lib/waveform-buffer.ts'
 import { settings } from './settings.ts'
 import {
@@ -87,7 +87,7 @@ async function createDspProgramContextImpl(
   historiesRefreshed: { value: number },
 ) {
   const program = await dsp.createProgram()
-  const doc = opts.doc ?? createDoc(tokenize)
+  const doc = opts.doc ?? createDoc(tokenizer)
   let compiledSubmitVersion = -1
   let submittedCode = doc.code
 

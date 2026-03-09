@@ -4,7 +4,7 @@ import { createPersistedDoc } from 'editor/src/doc.ts'
 import { MouseButton } from 'utils'
 import { cn } from '../lib/cn.ts'
 import { createId } from '../lib/create-id.ts'
-import { tokenize } from '../lib/tokenizer.ts'
+import { tokenizer } from '../lib/tokenizer.ts'
 import { wallTransport } from '../state.ts'
 import { Editor } from './Editor.tsx'
 
@@ -61,7 +61,7 @@ const getWallProgramId = (id: string) => `wall-sound-${id}`
 const getWallDoc = (id: string): Doc => {
   let doc = wallDocs.get(id)
   if (!doc) {
-    doc = createPersistedDoc(getWallProgramId(id), tokenize)
+    doc = createPersistedDoc(getWallProgramId(id), tokenizer)
     wallDocs.set(id, doc)
   }
   return doc

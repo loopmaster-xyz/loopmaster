@@ -4,14 +4,14 @@ import { createPersistedDoc } from 'editor'
 import { useCallback, useEffect } from 'preact/hooks'
 import type { OneLiner, OneLiners as OneLinersType } from '../../deno/types.ts'
 import { api } from '../api.ts'
-import { tokenize } from '../lib/tokenizer.ts'
+import { tokenizer } from '../lib/tokenizer.ts'
 import { Link } from '../router.tsx'
 import { primaryColor, session } from '../state.ts'
 import { InlineEditor } from './InlineEditor.tsx'
 import { Main } from './Main.tsx'
 import { SpinnerLarge } from './Spinner.tsx'
 
-const oneLinerDoc = createPersistedDoc('one-liner', tokenize)
+const oneLinerDoc = createPersistedDoc('one-liner', tokenizer)
 
 export const OneLiners = ({ oneLiners }: { oneLiners: OneLinersType }) => {
   const list = useSignal<OneLinersType>(oneLiners)

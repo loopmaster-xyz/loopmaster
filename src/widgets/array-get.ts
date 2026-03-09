@@ -28,7 +28,10 @@ export function createArrayGetWidgets(
     return []
   }
 
-  const line = target.source.line
+  // Element mappings are expressed in the ArrayGet source line/columns.
+  // Using call-site target lines can leak highlights to unrelated lines
+  // (e.g. callback call-sites that collapse to line 1).
+  const line = history.source.line > 0 ? history.source.line : target.source.line
   const widgets: Widget[] = []
   const historyRef = { current: history }
 

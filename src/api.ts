@@ -20,7 +20,7 @@ import type {
   UpdateProjectRequest,
   Users,
 } from '../deno/types.ts'
-import { tokenize } from './lib/tokenizer.ts'
+import { tokenizer } from './lib/tokenizer.ts'
 import { busyLock, busyUnlock, createProject, type Project as StateProject, projects, session } from './state.ts'
 
 export const projectsLoading = signal(false)
@@ -345,7 +345,7 @@ queueMicrotask(() => {
               if (!found.scratch.code) found.scratch.code = project.code
               continue
             }
-            const doc = createDoc(tokenize)
+            const doc = createDoc(tokenizer)
             doc.code = project.code
 
             const p = createProject({

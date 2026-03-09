@@ -181,192 +181,170 @@ function isPunctuationCode(code: number): boolean {
   }
 }
 
-export const tokenize: Tokenizer = (input: string) => {
-  const lines: Token[][] = []
-  let currentLine: Token[] = []
-  let i = 0
+const MODE_NORMAL = 0
+const MODE_BLOCK_COMMENT = 1
+const MODE_SINGLE_QUOTE = 2
+const MODE_DOUBLE_QUOTE = 3
+const MODE_BACKTICK = 4
+
+function decodeMode(prevState: unknown): number {
+  const mode = typeof prevState === 'number' ? prevState : MODE_NORMAL
+  if (mode < MODE_NORMAL || mode > MODE_BACKTICK) return MODE_NORMAL
+  return mode
+}
+
+function quoteFromMode(mode: number): number {
+  if (mode === MODE_SINGLE_QUOTE) return codeSingleQuote
+  if (mode === MODE_DOUBLE_QUOTE) return codeDoubleQuote
+  if (mode === MODE_BACKTICK) return codeBacktick
+  return 0
+}
+
+function modeFromQuote(quoteCode: number): number {
+  if (quoteCode === codeSingleQuote) return MODE_SINGLE_QUOTE
+  if (quoteCode === codeDoubleQuote) return MODE_DOUBLE_QUOTE
+  if (quoteCode === codeBacktick) return MODE_BACKTICK
+  return MODE_NORMAL
+}
+
+function tokenizeLineInternal(
+  input: string,
+  lineIndex: number,
+  prevState: unknown,
+): { tokens: Token[]; state: number } {
+  const tokens: Token[] = []
+  const line = lineIndex + 1
   const n = input.length
-  let lineNum = 1
-  let column = 1
+  let i = 0
+  let mode = decodeMode(prevState)
+
+  if (mode === MODE_BLOCK_COMMENT) {
+    const startColumn = 1
+    let closed = false
+    while (i < n) {
+      if (input.charCodeAt(i) === codeStar && input.charCodeAt(i + 1) === codeSlash) {
+        i += 2
+        closed = true
+        break
+      }
+      i++
+    }
+    tokens.push({ text: input.slice(0, i), type: 'comment', line, column: startColumn })
+    if (!closed) {
+      return { tokens, state: MODE_BLOCK_COMMENT }
+    }
+    mode = MODE_NORMAL
+  }
+  else if (mode !== MODE_NORMAL) {
+    const quote = quoteFromMode(mode)
+    const startColumn = 1
+    let escaped = false
+    let closed = false
+    while (i < n) {
+      const c = input.charCodeAt(i)
+      if (escaped) {
+        escaped = false
+        i++
+        continue
+      }
+      if (c === codeBackslash) {
+        escaped = true
+        i++
+        continue
+      }
+      i++
+      if (c === quote) {
+        closed = true
+        break
+      }
+    }
+    tokens.push({ text: input.slice(0, i), type: 'string', line, column: startColumn })
+    if (!closed) {
+      return { tokens, state: mode }
+    }
+    mode = MODE_NORMAL
+  }
 
   while (i < n) {
+    const start = i
+    const startColumn = i + 1
     const code = input.charCodeAt(i)
-    const startLine = lineNum
-    const startColumn = column
 
     if (code === codeDollar) {
-      currentLine.push({ text: '$', type: 'special', line: startLine, column: startColumn })
+      tokens.push({ text: '$', type: 'special', line, column: startColumn })
       i++
-      column++
       continue
     }
 
     if (isWhitespaceCode(code)) {
-      let segStart = i
-      let segLine = lineNum
-      let segColumn = column
-      while (i < n && isWhitespaceCode(input.charCodeAt(i))) {
-        if (input.charCodeAt(i) === codeLf) {
-          if (segStart < i) {
-            currentLine.push({
-              text: input.slice(segStart, i),
-              type: 'text',
-              line: segLine,
-              column: segColumn,
-            })
-          }
-          lines.push(currentLine)
-          currentLine = []
-          i++
-          lineNum++
-          column = 1
-          segStart = i
-          segLine = lineNum
-          segColumn = column
-        }
-        else {
-          i++
-          column++
-        }
-      }
-      if (segStart < i) {
-        currentLine.push({
-          text: input.slice(segStart, i),
-          type: 'text',
-          line: segLine,
-          column: segColumn,
-        })
-      }
+      i++
+      while (i < n && isWhitespaceCode(input.charCodeAt(i))) i++
+      tokens.push({ text: input.slice(start, i), type: 'text', line, column: startColumn })
       continue
     }
 
     if (code === codeSlash && input.charCodeAt(i + 1) === codeSlash) {
-      const start = i
-      const end = input.indexOf('\n', i + 2)
-      i = end === -1 ? n : end
-      column += i - start
-      currentLine.push({
-        text: input.slice(start, i),
-        type: 'comment',
-        line: startLine,
-        column: startColumn,
-      })
-      continue
+      tokens.push({ text: input.slice(i), type: 'comment', line, column: startColumn })
+      break
     }
 
     if (code === codeSlash && input.charCodeAt(i + 1) === codeStar) {
-      let segStart = i
       i += 2
-      column += 2
+      let closed = false
       while (i < n) {
-        const c = input.charCodeAt(i)
-        if (c === codeLf) {
-          currentLine.push({
-            text: input.slice(segStart, i + 1),
-            type: 'comment',
-            line: startLine,
-            column: startColumn,
-          })
-          lines.push(currentLine)
-          currentLine = []
-          i++
-          lineNum++
-          column = 1
-          segStart = i
-          continue
-        }
-        if (c === codeStar && input.charCodeAt(i + 1) === codeSlash) {
+        if (input.charCodeAt(i) === codeStar && input.charCodeAt(i + 1) === codeSlash) {
           i += 2
-          column += 2
-          currentLine.push({
-            text: input.slice(segStart, i),
-            type: 'comment',
-            line: startLine,
-            column: startColumn,
-          })
-          segStart = i
+          closed = true
           break
         }
         i++
-        column++
       }
-      if (segStart < i) {
-        currentLine.push({
-          text: input.slice(segStart, i),
-          type: 'comment',
-          line: startLine,
-          column: startColumn,
-        })
+      tokens.push({ text: input.slice(start, i), type: 'comment', line, column: startColumn })
+      if (!closed) {
+        mode = MODE_BLOCK_COMMENT
+        break
       }
       continue
     }
 
     if (code === codeBacktick || code === codeSingleQuote || code === codeDoubleQuote) {
       const quote = code
-      let segStart = i
       i++
-      column++
       let escaped = false
+      let closed = false
       while (i < n) {
         const c = input.charCodeAt(i)
         if (escaped) {
           escaped = false
           i++
-          column++
+          continue
         }
-        else if (c === codeBackslash) {
+        if (c === codeBackslash) {
           escaped = true
           i++
-          column++
+          continue
         }
-        else if (c === codeLf) {
-          currentLine.push({
-            text: input.slice(segStart, i + 1),
-            type: 'string',
-            line: startLine,
-            column: startColumn,
-          })
-          lines.push(currentLine)
-          currentLine = []
-          i++
-          lineNum++
-          column = 1
-          segStart = i
-        }
-        else {
-          i++
-          column++
-          if (c === quote) {
-            currentLine.push({
-              text: input.slice(segStart, i),
-              type: 'string',
-              line: startLine,
-              column: startColumn,
-            })
-            segStart = i
-            break
-          }
+        i++
+        if (c === quote) {
+          closed = true
+          break
         }
       }
-      if (segStart < i) {
-        currentLine.push({
-          text: input.slice(segStart, i),
-          type: 'string',
-          line: startLine,
-          column: startColumn,
-        })
+      tokens.push({ text: input.slice(start, i), type: 'string', line, column: startColumn })
+      if (!closed) {
+        mode = modeFromQuote(quote)
+        break
       }
       continue
     }
 
     if (isDigitCode(code) || (code === codeDot && isDigitCode(input.charCodeAt(i + 1)))) {
-      const start = i
-
       if (code === codeDot) {
         i++
         while (i < n && isDigitCode(input.charCodeAt(i))) i++
       }
       else {
+        i++
         while (i < n && isDigitCode(input.charCodeAt(i))) i++
         if (input.charCodeAt(i) === codeDot && isDigitCode(input.charCodeAt(i + 1))) {
           i++
@@ -384,13 +362,7 @@ export const tokenize: Tokenizer = (input: string) => {
 
       if (input.charCodeAt(i) === codeLowerK) i++
 
-      currentLine.push({
-        text: input.slice(start, i),
-        type: 'number',
-        line: startLine,
-        column: startColumn,
-      })
-      column += i - start
+      tokens.push({ text: input.slice(start, i), type: 'number', line, column: startColumn })
       continue
     }
 
@@ -399,9 +371,8 @@ export const tokenize: Tokenizer = (input: string) => {
       let matched = false
       for (const op of ops) {
         if (input.startsWith(op, i)) {
-          currentLine.push({ text: op, type: 'operator', line: startLine, column: startColumn })
+          tokens.push({ text: op, type: 'operator', line, column: startColumn })
           i += op.length
-          column += op.length
           matched = true
           break
         }
@@ -410,20 +381,16 @@ export const tokenize: Tokenizer = (input: string) => {
     }
 
     if (isPunctuationCode(code)) {
-      currentLine.push({ text: input[i]!, type: 'punctuation', line: startLine, column: startColumn })
+      tokens.push({ text: input[i]!, type: 'punctuation', line, column: startColumn })
       i++
-      column++
       continue
     }
 
     if (isLetterCode(code) || code === codeHash) {
-      const start = i
       i++
       while (i < n && isIdentifierCode(input.charCodeAt(i))) i++
 
       const identifier = input.slice(start, i)
-      column += i - start
-
       let type: TokenType = 'identifier'
       if (keywords.has(identifier)) {
         type = 'keyword'
@@ -434,20 +401,35 @@ export const tokenize: Tokenizer = (input: string) => {
       else if (identifier === 'null' || identifier === 'undefined') {
         type = 'null'
       }
-      else if (i < n && input.charCodeAt(i) === codeLParen) {
+      else if (input.charCodeAt(i) === codeLParen) {
         type = 'function'
       }
 
-      currentLine.push({ text: identifier, type, line: startLine, column: startColumn })
+      tokens.push({ text: identifier, type, line, column: startColumn })
       continue
     }
 
-    currentLine.push({ text: input[i]!, type: 'text', line: startLine, column: startColumn })
+    tokens.push({ text: input[i]!, type: 'text', line, column: startColumn })
     i++
-    column++
   }
 
-  lines.push(currentLine)
+  return { tokens, state: mode }
+}
 
-  return lines
+export const tokenizer: Tokenizer = {
+  tokenizeLine(line: string, lineIndex: number, prevState: unknown) {
+    return tokenizeLineInternal(line, lineIndex, prevState)
+  },
+}
+
+export function tokenize(input: string): Token[][] {
+  const lines = input.split('\n')
+  const result: Token[][] = new Array(lines.length)
+  let state = MODE_NORMAL
+  for (let i = 0; i < lines.length; i++) {
+    const lineResult = tokenizeLineInternal(lines[i] ?? '', i, state)
+    result[i] = lineResult.tokens
+    state = lineResult.state
+  }
+  return result
 }

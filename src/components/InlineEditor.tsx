@@ -8,7 +8,7 @@ import type { DspProgramContext } from '../dsp.ts'
 import { useReactiveEffect } from '../hooks/useReactiveEffect.ts'
 import { cn } from '../lib/cn.ts'
 import { createEditorOnHover, editorSettings } from '../lib/editor-common.ts'
-import { tokenize } from '../lib/tokenizer.ts'
+import { tokenizer } from '../lib/tokenizer.ts'
 import { ctx, getProgramContext, inlineTransport, playingContext, playingInlineContext, theme } from '../state.ts'
 import { PlayGradientIcon, StopGradientIcon } from './Icons.tsx'
 
@@ -52,7 +52,7 @@ export const InlineEditor = (
     if (!ctx.value || !inView.value) return
 
     getProgramContext(ctx.value, id, {
-      doc: doc ?? (persisted ? createPersistedDoc(id, tokenize) : createDoc(tokenize)),
+      doc: doc ?? (persisted ? createPersistedDoc(id, tokenizer) : createDoc(tokenizer)),
       waveBackground,
     }).then(instance => {
       if (doc) code = doc.code ?? ''
