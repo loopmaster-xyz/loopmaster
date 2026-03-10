@@ -29,6 +29,9 @@ import { toPascalCase } from './to-pascal-case.ts'
 import { withPeriod } from './with-period.ts'
 const VISUAL_HEIGHT = 35
 const VISUAL_SPACING = 0
+const TOOLTIP_WIDGETS_PER_ROW = 5
+const TOOLTIP_WIDGET_GAP = 2
+const TOOLTIP_WIDGET_ROW_GAP = 2
 const AUTCOMPLETE_GAP = 8
 const AUTCOMPLETE_ITEM_HEIGHT = 20
 const AUTCOMPLETE_PADDING = 8
@@ -417,13 +420,14 @@ export function drawDefinitionTooltip(
     const parenI = callBlock.findIndex(t => t.text === '(')
     if (parenI > 0) {
       const callee = callBlock[parenI - 1]
-      const line = callee?.line
-      const column = callee?.column
-      if (line != null && column != null) {
-        const pascalName: string = toPascalCase(nameToGenMap.value.get(callee?.text ?? '')?.name ?? callee?.text ?? '')
+      const lookupLine = tokenIsDefinition && token.line != null ? token.line : callee?.line
+      const lookupColumn = tokenIsDefinition && token.column != null ? token.column : callee?.column
+      const calleeName = callee?.text ?? token.text
+      if (lookupLine != null && lookupColumn != null) {
+        const pascalName: string = toPascalCase(nameToGenMap.value.get(calleeName ?? '')?.name ?? calleeName ?? '')
         const resolved = resolveTooltipSource(
-          line,
-          column,
+          lookupLine,
+          lookupColumn,
           pascalName,
           definition,
           program.histories.value,
@@ -432,18 +436,20 @@ export function drawDefinitionTooltip(
         const widgetContext: DspWidgetContext = program.tooltipWidgetContext
         const { history, target, isUserCallSite } = resolved
         if (target !== undefined) {
-          const key = `${line}:${column}`
+          const key = `${lookupLine}:${lookupColumn}:${calleeName}`
           let innerSignature: string | undefined
           const widgets = isUserCallSite && 'inner' in target
             ? (() => {
               const inner = (target as UserCallHistory).inner
               innerSignature = inner.map(h => `${h.genName}:${h.index}`).join('|')
-              const canReuseInnerWidgets = tooltipWidgetCache?.key === key
-                && tooltipWidgetCache?.ref === target
-                && tooltipWidgetCache?.innerSignature === innerSignature
-                && tooltipWidgetCache.widgets.length === inner.length
+              const cached = tooltipWidgetCache
+              const canReuseInnerWidgets = cached != null
+                && cached.key === key
+                && cached.ref === target
+                && cached.innerSignature === innerSignature
+                && cached.widgets.length === inner.length
               if (canReuseInnerWidgets) {
-                return tooltipWidgetCache.widgets
+                return cached.widgets
               }
               return inner
                 .map((h) => {
@@ -573,8 +579,12 @@ export function drawDefinitionTooltip(
     }
   }
 
-  if (tooltipWidgets.length > 0) {
-    contentY += VISUAL_SPACING + VISUAL_HEIGHT
+  const widgetRowCount = tooltipWidgets.length > 0
+    ? Math.ceil(tooltipWidgets.length / TOOLTIP_WIDGETS_PER_ROW)
+    : 0
+  if (widgetRowCount > 0) {
+    const widgetBlockHeight = widgetRowCount * VISUAL_HEIGHT + (widgetRowCount - 1) * TOOLTIP_WIDGET_ROW_GAP
+    contentY += VISUAL_SPACING + widgetBlockHeight
   }
 
   const tooltipHeight = tooltipWidgets.length > 0
@@ -1006,8 +1016,9 @@ export function drawDefinitionTooltip(
     contentY += VISUAL_SPACING
     const padding = LINE_WIDTH * 2
     const n = tooltipWidgets.length
-    const gap = n > 1 ? 2 : 0
-    const segmentWidth = (contentWidth - (n - 1) * gap) / n
+    const columns = Math.min(n, TOOLTIP_WIDGETS_PER_ROW)
+    const gap = n > 1 ? TOOLTIP_WIDGET_GAP : 0
+    const segmentWidth = (contentWidth - (columns - 1) * gap) / columns
     const widgetDraw = (w: Widget) =>
       (w.draw as (
         c: CanvasRenderingContext2D,
@@ -1027,8 +1038,13 @@ export function drawDefinitionTooltip(
         padding,
       )
     for (let i = 0; i < n; i++) {
+      const row = Math.floor(i / TOOLTIP_WIDGETS_PER_ROW)
+      const col = i % TOOLTIP_WIDGETS_PER_ROW
       c.save()
-      c.translate(PADDING + i * (segmentWidth + gap), contentY)
+      c.translate(
+        PADDING + col * (segmentWidth + gap),
+        contentY + row * (VISUAL_HEIGHT + TOOLTIP_WIDGET_ROW_GAP),
+      )
       c.beginPath()
       c.rect(0, 0, segmentWidth, VISUAL_HEIGHT)
       c.clip()
