@@ -14827,6 +14827,7 @@ var SYNC_INCREMENTAL_EMIT_HEAVY_THROTTLE_MS = 24;
 var SYNC_INCREMENTAL_EMIT_HOLD_THROTTLE_MS = 32;
 var SYNC_INCREMENTAL_HEAVY_LINE_THRESHOLD = 128;
 var SYNC_INCREMENTAL_LAYOUT_PATCH_BUDGET_LINES = 96;
+var SYNC_INCREMENTAL_KEYHOLD_HOT_TOKENIZE_LINES = 2;
 var SYNC_INCREMENTAL_LAYOUT_PATCH_BUDGET_PASTE_LINES = 2048;
 var BURST_SYNC_TOKENIZATION_LINE_THRESHOLD = 16;
 var BURST_SYNC_TOKENIZATION_CHAR_THRESHOLD = 2048;
@@ -15471,17 +15472,43 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 			const hasLines = currentLines.length > 0;
 			firstUnresolvedTokenLine = currentLines.length > 0 ? Math.max(0, Math.min(startLine, currentLines.length - 1)) : -1;
 			doc.tokenizationPending = hasLines;
-			if (prealignedChanged && !doc.keyHoldActive) bumpTokenVersion();
+			let hotTokenizedStartLine = -1;
+			let hotTokenizedEndLine = -1;
+			let hotTokenizedChanged = false;
+			if (source === "sync" && hasLines && isIncrementalTokenizer(doc.tokenize)) {
+				const hotStartLine = Math.max(0, Math.min(startLine, currentLines.length - 1));
+				const optimisticHotEndLine = Math.max(hotStartLine, Math.min(Math.max(endLineAfter, startLine), currentLines.length - 1));
+				const hotEndLine = Math.max(optimisticHotEndLine, Math.min(currentLines.length - 1, hotStartLine + SYNC_INCREMENTAL_KEYHOLD_HOT_TOKENIZE_LINES - 1));
+				let prevState = hotStartLine > 0 ? doc.tokenStates[hotStartLine - 1] ?? null : null;
+				for (let line = hotStartLine; line <= hotEndLine; line++) {
+					const lineResult = doc.tokenize.tokenizeLine(currentLines[line] ?? "", line, prevState);
+					const nextState = lineResult.state ?? null;
+					if (!tokensEqual(doc.tokenLines[line], lineResult.tokens)) {
+						doc.tokenLines[line] = lineResult.tokens;
+						hotTokenizedChanged = true;
+					}
+					if (doc.tokenStates[line] !== nextState) {
+						doc.tokenStates[line] = nextState;
+						hotTokenizedChanged = true;
+					}
+					prevState = nextState;
+				}
+				hotTokenizedStartLine = hotStartLine;
+				hotTokenizedEndLine = hotEndLine;
+			}
+			if ((prealignedChanged || hotTokenizedChanged) && !doc.keyHoldActive) bumpTokenVersion();
 			const processedStartLine = Math.max(0, startLine);
 			const optimisticProcessedEndLine = Math.max(0, Math.max(endLineBefore, endLineAfter));
 			const layoutPatchBudgetLines = maxLines <= 0 ? SYNC_INCREMENTAL_LAYOUT_PATCH_BUDGET_PASTE_LINES : SYNC_INCREMENTAL_LAYOUT_PATCH_BUDGET_LINES;
+			const cappedProcessedEndLineBase = Math.max(processedStartLine, Math.min(optimisticProcessedEndLine, processedStartLine + layoutPatchBudgetLines - 1));
+			const cappedProcessedEndLine = hotTokenizedEndLine >= 0 ? Math.max(cappedProcessedEndLineBase, hotTokenizedEndLine) : cappedProcessedEndLineBase;
 			emitIncrementalChange({
 				source,
 				startLine,
 				endLineBefore,
 				endLineAfter,
-				tokenProcessedStartLine: processedStartLine,
-				tokenProcessedEndLine: Math.max(processedStartLine, Math.min(optimisticProcessedEndLine, processedStartLine + layoutPatchBudgetLines - 1)),
+				tokenProcessedStartLine: hotTokenizedStartLine >= 0 ? Math.min(processedStartLine, hotTokenizedStartLine) : processedStartLine,
+				tokenProcessedEndLine: cappedProcessedEndLine,
 				tokenConverged: !hasLines
 			});
 			if (hasLines) {
@@ -49390,7 +49417,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-Dr2xJDat.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-Dx7zjAgO.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -70730,4 +70757,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-Coyzst_o.js.map
+//# sourceMappingURL=index-CZd_4Wz4.js.map
