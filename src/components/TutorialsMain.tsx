@@ -11,6 +11,7 @@ import { isMobile } from 'utils/is-mobile'
 import { useAsyncMemo } from '../hooks/useAsyncMemo.ts'
 import { useReactiveEffect } from '../hooks/useReactiveEffect.ts'
 import { pathname, subsection } from '../router.tsx'
+import { Link as RouterLink } from '../router.tsx'
 import { primaryColor, widgetOptions } from '../state.ts'
 import { Grid } from './Grid.tsx'
 import { GridItem } from './GridItem.tsx'
@@ -543,6 +544,12 @@ export const TutorialsMain = () => {
             <div ref={containerRef} class="flex gap-8 min-h-0">
               <div class="flex-1 min-w-0">
                 {parsed.value.slice(1).map(compile)}
+                <div class="flex flex-row gap-4 items-center">
+                  <Heading level={3} children={[{ type: 'text', value: 'Support this project' }]} />
+                  <RouterLink to="https://buymeacoffee.com/loopmaster" target="_blank">
+                    <img src="/bmc-button.png" alt="Buy me a coffee" class="w-48 h-auto" />
+                  </RouterLink>
+                </div>
                 <Grid cols={isMobile() ? 1 : 3}>
                   {tutorials.filter(tutorial => tutorial.href !== pathname.value).sort(() => Math.random() - 0.5).slice(
                     0,

@@ -10302,31 +10302,11 @@ var PASTE_BURST_WINDOW_MS = 80;
 var PASTE_COALESCE_DELAY_MS = 24;
 var PASTE_FORCE_FLUSH_CHARS = 256 * 1024;
 var PASTE_CARET_VISIBLE_THROTTLE_MS = 96;
-var PASTE_STREAM_TRIGGER_LINES = 512;
+var PASTE_STREAM_TRIGGER_CHARS = 192 * 1024;
 var PASTE_STREAM_CHUNK_CHARS = 64 * 1024;
-var PASTE_STREAM_CHUNK_LINES = 256;
-var PASTE_STREAM_STEP_DELAY_MS = 4;
+var PASTE_STREAM_STEP_DELAY_MS = 0;
 var PASTE_POST_LAYOUT_CARET_PASSES = 2;
-function countLineBreaks(text, maxCount = Number.POSITIVE_INFINITY) {
-	let lineBreaks = 0;
-	for (let i$6 = 0; i$6 < text.length; i$6++) {
-		if (text.charCodeAt(i$6) !== 10) continue;
-		lineBreaks++;
-		if (lineBreaks >= maxCount) return lineBreaks;
-	}
-	return lineBreaks;
-}
-function capChunkEndByLineCount(text, start, maxEndExclusive, maxLineBreaks) {
-	if (maxLineBreaks <= 0) return maxEndExclusive;
-	let lineBreaks = 0;
-	for (let i$6 = start; i$6 < maxEndExclusive; i$6++) {
-		if (text.charCodeAt(i$6) !== 10) continue;
-		lineBreaks++;
-		if (lineBreaks >= maxLineBreaks) return i$6 + 1;
-	}
-	return maxEndExclusive;
-}
-function createClipboard(doc, selection, insertText, deleteSelection, ensureCaretVisible, onKeyDown, onKeyUp, canvas) {
+function createClipboard(doc, selection, insertText, deleteSelection, ensureCaretVisible, onKeyDown, onKeyUp, canvas, syncKeyHoldActive) {
 	const textarea$1 = getTextareaElement();
 	let pendingPasteText = "";
 	let pendingPasteTimer = null;
@@ -10337,11 +10317,60 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 	let deferredCaretVisibleRaf = null;
 	let deferredCaretVisibleTimer = null;
 	let deferredCaretVisiblePasses = 0;
+	let pasteActivityDepth = 0;
+	let chunkedPasteSessionActive = false;
 	function restoreTextareaFocus() {
 		const activeCanvas$1 = document.activeElement?.tagName === "CANVAS" ? document.activeElement : null;
 		if (activeCanvas$1) setTimeout(() => {
 			if (document.activeElement === activeCanvas$1) textarea$1.focus();
 		}, 0);
+	}
+	function beginChunkedPasteSession() {
+		if (chunkedPasteSessionActive) return;
+		chunkedPasteSessionActive = true;
+		doc.keyHoldActive = false;
+	}
+	function endChunkedPasteSession() {
+		if (!chunkedPasteSessionActive) return;
+		chunkedPasteSessionActive = false;
+		syncKeyHoldActive?.();
+	}
+	function withPasteActivity(fn$1) {
+		pasteActivityDepth++;
+		const prevKeyHoldActive = doc.keyHoldActive;
+		doc.keyHoldActive = false;
+		try {
+			return fn$1();
+		} finally {
+			if (chunkedPasteSessionActive || pasteActivityDepth > 1) doc.keyHoldActive = false;
+			else if (syncKeyHoldActive) syncKeyHoldActive();
+			else doc.keyHoldActive = prevKeyHoldActive;
+			pasteActivityDepth = Math.max(0, pasteActivityDepth - 1);
+		}
+	}
+	function normalizeChunkedPasteState(state) {
+		while (state.segmentIndex < state.segments.length) {
+			const segment = state.segments[state.segmentIndex] ?? "";
+			if (state.offset < segment.length) break;
+			state.segmentIndex++;
+			state.offset = 0;
+		}
+		if (state.segmentIndex > 32) {
+			state.segments = state.segments.slice(state.segmentIndex);
+			state.segmentIndex = 0;
+		}
+	}
+	function appendChunkedPasteText(text) {
+		if (!text) return;
+		if (chunkedPaste) {
+			chunkedPaste.segments.push(text);
+			return;
+		}
+		chunkedPaste = {
+			segments: [text],
+			segmentIndex: 0,
+			offset: 0
+		};
 	}
 	function flushPendingPaste() {
 		if (pendingPasteTimer) {
@@ -10351,18 +10380,16 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 		if (!pendingPasteText) return;
 		const text = pendingPasteText;
 		pendingPasteText = "";
-		const lineBreakCount = countLineBreaks(text, PASTE_STREAM_TRIGGER_LINES);
-		if (chunkedPaste !== null || text.length >= PASTE_STREAM_CHUNK_CHARS || lineBreakCount >= PASTE_STREAM_TRIGGER_LINES) {
-			if (chunkedPaste) chunkedPaste.text += text;
-			else chunkedPaste = {
-				text,
-				index: 0
-			};
+		if (chunkedPaste !== null || text.length >= PASTE_STREAM_TRIGGER_CHARS) {
+			beginChunkedPasteSession();
+			appendChunkedPasteText(text);
 			scheduleChunkedPasteStep(PASTE_STREAM_STEP_DELAY_MS);
 			return;
 		}
-		insertText(text);
-		maybeEnsureCaretVisible();
+		withPasteActivity(() => {
+			insertText(text);
+			maybeEnsureCaretVisible();
+		});
 		scheduleDeferredCaretVisible();
 		textarea$1.value = "";
 		restoreTextareaFocus();
@@ -10374,14 +10401,21 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 			flushPendingPaste();
 		}, delay);
 	}
-	function queuePastedText(text) {
+	function queuePastedText(text, immediate = false) {
 		if (!text) return;
+		if (immediate) {
+			pendingPasteText += text;
+			flushPendingPaste();
+			return;
+		}
 		const now = Date.now();
-		const isBurst = doc.keyHoldActive || pendingPasteText.length > 0 || now - lastPasteQueuedAt <= PASTE_BURST_WINDOW_MS;
+		const isBurst = pendingPasteText.length > 0 || now - lastPasteQueuedAt <= PASTE_BURST_WINDOW_MS;
 		lastPasteQueuedAt = now;
 		if (!isBurst) {
-			insertText(text);
-			maybeEnsureCaretVisible(true);
+			withPasteActivity(() => {
+				insertText(text);
+				maybeEnsureCaretVisible(true);
+			});
 			scheduleDeferredCaretVisible();
 			textarea$1.value = "";
 			restoreTextareaFocus();
@@ -10396,7 +10430,7 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 	}
 	function maybeEnsureCaretVisible(force = false) {
 		const now = Date.now();
-		if (force || !doc.keyHoldActive || now - lastCaretVisibleAt >= PASTE_CARET_VISIBLE_THROTTLE_MS) {
+		if (force || pasteActivityDepth > 0 || chunkedPasteSessionActive || !doc.keyHoldActive || now - lastCaretVisibleAt >= PASTE_CARET_VISIBLE_THROTTLE_MS) {
 			ensureCaretVisible?.();
 			lastCaretVisibleAt = now;
 		}
@@ -10437,9 +10471,10 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 	function processChunkedPasteStep() {
 		const state = chunkedPaste;
 		if (!state) return;
-		const text = state.text;
-		if (state.index >= text.length) {
+		normalizeChunkedPasteState(state);
+		if (state.segmentIndex >= state.segments.length) {
 			chunkedPaste = null;
+			endChunkedPasteSession();
 			maybeEnsureCaretVisible(true);
 			scheduleDeferredCaretVisible();
 			textarea$1.value = "";
@@ -10447,25 +10482,31 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 			if (pendingPasteText.length > 0) flushPendingPaste();
 			return;
 		}
-		const start = state.index;
+		const text = state.segments[state.segmentIndex] ?? "";
+		const start = state.offset;
 		let end = Math.min(text.length, start + PASTE_STREAM_CHUNK_CHARS);
 		if (end < text.length) {
-			end = capChunkEndByLineCount(text, start, end, PASTE_STREAM_CHUNK_LINES);
 			const newline = text.lastIndexOf("\n", end - 1);
 			if (newline >= start + Math.max(64, PASTE_STREAM_CHUNK_CHARS >> 2)) end = newline + 1;
 		}
 		if (end <= start) end = Math.min(text.length, start + PASTE_STREAM_CHUNK_CHARS);
 		const chunk = text.slice(start, end);
-		if (chunk.length > 0) {
+		if (chunk.length > 0) withPasteActivity(() => {
 			insertText(chunk);
 			maybeEnsureCaretVisible();
+		});
+		state.offset = end;
+		if (state.offset >= text.length) {
+			state.segmentIndex++;
+			state.offset = 0;
 		}
-		state.index = end;
-		if (state.index < state.text.length) {
+		normalizeChunkedPasteState(state);
+		if (state.segmentIndex < state.segments.length) {
 			scheduleChunkedPasteStep(PASTE_STREAM_STEP_DELAY_MS);
 			return;
 		}
 		chunkedPaste = null;
+		endChunkedPasteSession();
 		maybeEnsureCaretVisible(true);
 		scheduleDeferredCaretVisible();
 		textarea$1.value = "";
@@ -10477,14 +10518,27 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 			clearTimeout(chunkedPasteTimer);
 			chunkedPasteTimer = null;
 		}
-		if (!chunkedPaste) return;
-		const remaining = chunkedPaste.text.slice(chunkedPaste.index);
+		const state = chunkedPaste;
+		if (!state) return;
+		normalizeChunkedPasteState(state);
+		const remainingParts = [];
+		for (let i$6 = state.segmentIndex; i$6 < state.segments.length; i$6++) {
+			const segment = state.segments[i$6] ?? "";
+			if (!segment) continue;
+			if (i$6 === state.segmentIndex) {
+				if (state.offset < segment.length) remainingParts.push(segment.slice(state.offset));
+			} else remainingParts.push(segment);
+		}
+		const remaining = remainingParts.length > 0 ? remainingParts.join("") : "";
 		chunkedPaste = null;
 		if (remaining.length > 0) {
-			insertText(remaining);
-			maybeEnsureCaretVisible(true);
+			withPasteActivity(() => {
+				insertText(remaining);
+				maybeEnsureCaretVisible(true);
+			});
 			scheduleDeferredCaretVisible();
 		}
+		endChunkedPasteSession();
 		textarea$1.value = "";
 		restoreTextareaFocus();
 	}
@@ -10543,7 +10597,7 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 	function handlePaste(event) {
 		event.preventDefault();
 		event.stopPropagation();
-		queuePastedText(event.clipboardData?.getData("text/plain") || "");
+		queuePastedText(event.clipboardData?.getData("text/plain") || "", true);
 		textarea$1.value = "";
 	}
 	function handleInput(event) {
@@ -10557,8 +10611,8 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 	}
 	function handleKeyUp(event) {
 		onKeyUp?.(event);
-		if (!doc.keyHoldActive && pendingPasteText.length > 0) flushPendingPaste();
-		if (!doc.keyHoldActive) maybeEnsureCaretVisible(true);
+		if (pendingPasteText.length > 0) flushPendingPaste();
+		maybeEnsureCaretVisible(true);
 	}
 	const handlers = {
 		handlePaste,
@@ -10573,6 +10627,7 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 	const deactivate = () => {
 		flushPendingPaste();
 		flushChunkedPasteImmediately();
+		endChunkedPasteSession();
 		clearDeferredCaretVisible();
 		setActiveClipboard(null, void 0);
 	};
@@ -12923,6 +12978,11 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 			metaKey.value = event.metaKey;
 			altKey.value = event.altKey;
 			if (NON_KEYS.has(event.key)) return;
+			const normalizedKey = event.key.toLowerCase();
+			const normalizedCode = (event.code || "").toLowerCase();
+			const isPasteShortcut = (event.ctrlKey || event.metaKey) && !event.altKey && (normalizedKey === "v" || normalizedCode === "keyv");
+			const isShiftInsertPaste = !event.ctrlKey && !event.metaKey && event.shiftKey && normalizedKey === "insert";
+			if (isPasteShortcut || isShiftInsertPaste) return;
 			pressedInputKeys.add(event.code || event.key);
 			updateKeyHoldActive();
 			handleKeyAction(event.key, event.shiftKey, event.ctrlKey, event.metaKey, event.altKey);
@@ -12936,13 +12996,18 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 			ctrlKey.value = event.ctrlKey;
 			metaKey.value = event.metaKey;
 			altKey.value = event.altKey;
+			if ((event.key === "Control" || event.key === "Meta") && pressedInputKeys.size > 0) {
+				pressedInputKeys.clear();
+				updateKeyHoldActive();
+				return;
+			}
 			if (!NON_KEYS.has(event.key)) {
 				pressedInputKeys.delete(event.code || event.key);
 				updateKeyHoldActive();
 			}
 		});
 	};
-	clipboard = createClipboard(doc, selection, insertText, deleteSelection, ensureCaretVisible, handleKeyDown, handleKeyUp, canvas);
+	clipboard = createClipboard(doc, selection, insertText, deleteSelection, ensureCaretVisible, handleKeyDown, handleKeyUp, canvas, updateKeyHoldActive);
 	const textarea$1 = getTextareaElement();
 	const handleTextareaFocus = () => {
 		if (getActiveCanvas() === canvas.el) clipboard.activate();
@@ -49325,7 +49390,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-CytYnceO.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-yWczYutn.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -58707,7 +58772,7 @@ const navigate = (path) => {
 	history.pushState({}, "", path);
 	pathname.value = path;
 };
-const Link$1 = (props) => {
+const Link = (props) => {
 	return /* @__PURE__ */ u("a", {
 		href: props.to,
 		style: props.style,
@@ -58857,19 +58922,19 @@ const AboutMain = () => {
 				}), /* @__PURE__ */ u("ul", {
 					class: "text-sm text-white/70 space-y-1",
 					children: [
-						/* @__PURE__ */ u("li", { children: /* @__PURE__ */ u(Link$1, {
+						/* @__PURE__ */ u("li", { children: /* @__PURE__ */ u(Link, {
 							to: "https://discord.gg/NSWaB9dRYh",
 							target: "_blank",
 							class: "text-white/90 hover:underline",
 							children: "Discord"
 						}) }),
-						/* @__PURE__ */ u("li", { children: /* @__PURE__ */ u(Link$1, {
+						/* @__PURE__ */ u("li", { children: /* @__PURE__ */ u(Link, {
 							to: "https://loopmaster.featurebase.app/",
 							target: "_blank",
 							class: "text-white/90 hover:underline",
 							children: "Feedback"
 						}) }),
-						/* @__PURE__ */ u("li", { children: /* @__PURE__ */ u(Link$1, {
+						/* @__PURE__ */ u("li", { children: /* @__PURE__ */ u(Link, {
 							to: "https://github.com/loopmaster-xyz/loopmaster",
 							target: "_blank",
 							class: "text-white/90 hover:underline",
@@ -58930,7 +58995,7 @@ function timeAgo(date) {
 	if (seconds > 0) return `${seconds}s`;
 	return "just now";
 }
-const SidebarLink = ({ to, children, className, target, dataSelected = false }) => /* @__PURE__ */ u(Link$1, {
+const SidebarLink = ({ to, children, className, target, dataSelected = false }) => /* @__PURE__ */ u(Link, {
 	to,
 	class: cn("group px-2 py-1 hover:bg-white/5 flex flex-row items-center justify-start gap-2 outline-none focus:bg-white/5", className),
 	target,
@@ -58998,7 +59063,7 @@ const Grid = ({ children, cols = 3, class: className }) => {
 	});
 };
 const GridItem = ({ children, to, class: className }) => {
-	return /* @__PURE__ */ u(Link$1, {
+	return /* @__PURE__ */ u(Link, {
 		to,
 		target: to.startsWith("https://") ? "_blank" : void 0,
 		class: cn("w-30 md:h-[115px] gap-1 px-2 py-1 text-white hover:bg-white/5 flex flex-col items-center justify-center outline-none focus:bg-white/5", className),
@@ -59105,14 +59170,14 @@ var AdminUsers = () => {
 						/* @__PURE__ */ u("td", { children: user.id }),
 						/* @__PURE__ */ u("td", {
 							class: "text-white",
-							children: /* @__PURE__ */ u(Link$1, {
+							children: /* @__PURE__ */ u(Link, {
 								to: `/u/${user.id}/${user.artistName}`,
 								children: user.artistName
 							})
 						}),
 						/* @__PURE__ */ u("td", {
 							class: "text-white",
-							children: /* @__PURE__ */ u(Link$1, {
+							children: /* @__PURE__ */ u(Link, {
 								to: `mailto:${user.email}`,
 								children: user.email
 							})
@@ -59191,14 +59256,14 @@ var AdminProjects = () => {
 				/* @__PURE__ */ u("td", { children: project.id }),
 				/* @__PURE__ */ u("td", {
 					class: "text-white",
-					children: /* @__PURE__ */ u(Link$1, {
+					children: /* @__PURE__ */ u(Link, {
 						to: `/p/${project.id}`,
 						children: project.name
 					})
 				}),
 				/* @__PURE__ */ u("td", {
 					class: "text-white",
-					children: /* @__PURE__ */ u(Link$1, {
+					children: /* @__PURE__ */ u(Link, {
 						to: `/u/${project.artistName}`,
 						children: project.artistName
 					})
@@ -60179,7 +60244,7 @@ const BrowseProject = ({ project, autoHeight = false, header, headerHeight = 48 
 					/* @__PURE__ */ u("div", {
 						class: "flex flex-row gap-2 items-center justify-start",
 						children: [
-							/* @__PURE__ */ u(Link$1, {
+							/* @__PURE__ */ u(Link, {
 								to: `/u/${project.userId}/${project.artistName}`,
 								class: `inline-flex flex-row items-center gap-2 text-[${primaryColor.value}] hover:text-[${primaryGradientA.value}]`,
 								children: [/* @__PURE__ */ u(Avatar, {
@@ -60195,7 +60260,7 @@ const BrowseProject = ({ project, autoHeight = false, header, headerHeight = 48 
 							}),
 							" ",
 							"- ",
-							/* @__PURE__ */ u(Link$1, {
+							/* @__PURE__ */ u(Link, {
 								to: `/p/${project.id}`,
 								class: "text-white hover:underline",
 								children: project.name
@@ -60325,7 +60390,7 @@ const BrowseProject = ({ project, autoHeight = false, header, headerHeight = 48 
 						children: [
 							/* @__PURE__ */ u("div", {
 								class: "flex flex-row gap-2 items-center justify-start",
-								children: /* @__PURE__ */ u(Link$1, {
+								children: /* @__PURE__ */ u(Link, {
 									to: `/u/${comment.userId}/${comment.artistName}`,
 									class: "flex flex-row gap-2 items-center justify-start hover:text-white",
 									children: [/* @__PURE__ */ u(Avatar, {
@@ -60538,14 +60603,14 @@ const OneLiners = ({ oneLiners }) => {
 			/* @__PURE__ */ u("p", { children: "One-liners are short, simple code snippets that are easy to understand and help you learn to use loopmaster." }),
 			/* @__PURE__ */ u("p", { children: [
 				"Post your own one-liner here: (or ",
-				/* @__PURE__ */ u(Link$1, {
+				/* @__PURE__ */ u(Link, {
 					class: "text-white",
 					to: "/docs",
 					children: "read the docs"
 				}),
 				" or",
 				" ",
-				/* @__PURE__ */ u(Link$1, {
+				/* @__PURE__ */ u(Link, {
 					class: "text-white",
 					to: "/tutorials",
 					children: "the tutorials"
@@ -61316,7 +61381,7 @@ var DocsGen = ({ name, category }) => {
 	const def = getDefinitionByDocPath(name);
 	if (!def) return null;
 	const params = (def.parameters ?? []).filter((p$8) => !(def.arrayMethod && p$8.name === "array"));
-	return /* @__PURE__ */ u(k, { children: [/* @__PURE__ */ u(Header, { children: [/* @__PURE__ */ u(Link$1, {
+	return /* @__PURE__ */ u(k, { children: [/* @__PURE__ */ u(Header, { children: [/* @__PURE__ */ u(Link, {
 		to: `/docs/${category}`,
 		class: `flex flex-row items-center gap-2 hover:text-[${primaryColor.value}]`,
 		children: [
@@ -62029,7 +62094,7 @@ var testimonials = [
 	}
 ];
 var ActionButton = ({ to, text, icon }) => {
-	return /* @__PURE__ */ u(Link$1, {
+	return /* @__PURE__ */ u(Link, {
 		to,
 		class: `flex items-center justify-center gap-2 px-6 py-3 text-white font-semibold`,
 		style: {
@@ -62050,7 +62115,7 @@ var ActionButton = ({ to, text, icon }) => {
 	});
 };
 var ActionGrayButton = ({ to, text, icon }) => {
-	return /* @__PURE__ */ u(Link$1, {
+	return /* @__PURE__ */ u(Link, {
 		to,
 		class: `flex items-center justify-center gap-2 px-6 py-3 text-white font-semibold bg-gradient-to-br from-neutral-500 to-neutral-700`,
 		style: {
@@ -62361,7 +62426,7 @@ function Landing() {
 							}) }), /* @__PURE__ */ u("div", {
 								class: "flex flex-col md:flex-row items-center justify-center gap-6 text-neutral-400",
 								children: [
-									/* @__PURE__ */ u(Link$1, {
+									/* @__PURE__ */ u(Link, {
 										to: "https://github.com/loopmaster-xyz/loopmaster",
 										target: "_blank",
 										class: "text-sm border-none rounded-md cursor-pointer font-semibold text-white hover:text-[#4c6dee] flex items-center gap-2",
@@ -62384,7 +62449,7 @@ function Landing() {
 											})
 										})
 									}),
-									/* @__PURE__ */ u(Link$1, {
+									/* @__PURE__ */ u(Link, {
 										title: "Discord",
 										class: "text-sm border-none rounded-md cursor-pointer font-semibold text-white hover:text-[#4c6dee] flex items-center gap-2",
 										to: "https://discord.gg/NSWaB9dRYh",
@@ -62398,7 +62463,7 @@ function Landing() {
 											children: /* @__PURE__ */ u("path", { d: "M16.074,4.361a14.243,14.243,0,0,0-3.61-1.134,10.61,10.61,0,0,0-.463.96,13.219,13.219,0,0,0-4,0,10.138,10.138,0,0,0-.468-.96A14.206,14.206,0,0,0,3.919,4.364,15.146,15.146,0,0,0,1.324,14.5a14.435,14.435,0,0,0,4.428,2.269A10.982,10.982,0,0,0,6.7,15.21a9.294,9.294,0,0,1-1.494-.727c.125-.093.248-.19.366-.289a10.212,10.212,0,0,0,8.854,0c.119.1.242.2.366.289a9.274,9.274,0,0,1-1.5.728,10.8,10.8,0,0,0,.948,1.562,14.419,14.419,0,0,0,4.431-2.27A15.128,15.128,0,0,0,16.074,4.361Zm-8.981,8.1a1.7,1.7,0,0,1-1.573-1.79A1.689,1.689,0,0,1,7.093,8.881a1.679,1.679,0,0,1,1.573,1.791A1.687,1.687,0,0,1,7.093,12.462Zm5.814,0a1.7,1.7,0,0,1-1.573-1.79,1.689,1.689,0,0,1,1.573-1.791,1.679,1.679,0,0,1,1.573,1.791A1.688,1.688,0,0,1,12.907,12.462Z" })
 										})
 									}),
-									/* @__PURE__ */ u(Link$1, {
+									/* @__PURE__ */ u(Link, {
 										to: "https://whop.com/loopmaster",
 										title: "Support me on Whop",
 										target: "_blank",
@@ -62410,7 +62475,7 @@ function Landing() {
 											height: 24
 										})
 									}),
-									/* @__PURE__ */ u(Link$1, {
+									/* @__PURE__ */ u(Link, {
 										to: "https://www.buymeacoffee.com/loopmaster",
 										title: "Buy Me a Coffee",
 										target: "_blank",
@@ -62422,19 +62487,19 @@ function Landing() {
 											height: 24
 										})
 									}),
-									/* @__PURE__ */ u(Link$1, {
+									/* @__PURE__ */ u(Link, {
 										title: "Feedback",
 										class: `hover:text-[${secondaryColor.value}] transition-colors border-b-2 border-transparent hover:border-[${secondaryColor.value}]`,
 										to: "https://loopmaster.featurebase.app/",
 										target: "_blank",
 										children: "Feedback"
 									}),
-									/* @__PURE__ */ u(Link$1, {
+									/* @__PURE__ */ u(Link, {
 										to: "/docs",
 										class: `hover:text-[${secondaryColor.value}] transition-colors border-b-2 border-transparent hover:border-[${secondaryColor.value}]`,
 										children: "Documentation"
 									}),
-									/* @__PURE__ */ u(Link$1, {
+									/* @__PURE__ */ u(Link, {
 										to: "/about",
 										class: `hover:text-[${secondaryColor.value}] transition-colors border-b-2 border-transparent hover:border-[${secondaryColor.value}]`,
 										children: "Contact"
@@ -64082,7 +64147,7 @@ const Artist = ({ session: propsSession }) => {
 							children: /* @__PURE__ */ u(o$12, { size: "20" })
 						})]
 					}),
-					accountSession.value && /* @__PURE__ */ u(Link$1, {
+					accountSession.value && /* @__PURE__ */ u(Link, {
 						to: `/u/${accountSession.value.userId}/${accountSession.value.artistName}`,
 						children: ["@", accountSession.value.artistName]
 					}),
@@ -68804,7 +68869,7 @@ const Tutorials = () => {
 	})) });
 };
 var sidebarButtonClass = "select-none p-4 flex items-center justify-center hover:bg-white/5 focus:bg-white/5 outline-none text-neutral-400 text-sm";
-var SidebarTabLink = ({ icon, tab, title: title$1 }) => /* @__PURE__ */ u(Link$1, {
+var SidebarTabLink = ({ icon, tab, title: title$1 }) => /* @__PURE__ */ u(Link, {
 	to: tab ? `/${tab}` : "/",
 	title: title$1,
 	class: cn(sidebarButtonClass, { "text-white": sidebarTab.value === tab?.split("/")[0] }),
@@ -68829,7 +68894,7 @@ const Sidebar = () => /* @__PURE__ */ u("div", {
 		class: "flex flex-col items-stretch justify-start h-full",
 		children: [/* @__PURE__ */ u("div", {
 			class: `w-full h-[50px] leading-none flex items-end border-b-2 border-[${primaryColor.value}]`,
-			children: /* @__PURE__ */ u(Link$1, {
+			children: /* @__PURE__ */ u(Link, {
 				to: "/",
 				class: "px-2 py-1 h-[50px] top-[3px] relative hover:bg-white/5 focus:bg-white/5 outline-none",
 				children: /* @__PURE__ */ u(Logo, {})
@@ -68898,7 +68963,7 @@ const Sidebar = () => /* @__PURE__ */ u("div", {
 					title: "Admin"
 				}),
 				/* @__PURE__ */ u("div", { class: "flex-1" }),
-				/* @__PURE__ */ u(Link$1, {
+				/* @__PURE__ */ u(Link, {
 					to: "https://whop.com/loopmaster",
 					title: "Support me on Whop",
 					target: "_blank",
@@ -68910,7 +68975,7 @@ const Sidebar = () => /* @__PURE__ */ u("div", {
 						height: 16
 					})
 				}),
-				/* @__PURE__ */ u(Link$1, {
+				/* @__PURE__ */ u(Link, {
 					to: "https://www.buymeacoffee.com/loopmaster",
 					title: "Buy Me a Coffee",
 					target: "_blank",
@@ -69601,7 +69666,7 @@ var compile = (node) => {
 	else if (node.type === "paragraph") return /* @__PURE__ */ u(Paragraph, { children: node.children });
 	else if (node.type === "list") return /* @__PURE__ */ u(List, { children: node.children });
 	else if (node.type === "listItem") return /* @__PURE__ */ u(ListItem, { children: node.children });
-	else if (node.type === "link") return /* @__PURE__ */ u(Link, {
+	else if (node.type === "link") return /* @__PURE__ */ u(Link$1, {
 		href: node.href,
 		children: node.children
 	});
@@ -69733,7 +69798,7 @@ var List = ({ children }) => {
 var ListItem = ({ children }) => {
 	return /* @__PURE__ */ u("li", { children: children.map(compile) });
 };
-var Link = ({ href, children }) => {
+var Link$1 = ({ href, children }) => {
 	return /* @__PURE__ */ u("a", {
 		href,
 		target: "_blank",
@@ -69965,26 +70030,47 @@ const TutorialsMain = () => {
 			class: "flex gap-8 min-h-0",
 			children: [/* @__PURE__ */ u("div", {
 				class: "flex-1 min-w-0",
-				children: [parsed.value.slice(1).map(compile), /* @__PURE__ */ u(Grid, {
-					cols: isMobile() ? 1 : 3,
-					children: [tutorials.filter((tutorial$1) => tutorial$1.href !== pathname.value).sort(() => Math.random() - .5).slice(0, 2).map((tutorial$1) => /* @__PURE__ */ u(GridItem, {
-						to: tutorial$1.href,
-						children: [
-							/* @__PURE__ */ u(tutorial$1.Icon, { size: 24 }),
-							/* @__PURE__ */ u("span", {
-								class: "mt-2",
-								children: tutorial$1.name
-							}),
-							/* @__PURE__ */ u("span", {
-								class: "text-sm text-white/50",
-								children: tutorial$1.description
+				children: [
+					parsed.value.slice(1).map(compile),
+					/* @__PURE__ */ u("div", {
+						class: "flex flex-row gap-4 items-center",
+						children: [/* @__PURE__ */ u(Heading, {
+							level: 3,
+							children: [{
+								type: "text",
+								value: "Support this project"
+							}]
+						}), /* @__PURE__ */ u(Link, {
+							to: "https://buymeacoffee.com/loopmaster",
+							target: "_blank",
+							children: /* @__PURE__ */ u("img", {
+								src: "/bmc-button.png",
+								alt: "Buy me a coffee",
+								class: "w-48 h-auto"
 							})
-						]
-					})), /* @__PURE__ */ u(GridItem, {
-						to: "/docs",
-						children: [/* @__PURE__ */ u(e, { size: 24 }), "Docs"]
-					})]
-				})]
+						})]
+					}),
+					/* @__PURE__ */ u(Grid, {
+						cols: isMobile() ? 1 : 3,
+						children: [tutorials.filter((tutorial$1) => tutorial$1.href !== pathname.value).sort(() => Math.random() - .5).slice(0, 2).map((tutorial$1) => /* @__PURE__ */ u(GridItem, {
+							to: tutorial$1.href,
+							children: [
+								/* @__PURE__ */ u(tutorial$1.Icon, { size: 24 }),
+								/* @__PURE__ */ u("span", {
+									class: "mt-2",
+									children: tutorial$1.name
+								}),
+								/* @__PURE__ */ u("span", {
+									class: "text-sm text-white/50",
+									children: tutorial$1.description
+								})
+							]
+						})), /* @__PURE__ */ u(GridItem, {
+							to: "/docs",
+							children: [/* @__PURE__ */ u(e, { size: 24 }), "Docs"]
+						})]
+					})
+				]
 			}), headings.value.length > 0 && /* @__PURE__ */ u(Toc, {
 				headings: headings.value,
 				activeId: activeId.value
@@ -70628,4 +70714,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-CeH8sR8k.js.map
+//# sourceMappingURL=index-DQP9jq3i.js.map
