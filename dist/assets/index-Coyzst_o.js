@@ -49390,7 +49390,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-yWczYutn.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-Dr2xJDat.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -70034,21 +70034,37 @@ const TutorialsMain = () => {
 					parsed.value.slice(1).map(compile),
 					/* @__PURE__ */ u("div", {
 						class: "flex flex-row gap-4 items-center",
-						children: [/* @__PURE__ */ u(Heading, {
-							level: 3,
-							children: [{
-								type: "text",
-								value: "Support this project"
-							}]
-						}), /* @__PURE__ */ u(Link, {
-							to: "https://buymeacoffee.com/loopmaster",
-							target: "_blank",
-							children: /* @__PURE__ */ u("img", {
-								src: "/bmc-button.png",
-								alt: "Buy me a coffee",
-								class: "w-48 h-auto"
+						children: [
+							/* @__PURE__ */ u(Heading, {
+								level: 3,
+								children: [{
+									type: "text",
+									value: "Support this project"
+								}]
+							}),
+							/* @__PURE__ */ u(Link, {
+								to: "https://buymeacoffee.com/loopmaster",
+								title: "Buy me a coffee",
+								target: "_blank",
+								children: /* @__PURE__ */ u("img", {
+									src: "/bmc-button.png",
+									alt: "Buy me a coffee",
+									class: "w-48 h-auto"
+								})
+							}),
+							/* @__PURE__ */ u(Link, {
+								to: "https://whop.com/loopmaster",
+								title: "Support me on Whop",
+								target: "_blank",
+								class: "p-4 flex items-center justify-center hover:bg-white/5 focus:bg-white/5 outline-none text-neutral-400 text-sm",
+								children: /* @__PURE__ */ u("img", {
+									src: whop_default,
+									alt: "Support me on Whop",
+									width: 48,
+									height: 48
+								})
 							})
-						})]
+						]
 					}),
 					/* @__PURE__ */ u(Grid, {
 						cols: isMobile() ? 1 : 3,
@@ -70714,4 +70730,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-DQP9jq3i.js.map
+//# sourceMappingURL=index-Coyzst_o.js.map
