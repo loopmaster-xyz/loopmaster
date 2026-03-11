@@ -30,6 +30,7 @@ export const Editor = (
       paddingBottom: !header ? !gutter ? 15 : 15.5 : 17,
       ...editorSettings,
       showGutter: gutter,
+      showMinimap: settings.showMinimap,
     }), [])
 
   useEffect(() => {
@@ -61,6 +62,10 @@ export const Editor = (
 
   useReactiveEffect(() => {
     editor.settings.wordWrap = settings.wordWrap
+  }, [editor])
+
+  useReactiveEffect(() => {
+    editor.settings.showMinimap = settings.showMinimap
   }, [editor])
 
   useEffect(() => {

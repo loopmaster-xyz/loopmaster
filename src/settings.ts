@@ -11,6 +11,7 @@ export const settings = signalify({
   effect: 'none' as 'none' | 'shake' | 'glitch',
   showDocs: true,
   wordWrap: true,
+  showMinimap: false,
   analyserType: 'waveform' as 'waveform' | 'spectrum' | 'amplitude',
   fullSize: false,
   debug: false,

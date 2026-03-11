@@ -900,6 +900,10 @@ effect(() => {
         settings.wordWrap = !settings.wordWrap
         return true
       }
+      else if (e.key === 'm') {
+        settings.showMinimap = !settings.showMinimap
+        return true
+      }
       else if (e.key === 'l') {
         toggleAnalyserType()
         return true

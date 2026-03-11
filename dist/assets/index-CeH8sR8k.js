@@ -3691,6 +3691,7 @@ function unpack(data) {
 	if (data.index !== void 0) buffer.index.value = data.index;
 	return buffer;
 }
+var brace_worker_default = "/assets/brace-worker-BxzBoWld.js";
 var openingBraces = new Set([
 	"{",
 	"(",
@@ -3713,6 +3714,8 @@ function getBraceCacheRebuildDebounceMs(lineCount) {
 	if (lineCount >= 2e4) return 280;
 	return 180;
 }
+var BRACE_REBUILD_SCROLL_SETTLE_MS = 110;
+var BRACE_REBUILD_SCROLL_EPSILON = .35;
 var EMPTY_BRACE_CACHE = {
 	braces: [],
 	matchedPairs: [],
@@ -3786,94 +3789,13 @@ function getMatchingOpenBrace(closeChar) {
 		default: return "";
 	}
 }
-var sameLineBraceDepthCache = /* @__PURE__ */ new WeakMap();
-function makeSameLineBraceLocationKey(tokenIndex, charIndex) {
-	return `${tokenIndex}:${charIndex}`;
-}
-function getSameLineBraceDepthForPosition(tokenLines, line, tokenIndex, charIndex) {
-	if (line < 0 || line >= tokenLines.length) return null;
-	const lineTokens = tokenLines[line] ?? [];
-	if (lineTokens.length === 0) return null;
-	let depthByLocation = sameLineBraceDepthCache.get(lineTokens);
-	if (!depthByLocation) {
-		depthByLocation = /* @__PURE__ */ new Map();
-		const braces = [];
-		let inString = null;
-		for (let i$6 = 0; i$6 < lineTokens.length; i$6++) {
-			const token = lineTokens[i$6];
-			if (token.type === "comment") continue;
-			const text = token.text;
-			let escaped = false;
-			for (let j$4 = 0; j$4 < text.length; j$4++) {
-				const char = text[j$4];
-				if (escaped) {
-					escaped = false;
-					continue;
-				}
-				if (char === "\\") {
-					escaped = true;
-					continue;
-				}
-				if (quoteChars.has(char)) {
-					if (inString === null) {
-						inString = char;
-						braces.push({
-							char,
-							tokenIndex: i$6,
-							charIndex: j$4,
-							isOpening: true
-						});
-					} else if (inString === char) {
-						inString = null;
-						braces.push({
-							char,
-							tokenIndex: i$6,
-							charIndex: j$4,
-							isOpening: false
-						});
-					}
-					continue;
-				}
-				if (openingBraces.has(char) || closingBraces.has(char)) braces.push({
-					char,
-					tokenIndex: i$6,
-					charIndex: j$4,
-					isOpening: openingBraces.has(char)
-				});
-			}
-		}
-		const stack = [];
-		for (let i$6 = 0; i$6 < braces.length; i$6++) {
-			const brace = braces[i$6];
-			if (brace.isOpening) {
-				stack.push({
-					char: brace.char,
-					index: i$6,
-					depth: stack.length
-				});
-				continue;
-			}
-			const expectedOpen = getMatchingOpenBrace(brace.char);
-			for (let j$4 = stack.length - 1; j$4 >= 0; j$4--) {
-				if (stack[j$4].char !== expectedOpen) continue;
-				const open = braces[stack[j$4].index];
-				const depth = stack[j$4].depth;
-				depthByLocation.set(makeSameLineBraceLocationKey(open.tokenIndex, open.charIndex), depth);
-				depthByLocation.set(makeSameLineBraceLocationKey(brace.tokenIndex, brace.charIndex), depth);
-				stack.splice(j$4, 1);
-				break;
-			}
-		}
-		sameLineBraceDepthCache.set(lineTokens, depthByLocation);
-	}
-	return depthByLocation.get(makeSameLineBraceLocationKey(tokenIndex, charIndex)) ?? null;
-}
 function findSameLineMatchingBraceFallback(tokenLines, cursorLine, cursorColumn) {
 	if (cursorLine < 0 || cursorLine >= tokenLines.length) return null;
 	const lineTokens = tokenLines[cursorLine] ?? [];
 	if (lineTokens.length === 0) return null;
 	const stack = [];
 	const pairs = [];
+	let inString = null;
 	let position = 0;
 	for (let tokenIndex = 0; tokenIndex < lineTokens.length; tokenIndex++) {
 		const token = lineTokens[tokenIndex];
@@ -3882,8 +3804,23 @@ function findSameLineMatchingBraceFallback(tokenLines, cursorLine, cursorColumn)
 			position += text.length;
 			continue;
 		}
+		let escaped = false;
 		for (let charIndex = 0; charIndex < text.length; charIndex++) {
 			const char = text[charIndex];
+			if (escaped) {
+				escaped = false;
+				continue;
+			}
+			if (char === "\\") {
+				escaped = true;
+				continue;
+			}
+			if (quoteChars.has(char)) {
+				if (inString === null) inString = char;
+				else if (inString === char) inString = null;
+				continue;
+			}
+			if (inString !== null) continue;
 			if (openingBraces.has(char)) stack.push({
 				char,
 				tokenIndex,
@@ -3996,7 +3933,7 @@ function buildBraceCache(tokenLines, tokenVersion) {
 								isOpening: false
 							});
 						}
-					} else if (openingBraces.has(char) || closingBraces.has(char)) braces.push({
+					} else if (inString === null && (openingBraces.has(char) || closingBraces.has(char))) braces.push({
 						char,
 						line: lineIndex,
 						tokenIndex,
@@ -4361,6 +4298,9 @@ function createBlocks(doc, caches) {
 	let braceWorkerJobId = 0;
 	let activeBraceWorkerJob = null;
 	let queuedBraceWorkerTokenVersion = null;
+	let braceWorkerFlushTimer = null;
+	let lastScrollActivityAt = 0;
+	let disposeScrollActivityObserver = null;
 	const debouncedBraceTokenVersion = c(-1);
 	const pendingLineTransforms = [];
 	let pendingLineTransformsVersion = 0;
@@ -4402,9 +4342,23 @@ function createBlocks(doc, caches) {
 	const shouldUseBraceWorker = () => {
 		return typeof window !== "undefined" && typeof Worker !== "undefined" && doc.lines.length >= 2e4;
 	};
+	const scheduleQueuedBraceWorkerFlush = (delayMs = BRACE_REBUILD_SCROLL_SETTLE_MS) => {
+		if (braceWorkerFlushTimer !== null) clearTimeout(braceWorkerFlushTimer);
+		braceWorkerFlushTimer = setTimeout(() => {
+			braceWorkerFlushTimer = null;
+			flushQueuedBraceWorkerRebuild();
+		}, Math.max(0, delayMs));
+	};
+	const isScrollSettling = () => {
+		return Date.now() - lastScrollActivityAt < BRACE_REBUILD_SCROLL_SETTLE_MS;
+	};
 	const flushQueuedBraceWorkerRebuild = () => {
 		if (queuedBraceWorkerTokenVersion === null) return;
 		if (activeBraceWorkerJob) return;
+		if (isScrollSettling()) {
+			scheduleQueuedBraceWorkerFlush();
+			return;
+		}
 		const nextTokenVersion = queuedBraceWorkerTokenVersion;
 		queuedBraceWorkerTokenVersion = null;
 		if (doc.tokenVersion !== nextTokenVersion) return;
@@ -4426,14 +4380,40 @@ function createBlocks(doc, caches) {
 		};
 		worker.postMessage(message);
 	};
+	const setScrollSource = (scroll) => {
+		if (disposeScrollActivityObserver) {
+			disposeScrollActivityObserver();
+			disposeScrollActivityObserver = null;
+		}
+		if (!scroll) return;
+		let lastPosX = NaN;
+		let lastPosY = NaN;
+		let lastTargetX = NaN;
+		let lastTargetY = NaN;
+		disposeScrollActivityObserver = m(() => {
+			const posX = scroll.pos.x;
+			const posY = scroll.pos.y;
+			const targetX = scroll.targetX.value;
+			const targetY = scroll.targetY.value;
+			const hasFinitePos = Number.isFinite(posX) && Number.isFinite(posY);
+			const hasFiniteTarget = Number.isFinite(targetX) && Number.isFinite(targetY);
+			const targetOffsetChanged = hasFiniteTarget && (Math.abs(targetX - posX) > BRACE_REBUILD_SCROLL_EPSILON || Math.abs(targetY - posY) > BRACE_REBUILD_SCROLL_EPSILON);
+			const posChanged = Number.isFinite(lastPosX) && Number.isFinite(lastPosY) ? Math.abs(posX - lastPosX) > BRACE_REBUILD_SCROLL_EPSILON || Math.abs(posY - lastPosY) > BRACE_REBUILD_SCROLL_EPSILON : hasFinitePos;
+			const targetChanged = Number.isFinite(lastTargetX) && Number.isFinite(lastTargetY) ? Math.abs(targetX - lastTargetX) > BRACE_REBUILD_SCROLL_EPSILON || Math.abs(targetY - lastTargetY) > BRACE_REBUILD_SCROLL_EPSILON : hasFiniteTarget;
+			if (targetOffsetChanged || posChanged || targetChanged) {
+				lastScrollActivityAt = Date.now();
+				if (queuedBraceWorkerTokenVersion !== null && !activeBraceWorkerJob) scheduleQueuedBraceWorkerFlush();
+			}
+			lastPosX = posX;
+			lastPosY = posY;
+			lastTargetX = targetX;
+			lastTargetY = targetY;
+		});
+	};
 	const ensureBraceWorker = () => {
 		if (!shouldUseBraceWorker()) return null;
 		if (braceWorker) return braceWorker;
-		braceWorker = new Worker(new URL(
-			/* @vite-ignore */
-			"/assets/brace-worker-DyuxA6xZ.js",
-			"" + import.meta.url
-		), { type: "module" });
+		braceWorker = new Worker(brace_worker_default, { type: "module" });
 		braceWorker.onmessage = (event) => {
 			const message = event.data;
 			if (!message || message.type !== "braceCacheRebuildResult") return;
@@ -4568,6 +4548,10 @@ function createBlocks(doc, caches) {
 				clearTimeout(braceRebuildTimer);
 				braceRebuildTimer = null;
 			}
+			if (braceWorkerFlushTimer !== null) {
+				clearTimeout(braceWorkerFlushTimer);
+				braceWorkerFlushTimer = null;
+			}
 			activeBraceWorkerJob = null;
 			queuedBraceWorkerTokenVersion = null;
 			const tokenVersion = doc.tokenVersion;
@@ -4609,7 +4593,7 @@ function createBlocks(doc, caches) {
 	};
 	m(() => {
 		const tokenVersion = doc.tokenVersion;
-		doc.tokenizationPending;
+		const tokenizationPending = doc.tokenizationPending;
 		const keyHoldActive = doc.keyHoldActive;
 		if (lastStableBraceTokenVersion === tokenVersion) {
 			if (braceRebuildTimer !== null) {
@@ -4619,6 +4603,13 @@ function createBlocks(doc, caches) {
 			return;
 		}
 		if (keyHoldActive) {
+			if (braceRebuildTimer !== null) {
+				clearTimeout(braceRebuildTimer);
+				braceRebuildTimer = null;
+			}
+			return;
+		}
+		if (tokenizationPending) {
 			if (braceRebuildTimer !== null) {
 				clearTimeout(braceRebuildTimer);
 				braceRebuildTimer = null;
@@ -4725,6 +4716,26 @@ function createBlocks(doc, caches) {
 	const isCollapsed = (line) => {
 		return doc.collapsed.has(line);
 	};
+	const computeMaxCollapsedLine = (collapsed) => {
+		let maxLine = -1;
+		for (const line of collapsed) if (line > maxLine) maxLine = line;
+		return maxLine;
+	};
+	let collapsedRef = doc.collapsed;
+	let collapsedMaxLine = computeMaxCollapsedLine(collapsedRef);
+	const syncCollapsedMeta = () => {
+		const collapsed = doc.collapsed;
+		if (collapsed !== collapsedRef) {
+			collapsedRef = collapsed;
+			collapsedMaxLine = computeMaxCollapsedLine(collapsed);
+		}
+		return collapsed;
+	};
+	const assignCollapsed = (nextCollapsed, nextMaxLine) => {
+		doc.collapsed = nextCollapsed;
+		collapsedRef = nextCollapsed;
+		collapsedMaxLine = nextMaxLine;
+	};
 	const findNearestBlockStartAtOrBefore = (line) => {
 		if (line < 0 || line >= doc.lines.length) return null;
 		const { sortedStarts } = blockNavigation.value;
@@ -4769,17 +4780,24 @@ function createBlocks(doc, caches) {
 		doc.collapsed = newCollapsed;
 	};
 	const adjustOnLineInsert = (insertedAt) => {
+		const collapsed = syncCollapsedMeta();
+		if (collapsed.size === 0) return;
+		if (collapsedMaxLine < insertedAt) return;
 		const newCollapsed = /* @__PURE__ */ new Set();
-		for (const line of doc.collapsed) if (line >= insertedAt) newCollapsed.add(line + 1);
+		for (const line of collapsed) if (line >= insertedAt) newCollapsed.add(line + 1);
 		else newCollapsed.add(line);
-		doc.collapsed = newCollapsed;
+		assignCollapsed(newCollapsed, collapsedMaxLine + 1);
 	};
 	const adjustOnLineInsertRange = (startLine, endLine) => {
+		const collapsed = syncCollapsedMeta();
+		if (collapsed.size === 0) return;
 		const insertedCount = endLine - startLine + 1;
+		if (insertedCount <= 0) return;
+		if (collapsedMaxLine < startLine) return;
 		const newCollapsed = /* @__PURE__ */ new Set();
-		for (const line of doc.collapsed) if (line >= startLine) newCollapsed.add(line + insertedCount);
+		for (const line of collapsed) if (line >= startLine) newCollapsed.add(line + insertedCount);
 		else newCollapsed.add(line);
-		doc.collapsed = newCollapsed;
+		assignCollapsed(newCollapsed, collapsedMaxLine + insertedCount);
 	};
 	const adjustOnLineDelete = (deletedAt) => {
 		const newCollapsed = /* @__PURE__ */ new Set();
@@ -4811,24 +4829,9 @@ function createBlocks(doc, caches) {
 				if (staleDepth !== null) return staleDepth;
 			}
 		}
-		if (doc.tokenizationPending) return getSameLineBraceDepthForPosition(doc.tokenLines, line, tokenIndex, charIndex);
+		if (doc.tokenizationPending) return null;
 		if (lastStableBraceTokenVersion < 0) return null;
-		if (lastStableBraceTokenVersion !== doc.tokenVersion) {
-			const column = getColumnFromTokenLocation(doc.tokenLines, line, tokenIndex, charIndex);
-			const fromMatchAfter = findMatchingBrace(line, column + 1);
-			if (fromMatchAfter) {
-				const isOpen = fromMatchAfter.line === line && fromMatchAfter.tokenIndex === tokenIndex && fromMatchAfter.charIndex === charIndex;
-				const isClose = fromMatchAfter.matchingLine === line && fromMatchAfter.matchingTokenIndex === tokenIndex && fromMatchAfter.matchingCharIndex === charIndex;
-				if (isOpen || isClose) return fromMatchAfter.depth;
-			}
-			const fromMatchAt = findMatchingBrace(line, column);
-			if (fromMatchAt) {
-				const isOpen = fromMatchAt.line === line && fromMatchAt.tokenIndex === tokenIndex && fromMatchAt.charIndex === charIndex;
-				const isClose = fromMatchAt.matchingLine === line && fromMatchAt.matchingTokenIndex === tokenIndex && fromMatchAt.matchingCharIndex === charIndex;
-				if (isOpen || isClose) return fromMatchAt.depth;
-			}
-			return getSameLineBraceDepthForPosition(doc.tokenLines, line, tokenIndex, charIndex);
-		}
+		if (lastStableBraceTokenVersion !== doc.tokenVersion) return null;
 		return null;
 	};
 	const getBraceDepthForLine = (line) => {
@@ -4961,6 +4964,26 @@ function createBlocks(doc, caches) {
 	const getBraceAnalysisVersion = () => {
 		return lastStableBraceTokenVersion;
 	};
+	const dispose = () => {
+		if (braceRebuildTimer !== null) {
+			clearTimeout(braceRebuildTimer);
+			braceRebuildTimer = null;
+		}
+		if (braceWorkerFlushTimer !== null) {
+			clearTimeout(braceWorkerFlushTimer);
+			braceWorkerFlushTimer = null;
+		}
+		if (disposeScrollActivityObserver) {
+			disposeScrollActivityObserver();
+			disposeScrollActivityObserver = null;
+		}
+		activeBraceWorkerJob = null;
+		queuedBraceWorkerTokenVersion = null;
+		if (braceWorker) {
+			braceWorker.terminate();
+			braceWorker = null;
+		}
+	};
 	return {
 		blockStarts,
 		blockEnds,
@@ -4982,7 +5005,9 @@ function createBlocks(doc, caches) {
 		getBraceDepthForLine,
 		isBraceAnalysisCurrent,
 		getBraceAnalysisVersion,
-		debugBraceProbe
+		setScrollSource,
+		debugBraceProbe,
+		dispose
 	};
 }
 var MIN_LINE_CANVAS_DIMENSION = 32;
@@ -5721,14 +5746,16 @@ function drawBlocks(context) {
 	const lastVisibleLogicalLine = visibleLinesArray[visibleLinesArray.length - 1];
 	let optimisticSnapshot = null;
 	const inputAgeMs = Date.now() - caret.lastInputTime.value;
-	const shouldUseOptimistic = doc.keyHoldActive || !blocks.isBraceAnalysisCurrent() || caret.isTyping.value && inputAgeMs <= OPTIMISTIC_INPUT_WINDOW_MS;
+	const braceAnalysisCurrent = blocks.isBraceAnalysisCurrent();
+	const shouldUseOptimistic = doc.keyHoldActive || !braceAnalysisCurrent || caret.isTyping.value && inputAgeMs <= OPTIMISTIC_INPUT_WINDOW_MS;
+	const shouldBuildOptimisticSnapshot = shouldUseOptimistic || braceAnalysisCurrent;
 	const shouldBypassOptimisticCache = doc.keyHoldActive;
-	if (shouldUseOptimistic) {
+	if (shouldBuildOptimisticSnapshot) {
 		const optimisticStartLine = Math.max(0, firstVisibleLogicalLine - OPTIMISTIC_BRACE_MARGIN_LINES);
 		const optimisticEndLine = Math.min(codeLines.length - 1, lastVisibleLogicalLine + OPTIMISTIC_BRACE_MARGIN_LINES);
 		if (optimisticStartLine <= optimisticEndLine) {
 			const cachedOptimistic = optimisticSnapshotCacheByContext.get(context);
-			if (!shouldBypassOptimisticCache && cachedOptimistic && cachedOptimistic.revision === doc.revision && cachedOptimistic.tokenVersion === doc.tokenVersion && cachedOptimistic.startLine === optimisticStartLine && cachedOptimistic.endLine === optimisticEndLine && cachedOptimistic.cursorLine === caret.line.value && cachedOptimistic.cursorColumn === caret.column.value) optimisticSnapshot = cachedOptimistic.snapshot;
+			if (!shouldBypassOptimisticCache && cachedOptimistic && cachedOptimistic.revision === doc.revision && cachedOptimistic.tokenVersion === doc.tokenVersion && cachedOptimistic.startLine === optimisticStartLine && cachedOptimistic.endLine === optimisticEndLine) optimisticSnapshot = cachedOptimistic.snapshot;
 			else {
 				optimisticSnapshot = buildOptimisticViewportSnapshot(codeLines, optimisticStartLine, optimisticEndLine);
 				optimisticSnapshotCacheByContext.set(context, {
@@ -5736,8 +5763,6 @@ function drawBlocks(context) {
 					tokenVersion: doc.tokenVersion,
 					startLine: optimisticStartLine,
 					endLine: optimisticEndLine,
-					cursorLine: caret.line.value,
-					cursorColumn: caret.column.value,
 					snapshot: optimisticSnapshot
 				});
 			}
@@ -5747,7 +5772,7 @@ function drawBlocks(context) {
 	const optimisticBlockEndsByStart = optimisticSnapshot?.blockEndsByStart ?? null;
 	const optimisticSortedStarts = optimisticSnapshot?.sortedStarts ?? [];
 	const optimisticParentByStart = optimisticSnapshot?.parentByStart ?? null;
-	const useOptimisticTopology = optimisticSnapshot !== null;
+	let useOptimisticTopology = shouldUseOptimistic && optimisticSnapshot !== null;
 	const matchingBrace = blocks.findMatchingBrace(caret.line.value, caret.column.value);
 	const blockColors = settings$1.ui.blockColors;
 	const blockInfoCache = /* @__PURE__ */ new Map();
@@ -5819,6 +5844,58 @@ function drawBlocks(context) {
 		}
 		return null;
 	};
+	const doesStableContainLine = (line, stableStart) => {
+		if (stableStart === null) return false;
+		const stableEnd = blocks.blockEnds.value.get(stableStart);
+		return stableEnd !== void 0 && line >= stableStart && line <= stableEnd;
+	};
+	const getStableBlockChain = (line) => {
+		const chain = [];
+		let current = blocks.findContainingBlockStart(line);
+		while (current !== null) {
+			chain.push(current);
+			current = blocks.getParentBlockStart(current);
+		}
+		return chain;
+	};
+	const getOptimisticBlockChain = (line) => {
+		const chain = [];
+		if (!optimisticParentByStart) return chain;
+		let current = findOptimisticContainingBlockStart(line);
+		while (current !== null) {
+			chain.push(current);
+			current = optimisticParentByStart.get(current) ?? null;
+		}
+		return chain;
+	};
+	const areBlockChainsEqual = (a$35, b$4) => {
+		if (a$35.length !== b$4.length) return false;
+		for (let i$6 = 0; i$6 < a$35.length; i$6++) if (a$35[i$6] !== b$4[i$6]) return false;
+		return true;
+	};
+	if (!useOptimisticTopology && optimisticSnapshot) {
+		const stableContainingBlockAtCaret = blocks.findContainingBlockStart(caret.line.value);
+		const optimisticContainingBlockAtCaret = findOptimisticContainingBlockStart(caret.line.value);
+		if (optimisticContainingBlockAtCaret !== null && optimisticContainingBlockAtCaret !== stableContainingBlockAtCaret) useOptimisticTopology = true;
+		if (!useOptimisticTopology) for (let i$6 = 0; i$6 < visibleLinesArray.length; i$6++) {
+			const line = visibleLinesArray[i$6];
+			const optimisticContainingBlock = findOptimisticContainingBlockStart(line);
+			if (optimisticContainingBlock === null) continue;
+			const stableContainingBlock = blocks.findContainingBlockStart(line);
+			if (!doesStableContainLine(line, stableContainingBlock)) {
+				useOptimisticTopology = true;
+				break;
+			}
+			if (stableContainingBlock !== optimisticContainingBlock) {
+				useOptimisticTopology = true;
+				break;
+			}
+			if (!areBlockChainsEqual(getOptimisticBlockChain(line), getStableBlockChain(line))) {
+				useOptimisticTopology = true;
+				break;
+			}
+		}
+	}
 	const blocksToDraw = /* @__PURE__ */ new Set();
 	for (const logicalLine of visibleLogicalLines) {
 		const containingBlock = useOptimisticTopology ? findOptimisticContainingBlockStart(logicalLine) : blocks.findContainingBlockStart(logicalLine);
@@ -5882,7 +5959,8 @@ function drawBlocks(context) {
 		}
 		const endVisualLine = lastVisibleVisualByLogicalLine.get(endLine) ?? (visualLinesByLogicalLine[endLine] ?? []).at(-1);
 		if (!endVisualLine) return;
-		const endY = textBottom(endVisualLine);
+		let endY = textBottom(endVisualLine);
+		if (endY <= startY) endY = startY + settings$1.lineHeight;
 		const startYCanvas = startY + scrollY;
 		if (endY + scrollY < visibleTop || startYCanvas > canvasHeight) return;
 		if (hasMatchingBrace) {
@@ -6229,11 +6307,620 @@ function hitTestGutter(canvas, settings$1, lines, scroll, gutter, x$4, y$5, head
 		line: null
 	};
 }
-var SCROLLBAR_MIN_THUMB = 20;
+var minimap_worker_default = "/assets/minimap-worker-ufmyyTr7.js";
+var SCROLLBAR_MIN_THUMB$1 = 20;
 var SCROLLBAR_TRACK_COLOR = "rgba(255, 255, 255, 0.05)";
 var SCROLLBAR_THUMB_COLOR = "rgba(255, 255, 255, 0.1)";
 var SCROLLBAR_THUMB_HOVER_COLOR = "rgba(255, 255, 255, 0.2)";
-function hitTestScrollbar(canvas, scroll, lines, settings$1, gutter, header, x$4, y$5) {
+var MINIMAP_VIEWPORT_COLOR = "rgba(255, 255, 255, 0.08)";
+var MINIMAP_VIEWPORT_HOVER_COLOR = "rgba(255, 255, 255, 0.14)";
+var MINIMAP_INNER_PADDING = 4;
+var MINIMAP_BASE_ROW_HEIGHT = 2;
+var MINIMAP_MIN_ROW_HEIGHT = 1;
+var MINIMAP_DENSITY_RANGE = 1;
+var MINIMAP_MAX_VIRTUAL_ROWS = 3e3;
+var MINIMAP_MAX_COMPRESSED_LINES_PER_ROW = 1;
+var MINIMAP_BITMAP_ROW_SCALE = 1;
+var MINIMAP_BURST_WINDOW_MS = 120;
+var MINIMAP_WORKER_THROTTLE_BURST_MS = 120;
+var MINIMAP_WORKER_THROTTLE_SETTLE_MS = 24;
+var MINIMAP_MAX_CHUNK_LINES = 1536;
+var MINIMAP_MAX_SURFACE_PIXELS = 32767;
+var MINIMAP_MAX_LINE_CHARS = 100;
+var MINIMAP_BACKGROUND_ALPHA = .62;
+var MINIMAP_BACKGROUND_HOVER_ALPHA = .52;
+var MINIMAP_LEFT_SHADOW_WIDTH = 7;
+var MINIMAP_LEFT_SHADOW_ALPHA = .25;
+var MINIMAP_TOKEN_TYPES = [
+	"keyword",
+	"function",
+	"identifier",
+	"string",
+	"number",
+	"boolean",
+	"null",
+	"operator",
+	"punctuation",
+	"comment",
+	"text",
+	"special"
+];
+var minimapWorker = null;
+var minimapWorkerDisabled = false;
+var minimapContextId = 0;
+var minimapRequestId = 0;
+var minimapRenderStateByContext = /* @__PURE__ */ new WeakMap();
+var minimapWorkerRequests = /* @__PURE__ */ new Map();
+var parsedColorCache = /* @__PURE__ */ new Map();
+var EMPTY_MINIMAP_TOKEN_LINE = [];
+var minimapCompactTokenLineCache = /* @__PURE__ */ new WeakMap();
+function clampByte(value) {
+	return Math.max(0, Math.min(255, value | 0));
+}
+function parseHexColor(color) {
+	const hex = color.slice(1);
+	if (hex.length === 3 || hex.length === 4) {
+		const r$13 = parseInt(hex[0] + hex[0], 16);
+		const g$5 = parseInt(hex[1] + hex[1], 16);
+		const b$4 = parseInt(hex[2] + hex[2], 16);
+		if (Number.isNaN(r$13) || Number.isNaN(g$5) || Number.isNaN(b$4)) return null;
+		return {
+			r: r$13,
+			g: g$5,
+			b: b$4
+		};
+	}
+	if (hex.length === 6 || hex.length === 8) {
+		const r$13 = parseInt(hex.slice(0, 2), 16);
+		const g$5 = parseInt(hex.slice(2, 4), 16);
+		const b$4 = parseInt(hex.slice(4, 6), 16);
+		if (Number.isNaN(r$13) || Number.isNaN(g$5) || Number.isNaN(b$4)) return null;
+		return {
+			r: r$13,
+			g: g$5,
+			b: b$4
+		};
+	}
+	return null;
+}
+function parseRgbColor(color) {
+	const match = color.match(/^rgba?\((.+)\)$/i);
+	if (!match) return null;
+	const parts = match[1].split(",").map((part) => part.trim());
+	if (parts.length < 3) return null;
+	const parseChannel = (value) => {
+		if (value.endsWith("%")) {
+			const percent = Number.parseFloat(value.slice(0, -1));
+			if (!Number.isFinite(percent)) return null;
+			return clampByte(Math.round(percent * 2.55));
+		}
+		const numeric = Number.parseFloat(value);
+		if (!Number.isFinite(numeric)) return null;
+		return clampByte(Math.round(numeric));
+	};
+	const r$13 = parseChannel(parts[0]);
+	const g$5 = parseChannel(parts[1]);
+	const b$4 = parseChannel(parts[2]);
+	if (r$13 == null || g$5 == null || b$4 == null) return null;
+	return {
+		r: r$13,
+		g: g$5,
+		b: b$4
+	};
+}
+function parseColorToRgb(color, fallback) {
+	if (!color) return fallback;
+	const cached = parsedColorCache.get(color);
+	if (cached) return cached;
+	const normalized = color.trim().toLowerCase();
+	const value = (normalized.startsWith("#") ? parseHexColor(normalized) : normalized.startsWith("rgb") ? parseRgbColor(normalized) : null) ?? fallback;
+	parsedColorCache.set(color, value);
+	return value;
+}
+function getMinimapBackgroundCss(context, isHovered) {
+	const background = parseColorToRgb(context.settings.colors.black, {
+		r: 0,
+		g: 0,
+		b: 0
+	});
+	const alpha = isHovered ? MINIMAP_BACKGROUND_HOVER_ALPHA : MINIMAP_BACKGROUND_ALPHA;
+	return `rgba(${background.r}, ${background.g}, ${background.b}, ${alpha})`;
+}
+function drawMinimapLeftShadow(c$7, x$4, y$5, height) {
+	const gradient = c$7.createLinearGradient(x$4, 0, x$4 - MINIMAP_LEFT_SHADOW_WIDTH, 0);
+	gradient.addColorStop(0, `rgba(0, 0, 0, ${MINIMAP_LEFT_SHADOW_ALPHA})`);
+	gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+	c$7.fillStyle = gradient;
+	c$7.fillRect(x$4 - MINIMAP_LEFT_SHADOW_WIDTH, y$5, MINIMAP_LEFT_SHADOW_WIDTH, height);
+}
+function getMinimapThemeSnapshot(context) {
+	const theme$1 = context.settings.theme;
+	const byTokenType = {};
+	const themeParts = new Array(MINIMAP_TOKEN_TYPES.length + 1);
+	for (let i$6 = 0; i$6 < MINIMAP_TOKEN_TYPES.length; i$6++) {
+		const tokenType = MINIMAP_TOKEN_TYPES[i$6];
+		const color = theme$1[tokenType]?.color ?? theme$1.text?.color;
+		byTokenType[tokenType] = color;
+		themeParts[i$6] = color ?? "";
+	}
+	themeParts[MINIMAP_TOKEN_TYPES.length] = theme$1.text?.color ?? "";
+	return {
+		themeKey: themeParts.join("|"),
+		payload: {
+			textColor: theme$1.text?.color,
+			byTokenType
+		}
+	};
+}
+function createSurface(width, height) {
+	const safeWidth = Math.max(1, width | 0);
+	const safeHeight = Math.max(1, height | 0);
+	let canvas;
+	if (typeof OffscreenCanvas !== "undefined") canvas = new OffscreenCanvas(safeWidth, safeHeight);
+	else {
+		if (typeof document === "undefined") return null;
+		const element = document.createElement("canvas");
+		element.width = safeWidth;
+		element.height = safeHeight;
+		canvas = element;
+	}
+	const c$7 = canvas.getContext("2d");
+	if (!c$7) return null;
+	return {
+		canvas,
+		c: c$7,
+		width: safeWidth,
+		height: safeHeight
+	};
+}
+function ensureSurface(surface, width, height) {
+	const safeWidth = Math.max(1, width | 0);
+	const safeHeight = Math.max(1, height | 0);
+	if (surface && surface.width === safeWidth && surface.height === safeHeight) return surface;
+	return createSurface(safeWidth, safeHeight);
+}
+function closeBitmap(bitmap) {
+	if (!bitmap) return;
+	if (typeof bitmap.close === "function") bitmap.close();
+}
+function getMinimapWorkerThrottleDelay(burstMode) {
+	return burstMode ? MINIMAP_WORKER_THROTTLE_BURST_MS : MINIMAP_WORKER_THROTTLE_SETTLE_MS;
+}
+function isMinimapBurstMode(context) {
+	const inputAgeMs = context.caret.lastInputTime.value > 0 ? Date.now() - context.caret.lastInputTime.value : Number.POSITIVE_INFINITY;
+	return context.doc.keyHoldActive || inputAgeMs <= MINIMAP_BURST_WINDOW_MS;
+}
+function makeMinimapContentKey(tokenVersion, themeKey) {
+	return `${tokenVersion}:${themeKey}`;
+}
+function isWhitespaceOnlyLine(text) {
+	for (let i$6 = 0; i$6 < text.length; i$6++) if (text.charCodeAt(i$6) > 32) return false;
+	return text.length > 0;
+}
+function createFallbackTokenLineForWorker(line) {
+	if (line.length === 0 || isWhitespaceOnlyLine(line)) return EMPTY_MINIMAP_TOKEN_LINE;
+	return [{
+		type: "text",
+		text: line.length > MINIMAP_MAX_LINE_CHARS ? line.slice(0, MINIMAP_MAX_LINE_CHARS) : line
+	}];
+}
+function compactTokenLineForWorker(tokenLine) {
+	if (!tokenLine || tokenLine.length === 0) return EMPTY_MINIMAP_TOKEN_LINE;
+	const cached = minimapCompactTokenLineCache.get(tokenLine);
+	if (cached) return cached;
+	let needsCopy = false;
+	for (let i$6 = 0; i$6 < tokenLine.length; i$6++) {
+		const token = tokenLine[i$6];
+		if ((token?.text ?? "").length === 0 || token?.type == null) {
+			needsCopy = true;
+			break;
+		}
+		if (token.line !== void 0 || token.column !== void 0) {
+			needsCopy = true;
+			break;
+		}
+	}
+	if (!needsCopy) {
+		minimapCompactTokenLineCache.set(tokenLine, tokenLine);
+		return tokenLine;
+	}
+	const compact = [];
+	for (let i$6 = 0; i$6 < tokenLine.length; i$6++) {
+		const token = tokenLine[i$6];
+		const text = token?.text ?? "";
+		if (text.length === 0) continue;
+		compact.push({
+			type: token?.type ?? "text",
+			text
+		});
+	}
+	const result = compact.length > 0 ? compact : EMPTY_MINIMAP_TOKEN_LINE;
+	minimapCompactTokenLineCache.set(tokenLine, result);
+	return result;
+}
+function prepareTokenLinesForWorker(lines, tokenLines, startLine, lineCount) {
+	if (lineCount <= 0) return [];
+	const prepared = new Array(lineCount);
+	for (let lineIndex = 0; lineIndex < lineCount; lineIndex++) {
+		const absoluteLine = startLine + lineIndex;
+		const compact = compactTokenLineForWorker(tokenLines[absoluteLine]);
+		prepared[lineIndex] = compact !== EMPTY_MINIMAP_TOKEN_LINE ? compact : createFallbackTokenLineForWorker(lines[absoluteLine] ?? "");
+	}
+	return prepared;
+}
+function getMinimapRenderState(context) {
+	const existing = minimapRenderStateByContext.get(context);
+	if (existing) return existing;
+	const state = {
+		context,
+		contextId: ++minimapContextId,
+		compression: null,
+		contentKey: null,
+		renderContentKey: null,
+		stitchSurface: null,
+		latchedViewportSurface: null,
+		latchedViewportCompressionKey: null,
+		latchedViewportSourceStart: -1,
+		latchedViewportSourceHeight: -1,
+		latchedViewportContentKey: null,
+		readyChunks: /* @__PURE__ */ new Set(),
+		chunkContentKey: /* @__PURE__ */ new Map(),
+		pendingSnapshot: null,
+		inFlightRequestId: null,
+		inFlightChunkIndex: null,
+		inFlightCompressionKey: null,
+		inFlightContentKey: null,
+		throttleMs: MINIMAP_WORKER_THROTTLE_SETTLE_MS,
+		lastDispatchAt: 0
+	};
+	minimapRenderStateByContext.set(context, state);
+	return state;
+}
+function clearMinimapWorkerRequests() {
+	for (const [, request] of minimapWorkerRequests) {
+		const state = request.state;
+		if (state.inFlightRequestId != null) {
+			state.inFlightRequestId = null;
+			state.inFlightChunkIndex = null;
+			state.inFlightCompressionKey = null;
+			state.inFlightContentKey = null;
+		}
+	}
+	minimapWorkerRequests.clear();
+}
+function dropMinimapWorker() {
+	clearMinimapWorkerRequests();
+	minimapWorkerDisabled = true;
+	if (minimapWorker) {
+		minimapWorker.terminate();
+		minimapWorker = null;
+	}
+}
+function ensureMinimapWorker() {
+	if (minimapWorkerDisabled) return null;
+	if (typeof window === "undefined" || typeof Worker === "undefined") return null;
+	if (minimapWorker) return minimapWorker;
+	let worker;
+	try {
+		worker = new Worker(minimap_worker_default, { type: "module" });
+	} catch (error$1) {
+		console.error("[editor:minimap] worker creation failed", {
+			url: minimap_worker_default,
+			error: error$1
+		});
+		minimapWorkerDisabled = true;
+		return null;
+	}
+	worker.onerror = (event) => {
+		console.error("[editor:minimap] worker error", event);
+		dropMinimapWorker();
+	};
+	worker.onmessageerror = () => {
+		console.error("[editor:minimap] worker message error");
+		dropMinimapWorker();
+	};
+	worker.onmessage = (event) => {
+		const message = event.data;
+		if (!message) return;
+		if (message.type === "minimapError") {
+			const error$1 = message;
+			const request$1 = minimapWorkerRequests.get(error$1.requestId);
+			if (request$1) {
+				minimapWorkerRequests.delete(error$1.requestId);
+				const state$1 = request$1.state;
+				if (state$1.inFlightRequestId === error$1.requestId) {
+					state$1.inFlightRequestId = null;
+					state$1.inFlightChunkIndex = null;
+					state$1.inFlightCompressionKey = null;
+					state$1.inFlightContentKey = null;
+				}
+			}
+			console.error("[editor:minimap] render error", error$1.error);
+			return;
+		}
+		if (message.type !== "minimapRenderChunkResult") return;
+		const result = message;
+		const request = minimapWorkerRequests.get(result.requestId);
+		if (!request) {
+			closeBitmap(result.bitmap);
+			return;
+		}
+		minimapWorkerRequests.delete(result.requestId);
+		const state = request.state;
+		if (state.inFlightRequestId === result.requestId) {
+			state.inFlightRequestId = null;
+			state.inFlightChunkIndex = null;
+			state.inFlightCompressionKey = null;
+			state.inFlightContentKey = null;
+		}
+		const compression = state.compression;
+		if (!compression || request.compressionKey !== compression.key || result.compressionKey !== compression.key || request.chunkIndex !== result.chunkIndex) {
+			closeBitmap(result.bitmap);
+			return;
+		}
+		const stitchSurface = ensureSurface(state.stitchSurface, compression.pixelColumnCount, compression.pixelTotalSourceRows);
+		if (!stitchSurface) {
+			closeBitmap(result.bitmap);
+			return;
+		}
+		state.stitchSurface = stitchSurface;
+		const chunkHeight = Math.max(1, result.rowCount * result.rowScale);
+		stitchSurface.c.clearRect(0, result.chunkStartRow, compression.pixelColumnCount, chunkHeight);
+		if (result.hasInk) stitchSurface.c.drawImage(result.bitmap, 0, result.chunkStartRow);
+		state.readyChunks.add(result.chunkIndex);
+		state.chunkContentKey.set(result.chunkIndex, result.contentKey);
+		closeBitmap(result.bitmap);
+		if (state.pendingSnapshot && state.inFlightRequestId == null) {
+			const theme$1 = getMinimapThemeSnapshot(state.context);
+			tryDispatchMinimapRequest(state.context, state, compression, theme$1);
+		}
+	};
+	minimapWorker = worker;
+	return worker;
+}
+function resetCompressionState(state, compression) {
+	state.compression = compression;
+	state.readyChunks.clear();
+	state.chunkContentKey.clear();
+	state.pendingSnapshot = null;
+	state.renderContentKey = state.contentKey;
+	state.latchedViewportSourceStart = -1;
+	state.latchedViewportSourceHeight = -1;
+	state.latchedViewportContentKey = null;
+	state.stitchSurface = ensureSurface(state.stitchSurface, compression.pixelColumnCount, compression.pixelTotalSourceRows);
+	if (state.stitchSurface) state.stitchSurface.c.clearRect(0, 0, compression.pixelColumnCount, compression.pixelTotalSourceRows);
+}
+function getVisibleChunkRange(compression, sourceY, sourceHeight) {
+	const sourceStart = Math.max(0, Math.floor(sourceY));
+	const sourceEnd = Math.max(sourceStart + 1, Math.ceil(sourceY + sourceHeight));
+	return {
+		startChunk: Math.max(0, Math.floor(sourceStart / compression.chunkRowCount)),
+		endChunk: Math.min(compression.chunkCount - 1, Math.floor((sourceEnd - 1) / compression.chunkRowCount))
+	};
+}
+function pickNextChunkIndexForSnapshot(state, compression, sourceY, sourceHeight, contentKey) {
+	const visible = getVisibleChunkRange(compression, sourceY, sourceHeight);
+	for (let chunkIndex = visible.startChunk; chunkIndex <= visible.endChunk; chunkIndex++) if (!isChunkReadyForContent(state, chunkIndex, contentKey, true)) return chunkIndex;
+	const anchor = Math.max(0, Math.min(compression.chunkCount - 1, Math.floor(sourceY / compression.chunkRowCount)));
+	for (let radius = 0; radius < compression.chunkCount; radius++) {
+		const right = anchor + radius;
+		if (right < compression.chunkCount && !isChunkReadyForContent(state, right, contentKey, true)) return right;
+		const left = anchor - radius;
+		if (left >= 0 && !isChunkReadyForContent(state, left, contentKey, true)) return left;
+	}
+	return -1;
+}
+function isChunkReadyForContent(state, chunkIndex, contentKey, strict) {
+	if (!state.readyChunks.has(chunkIndex)) return false;
+	if (!strict) return true;
+	return state.chunkContentKey.get(chunkIndex) === contentKey;
+}
+function isViewportCovered(state, compression, sourceY, sourceHeight, contentKey, strict) {
+	const range = getVisibleChunkRange(compression, sourceY, sourceHeight);
+	for (let chunkIndex = range.startChunk; chunkIndex <= range.endChunk; chunkIndex++) if (!isChunkReadyForContent(state, chunkIndex, contentKey, strict)) return false;
+	return true;
+}
+function drawMinimapFromCache(c$7, state, sourceY, sourceHeight, drawX, drawY, drawWidth, drawHeight) {
+	const compression = state.compression;
+	const contentKey = state.contentKey;
+	if (!compression || !contentKey) return false;
+	const sourceStart = Math.max(0, Math.floor(sourceY));
+	const sourceHeightInt = Math.max(1, Math.ceil(sourceHeight));
+	const sourceStartPx = sourceStart * compression.pixelRowScale;
+	const sourceHeightPx = sourceHeightInt * compression.pixelRowScale;
+	const shouldDrawFromStitch = isViewportCovered(state, compression, sourceStart, sourceHeightInt, contentKey, true);
+	const previousSmoothing = c$7.imageSmoothingEnabled;
+	c$7.imageSmoothingEnabled = false;
+	if (shouldDrawFromStitch && state.stitchSurface) {
+		c$7.drawImage(state.stitchSurface.canvas, 0, sourceStartPx, compression.pixelColumnCount, sourceHeightPx, drawX, drawY, drawWidth, drawHeight);
+		const latchedContentKey = contentKey;
+		if (state.latchedViewportCompressionKey !== compression.key || state.latchedViewportSourceStart !== sourceStart || state.latchedViewportSourceHeight !== sourceHeightInt || state.latchedViewportContentKey !== latchedContentKey) {
+			const latchedViewportSurface = ensureSurface(state.latchedViewportSurface, compression.pixelColumnCount, sourceHeightPx);
+			if (latchedViewportSurface) {
+				latchedViewportSurface.c.clearRect(0, 0, latchedViewportSurface.width, latchedViewportSurface.height);
+				latchedViewportSurface.c.drawImage(state.stitchSurface.canvas, 0, sourceStartPx, compression.pixelColumnCount, sourceHeightPx, 0, 0, compression.pixelColumnCount, sourceHeightPx);
+				state.latchedViewportSurface = latchedViewportSurface;
+				state.latchedViewportCompressionKey = compression.key;
+				state.latchedViewportSourceStart = sourceStart;
+				state.latchedViewportSourceHeight = sourceHeightInt;
+				state.latchedViewportContentKey = latchedContentKey;
+			}
+		}
+		c$7.imageSmoothingEnabled = previousSmoothing;
+		return true;
+	}
+	if (state.latchedViewportSurface) {
+		c$7.drawImage(state.latchedViewportSurface.canvas, 0, 0, state.latchedViewportSurface.width, state.latchedViewportSurface.height, drawX, drawY, drawWidth, drawHeight);
+		c$7.imageSmoothingEnabled = previousSmoothing;
+		return true;
+	}
+	c$7.imageSmoothingEnabled = previousSmoothing;
+	return false;
+}
+function tryDispatchMinimapRequest(context, state, compression, theme$1) {
+	if (state.inFlightRequestId != null) return;
+	if (!state.pendingSnapshot) return;
+	const worker = ensureMinimapWorker();
+	if (!worker) return;
+	const latestContentKey = state.contentKey;
+	if (!latestContentKey) return;
+	if (!state.renderContentKey) state.renderContentKey = latestContentKey;
+	const snapshot = state.pendingSnapshot;
+	let dispatchContentKey = state.renderContentKey;
+	if (dispatchContentKey !== latestContentKey && isViewportCovered(state, compression, snapshot.sourceY, snapshot.sourceHeight, dispatchContentKey, true)) {
+		dispatchContentKey = latestContentKey;
+		state.renderContentKey = latestContentKey;
+	}
+	let targetChunkIndex = pickNextChunkIndexForSnapshot(state, compression, snapshot.sourceY, snapshot.sourceHeight, dispatchContentKey);
+	if (targetChunkIndex < 0 && dispatchContentKey !== latestContentKey) {
+		dispatchContentKey = latestContentKey;
+		state.renderContentKey = latestContentKey;
+		targetChunkIndex = pickNextChunkIndexForSnapshot(state, compression, snapshot.sourceY, snapshot.sourceHeight, dispatchContentKey);
+	}
+	if (targetChunkIndex < 0) {
+		state.pendingSnapshot = null;
+		return;
+	}
+	const now = Date.now();
+	const throttleMs = !isViewportCovered(state, compression, snapshot.sourceY, snapshot.sourceHeight, dispatchContentKey, true) ? 0 : state.throttleMs;
+	if (now - state.lastDispatchAt < throttleMs) return;
+	const chunkStartRow = targetChunkIndex * compression.chunkRowCount;
+	const rowCount = Math.max(1, Math.min(compression.chunkRowCount, compression.totalSourceRows - chunkStartRow));
+	const chunkEndRow = chunkStartRow + rowCount;
+	const lineStart = chunkStartRow * compression.lineSpan;
+	const lineEnd = Math.min(compression.lineCount, chunkEndRow * compression.lineSpan);
+	const lineCount = Math.max(0, lineEnd - lineStart);
+	if (lineCount <= 0) {
+		const chunkPixelStart = chunkStartRow * compression.pixelRowScale;
+		const chunkPixelHeight = Math.max(1, rowCount * compression.pixelRowScale);
+		state.stitchSurface?.c.clearRect(0, chunkPixelStart, compression.pixelColumnCount, chunkPixelHeight);
+		state.readyChunks.add(targetChunkIndex);
+		state.chunkContentKey.set(targetChunkIndex, dispatchContentKey);
+		tryDispatchMinimapRequest(context, state, compression, theme$1);
+		return;
+	}
+	const tokenLines = prepareTokenLinesForWorker(context.doc.lines, context.doc.tokenLines, lineStart, lineCount);
+	const requestId = ++minimapRequestId;
+	const message = {
+		type: "minimapRenderChunk",
+		requestId,
+		contextId: state.contextId,
+		revision: context.doc.revision,
+		tokenVersion: context.doc.tokenVersion,
+		compressionKey: compression.key,
+		contentKey: dispatchContentKey,
+		chunkIndex: targetChunkIndex,
+		chunkStartRow: chunkStartRow * compression.pixelRowScale,
+		rowCount,
+		lineSpan: compression.lineSpan,
+		columnCount: compression.pixelColumnCount,
+		rowScale: compression.pixelRowScale,
+		tokenLines,
+		theme: theme$1.payload
+	};
+	state.inFlightRequestId = requestId;
+	state.inFlightChunkIndex = targetChunkIndex;
+	state.inFlightCompressionKey = compression.key;
+	state.inFlightContentKey = dispatchContentKey;
+	state.lastDispatchAt = now;
+	minimapWorkerRequests.set(requestId, {
+		state,
+		compressionKey: compression.key,
+		contentKey: dispatchContentKey,
+		chunkIndex: targetChunkIndex
+	});
+	try {
+		worker.postMessage(message);
+	} catch (error$1) {
+		console.error("[editor:minimap] request post failed", error$1);
+		minimapWorkerRequests.delete(requestId);
+		if (state.inFlightRequestId === requestId) {
+			state.inFlightRequestId = null;
+			state.inFlightChunkIndex = null;
+			state.inFlightCompressionKey = null;
+			state.inFlightContentKey = null;
+		}
+	}
+}
+function queueSnapshotRender(context, state, compression, theme$1, sourceY, sourceHeight, burstMode) {
+	state.throttleMs = getMinimapWorkerThrottleDelay(burstMode);
+	const snapshotChunkIndex = Math.max(0, Math.min(compression.chunkCount - 1, Math.floor(sourceY / compression.chunkRowCount)));
+	if (state.inFlightRequestId != null && state.inFlightChunkIndex === snapshotChunkIndex && state.inFlightCompressionKey === compression.key && state.inFlightContentKey === state.contentKey) return;
+	if (state.pendingSnapshot) {
+		if (Math.max(0, Math.min(compression.chunkCount - 1, Math.floor(state.pendingSnapshot.sourceY / compression.chunkRowCount))) === snapshotChunkIndex && Math.round(state.pendingSnapshot.sourceHeight) === Math.round(sourceHeight)) {
+			tryDispatchMinimapRequest(context, state, compression, theme$1);
+			return;
+		}
+	}
+	state.pendingSnapshot = {
+		sourceY,
+		sourceHeight
+	};
+	tryDispatchMinimapRequest(context, state, compression, theme$1);
+}
+function computeMinimapGeometry(lineCount, minimapHeight, minimapWidth, maxTotalSourceRows = Number.POSITIVE_INFINITY) {
+	const density = lineCount / MINIMAP_MAX_VIRTUAL_ROWS;
+	const densityT = density <= 1 ? 0 : Math.min(1, (density - 1) / MINIMAP_DENSITY_RANGE);
+	const targetRowHeight = MINIMAP_BASE_ROW_HEIGHT - (MINIMAP_BASE_ROW_HEIGHT - MINIMAP_MIN_ROW_HEIGHT) * densityT;
+	const maxRowCount = Math.max(1, Math.floor(minimapHeight / MINIMAP_MIN_ROW_HEIGHT));
+	const rowCount = Math.max(1, Math.min(maxRowCount, Math.round(minimapHeight / targetRowHeight)));
+	const columnCount = Math.max(1, Math.floor(minimapWidth));
+	const virtualRowCapacity = Math.max(rowCount, MINIMAP_MAX_VIRTUAL_ROWS);
+	const compressedLineSpan = Math.max(1, Math.ceil(lineCount / virtualRowCapacity));
+	const mode = compressedLineSpan > MINIMAP_MAX_COMPRESSED_LINES_PER_ROW ? "windowed" : "compressed";
+	const lineSpan = mode === "windowed" ? MINIMAP_MAX_COMPRESSED_LINES_PER_ROW : compressedLineSpan;
+	const virtualRowCount = Math.max(1, Math.ceil(lineCount / lineSpan));
+	const rowScale = MINIMAP_BITMAP_ROW_SCALE;
+	const totalSourceRows = Math.max(1, virtualRowCount * rowScale);
+	if (totalSourceRows > maxTotalSourceRows) {
+		const clampedLineSpan = Math.max(lineSpan, Math.ceil(lineCount / Math.max(1, maxTotalSourceRows)));
+		const clampedVirtualRowCount = Math.max(1, Math.ceil(lineCount / clampedLineSpan));
+		const clampedMode = clampedLineSpan > MINIMAP_MAX_COMPRESSED_LINES_PER_ROW ? "windowed" : "compressed";
+		return {
+			lineSpan: clampedLineSpan,
+			virtualRowCount: clampedVirtualRowCount,
+			columnCount,
+			rowScale,
+			totalSourceRows: Math.max(1, clampedVirtualRowCount * rowScale),
+			mode: clampedMode
+		};
+	}
+	return {
+		lineSpan,
+		virtualRowCount,
+		columnCount,
+		rowScale,
+		totalSourceRows,
+		mode
+	};
+}
+function buildCompressionState(lineCount, geometry, sourceHeight, pixelScale) {
+	const maxChunkRowsByLineBudget = Math.max(1, Math.floor(MINIMAP_MAX_CHUNK_LINES / geometry.lineSpan));
+	const modeChunkRowCount = Math.max(1, Math.min(geometry.totalSourceRows, sourceHeight));
+	const chunkRowCount = Math.max(1, Math.min(modeChunkRowCount, maxChunkRowsByLineBudget));
+	const chunkCount = Math.max(1, Math.ceil(geometry.totalSourceRows / chunkRowCount));
+	const pixelRowScale = Math.max(1, Math.round(geometry.rowScale * pixelScale));
+	const pixelColumnCount = Math.max(1, Math.round(geometry.columnCount * pixelScale));
+	const pixelTotalSourceRows = Math.max(1, geometry.totalSourceRows * pixelRowScale);
+	return {
+		key: `${geometry.lineSpan}:${geometry.columnCount}:${geometry.rowScale}:${geometry.totalSourceRows}:${chunkRowCount}:${pixelScale}:${pixelColumnCount}:${pixelRowScale}`,
+		lineCount,
+		lineSpan: geometry.lineSpan,
+		columnCount: geometry.columnCount,
+		rowScale: geometry.rowScale,
+		totalSourceRows: geometry.totalSourceRows,
+		chunkRowCount,
+		chunkCount,
+		pixelScale,
+		pixelColumnCount,
+		pixelRowScale,
+		pixelTotalSourceRows
+	};
+}
+function getVerticalScrollbarSize(settings$1) {
+	return settings$1.showMinimap ? 64 : 12;
+}
+function getScrollbarLayout(canvas, scroll, lines, settings$1, gutter, header) {
 	const width = canvas.size.width.value;
 	const height = canvas.size.height.value;
 	const totalWidth = lines.totalWidth.value;
@@ -6243,28 +6930,61 @@ function hitTestScrollbar(canvas, scroll, lines, settings$1, gutter, header, x$4
 	const scrollX = scroll.targetX.value;
 	const scrollY = scroll.targetY.value;
 	const headerHeight = header.value?.height ?? 0;
-	const availableHeight = height - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
+	const availableHeightForVertical = height - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
 	const availableWidth = width - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value;
-	const needsVertical = totalHeight > availableHeight;
-	const needsHorizontal = !settings$1.wordWrap && totalWidth > availableWidth;
-	if (needsVertical) {
-		if (x$4 >= width - 12 && x$4 <= width && y$5 >= headerHeight) {
-			const trackHeight = height - headerHeight;
-			const thumbHeight = Math.max(SCROLLBAR_MIN_THUMB, availableHeight / totalHeight * trackHeight);
-			const scrollRange = -scrollHeight;
-			const thumbY = headerHeight + (scrollRange > 0 ? -scrollY / scrollRange : 0) * (trackHeight - thumbHeight);
-			return {
-				type: "vertical",
-				thumb: y$5 >= thumbY && y$5 <= thumbY + thumbHeight
-			};
-		}
+	const needsVertical = settings$1.showMinimap || totalHeight > availableHeightForVertical;
+	const verticalScrollbarSize = getVerticalScrollbarSize(settings$1);
+	const availableWidthForHorizontal = availableWidth - (needsVertical ? verticalScrollbarSize : 0);
+	const needsHorizontal = !settings$1.wordWrap && totalWidth > availableWidthForHorizontal;
+	return {
+		width,
+		height,
+		totalWidth,
+		totalHeight,
+		scrollWidth,
+		scrollHeight,
+		scrollX,
+		scrollY,
+		headerHeight,
+		availableHeightForVertical,
+		availableWidth,
+		availableWidthForHorizontal,
+		verticalScrollbarSize,
+		needsVertical,
+		needsHorizontal,
+		availableHeight: availableHeightForVertical - (needsHorizontal ? 3 : 0)
+	};
+}
+function getVerticalThumbMetrics(layout, scrollY = layout.scrollY) {
+	const scrollbarX = layout.width - layout.verticalScrollbarSize;
+	const trackHeight = layout.height - layout.headerHeight;
+	const thumbHeightUnclamped = Math.max(SCROLLBAR_MIN_THUMB$1, layout.availableHeight / layout.totalHeight * trackHeight);
+	const thumbHeight = Math.min(trackHeight, thumbHeightUnclamped);
+	const trackLength = Math.max(0, trackHeight - thumbHeight);
+	const scrollRange = -layout.scrollHeight;
+	const scrollRatio = scrollRange > 0 ? Math.max(0, Math.min(1, -scrollY / scrollRange)) : 0;
+	return {
+		scrollbarX,
+		trackHeight,
+		thumbHeight,
+		thumbY: layout.headerHeight + scrollRatio * trackLength
+	};
+}
+function hitTestScrollbar(canvas, scroll, lines, settings$1, gutter, header, x$4, y$5) {
+	const layout = getScrollbarLayout(canvas, scroll, lines, settings$1, gutter, header);
+	if (layout.needsVertical) {
+		const { scrollbarX, thumbHeight, thumbY } = getVerticalThumbMetrics(layout);
+		if (x$4 >= scrollbarX && x$4 <= layout.width && y$5 >= layout.headerHeight) return {
+			type: "vertical",
+			thumb: y$5 >= thumbY && y$5 <= thumbY + thumbHeight
+		};
 	}
-	if (needsHorizontal) {
-		if (y$5 >= height - 3 && y$5 <= height) {
-			const trackWidth = width - (needsVertical ? 12 : 0);
-			const thumbWidth = Math.max(SCROLLBAR_MIN_THUMB, availableWidth / totalWidth * trackWidth);
-			const scrollRange = -scrollWidth;
-			const thumbX = (scrollRange > 0 ? -scrollX / scrollRange : 0) * (trackWidth - thumbWidth);
+	if (layout.needsHorizontal) {
+		if (y$5 >= layout.height - 3 && y$5 <= layout.height) {
+			const trackWidth = layout.width - (layout.needsVertical ? layout.verticalScrollbarSize : 0);
+			const thumbWidth = Math.max(SCROLLBAR_MIN_THUMB$1, layout.availableWidthForHorizontal / layout.totalWidth * trackWidth);
+			const scrollRange = -layout.scrollWidth;
+			const thumbX = (scrollRange > 0 ? -layout.scrollX / scrollRange : 0) * (trackWidth - thumbWidth);
 			return {
 				type: "horizontal",
 				thumb: x$4 >= thumbX && x$4 <= thumbX + thumbWidth
@@ -6279,40 +6999,66 @@ function hitTestScrollbar(canvas, scroll, lines, settings$1, gutter, header, x$4
 function drawScrollbars(context) {
 	const { canvas, scroll, lines, settings: settings$1, gutter, header } = context;
 	const { c: c$7 } = canvas;
-	const width = canvas.size.width.value;
-	const height = canvas.size.height.value;
-	const totalWidth = lines.totalWidth.value;
-	const totalHeight = lines.totalHeight.value;
-	const scrollWidth = scroll.scrollWidth.value;
-	const scrollHeight = scroll.scrollHeight.value;
-	const scrollX = scroll.targetX.value;
-	const scrollY = scroll.targetY.value;
-	const headerHeight = header.value?.height ?? 0;
-	const availableHeight = height - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
-	const availableWidth = width - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value;
-	const needsVertical = totalHeight > availableHeight;
-	const needsHorizontal = !settings$1.wordWrap && totalWidth > availableWidth;
-	if (needsVertical) {
-		const scrollbarX = width - 12;
-		const trackHeight = height - headerHeight;
-		c$7.strokeStyle = SCROLLBAR_TRACK_COLOR;
-		c$7.lineWidth = 1;
-		c$7.beginPath();
-		c$7.moveTo(scrollbarX, headerHeight);
-		c$7.lineTo(scrollbarX, height);
-		c$7.stroke();
-		const thumbHeight = Math.max(SCROLLBAR_MIN_THUMB, availableHeight / totalHeight * trackHeight);
-		const scrollRange = -scrollHeight;
-		const thumbY = headerHeight + (scrollRange > 0 ? -scrollY / scrollRange : 0) * (trackHeight - thumbHeight);
-		c$7.fillStyle = context.mouse.hovered.scrollbar === "vertical" ? SCROLLBAR_THUMB_HOVER_COLOR : SCROLLBAR_THUMB_COLOR;
-		c$7.fillRect(scrollbarX, thumbY, 12, thumbHeight);
+	const layout = getScrollbarLayout(canvas, scroll, lines, settings$1, gutter, header);
+	if (layout.needsVertical) {
+		const liveScrollY = scroll.pos.y === Infinity ? layout.scrollY : scroll.pos.y;
+		const { scrollbarX, trackHeight, thumbHeight, thumbY } = getVerticalThumbMetrics(layout, liveScrollY);
+		const isHovered = context.mouse.hovered.scrollbar === "vertical";
+		if (settings$1.showMinimap) {
+			const canvasDpr = Math.max(1, canvas.dpr.value);
+			const alignToDevicePixels = (value) => Math.round(value * canvasDpr) / canvasDpr;
+			c$7.fillStyle = getMinimapBackgroundCss(context, isHovered);
+			c$7.fillRect(scrollbarX, layout.headerHeight, layout.verticalScrollbarSize, trackHeight);
+			drawMinimapLeftShadow(c$7, scrollbarX, layout.headerHeight, trackHeight);
+			const minimapX = alignToDevicePixels(scrollbarX + MINIMAP_INNER_PADDING);
+			const minimapY = alignToDevicePixels(layout.headerHeight + MINIMAP_INNER_PADDING);
+			const minimapWidth = Math.max(1 / canvasDpr, alignToDevicePixels(layout.verticalScrollbarSize - MINIMAP_INNER_PADDING * 2));
+			const minimapHeight = Math.max(1 / canvasDpr, alignToDevicePixels(trackHeight - MINIMAP_INNER_PADDING * 2));
+			const lineCount = Math.max(1, context.doc.lines.length);
+			const minimapPixelScale = Math.max(1, canvasDpr);
+			const maxPixelRowScale = Math.max(1, Math.round(MINIMAP_BITMAP_ROW_SCALE * minimapPixelScale));
+			const geometry = computeMinimapGeometry(lineCount, minimapHeight, minimapWidth, Math.max(1, Math.floor(MINIMAP_MAX_SURFACE_PIXELS / maxPixelRowScale)));
+			const pixelRowScale = Math.max(1, Math.round(geometry.rowScale * minimapPixelScale));
+			const targetDrawHeight = Math.max(1, Math.round(minimapHeight));
+			const sourceHeight = Math.max(1, Math.min(geometry.totalSourceRows, Math.round(targetDrawHeight * minimapPixelScale / pixelRowScale)));
+			const scrollRangeY = -layout.scrollHeight;
+			const scrollRatioY = scrollRangeY > 0 ? Math.max(0, Math.min(1, -liveScrollY / scrollRangeY)) : 0;
+			const maxSourceY = Math.max(0, geometry.totalSourceRows - sourceHeight);
+			const sourceY = Math.max(0, Math.min(maxSourceY, Math.round(scrollRatioY * maxSourceY)));
+			const compression = buildCompressionState(lineCount, geometry, sourceHeight, minimapPixelScale);
+			const drawWidth = Math.max(1, compression.pixelColumnCount / compression.pixelScale);
+			const drawHeight = Math.max(1, sourceHeight * compression.pixelRowScale / compression.pixelScale);
+			const theme$1 = getMinimapThemeSnapshot(context);
+			const state = getMinimapRenderState(context);
+			const rawContentKey = makeMinimapContentKey(context.doc.tokenVersion, theme$1.themeKey);
+			const contentKey = context.doc.tokenizationPending && state.renderContentKey ? state.renderContentKey : rawContentKey;
+			const burstMode = isMinimapBurstMode(context);
+			if (!state.compression || state.compression.key !== compression.key) resetCompressionState(state, compression);
+			state.contentKey = contentKey;
+			queueSnapshotRender(context, state, compression, theme$1, sourceY, sourceHeight, burstMode);
+			if (!drawMinimapFromCache(c$7, state, sourceY, sourceHeight, minimapX, minimapY, drawWidth, drawHeight)) {
+				c$7.fillStyle = "rgba(255, 255, 255, 0.02)";
+				c$7.fillRect(minimapX, minimapY, drawWidth, drawHeight);
+			}
+			c$7.fillStyle = isHovered ? MINIMAP_VIEWPORT_HOVER_COLOR : MINIMAP_VIEWPORT_COLOR;
+			c$7.fillRect(scrollbarX + 1, thumbY, Math.max(1, layout.verticalScrollbarSize - 2), thumbHeight);
+		} else {
+			c$7.strokeStyle = SCROLLBAR_TRACK_COLOR;
+			c$7.lineWidth = 1;
+			c$7.beginPath();
+			c$7.moveTo(scrollbarX, layout.headerHeight);
+			c$7.lineTo(scrollbarX, layout.height);
+			c$7.stroke();
+			c$7.fillStyle = isHovered ? SCROLLBAR_THUMB_HOVER_COLOR : SCROLLBAR_THUMB_COLOR;
+			c$7.fillRect(scrollbarX, thumbY, layout.verticalScrollbarSize, thumbHeight);
+		}
 	}
-	if (needsHorizontal) {
-		const scrollbarY = height - 3;
-		const trackWidth = width - (needsVertical ? 12 : 0);
-		const thumbWidth = Math.max(SCROLLBAR_MIN_THUMB, availableWidth / totalWidth * trackWidth);
-		const scrollRange = -scrollWidth;
-		const thumbX = (scrollRange > 0 ? -scrollX / scrollRange : 0) * (trackWidth - thumbWidth);
+	if (layout.needsHorizontal) {
+		const scrollbarY = layout.height - 3;
+		const trackWidth = layout.width - (layout.needsVertical ? layout.verticalScrollbarSize : 0);
+		const thumbWidth = Math.max(SCROLLBAR_MIN_THUMB$1, layout.availableWidthForHorizontal / layout.totalWidth * trackWidth);
+		const scrollRange = -layout.scrollWidth;
+		const thumbX = (scrollRange > 0 ? -layout.scrollX / scrollRange : 0) * (trackWidth - thumbWidth);
 		c$7.fillStyle = context.mouse.hovered.scrollbar === "horizontal" ? SCROLLBAR_THUMB_HOVER_COLOR : SCROLLBAR_THUMB_COLOR;
 		c$7.fillRect(thumbX, scrollbarY, thumbWidth, 3);
 	}
@@ -6401,6 +7147,11 @@ function createOverlayCanvas() {
 }
 const SCROLL_SMOOTH_KEYBOARD = .2;
 const SCROLL_SMOOTH_SCROLLING = .4;
+function clampScrollAxis(value, min, max) {
+	if (value < min) return min;
+	if (value > max) return max;
+	return value;
+}
 function createScroll(canvas, lines, settings$1, gutter, header, metrics) {
 	const pos = signalify$1({
 		x: Infinity,
@@ -6409,35 +7160,49 @@ function createScroll(canvas, lines, settings$1, gutter, header, metrics) {
 	const targetX = c(Infinity);
 	const targetY = c(Infinity);
 	const smooth = c(.2);
+	const clampScrollOffsets = () => {
+		const minX = scrollWidth.value;
+		const minY = scrollHeight.value;
+		if (Number.isFinite(targetX.value)) targetX.value = clampScrollAxis(targetX.value, minX, 0);
+		if (Number.isFinite(targetY.value)) targetY.value = clampScrollAxis(targetY.value, minY, 0);
+		if (Number.isFinite(pos.x)) pos.x = clampScrollAxis(pos.x, minX, 0);
+		if (Number.isFinite(pos.y)) pos.y = clampScrollAxis(pos.y, minY, 0);
+	};
 	const update = () => {
 		n(() => {
-			if (pos.x === Infinity || pos.y === Infinity) {
-				if (targetX.value === Infinity || targetY.value === Infinity) return;
+			clampScrollOffsets();
+			const { x: x$4, y: y$5 } = pos;
+			if (x$4 === Infinity) {
+				if (targetX.value === Infinity) return;
 				pos.x = targetX.value;
 				pos.y = targetY.value;
 				return;
 			}
-			const dx = targetX.value - pos.x;
-			const dy = targetY.value - pos.y;
-			pos.x = pos.x + dx * smooth.value;
-			pos.y = pos.y + dy * smooth.value;
+			const dx = targetX.value - x$4;
+			const dy = targetY.value - y$5;
+			const s$4 = smooth.value;
+			pos.x = x$4 + dx * s$4;
+			pos.y = y$5 + dy * s$4;
 			if (Math.abs(dx) < .1 && Math.abs(dy) < .1) {
 				pos.x = targetX.value;
 				pos.y = targetY.value;
 			}
+			clampScrollOffsets();
 		});
 	};
 	const scrollWidth = b(() => {
 		if (settings$1.wordWrap) return 0;
 		const headerHeight = header.value?.height ?? 0;
-		const needsVertical = lines.totalHeight.value > canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
-		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value - (needsVertical ? 12 : 0);
+		const verticalScrollbarSize = getVerticalScrollbarSize(settings$1);
+		const needsVertical = settings$1.showMinimap || lines.totalHeight.value > canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
+		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value - (needsVertical ? verticalScrollbarSize : 0);
 		return Math.min(0, -lines.totalWidth.value + availableWidth);
 	});
 	const scrollHeight = b(() => {
 		const headerHeight = header.value?.height ?? 0;
-		const needsVertical = lines.totalHeight.value > canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
-		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value - (needsVertical ? 12 : 0);
+		const verticalScrollbarSize = getVerticalScrollbarSize(settings$1);
+		const needsVertical = settings$1.showMinimap || lines.totalHeight.value > canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
+		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value - (needsVertical ? verticalScrollbarSize : 0);
 		const needsHorizontal = !settings$1.wordWrap && lines.totalWidth.value > availableWidth;
 		const availableHeight = canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom - (needsHorizontal ? 3 : 0);
 		return Math.min(0, -lines.totalHeight.value + availableHeight);
@@ -6486,20 +7251,15 @@ function createScroll(canvas, lines, settings$1, gutter, header, metrics) {
 		};
 	});
 	m(() => {
-		if (pos.x === Infinity || pos.y === Infinity) return;
-		const approxContentMetrics = typeof lines.getApproxContentMetrics === "function" ? lines.getApproxContentMetrics() : null;
-		if (!approxContentMetrics) return;
-		const headerHeight = header.value?.height ?? 0;
-		const needsVertical = approxContentMetrics.totalHeight > canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
-		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value - (needsVertical ? 12 : 0);
-		const minScrollX = settings$1.wordWrap ? 0 : Math.min(0, -approxContentMetrics.totalWidth + availableWidth);
-		const needsHorizontal = !settings$1.wordWrap && approxContentMetrics.totalWidth > availableWidth;
-		const availableHeight = canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom - (needsHorizontal ? 3 : 0);
-		const minScrollY = Math.min(0, -approxContentMetrics.totalHeight + availableHeight);
-		if (targetX.value < minScrollX) targetX.value = minScrollX;
-		if (targetX.value > 0) targetX.value = 0;
-		if (targetY.value < minScrollY) targetY.value = minScrollY;
-		if (targetY.value > 0) targetY.value = 0;
+		scrollWidth.value;
+		scrollHeight.value;
+		targetX.value;
+		targetY.value;
+		pos.x;
+		pos.y;
+		n(() => {
+			clampScrollOffsets();
+		});
 	});
 	return {
 		pos,
@@ -6784,7 +7544,7 @@ function findCallBlockForToken(tokenLines, lineIndex, tokenIndex) {
 		}
 		if (foundOpenParen) break;
 		currentLineIndex--;
-		if (currentLineIndex >= 0 && currentLineIndex < tokenLines.length) currentTokenIndex = tokenLines[currentLineIndex].length - 1;
+		if (currentLineIndex >= 0 && currentLineIndex < tokenLines.length) currentTokenIndex = (tokenLines[currentLineIndex]?.length ?? 0) - 1;
 		else currentTokenIndex = -1;
 	}
 	if (functionTokenIndex >= 0 && openParenTokenIndex >= 0) return findCallBlock(tokenLines, currentLineIndex, functionTokenIndex);
@@ -6947,7 +7707,7 @@ function createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scro
 		for (const widget of foundLine.widgets.beforeAfter) {
 			if (!widget.onMouseDown) continue;
 			const widgetColumn = widget.pos.x - 1;
-			if (widgetColumn < lineStartColumn || widgetColumn > lineEndColumn) continue;
+			if (!(widget.type === "before" ? widgetColumn >= lineStartColumn && widgetColumn < lineEndColumn : widgetColumn > lineStartColumn && widgetColumn <= lineEndColumn)) continue;
 			const widgetWorldX = widget.type === "before" ? getXFromColumnUnclamped(lines, foundLine, widgetColumn, tokenLines, canvas, settings$1, caches) : getXFromColumnUnclamped(lines, foundLine, widgetColumn + 1, tokenLines, canvas, settings$1, caches);
 			const widgetWorldW = widget.pos.width;
 			if (worldX >= widgetWorldX && worldX < widgetWorldX + widgetWorldW) return {
@@ -6966,7 +7726,8 @@ function createMouse(canvas, scroll, lines, settings$1, caches, doc, caret, scro
 		const inHeader = y$5 >= 0 && y$5 < headerHeight;
 		const gutterHit = hitTestGutter(canvas, settings$1, lines, scroll, gutter, x$4, y$5, headerHeight);
 		const scrollbarHit = hitTestScrollbar(canvas, scroll, lines, settings$1, gutter, header, x$4, y$5);
-		canvas.el.style.cursor = gutterHit.type === "collapse" ? "pointer" : y$5 < 0 || inHeader || gutterHit.type !== null || scrollbarHit.type !== null || widgetPressed.value || headerPressed.value || scrollbars.isDragging.value ? "default" : "text";
+		const widgetHover = y$5 >= headerHeight && gutterHit.type === null && scrollbarHit.type === null && (findBelowWidgetHit(x$4, y$5) !== null || findBeforeAfterWidgetHit(x$4, y$5) !== null);
+		canvas.el.style.cursor = gutterHit.type === "collapse" ? "pointer" : widgetHover ? "default" : y$5 < 0 || inHeader || gutterHit.type !== null || scrollbarHit.type !== null || widgetPressed.value || headerPressed.value || scrollbars.isDragging.value ? "default" : "text";
 	});
 	m(() => {
 		const { x: x$4, y: y$5 } = pos;
@@ -7836,11 +8597,12 @@ function drawFullWidgets(context, line) {
 	const emptyHeight = line.logicalAboveHeight ?? line.aboveHeight ?? 0;
 	if (emptyHeight === 0) return;
 	const headerHeight = context.header.value?.height ?? 0;
+	const verticalScrollbarSize = getVerticalScrollbarSize(context.settings);
 	const needsVertical = context.lines.totalHeight.value > context.canvas.size.height.value - headerHeight - context.settings.paddingTop - context.settings.paddingBottom;
 	const widgetY = line.y - emptyHeight;
 	const x$4 = -context.scroll.pos.x;
 	const contentLeft = context.gutter.width.value + context.settings.paddingLeft;
-	const w$5 = context.canvas.size.width.value - context.gutter.width.value - (needsVertical ? 12 : 0);
+	const w$5 = context.canvas.size.width.value - context.gutter.width.value - (needsVertical ? verticalScrollbarSize : 0);
 	const fw = context.canvas.size.width.value;
 	for (const widget of fullWidgets) {
 		c$7.save();
@@ -8095,7 +8857,11 @@ function resolveCaretCallBlockAnalysis(context, tokenLines, line, tokenIndex, to
 function drawCaret(context) {
 	const { canvas, doc, lines, caret, settings: settings$1, caches } = context;
 	const { c: c$7 } = canvas;
-	if (!(getActiveCanvas() === canvas.el)) {
+	const isCanvasFocused = getActiveCanvas() === canvas.el;
+	const isWindowFocused = typeof document === "undefined" ? true : document.hasFocus();
+	const isFocused = isCanvasFocused && isWindowFocused;
+	caret.setWindowFocus(isWindowFocused);
+	if (!isFocused) {
 		caret.caretToken = null;
 		caret.screenPosition = null;
 		return;
@@ -8465,14 +9231,13 @@ function isBraceOrQuoteChar(char) {
 	}
 }
 var lastKnownBraceDepthByToken = /* @__PURE__ */ new WeakMap();
-var lastKnownBraceDepthBySignature = /* @__PURE__ */ new Map();
-var MAX_BRACE_DEPTH_SIGNATURES = 2e4;
 var braceNullTraceLastLogAt = /* @__PURE__ */ new Map();
 var BRACE_NULL_TRACE_THROTTLE_MS = 150;
 var lineHasBraceCandidatesCache = /* @__PURE__ */ new WeakMap();
 var IS_CHROME = navigator.userAgent.includes("Chrome");
 var RUN_CONTIGUOUS_EPSILON = .001;
 var SCROLL_DIRECT_THRESHOLD_PX = 10;
+var EMPTY_LOGICAL_LINE_TOKENS = [];
 function isOffscreen2DContext(c$7) {
 	return typeof OffscreenCanvas !== "undefined" && c$7.canvas instanceof OffscreenCanvas;
 }
@@ -8495,23 +9260,6 @@ function clearLastKnownBraceDepth(token, charOffset) {
 	if (!perChar) return;
 	perChar.delete(charOffset);
 	if (perChar.size === 0) lastKnownBraceDepthByToken.delete(token);
-}
-function makeBraceDepthSignature(lineText, column, char) {
-	return `${lineText}\u0000${column}\u0000${char}`;
-}
-function getLastKnownBraceDepthBySignature(signature) {
-	const depth = lastKnownBraceDepthBySignature.get(signature);
-	return depth === void 0 ? null : depth;
-}
-function setLastKnownBraceDepthBySignature(signature, depth) {
-	if (!lastKnownBraceDepthBySignature.has(signature) && lastKnownBraceDepthBySignature.size >= MAX_BRACE_DEPTH_SIGNATURES) {
-		const firstKey = lastKnownBraceDepthBySignature.keys().next().value;
-		if (typeof firstKey === "string") lastKnownBraceDepthBySignature.delete(firstKey);
-	}
-	lastKnownBraceDepthBySignature.set(signature, depth);
-}
-function clearLastKnownBraceDepthBySignature(signature) {
-	lastKnownBraceDepthBySignature.delete(signature);
 }
 function isBraceNullTraceEnabled() {
 	return globalThis.__EDITOR_TRACE_NULL_BRACES === true;
@@ -8545,7 +9293,7 @@ function drawLine(context, line, directDraw = false) {
 	const { lineCanvasCacheByLine, getLineCanvasSegmentKey: getLineCanvasSegmentKey$1, getLineCanvasBucketSize, acquireLineCanvas, markLineCanvasUsed } = caches;
 	const logicalLine = line.logicalLine;
 	const visualTokens = line.tokens;
-	const logicalLineTokens = context.doc.tokenLines[logicalLine] || [];
+	const logicalLineTokens = context.doc.tokenLines[logicalLine] ?? EMPTY_LOGICAL_LINE_TOKENS;
 	const lineCacheKey = getLineCacheKey(context, line, logicalLineTokens);
 	const lineCanvasSegmentKey = getLineCanvasSegmentKey$1(logicalLine, line.tokenOffset);
 	const braceAnalysisVersion = context.blocks.getBraceAnalysisVersion();
@@ -8641,7 +9389,7 @@ function drawLine(context, line, directDraw = false) {
 			runEndX = endX;
 			runText = token.text;
 		};
-		if (!hasBraceCandidates) {
+		if (!(hasBraceCandidates && braceAnalysisVersion >= 0)) {
 			for (let i$6 = 0; i$6 < visualTokens.length; i$6++) {
 				const visualToken = visualTokens[i$6];
 				drawRenderedToken(visualToken.token, visualToken.x, visualToken.tokenEndX);
@@ -8649,35 +9397,12 @@ function drawLine(context, line, directDraw = false) {
 			flushRun();
 			return;
 		}
-		let logicalLineText = "";
-		for (let i$6 = 0; i$6 < logicalLineTokens.length; i$6++) logicalLineText += logicalLineTokens[i$6]?.text ?? "";
 		const blockColors = context.settings.ui.blockColors;
 		const tokenStartColumns = new Array(logicalLineTokens.length + 1);
 		tokenStartColumns[0] = 0;
 		for (let i$6 = 0; i$6 < logicalLineTokens.length; i$6++) tokenStartColumns[i$6 + 1] = tokenStartColumns[i$6] + (logicalLineTokens[i$6]?.text.length ?? 0);
 		const getColumnFromTokenLocation$1 = (tokenIndex, charIndex) => {
 			return (tokenStartColumns[Math.max(0, Math.min(tokenIndex, logicalLineTokens.length))] ?? 0) + Math.max(0, charIndex);
-		};
-		const getDepthFromMatchingBraceAtColumn = (column) => {
-			const matchAfter = context.blocks.findMatchingBrace(logicalLine, column + 1);
-			if (matchAfter) {
-				if (matchAfter.line === logicalLine) {
-					if (getColumnFromTokenLocation$1(matchAfter.tokenIndex, matchAfter.charIndex) === column) return matchAfter.depth;
-				}
-				if (matchAfter.matchingLine === logicalLine) {
-					if (getColumnFromTokenLocation$1(matchAfter.matchingTokenIndex, matchAfter.matchingCharIndex) === column) return matchAfter.depth;
-				}
-			}
-			const matchAt = context.blocks.findMatchingBrace(logicalLine, column);
-			if (matchAt) {
-				if (matchAt.line === logicalLine) {
-					if (getColumnFromTokenLocation$1(matchAt.tokenIndex, matchAt.charIndex) === column) return matchAt.depth;
-				}
-				if (matchAt.matchingLine === logicalLine) {
-					if (getColumnFromTokenLocation$1(matchAt.matchingTokenIndex, matchAt.matchingCharIndex) === column) return matchAt.depth;
-				}
-			}
-			return null;
 		};
 		let tokenColumnStart = visualTokens.length > 0 ? getColumnFromTokenLocation$1(visualTokens[0].logicalTokenIndex, visualTokens[0].logicalCharOffset) : 0;
 		for (let i$6 = 0; i$6 < visualTokens.length; i$6++) {
@@ -8686,24 +9411,16 @@ function drawLine(context, line, directDraw = false) {
 			const logicalToken = logicalLineTokens[logicalTokenIndex];
 			const currentColumn = tokenColumnStart;
 			let colorOverride;
-			if (logicalToken && logicalToken.type !== "comment" && token.type !== "comment" && token.text.length === 1) {
+			if (token.type !== "comment" && token.text.length === 1) {
 				const char = token.text;
 				if (isBraceOrQuoteChar(char)) {
 					const depthToken = logicalToken ?? token;
-					const signature = makeBraceDepthSignature(logicalLineText, currentColumn, char);
 					let depth = context.blocks.getBraceDepthForPosition(logicalLine, logicalTokenIndex, logicalCharOffset);
-					if (depth === null && !isBraceAnalysisCurrent) depth = getDepthFromMatchingBraceAtColumn(currentColumn);
 					if (depth === null && !isBraceAnalysisCurrent) depth = getLastKnownBraceDepth(depthToken, logicalCharOffset);
-					if (depth === null && !isBraceAnalysisCurrent) depth = getLastKnownBraceDepthBySignature(signature);
 					if (depth !== null) {
 						setLastKnownBraceDepth(depthToken, logicalCharOffset, depth);
-						setLastKnownBraceDepthBySignature(signature, depth);
 						colorOverride = blockColors[depth % blockColors.length];
-					} else if (isBraceAnalysisCurrent) {
-						clearLastKnownBraceDepth(depthToken, logicalCharOffset);
-						clearLastKnownBraceDepthBySignature(signature);
-						colorOverride = "red";
-					}
+					} else if (isBraceAnalysisCurrent) clearLastKnownBraceDepth(depthToken, logicalCharOffset);
 					if (depth === null && !isBraceAnalysisCurrent && isBraceNullTraceEnabled()) {
 						const probe = context.blocks.debugBraceProbe?.(logicalLine, currentColumn + 1) ?? null;
 						logBraceNullTrace(`${logicalLine}:${currentColumn}:${char}:${tokenVersion}:${braceAnalysisVersion}`, {
@@ -8755,7 +9472,7 @@ function drawLine(context, line, directDraw = false) {
 	}
 	if (!lineCanvas) return;
 	markLineCanvasUsed(lineCanvasSegmentKey);
-	if (!needsRedraw && lineCanvas && hasBraceCandidates && braceAnalysisVersion >= 0 && (lineCanvas.braceAnalysisVersion !== braceAnalysisVersion || lineCanvas.braceRenderTokenVersion !== tokenVersion && lineCanvas.braceRenderTokenRef !== logicalLineTokens)) if (shouldDeferBraceOnlyRedraw) {
+	if (!needsRedraw && lineCanvas && hasBraceCandidates && isBraceAnalysisCurrent && braceAnalysisVersion >= 0 && (lineCanvas.braceAnalysisVersion !== braceAnalysisVersion || lineCanvas.braceRenderTokenVersion !== tokenVersion && lineCanvas.braceRenderTokenRef !== logicalLineTokens)) if (shouldDeferBraceOnlyRedraw) {
 		lineCanvas.braceAnalysisVersion = braceAnalysisVersion;
 		lineCanvas.braceRenderTokenVersion = tokenVersion;
 		lineCanvas.braceRenderTokenRef = logicalLineTokens;
@@ -8780,7 +9497,21 @@ function drawLines(context) {
 	const useDirectDraw = resolveDirectMode(Math.abs(context.scroll.targetX.value - x$4), Math.abs(context.scroll.targetY.value - y$5));
 	const visibleTop = -(context.header.value?.height ?? 0) - paddingTop;
 	const visibleBottom = height - paddingTop;
-	const visualLines = context.lines.getVisibleVisualLines(visibleTop, visibleBottom, y$5);
+	const approximateVisibleRange = context.lines.getApproxVisibleLogicalRange(visibleTop, visibleBottom, y$5);
+	let optimisticViewportRetokenized = false;
+	if (approximateVisibleRange) optimisticViewportRetokenized = context.doc.optimisticallyTokenizeViewport(approximateVisibleRange.start, approximateVisibleRange.end);
+	let visualLines = context.lines.getVisibleVisualLines(visibleTop, visibleBottom, y$5);
+	if (!approximateVisibleRange && visualLines.length > 0) {
+		let startLine = visualLines[0].logicalLine;
+		let endLine = startLine;
+		for (let i$6 = 1; i$6 < visualLines.length; i$6++) {
+			const logicalLine = visualLines[i$6].logicalLine;
+			if (logicalLine < startLine) startLine = logicalLine;
+			if (logicalLine > endLine) endLine = logicalLine;
+		}
+		optimisticViewportRetokenized = context.doc.optimisticallyTokenizeViewport(startLine, endLine);
+	}
+	if (optimisticViewportRetokenized) visualLines = context.lines.getVisibleVisualLines(visibleTop, visibleBottom, y$5);
 	if (visualLines.length === 0) return;
 	if (!useDirectDraw) context.caches.setLineCanvasBudget(Math.max(64, visualLines.length * 3));
 	for (let i$6 = 0; i$6 < visualLines.length; i$6++) drawLine(context, visualLines[i$6], useDirectDraw);
@@ -9229,6 +9960,15 @@ function drawTooltip(context, error$1, overlayCanvas, preferErrorAbove) {
 	c$7.restore();
 }
 var perfStatsByContext = /* @__PURE__ */ new WeakMap();
+function readViewportMetrics() {
+	const viewport = window.visualViewport;
+	return {
+		top: viewport?.offsetTop ?? 0,
+		left: viewport?.offsetLeft ?? 0,
+		width: viewport?.width ?? window.innerWidth,
+		height: viewport?.height ?? window.innerHeight
+	};
+}
 function updatePerformanceMode(context, drawMs) {
 	let stats = perfStatsByContext.get(context);
 	if (!stats) {
@@ -9255,18 +9995,13 @@ function updatePerformanceMode(context, drawMs) {
 	if (lineCount >= 1e5 || stats.emaDrawMs > 16 || stats.emaInputToPaintMs > 45) mode = "stress";
 	if (context.settings.performanceMode !== mode) context.settings.performanceMode = mode;
 }
-function drawContext(context, overlayCanvas, activeTooltip) {
+function drawContext(context, overlayCanvas, activeTooltip, viewport) {
 	const drawStart = performance.now();
 	const { canvas } = context;
 	context.mouse.update();
 	context.scroll.update();
 	const rect = canvas.rect;
-	const viewport = window.visualViewport;
-	const viewportTop = viewport?.offsetTop ?? 0;
-	const viewportLeft = viewport?.offsetLeft ?? 0;
-	const viewportHeight = viewport?.height ?? window.innerHeight;
-	const viewportWidth = viewport?.width ?? window.innerWidth;
-	if (!(rect.bottom > viewportTop && rect.top < viewportTop + viewportHeight && rect.right > viewportLeft && rect.left < viewportLeft + viewportWidth)) return;
+	if (!(rect.bottom > viewport.top && rect.top < viewport.top + viewport.height && rect.right > viewport.left && rect.left < viewport.left + viewport.width)) return;
 	canvas.clear();
 	const headerHeight = context.header.value?.height ?? 0;
 	canvas.c.save();
@@ -9287,7 +10022,12 @@ function drawContext(context, overlayCanvas, activeTooltip) {
 	drawGutter(context);
 	canvas.c.restore();
 	canvas.c.restore();
-	drawScrollbars(context);
+	try {
+		drawScrollbars(context);
+	} catch (error$2) {
+		console.error("[editor:render] drawScrollbars failed", error$2);
+		context.settings.showMinimap = false;
+	}
 	drawHeader(context);
 	const currentlyActive = activeTooltip.get(context) || null;
 	const hoverToken = context.mouse.hovered.hoverToken;
@@ -9339,6 +10079,20 @@ var RenderManager = class {
 	contexts = /* @__PURE__ */ new Set();
 	overlayCanvas = createOverlayCanvas();
 	activeTooltip = /* @__PURE__ */ new Map();
+	viewport = readViewportMetrics();
+	viewportDirty = true;
+	constructor() {
+		const markViewportDirty = () => {
+			this.viewportDirty = true;
+		};
+		window.addEventListener("resize", markViewportDirty, { passive: true });
+		window.addEventListener("scroll", markViewportDirty, {
+			passive: true,
+			capture: true
+		});
+		window.visualViewport?.addEventListener("resize", markViewportDirty, { passive: true });
+		window.visualViewport?.addEventListener("scroll", markViewportDirty, { passive: true });
+	}
 	register(context) {
 		this.contexts.add(context);
 	}
@@ -9347,8 +10101,16 @@ var RenderManager = class {
 		this.activeTooltip.delete(context);
 	}
 	draw() {
+		if (this.viewportDirty) {
+			this.viewport = readViewportMetrics();
+			this.viewportDirty = false;
+		}
 		this.overlayCanvas.clear();
-		for (const context of this.contexts) drawContext(context, this.overlayCanvas, this.activeTooltip);
+		for (const context of this.contexts) try {
+			drawContext(context, this.overlayCanvas, this.activeTooltip, this.viewport);
+		} catch (error$1) {
+			console.error("[editor:render] drawContext failed", error$1);
+		}
 	}
 };
 const renderManager = new RenderManager();
@@ -9440,6 +10202,7 @@ function createCaret(settings$1) {
 	const column = c(0);
 	const columnIntent = c(0);
 	const isTyping = c(false);
+	const isWindowFocused = c(true);
 	const lastInputTime = c(0);
 	let startTime = Date.now();
 	let suppressAutoScroll = false;
@@ -9449,6 +10212,7 @@ function createCaret(settings$1) {
 		startTime = Date.now();
 	};
 	const updateBlink = () => {
+		if (!isWindowFocused.value) return 0;
 		const elapsed = Date.now() - startTime;
 		const delay = 500 * settings$1.caretPhaseCoeff;
 		if (elapsed < delay) return 1;
@@ -9462,15 +10226,22 @@ function createCaret(settings$1) {
 		column.value = Math.max(0, Math.min(newColumn, lineLength));
 		resetBlink();
 	};
+	const setWindowFocus = (focused) => {
+		if (isWindowFocused.value === focused) return;
+		isWindowFocused.value = focused;
+		if (focused) resetBlink();
+	};
 	return {
 		line,
 		column,
 		columnIntent,
 		isTyping,
+		isWindowFocused,
 		lastInputTime,
 		resetBlink,
 		updateBlink,
 		setPosition,
+		setWindowFocus,
 		get suppressAutoScroll() {
 			return suppressAutoScroll;
 		},
@@ -9527,8 +10298,196 @@ function createGutter(doc, canvas, metrics, settings$1, caches, blocks, _lines) 
 		getLineNumberMetric
 	};
 }
+var PASTE_BURST_WINDOW_MS = 80;
+var PASTE_COALESCE_DELAY_MS = 24;
+var PASTE_FORCE_FLUSH_CHARS = 256 * 1024;
+var PASTE_CARET_VISIBLE_THROTTLE_MS = 96;
+var PASTE_STREAM_TRIGGER_LINES = 512;
+var PASTE_STREAM_CHUNK_CHARS = 64 * 1024;
+var PASTE_STREAM_CHUNK_LINES = 256;
+var PASTE_STREAM_STEP_DELAY_MS = 4;
+var PASTE_POST_LAYOUT_CARET_PASSES = 2;
+function countLineBreaks(text, maxCount = Number.POSITIVE_INFINITY) {
+	let lineBreaks = 0;
+	for (let i$6 = 0; i$6 < text.length; i$6++) {
+		if (text.charCodeAt(i$6) !== 10) continue;
+		lineBreaks++;
+		if (lineBreaks >= maxCount) return lineBreaks;
+	}
+	return lineBreaks;
+}
+function capChunkEndByLineCount(text, start, maxEndExclusive, maxLineBreaks) {
+	if (maxLineBreaks <= 0) return maxEndExclusive;
+	let lineBreaks = 0;
+	for (let i$6 = start; i$6 < maxEndExclusive; i$6++) {
+		if (text.charCodeAt(i$6) !== 10) continue;
+		lineBreaks++;
+		if (lineBreaks >= maxLineBreaks) return i$6 + 1;
+	}
+	return maxEndExclusive;
+}
 function createClipboard(doc, selection, insertText, deleteSelection, ensureCaretVisible, onKeyDown, onKeyUp, canvas) {
 	const textarea$1 = getTextareaElement();
+	let pendingPasteText = "";
+	let pendingPasteTimer = null;
+	let lastPasteQueuedAt = 0;
+	let lastCaretVisibleAt = 0;
+	let chunkedPaste = null;
+	let chunkedPasteTimer = null;
+	let deferredCaretVisibleRaf = null;
+	let deferredCaretVisibleTimer = null;
+	let deferredCaretVisiblePasses = 0;
+	function restoreTextareaFocus() {
+		const activeCanvas$1 = document.activeElement?.tagName === "CANVAS" ? document.activeElement : null;
+		if (activeCanvas$1) setTimeout(() => {
+			if (document.activeElement === activeCanvas$1) textarea$1.focus();
+		}, 0);
+	}
+	function flushPendingPaste() {
+		if (pendingPasteTimer) {
+			clearTimeout(pendingPasteTimer);
+			pendingPasteTimer = null;
+		}
+		if (!pendingPasteText) return;
+		const text = pendingPasteText;
+		pendingPasteText = "";
+		const lineBreakCount = countLineBreaks(text, PASTE_STREAM_TRIGGER_LINES);
+		if (chunkedPaste !== null || text.length >= PASTE_STREAM_CHUNK_CHARS || lineBreakCount >= PASTE_STREAM_TRIGGER_LINES) {
+			if (chunkedPaste) chunkedPaste.text += text;
+			else chunkedPaste = {
+				text,
+				index: 0
+			};
+			scheduleChunkedPasteStep(PASTE_STREAM_STEP_DELAY_MS);
+			return;
+		}
+		insertText(text);
+		maybeEnsureCaretVisible();
+		scheduleDeferredCaretVisible();
+		textarea$1.value = "";
+		restoreTextareaFocus();
+	}
+	function schedulePendingPasteFlush(delay) {
+		if (pendingPasteTimer) return;
+		pendingPasteTimer = setTimeout(() => {
+			pendingPasteTimer = null;
+			flushPendingPaste();
+		}, delay);
+	}
+	function queuePastedText(text) {
+		if (!text) return;
+		const now = Date.now();
+		const isBurst = doc.keyHoldActive || pendingPasteText.length > 0 || now - lastPasteQueuedAt <= PASTE_BURST_WINDOW_MS;
+		lastPasteQueuedAt = now;
+		if (!isBurst) {
+			insertText(text);
+			maybeEnsureCaretVisible(true);
+			scheduleDeferredCaretVisible();
+			textarea$1.value = "";
+			restoreTextareaFocus();
+			return;
+		}
+		pendingPasteText += text;
+		if (pendingPasteText.length >= PASTE_FORCE_FLUSH_CHARS) {
+			flushPendingPaste();
+			return;
+		}
+		schedulePendingPasteFlush(PASTE_COALESCE_DELAY_MS);
+	}
+	function maybeEnsureCaretVisible(force = false) {
+		const now = Date.now();
+		if (force || !doc.keyHoldActive || now - lastCaretVisibleAt >= PASTE_CARET_VISIBLE_THROTTLE_MS) {
+			ensureCaretVisible?.();
+			lastCaretVisibleAt = now;
+		}
+	}
+	function clearDeferredCaretVisible() {
+		if (deferredCaretVisibleRaf !== null && typeof cancelAnimationFrame === "function") cancelAnimationFrame(deferredCaretVisibleRaf);
+		if (deferredCaretVisibleTimer) {
+			clearTimeout(deferredCaretVisibleTimer);
+			deferredCaretVisibleTimer = null;
+		}
+		deferredCaretVisibleRaf = null;
+		deferredCaretVisiblePasses = 0;
+	}
+	function scheduleDeferredCaretVisible() {
+		if (!ensureCaretVisible) return;
+		deferredCaretVisiblePasses = Math.max(deferredCaretVisiblePasses, PASTE_POST_LAYOUT_CARET_PASSES);
+		if (deferredCaretVisibleRaf !== null || deferredCaretVisibleTimer !== null) return;
+		const runPass = () => {
+			deferredCaretVisibleRaf = null;
+			deferredCaretVisibleTimer = null;
+			if (deferredCaretVisiblePasses <= 0) return;
+			deferredCaretVisiblePasses--;
+			maybeEnsureCaretVisible(true);
+			if (deferredCaretVisiblePasses <= 0) return;
+			if (typeof requestAnimationFrame === "function") deferredCaretVisibleRaf = requestAnimationFrame(runPass);
+			else deferredCaretVisibleTimer = setTimeout(runPass, 16);
+		};
+		if (typeof requestAnimationFrame === "function") deferredCaretVisibleRaf = requestAnimationFrame(runPass);
+		else deferredCaretVisibleTimer = setTimeout(runPass, 16);
+	}
+	function scheduleChunkedPasteStep(delay) {
+		if (chunkedPasteTimer) return;
+		chunkedPasteTimer = setTimeout(() => {
+			chunkedPasteTimer = null;
+			processChunkedPasteStep();
+		}, delay);
+	}
+	function processChunkedPasteStep() {
+		const state = chunkedPaste;
+		if (!state) return;
+		const text = state.text;
+		if (state.index >= text.length) {
+			chunkedPaste = null;
+			maybeEnsureCaretVisible(true);
+			scheduleDeferredCaretVisible();
+			textarea$1.value = "";
+			restoreTextareaFocus();
+			if (pendingPasteText.length > 0) flushPendingPaste();
+			return;
+		}
+		const start = state.index;
+		let end = Math.min(text.length, start + PASTE_STREAM_CHUNK_CHARS);
+		if (end < text.length) {
+			end = capChunkEndByLineCount(text, start, end, PASTE_STREAM_CHUNK_LINES);
+			const newline = text.lastIndexOf("\n", end - 1);
+			if (newline >= start + Math.max(64, PASTE_STREAM_CHUNK_CHARS >> 2)) end = newline + 1;
+		}
+		if (end <= start) end = Math.min(text.length, start + PASTE_STREAM_CHUNK_CHARS);
+		const chunk = text.slice(start, end);
+		if (chunk.length > 0) {
+			insertText(chunk);
+			maybeEnsureCaretVisible();
+		}
+		state.index = end;
+		if (state.index < state.text.length) {
+			scheduleChunkedPasteStep(PASTE_STREAM_STEP_DELAY_MS);
+			return;
+		}
+		chunkedPaste = null;
+		maybeEnsureCaretVisible(true);
+		scheduleDeferredCaretVisible();
+		textarea$1.value = "";
+		restoreTextareaFocus();
+		if (pendingPasteText.length > 0) flushPendingPaste();
+	}
+	function flushChunkedPasteImmediately() {
+		if (chunkedPasteTimer) {
+			clearTimeout(chunkedPasteTimer);
+			chunkedPasteTimer = null;
+		}
+		if (!chunkedPaste) return;
+		const remaining = chunkedPaste.text.slice(chunkedPaste.index);
+		chunkedPaste = null;
+		if (remaining.length > 0) {
+			insertText(remaining);
+			maybeEnsureCaretVisible(true);
+			scheduleDeferredCaretVisible();
+		}
+		textarea$1.value = "";
+		restoreTextareaFocus();
+	}
 	function getSelectedText() {
 		const ordered = selection.getOrdered.value;
 		if (!ordered) return "";
@@ -9556,10 +10515,7 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 			console.error("Failed to copy:", err);
 		} finally {
 			textarea$1.value = "";
-			const activeCanvas$1 = document.activeElement?.tagName === "CANVAS" ? document.activeElement : null;
-			if (activeCanvas$1) setTimeout(() => {
-				if (document.activeElement === activeCanvas$1) textarea$1.focus();
-			}, 0);
+			restoreTextareaFocus();
 		}
 	}
 	function cut() {
@@ -9578,10 +10534,7 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 			console.error("Failed to cut:", err);
 		} finally {
 			textarea$1.value = "";
-			const activeCanvas$1 = document.activeElement?.tagName === "CANVAS" ? document.activeElement : null;
-			if (activeCanvas$1) setTimeout(() => {
-				if (document.activeElement === activeCanvas$1) textarea$1.focus();
-			}, 0);
+			restoreTextareaFocus();
 		}
 	}
 	function focus() {
@@ -9590,24 +10543,13 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 	function handlePaste(event) {
 		event.preventDefault();
 		event.stopPropagation();
-		const text = event.clipboardData?.getData("text/plain") || "";
-		if (text) {
-			insertText(text);
-			ensureCaretVisible?.();
-		}
+		queuePastedText(event.clipboardData?.getData("text/plain") || "");
 		textarea$1.value = "";
-		const activeCanvas$1 = document.activeElement?.tagName === "CANVAS" ? document.activeElement : null;
-		if (activeCanvas$1) setTimeout(() => {
-			if (document.activeElement === activeCanvas$1) textarea$1.focus();
-		}, 0);
 	}
 	function handleInput(event) {
 		event.preventDefault();
 		const text = textarea$1.value;
-		if (text) {
-			insertText(text);
-			ensureCaretVisible?.();
-		}
+		queuePastedText(text);
 		textarea$1.value = "";
 	}
 	function handleKeyDown(event) {
@@ -9615,6 +10557,8 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 	}
 	function handleKeyUp(event) {
 		onKeyUp?.(event);
+		if (!doc.keyHoldActive && pendingPasteText.length > 0) flushPendingPaste();
+		if (!doc.keyHoldActive) maybeEnsureCaretVisible(true);
 	}
 	const handlers = {
 		handlePaste,
@@ -9627,9 +10571,13 @@ function createClipboard(doc, selection, insertText, deleteSelection, ensureCare
 		setActiveClipboard(handlers, canvas?.el);
 	};
 	const deactivate = () => {
+		flushPendingPaste();
+		flushChunkedPasteImmediately();
+		clearDeferredCaretVisible();
 		setActiveClipboard(null, void 0);
 	};
 	const dispose = () => {
+		flushPendingPaste();
 		deactivate();
 	};
 	return {
@@ -9657,43 +10605,60 @@ function adjustError(error$1, adjust) {
 	} : error$1;
 }
 function adjustWidgetsOnLineSplit(doc, line, column, delta) {
+	if (delta === 0) return;
 	const widgetLine = line + 1;
 	const widgetColumn = column + 1;
-	for (const widget of doc.widgets) if (widget.pos.y === widgetLine) {
-		let shouldMove = false;
-		if (widget.type === "above" || widget.type === "below" || widget.type === "overlay") {
-			const [startColumn, endColumn] = widget.pos.x;
-			if (startColumn >= widgetColumn) {
-				shouldMove = true;
-				widget.pos.x[0] = startColumn - column;
-				widget.pos.x[1] = endColumn - column;
-			} else if (endColumn >= widgetColumn) widget.pos.x[1] = widgetColumn;
-		} else if (widget.type === "before" || widget.type === "after" || widget.type === "inlay") {
-			const widgetCol = widget.pos.x;
-			shouldMove = widgetCol >= widgetColumn;
-			if (shouldMove) widget.pos.x = widgetCol - column;
-		} else if (widget.type === "full") shouldMove = true;
-		if (shouldMove) widget.pos.y += delta;
-	} else if (widget.pos.y > widgetLine) widget.pos.y += delta;
-	doc.errors = doc.errors.map((error$1) => adjustError(error$1, (x$4, y$5) => {
-		if (y$5 === line + 1) {
-			const [startColumn, endColumn] = [x$4[0] - 1, x$4[1] - 1];
-			if (startColumn >= column) return {
-				x: [startColumn - column + 1, endColumn - column + 1],
-				y: y$5 + delta
-			};
-			if (endColumn >= column) return {
-				x: [x$4[0], column + 1],
-				y: y$5
-			};
-			return null;
-		}
-		if (y$5 > line + 1) return {
-			x: x$4,
-			y: y$5 + delta
+	const widgets = doc.widgets;
+	const errors = doc.errors;
+	if (widgets.length === 0 && errors.length === 0) return;
+	for (let i$6 = 0; i$6 < widgets.length; i$6++) {
+		const widget = widgets[i$6];
+		if (widget.pos.y === widgetLine) {
+			let shouldMove = false;
+			if (widget.type === "above" || widget.type === "below" || widget.type === "overlay") {
+				const [startColumn, endColumn] = widget.pos.x;
+				if (startColumn >= widgetColumn) {
+					shouldMove = true;
+					widget.pos.x[0] = startColumn - column;
+					widget.pos.x[1] = endColumn - column;
+				} else if (endColumn >= widgetColumn) widget.pos.x[1] = widgetColumn;
+			} else if (widget.type === "before" || widget.type === "after" || widget.type === "inlay") {
+				const widgetCol = widget.pos.x;
+				shouldMove = widgetCol >= widgetColumn;
+				if (shouldMove) widget.pos.x = widgetCol - column;
+			} else if (widget.type === "full") shouldMove = true;
+			if (shouldMove) widget.pos.y += delta;
+		} else if (widget.pos.y > widgetLine) widget.pos.y += delta;
+	}
+	if (errors.length === 0) return;
+	let nextErrors = null;
+	for (let i$6 = 0; i$6 < errors.length; i$6++) {
+		const error$1 = errors[i$6];
+		if (isDerivedError(error$1)) continue;
+		let nextY = error$1.y;
+		let nextXStart = error$1.x[0];
+		let nextXEnd = error$1.x[1];
+		if (nextY === widgetLine) {
+			const startColumn = nextXStart - 1;
+			const endColumn = nextXEnd - 1;
+			if (startColumn >= column) {
+				nextY += delta;
+				nextXStart = startColumn - column + 1;
+				nextXEnd = endColumn - column + 1;
+			} else if (endColumn >= column) nextXEnd = column + 1;
+			else continue;
+		} else if (nextY > widgetLine) nextY += delta;
+		else continue;
+		if (nextY === error$1.y && nextXStart === error$1.x[0] && nextXEnd === error$1.x[1]) continue;
+		if (!nextErrors) nextErrors = errors.slice();
+		nextErrors[i$6] = {
+			...error$1,
+			x: [nextXStart, nextXEnd],
+			y: nextY
 		};
-		return null;
-	}));
+	}
+	if (!nextErrors) return;
+	doc.errors = nextErrors;
 }
 function adjustWidgetsOnLineMerge(doc, line, prevLineLength) {
 	const widgetLine = line + 1;
@@ -10538,8 +11503,9 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 			return;
 		}
 		const headerHeight = header.value?.height ?? 0;
+		const verticalScrollbarSize = getVerticalScrollbarSize(settings$1);
 		const needsVertical = lines.totalHeight.value > canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
-		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - metrics.gutterWidth.value - (needsVertical ? 12 : 0);
+		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - metrics.gutterWidth.value - (needsVertical ? verticalScrollbarSize : 0);
 		const needsHorizontal = !settings$1.wordWrap && lines.totalWidth.value > availableWidth;
 		const availableHeight = canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom - (needsHorizontal ? 3 : 0);
 		const viewportHeight = Math.max(1, Math.floor(availableHeight / settings$1.lineHeight));
@@ -10596,8 +11562,9 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 			return;
 		}
 		const headerHeight = header.value?.height ?? 0;
+		const verticalScrollbarSize = getVerticalScrollbarSize(settings$1);
 		const needsVertical = lines.totalHeight.value > canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
-		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - metrics.gutterWidth.value - (needsVertical ? 12 : 0);
+		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - metrics.gutterWidth.value - (needsVertical ? verticalScrollbarSize : 0);
 		const needsHorizontal = lines.totalWidth.value > availableWidth;
 		const availableHeight = canvas.size.height.value - headerHeight - settings$1.paddingTop - settings$1.paddingBottom - (needsHorizontal ? 3 : 0);
 		const viewportHeight = Math.max(1, Math.floor(availableHeight / settings$1.lineHeight));
@@ -11016,8 +11983,10 @@ function createKeyboard(doc, canvas, scroll, lines, metrics, settings$1, caret, 
 		const scrollY = scroll.pos.y;
 		const caretY = targetY + scrollY;
 		const approxContentMetrics = typeof lines.getApproxContentMetrics === "function" ? lines.getApproxContentMetrics() : null;
-		const needsVertical = (approxContentMetrics?.totalHeight ?? Math.max(targetY, codeLines.length * settings$1.lineHeight)) > canvas.size.height.value;
-		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - metrics.gutterWidth.value - (needsVertical ? 12 : 0);
+		const estimatedTotalHeight = approxContentMetrics?.totalHeight ?? Math.max(targetY, codeLines.length * settings$1.lineHeight);
+		const verticalScrollbarSize = getVerticalScrollbarSize(settings$1);
+		const needsVertical = estimatedTotalHeight > canvas.size.height.value;
+		const availableWidth = canvas.size.width.value - settings$1.paddingLeft - metrics.gutterWidth.value - (needsVertical ? verticalScrollbarSize : 0);
 		const estimatedTotalWidth = approxContentMetrics?.totalWidth ?? (settings$1.wordWrap ? availableWidth : Math.max(availableWidth, caretX + 2));
 		const needsHorizontal = !settings$1.wordWrap && estimatedTotalWidth > availableWidth;
 		const headerHeight = header.value?.height ?? 0;
@@ -12548,7 +13517,8 @@ function createLines(doc, canvas, metrics, settings$1, caches, blocks, header) {
 		const widgetsRef = doc.widgets;
 		const errorsRef = doc.errors;
 		const baseAvailableWidth = canvas.size.width.value - settings$1.paddingLeft - settings$1.paddingRight - metrics.gutterWidth.value;
-		const maxWidth = settings$1.wordWrap ? baseAvailableWidth - 12 : Infinity;
+		const verticalScrollbarSize = getVerticalScrollbarSize(settings$1);
+		const maxWidth = settings$1.wordWrap ? baseAvailableWidth - verticalScrollbarSize : Infinity;
 		if (widgetsRef !== cachedWidgetsRef) {
 			cachedWidgetsRef = widgetsRef;
 			cachedWidgetsIndex = buildWidgetsByLogicalLineIndex(widgetsRef);
@@ -12689,7 +13659,7 @@ function createLines(doc, canvas, metrics, settings$1, caches, blocks, header) {
 				if (hasCollapsed && collapsedBlockEnds && collapsedLines.has(lineIndex)) fillSkipUntil = collapsedBlockEnds.get(lineIndex) ?? fillSkipUntil;
 			}
 			const nextTotalHeight$1 = nextHeightIndex.total();
-			const nextTotalWidth$1 = settings$1.wordWrap ? Math.min(maxLineWidth$1, baseAvailableWidth - 12) : maxLineWidth$1;
+			const nextTotalWidth$1 = settings$1.wordWrap ? Math.min(maxLineWidth$1, baseAvailableWidth - verticalScrollbarSize) : maxLineWidth$1;
 			let outputVisualLines = [];
 			let outputVisualLinesByLogicalLine = [];
 			let outputLineLayouts = newLayouts;
@@ -12805,7 +13775,7 @@ function createLines(doc, canvas, metrics, settings$1, caches, blocks, header) {
 				lineHeights[logicalLine] = 0;
 			}
 		}
-		const nextTotalWidth = settings$1.wordWrap ? Math.min(maxLineWidth, baseAvailableWidth - 12) : maxLineWidth;
+		const nextTotalWidth = settings$1.wordWrap ? Math.min(maxLineWidth, baseAvailableWidth - verticalScrollbarSize) : maxLineWidth;
 		let processedLines = [];
 		let processedVisualLinesByLogicalLine = hasAboveOrFullWidgets ? visualLinesByLogicalLine$1 : [];
 		let processedLineLayouts = lineLayouts;
@@ -13083,6 +14053,7 @@ function createMetrics() {
 		})
 	};
 }
+var SCROLLBAR_MIN_THUMB = 20;
 function createScrollbars(canvas, scroll, lines, settings$1, gutter, header) {
 	const isDragging = c(false);
 	let dragType = null;
@@ -13090,32 +14061,67 @@ function createScrollbars(canvas, scroll, lines, settings$1, gutter, header) {
 	let dragStartY = 0;
 	let dragStartScrollX = 0;
 	let dragStartScrollY = 0;
-	const handleMouseMove = (x$4, y$5) => {
-		if (!isDragging.value || !dragType) return;
+	const getLayout = () => {
 		const width = canvas.size.width.value;
 		const height = canvas.size.height.value;
 		const totalWidth = lines.totalWidth.value;
 		const totalHeight = lines.totalHeight.value;
+		const scrollWidth = scroll.scrollWidth.value;
+		const scrollHeight = scroll.scrollHeight.value;
 		const headerHeight = header.value?.height ?? 0;
 		const availableHeightForVertical = height - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
+		const availableWidth = width - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value;
+		const verticalScrollbarSize = getVerticalScrollbarSize(settings$1);
+		const needsVertical = settings$1.showMinimap || totalHeight > availableHeightForVertical;
+		const availableWidthForHorizontal = availableWidth - (needsVertical ? verticalScrollbarSize : 0);
+		return {
+			width,
+			height,
+			totalWidth,
+			totalHeight,
+			scrollWidth,
+			scrollHeight,
+			headerHeight,
+			availableWidth,
+			availableWidthForHorizontal,
+			availableHeight: availableHeightForVertical - (!settings$1.wordWrap && totalWidth > availableWidthForHorizontal ? 3 : 0),
+			verticalScrollbarSize,
+			needsVertical
+		};
+	};
+	const getVerticalThumbMetrics$1 = (layout) => {
+		const trackHeight = layout.height - layout.headerHeight;
+		const thumbHeightUnclamped = Math.max(SCROLLBAR_MIN_THUMB, layout.availableHeight / layout.totalHeight * trackHeight);
+		return {
+			trackHeight,
+			thumbHeight: Math.min(trackHeight, thumbHeightUnclamped)
+		};
+	};
+	const getHorizontalThumbMetrics = (layout) => {
+		const trackWidth = layout.width - (layout.needsVertical ? layout.verticalScrollbarSize : 0);
+		const thumbWidthUnclamped = Math.max(SCROLLBAR_MIN_THUMB, layout.availableWidthForHorizontal / layout.totalWidth * trackWidth);
+		return {
+			trackWidth,
+			thumbWidth: Math.min(trackWidth, thumbWidthUnclamped)
+		};
+	};
+	const handleMouseMove = (x$4, y$5) => {
+		if (!isDragging.value || !dragType) return;
+		const layout = getLayout();
 		if (dragType === "vertical") {
-			const availableHeight = availableHeightForVertical;
-			const trackHeight = height - headerHeight;
-			const thumbHeight = Math.max(20, availableHeight / totalHeight * trackHeight);
+			const { trackHeight, thumbHeight } = getVerticalThumbMetrics$1(layout);
 			const dragDelta = y$5 - dragStartY;
 			const trackLength = trackHeight - thumbHeight;
-			const scrollRange = -scroll.scrollHeight.value;
+			const scrollRange = -layout.scrollHeight;
 			if (trackLength > 0 && scrollRange > 0) {
 				const scrollRatio = dragDelta / trackLength;
 				scroll.targetY.value = dragStartScrollY - scrollRatio * scrollRange;
 			}
 		} else if (dragType === "horizontal") {
-			const availableWidth = width - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value;
-			const trackWidth = width - (totalHeight > availableHeightForVertical ? 12 : 0);
-			const thumbWidth = Math.max(20, availableWidth / totalWidth * trackWidth);
+			const { trackWidth, thumbWidth } = getHorizontalThumbMetrics(layout);
 			const dragDelta = x$4 - dragStartX;
 			const trackLength = trackWidth - thumbWidth;
-			const scrollRange = -scroll.scrollWidth.value;
+			const scrollRange = -layout.scrollWidth;
 			if (trackLength > 0 && scrollRange > 0) {
 				const scrollRatio = dragDelta / trackLength;
 				scroll.targetX.value = dragStartScrollX - scrollRatio * scrollRange;
@@ -13123,15 +14129,9 @@ function createScrollbars(canvas, scroll, lines, settings$1, gutter, header) {
 		}
 	};
 	const handleMouseDown = (x$4, y$5) => {
-		const headerHeight = header.value?.height ?? 0;
 		const hit = hitTestScrollbar(canvas, scroll, lines, settings$1, gutter, header, x$4, y$5);
 		if (!hit.type) return false;
-		const width = canvas.size.width.value;
-		const height = canvas.size.height.value;
-		const totalWidth = lines.totalWidth.value;
-		const totalHeight = lines.totalHeight.value;
-		const scrollWidth = scroll.scrollWidth.value;
-		const scrollHeight = scroll.scrollHeight.value;
+		const layout = getLayout();
 		if (hit.type && hit.thumb) {
 			isDragging.value = true;
 			dragType = hit.type;
@@ -13142,13 +14142,11 @@ function createScrollbars(canvas, scroll, lines, settings$1, gutter, header) {
 			return true;
 		} else if (hit.type && !hit.thumb) {
 			if (hit.type === "vertical") {
-				const availableHeight = height - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
-				const trackHeight = height - headerHeight;
-				const thumbHeight = Math.max(20, availableHeight / totalHeight * trackHeight);
+				const { trackHeight, thumbHeight } = getVerticalThumbMetrics$1(layout);
 				const trackLength = trackHeight - thumbHeight;
-				const scrollRange = -scrollHeight;
+				const scrollRange = -layout.scrollHeight;
 				if (trackLength > 0 && scrollRange > 0) {
-					const clickRatio = (y$5 - headerHeight - thumbHeight / 2) / trackLength;
+					const clickRatio = (y$5 - layout.headerHeight - thumbHeight / 2) / trackLength;
 					const newScrollY = -Math.max(0, Math.min(1, clickRatio)) * scrollRange;
 					scroll.targetY.value = newScrollY;
 					isDragging.value = true;
@@ -13160,12 +14158,9 @@ function createScrollbars(canvas, scroll, lines, settings$1, gutter, header) {
 					return true;
 				}
 			} else if (hit.type === "horizontal") {
-				const availableHeight = height - headerHeight - settings$1.paddingTop - settings$1.paddingBottom;
-				const availableWidth = width - settings$1.paddingLeft - settings$1.paddingRight - gutter.width.value;
-				const trackWidth = width - (totalHeight > availableHeight ? 12 : 0);
-				const thumbWidth = Math.max(20, availableWidth / totalWidth * trackWidth);
+				const { trackWidth, thumbWidth } = getHorizontalThumbMetrics(layout);
 				const trackLength = trackWidth - thumbWidth;
-				const scrollRange = -scrollWidth;
+				const scrollRange = -layout.scrollWidth;
 				if (trackLength > 0 && scrollRange > 0) {
 					const clickRatio = (x$4 - thumbWidth / 2) / trackLength;
 					const newScrollX = -Math.max(0, Math.min(1, clickRatio)) * scrollRange;
@@ -13456,6 +14451,7 @@ var defaultSettings = {
 	blockComment: ["/*", "*/"],
 	minGutterDigits: 2,
 	showGutter: true,
+	showMinimap: false,
 	performanceMode: "normal"
 };
 function createSettings(editorSettings$1 = {}) {
@@ -13495,6 +14491,7 @@ function createContext(editorSettings$1, doc, activeEditorOpts) {
 	const lines = createLines(doc, canvas, metrics, settings$1, caches, blocks, header);
 	const gutter = createGutter(doc, canvas, metrics, settings$1, caches, blocks, lines);
 	const scroll = createScroll(canvas, lines, settings$1, gutter, header, metrics);
+	blocks.setScrollSource(scroll);
 	const scrollbars = createScrollbars(canvas, scroll, lines, settings$1, gutter, header);
 	const caret = createCaret(settings$1);
 	const selection = createSelection();
@@ -13515,6 +14512,7 @@ function createContext(editorSettings$1, doc, activeEditorOpts) {
 		});
 	};
 	const dispose = () => {
+		blocks.dispose();
 		canvas.dispose();
 		caches.dispose();
 		keyboard.dispose();
@@ -13699,8 +14697,10 @@ const defaultIncrementalTokenizer = { tokenizeLine(line) {
 	};
 } };
 function countNewlines(text) {
-	let count = 0;
-	for (let i$6 = 0; i$6 < text.length; i$6++) if (text[i$6] === "\n") count++;
+	const firstBreak = text.indexOf("\n");
+	if (firstBreak < 0) return 0;
+	let count = 1;
+	for (let i$6 = firstBreak + 1; i$6 < text.length; i$6++) if (text[i$6] === "\n") count++;
 	return count;
 }
 function lineFromIndexInLines(lines, index) {
@@ -13713,6 +14713,39 @@ function lineFromIndexInLines(lines, index) {
 	}
 	return Math.max(0, lines.length - 1);
 }
+function resolveSpliceStartLine(lines, maxLine, start, now, startLine, cachedSpliceStart) {
+	if (startLine !== void 0) {
+		const line$1 = Math.max(0, Math.min(startLine, maxLine));
+		return {
+			line: line$1,
+			cache: {
+				index: start,
+				line: line$1,
+				at: now
+			}
+		};
+	}
+	if (cachedSpliceStart && cachedSpliceStart.index === start && now - cachedSpliceStart.at <= CACHED_SPLICE_START_WINDOW_MS) {
+		const line$1 = Math.max(0, Math.min(cachedSpliceStart.line, maxLine));
+		return {
+			line: line$1,
+			cache: {
+				index: start,
+				line: line$1,
+				at: now
+			}
+		};
+	}
+	const line = lineFromIndexInLines(lines, start);
+	return {
+		line,
+		cache: {
+			index: start,
+			line,
+			at: now
+		}
+	};
+}
 function getSyncTokenizationBudget(lineCount) {
 	if (lineCount >= 1e5) return 32;
 	if (lineCount >= 5e4) return 64;
@@ -13720,15 +14753,64 @@ function getSyncTokenizationBudget(lineCount) {
 	return Number.POSITIVE_INFINITY;
 }
 var LEGACY_DEFERRED_TOKENIZE_DELAY_MS = 75;
-function alignTokenSnapshotsForSpliceInPlace(tokenLines, tokenStates, nextLineCount, endLineBefore, endLineAfter) {
+var BURST_DEFERRED_TOKENIZE_DELAY_MS = 120;
+var UNRESOLVED_SCAN_BUDGET_LINES = 4096;
+var ALIGN_DIRECT_FALLBACK_THRESHOLD_LINES = 256;
+var ALIGN_SYNC_SCAN_LIMIT_LINES = 320;
+var SYNC_INCREMENTAL_EMIT_THROTTLE_MS = 16;
+var SYNC_INCREMENTAL_EMIT_HEAVY_THROTTLE_MS = 24;
+var SYNC_INCREMENTAL_EMIT_HOLD_THROTTLE_MS = 32;
+var SYNC_INCREMENTAL_HEAVY_LINE_THRESHOLD = 128;
+var SYNC_INCREMENTAL_LAYOUT_PATCH_BUDGET_LINES = 96;
+var SYNC_INCREMENTAL_LAYOUT_PATCH_BUDGET_PASTE_LINES = 2048;
+var BURST_SYNC_TOKENIZATION_LINE_THRESHOLD = 16;
+var BURST_SYNC_TOKENIZATION_CHAR_THRESHOLD = 2048;
+var FAST_SNAPSHOT_INVALIDATE_CHAR_THRESHOLD = 8192;
+var DEFERRED_TOKENIZE_SLICE_DELAY_MS = 8;
+var CACHED_SPLICE_START_WINDOW_MS = 64;
+var EMPTY_TOKEN_LINE = [];
+function createFallbackTokenLine(line) {
+	if (line.length === 0) return [];
+	return [{
+		type: "text",
+		text: line
+	}];
+}
+function tokensMatchLine(tokens, line) {
+	if (!tokens) return false;
+	if (tokens.length === 1) {
+		const token = tokens[0];
+		if (token?.type === "text") return (token.text ?? "") === line;
+	}
+	if (line.length === 0) return tokens.length === 0;
+	let offset = 0;
+	for (let i$6 = 0; i$6 < tokens.length; i$6++) {
+		const text = tokens[i$6]?.text ?? "";
+		if (!line.startsWith(text, offset)) return false;
+		offset += text.length;
+	}
+	return offset === line.length;
+}
+function tokensEqual(a$35, b$4) {
+	if (!a$35) return false;
+	if (a$35.length !== b$4.length) return false;
+	for (let i$6 = 0; i$6 < a$35.length; i$6++) {
+		const tokenA = a$35[i$6];
+		const tokenB = b$4[i$6];
+		if (!tokenA || !tokenB) return false;
+		if (tokenA.type !== tokenB.type || tokenA.text !== tokenB.text) return false;
+	}
+	return true;
+}
+function alignTokenSnapshotsForSpliceInPlace(tokenLines, tokenStates, nextLines, startLine, endLineBefore, endLineAfter) {
+	const nextLineCount = nextLines.length;
 	const delta = endLineAfter - endLineBefore;
-	if (delta === 0 && tokenLines.length === nextLineCount && tokenStates.length === nextLineCount) return false;
 	let changed = false;
 	if (delta > 0) {
 		const insertCount = delta;
 		const insertAt = Math.max(0, Math.min(endLineBefore + 1, tokenLines.length));
-		const tokenLinePlaceholders = new Array(insertCount);
-		const tokenStatePlaceholders = new Array(insertCount);
+		const tokenLinePlaceholders = new Array(insertCount).fill(EMPTY_TOKEN_LINE);
+		const tokenStatePlaceholders = new Array(insertCount).fill(void 0);
 		tokenLines.splice(insertAt, 0, ...tokenLinePlaceholders);
 		tokenStates.splice(insertAt, 0, ...tokenStatePlaceholders);
 		changed = true;
@@ -13746,7 +14828,9 @@ function alignTokenSnapshotsForSpliceInPlace(tokenLines, tokenStates, nextLineCo
 		changed = true;
 	}
 	if (tokenLines.length < nextLineCount) {
+		const previousLength = tokenLines.length;
 		tokenLines.length = nextLineCount;
+		for (let i$6 = previousLength; i$6 < nextLineCount; i$6++) tokenLines[i$6] = EMPTY_TOKEN_LINE;
 		changed = true;
 	}
 	if (tokenStates.length > nextLineCount) {
@@ -13754,8 +14838,91 @@ function alignTokenSnapshotsForSpliceInPlace(tokenLines, tokenStates, nextLineCo
 		changed = true;
 	}
 	if (tokenStates.length < nextLineCount) {
+		const previousLength = tokenStates.length;
 		tokenStates.length = nextLineCount;
+		for (let i$6 = previousLength; i$6 < nextLineCount; i$6++) tokenStates[i$6] = void 0;
 		changed = true;
+	}
+	if (nextLineCount === 0) return changed;
+	const alignedStartLine = Math.max(0, Math.min(startLine, nextLineCount - 1));
+	const alignedEndLine = Math.max(alignedStartLine, Math.min(Math.max(endLineAfter, startLine), nextLineCount - 1));
+	const alignLineCount = alignedEndLine - alignedStartLine + 1;
+	if (alignLineCount > ALIGN_SYNC_SCAN_LIMIT_LINES) {
+		const reconcileBoundaryLine = (line) => {
+			if (line < 0 || line >= nextLineCount) return;
+			const nextLineText = nextLines[line] ?? "";
+			if (!tokensMatchLine(tokenLines[line], nextLineText)) {
+				tokenLines[line] = createFallbackTokenLine(nextLineText);
+				changed = true;
+			}
+			if (tokenStates[line] !== void 0) {
+				tokenStates[line] = void 0;
+				changed = true;
+			}
+		};
+		reconcileBoundaryLine(alignedStartLine);
+		if (alignedEndLine !== alignedStartLine) reconcileBoundaryLine(alignedEndLine);
+		return true;
+	}
+	const useDirectFallback = alignLineCount >= ALIGN_DIRECT_FALLBACK_THRESHOLD_LINES;
+	for (let line = alignedStartLine; line <= alignedEndLine; line++) {
+		const nextLineText = nextLines[line] ?? "";
+		const tokenLine = tokenLines[line];
+		let lineMatches = false;
+		if (tokenLine && tokenLine.length === 1) {
+			const onlyToken = tokenLine[0];
+			lineMatches = onlyToken?.type === "text" && (onlyToken.text ?? "") === nextLineText;
+		} else if (!useDirectFallback) lineMatches = tokensMatchLine(tokenLine, nextLineText);
+		if (!lineMatches) {
+			tokenLines[line] = createFallbackTokenLine(nextLineText);
+			changed = true;
+		}
+		if (tokenStates[line] !== void 0) {
+			tokenStates[line] = void 0;
+			changed = true;
+		}
+	}
+	return changed;
+}
+function invalidateTokenSnapshotsFromLineInPlace(tokenLines, tokenStates, lineCount, startLine) {
+	let changed = false;
+	if (lineCount <= 0) {
+		if (tokenLines.length > 0) {
+			tokenLines.length = 0;
+			changed = true;
+		}
+		if (tokenStates.length > 0) {
+			tokenStates.length = 0;
+			changed = true;
+		}
+		return changed;
+	}
+	if (tokenLines.length > lineCount) {
+		tokenLines.length = lineCount;
+		changed = true;
+	} else if (tokenLines.length < lineCount) {
+		const previousLength = tokenLines.length;
+		tokenLines.length = lineCount;
+		for (let i$6 = previousLength; i$6 < lineCount; i$6++) tokenLines[i$6] = EMPTY_TOKEN_LINE;
+		changed = true;
+	}
+	if (tokenStates.length > lineCount) {
+		tokenStates.length = lineCount;
+		changed = true;
+	} else if (tokenStates.length < lineCount) {
+		tokenStates.length = lineCount;
+		changed = true;
+	}
+	const invalidateFrom = Math.max(0, Math.min(startLine, lineCount - 1));
+	for (let i$6 = invalidateFrom; i$6 < lineCount; i$6++) {
+		if (tokenLines[i$6] !== EMPTY_TOKEN_LINE) {
+			tokenLines[i$6] = EMPTY_TOKEN_LINE;
+			changed = true;
+		}
+		if (tokenStates[i$6] !== void 0) {
+			tokenStates[i$6] = void 0;
+			changed = true;
+		}
 	}
 	return changed;
 }
@@ -13768,6 +14935,11 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 	let tokenizerWorker = null;
 	let workerJobId = 0;
 	let activeWorkerJob = null;
+	let firstUnresolvedTokenLine = -1;
+	let lastOptimisticViewportPass = null;
+	let pendingSyncIncrementalChange = null;
+	let pendingSyncIncrementalEmitTimer = null;
+	let cachedSpliceStart = null;
 	const doc = signalify$1({
 		epoch: 0,
 		revision: 0,
@@ -13815,19 +14987,155 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 		get lines() {
 			return buffer.lines.value;
 		},
+		optimisticallyTokenizeViewport(startLine, endLine) {
+			if (!isIncrementalTokenizer(doc.tokenize)) return false;
+			const lines = buffer.lines.value;
+			if (lines.length === 0) return false;
+			let clampedStartLine = Math.max(0, Math.min(startLine, lines.length - 1));
+			let clampedEndLine = Math.max(0, Math.min(endLine, lines.length - 1));
+			if (clampedEndLine < clampedStartLine) {
+				const swap = clampedStartLine;
+				clampedStartLine = clampedEndLine;
+				clampedEndLine = swap;
+			}
+			if (lastOptimisticViewportPass && lastOptimisticViewportPass.revision === doc.revision && lastOptimisticViewportPass.tokenVersion === doc.tokenVersion && lastOptimisticViewportPass.startLine <= clampedStartLine && lastOptimisticViewportPass.endLine >= clampedEndLine) return false;
+			const processedStartLine = clampedStartLine;
+			const processedEndLine = clampedEndLine;
+			let tokenVisualChanged = false;
+			let hadUnresolvedState = false;
+			let prevState = null;
+			if (clampedStartLine > 0) {
+				const stateBeforeRange = doc.tokenStates[clampedStartLine - 1];
+				prevState = stateBeforeRange === void 0 ? null : stateBeforeRange ?? null;
+			}
+			for (let line = clampedStartLine; line <= clampedEndLine; line++) {
+				if (doc.tokenStates[line] === void 0) hadUnresolvedState = true;
+				const result = doc.tokenize.tokenizeLine(lines[line] ?? "", line, prevState);
+				if (!tokensEqual(doc.tokenLines[line], result.tokens)) {
+					doc.tokenLines[line] = result.tokens;
+					tokenVisualChanged = true;
+				}
+				prevState = result.state ?? null;
+			}
+			if (hadUnresolvedState) markUnresolvedFromLine(processedStartLine, lines);
+			const fullEndLine = Math.max(0, lines.length - 1);
+			const needsCanonicalPass = tokenVisualChanged || hadUnresolvedState;
+			if (needsCanonicalPass) {
+				if (pendingDeferredRange) {
+					pendingDeferredRange.startLine = Math.min(pendingDeferredRange.startLine, processedStartLine);
+					pendingDeferredRange.endLine = Math.max(pendingDeferredRange.endLine, fullEndLine);
+				} else pendingDeferredRange = {
+					startLine: processedStartLine,
+					endLine: fullEndLine
+				};
+				doc.tokenizationPending = true;
+			}
+			if (tokenVisualChanged) {
+				bumpTokenVersion();
+				emitIncrementalChange({
+					source: "sync",
+					startLine: processedStartLine,
+					endLineBefore: processedEndLine,
+					endLineAfter: processedEndLine,
+					tokenProcessedStartLine: processedStartLine,
+					tokenProcessedEndLine: processedEndLine,
+					tokenConverged: false
+				});
+			}
+			lastOptimisticViewportPass = {
+				revision: doc.revision,
+				tokenVersion: doc.tokenVersion,
+				startLine: clampedStartLine,
+				endLine: clampedEndLine
+			};
+			if (needsCanonicalPass) queueDeferredTokenization();
+			return tokenVisualChanged;
+		},
 		replace(index, length, text) {
 			buffer.replace(index, length, text);
 		}
 	});
+	const dispatchIncrementalChange = (payload) => {
+		for (const listener of incrementalChangeListeners) listener(payload);
+	};
+	const queuePendingSyncIncrementalEmit = (delay = SYNC_INCREMENTAL_EMIT_THROTTLE_MS) => {
+		if (pendingSyncIncrementalEmitTimer !== null) return;
+		pendingSyncIncrementalEmitTimer = setTimeout(() => {
+			pendingSyncIncrementalEmitTimer = null;
+			flushPendingSyncIncrementalChange();
+		}, delay);
+	};
+	const flushPendingSyncIncrementalChange = (force = false) => {
+		if (!pendingSyncIncrementalChange) {
+			if (pendingSyncIncrementalEmitTimer !== null) {
+				clearTimeout(pendingSyncIncrementalEmitTimer);
+				pendingSyncIncrementalEmitTimer = null;
+			}
+			return false;
+		}
+		if (pendingSyncIncrementalEmitTimer !== null) {
+			clearTimeout(pendingSyncIncrementalEmitTimer);
+			pendingSyncIncrementalEmitTimer = null;
+		}
+		const payload = pendingSyncIncrementalChange;
+		pendingSyncIncrementalChange = null;
+		dispatchIncrementalChange(payload);
+		return true;
+	};
 	const emitIncrementalChange = (change) => {
 		const payload = {
 			revision,
 			...change
 		};
-		for (const listener of incrementalChangeListeners) listener(payload);
+		if (payload.source !== "sync") {
+			flushPendingSyncIncrementalChange(payload.source === "reset");
+			dispatchIncrementalChange(payload);
+			return;
+		}
+		const changedLineSpan = Math.max(payload.endLineBefore, payload.endLineAfter) - payload.startLine + 1;
+		const isStructuralLineChange = payload.endLineAfter - payload.endLineBefore !== 0;
+		if (doc.keyHoldActive && !isStructuralLineChange || changedLineSpan >= SYNC_INCREMENTAL_HEAVY_LINE_THRESHOLD) {
+			pendingSyncIncrementalChange = payload;
+			queuePendingSyncIncrementalEmit(doc.keyHoldActive ? SYNC_INCREMENTAL_EMIT_HOLD_THROTTLE_MS : SYNC_INCREMENTAL_EMIT_HEAVY_THROTTLE_MS);
+			return;
+		}
+		flushPendingSyncIncrementalChange();
+		dispatchIncrementalChange(payload);
 	};
 	const bumpTokenVersion = () => {
 		doc.tokenVersion++;
+	};
+	const findNextUnresolvedTokenLine = (fromLine, lines) => {
+		const startLine = Math.max(0, fromLine);
+		const scanLimit = Math.min(lines.length, startLine + UNRESOLVED_SCAN_BUDGET_LINES);
+		for (let line = startLine; line < scanLimit; line++) if (doc.tokenLines[line] === void 0 || doc.tokenStates[line] === void 0) return line;
+		return scanLimit >= lines.length ? -1 : scanLimit;
+	};
+	const markUnresolvedFromLine = (line, lines) => {
+		if (lines.length === 0) {
+			firstUnresolvedTokenLine = -1;
+			return;
+		}
+		const clamped = Math.max(0, Math.min(line, lines.length - 1));
+		if (firstUnresolvedTokenLine === -1 || clamped < firstUnresolvedTokenLine) firstUnresolvedTokenLine = clamped;
+	};
+	const shiftUnresolvedLineForSplice = (startLine, endLineBefore, endLineAfter, lineCount) => {
+		if (firstUnresolvedTokenLine < 0) return;
+		const delta = endLineAfter - endLineBefore;
+		if (delta === 0) return;
+		if (firstUnresolvedTokenLine > endLineBefore) firstUnresolvedTokenLine += delta;
+		else if (firstUnresolvedTokenLine >= startLine) firstUnresolvedTokenLine = startLine;
+		if (lineCount <= 0) {
+			firstUnresolvedTokenLine = -1;
+			return;
+		}
+		if (firstUnresolvedTokenLine < 0) firstUnresolvedTokenLine = 0;
+		if (firstUnresolvedTokenLine >= lineCount) firstUnresolvedTokenLine = lineCount - 1;
+	};
+	const refreshFirstUnresolvedTokenLine = (processedEndLine, lines) => {
+		if (firstUnresolvedTokenLine >= lines.length) firstUnresolvedTokenLine = -1;
+		if (firstUnresolvedTokenLine >= 0 && processedEndLine >= firstUnresolvedTokenLine) firstUnresolvedTokenLine = findNextUnresolvedTokenLine(firstUnresolvedTokenLine, lines);
+		return firstUnresolvedTokenLine;
 	};
 	const shouldUseTokenizerWorker = () => {
 		return typeof window !== "undefined" && typeof Worker !== "undefined" && doc.tokenize === defaultIncrementalTokenizer && buffer.lines.value.length >= 5e4;
@@ -13852,6 +15160,7 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 			}
 			const nextTokenLines = doc.tokenLines;
 			const nextTokenStates = doc.tokenStates;
+			const lines = buffer.lines.value;
 			let changed = false;
 			for (let i$6 = 0; i$6 < message.tokenLines.length; i$6++) {
 				const line = message.startLine + i$6;
@@ -13867,6 +15176,20 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 				}
 			}
 			if (changed) bumpTokenVersion();
+			if (pendingDeferredRange) pendingDeferredRange.startLine = job.endLine + 1;
+			const unresolvedStartLine = refreshFirstUnresolvedTokenLine(job.endLine, lines);
+			if (unresolvedStartLine >= 0) {
+				const endLine = Math.max(0, lines.length - 1);
+				if (!pendingDeferredRange) pendingDeferredRange = {
+					startLine: unresolvedStartLine,
+					endLine
+				};
+				else {
+					pendingDeferredRange.startLine = Math.min(pendingDeferredRange.startLine, unresolvedStartLine);
+					pendingDeferredRange.endLine = Math.max(pendingDeferredRange.endLine, endLine);
+				}
+			}
+			const converged = (pendingDeferredRange === null || pendingDeferredRange.startLine > pendingDeferredRange.endLine) && unresolvedStartLine < 0;
 			emitIncrementalChange({
 				source: "deferred",
 				startLine: job.startLine,
@@ -13874,15 +15197,12 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 				endLineAfter: job.endLine,
 				tokenProcessedStartLine: job.startLine,
 				tokenProcessedEndLine: job.endLine,
-				tokenConverged: pendingDeferredRange === null || pendingDeferredRange.startLine > pendingDeferredRange.endLine
+				tokenConverged: converged
 			});
-			if (pendingDeferredRange) {
-				pendingDeferredRange.startLine = job.endLine + 1;
-				if (pendingDeferredRange.startLine > pendingDeferredRange.endLine) {
-					pendingDeferredRange = null;
-					doc.tokenizationPending = false;
-					return;
-				}
+			if (converged) {
+				pendingDeferredRange = null;
+				doc.tokenizationPending = false;
+				return;
 			}
 			if (pendingDeferredRange) queueDeferredTokenization();
 			else doc.tokenizationPending = false;
@@ -13891,15 +15211,29 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 	};
 	const queueDeferredTokenization = () => {
 		if (!pendingDeferredRange) return;
+		if (doc.keyHoldActive) {
+			if (deferredTokenizationTimer !== null) return;
+			deferredTokenizationTimer = setTimeout(() => {
+				deferredTokenizationTimer = null;
+				if (!pendingDeferredRange) return;
+				queueDeferredTokenization();
+			}, BURST_DEFERRED_TOKENIZE_DELAY_MS);
+			return;
+		}
 		if (!isIncrementalTokenizer(doc.tokenize)) {
 			if (deferredTokenizationTimer !== null) clearTimeout(deferredTokenizationTimer);
 			deferredTokenizationTimer = setTimeout(() => {
 				deferredTokenizationTimer = null;
 				if (!pendingDeferredRange) return;
+				if (doc.keyHoldActive) {
+					queueDeferredTokenization();
+					return;
+				}
 				const lines = buffer.lines.value;
 				const tokenLines = doc.tokenize(lines.join("\n"));
 				doc.tokenLines = tokenLines;
 				doc.tokenStates = new Array(tokenLines.length).fill(null);
+				firstUnresolvedTokenLine = -1;
 				bumpTokenVersion();
 				pendingDeferredRange = null;
 				doc.tokenizationPending = false;
@@ -13948,6 +15282,10 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 		deferredTokenizationTimer = setTimeout(() => {
 			deferredTokenizationTimer = null;
 			if (!pendingDeferredRange) return;
+			if (doc.keyHoldActive) {
+				queueDeferredTokenization();
+				return;
+			}
 			const lines = buffer.lines.value;
 			const startLine = Math.max(0, pendingDeferredRange.startLine);
 			const endLine = Math.min(lines.length - 1, pendingDeferredRange.endLine);
@@ -13958,6 +15296,9 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 			}
 			const tokenized = tokenizeIncremental(doc.tokenize, lines, doc.tokenLines, doc.tokenStates, startLine, endLine + 1, Math.max(512, getSyncTokenizationBudget(lines.length) * 8));
 			if (tokenized.changed) bumpTokenVersion();
+			const unresolvedStartLine = refreshFirstUnresolvedTokenLine(tokenized.processedEndLine, lines);
+			const converged = tokenized.converged && unresolvedStartLine < 0;
+			const nextDeferredStartLine = unresolvedStartLine >= 0 ? Math.min(Math.max(0, tokenized.processedEndLine + 1), unresolvedStartLine) : Math.max(0, tokenized.processedEndLine + 1);
 			emitIncrementalChange({
 				source: "deferred",
 				startLine,
@@ -13965,21 +15306,21 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 				endLineAfter: endLine,
 				tokenProcessedStartLine: tokenized.processedStartLine,
 				tokenProcessedEndLine: tokenized.processedEndLine,
-				tokenConverged: tokenized.converged
+				tokenConverged: converged
 			});
-			if (tokenized.converged) {
+			if (converged) {
 				pendingDeferredRange = null;
 				doc.tokenizationPending = false;
 				return;
 			}
-			pendingDeferredRange.startLine = tokenized.processedEndLine + 1;
+			pendingDeferredRange.startLine = nextDeferredStartLine;
 			if (pendingDeferredRange.startLine > pendingDeferredRange.endLine) {
 				pendingDeferredRange = null;
 				doc.tokenizationPending = false;
 				return;
 			}
 			queueDeferredTokenization();
-		}, 0);
+		}, DEFERRED_TOKENIZE_SLICE_DELAY_MS);
 	};
 	const applyTokenization = (source, startLine, endLineBefore, endLineAfter, maxLines = Number.POSITIVE_INFINITY, linesOverride, prealignedChanged = false) => {
 		const currentLines = linesOverride ?? buffer.lines.value;
@@ -13993,6 +15334,7 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 			const full = tokenizeAll(doc.tokenize, currentLines);
 			doc.tokenLines = full.tokenLines;
 			doc.tokenStates = full.states;
+			firstUnresolvedTokenLine = -1;
 			bumpTokenVersion();
 			doc.tokenizationPending = false;
 			emitIncrementalChange({
@@ -14019,14 +15361,30 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 				changed = true;
 			}
 			for (let i$6 = nextTokenLines.length; i$6 < currentLines.length; i$6++) {
-				nextTokenLines[i$6] = [];
+				nextTokenLines[i$6] = createFallbackTokenLine(currentLines[i$6] ?? "");
 				changed = true;
 			}
 			for (let i$6 = nextTokenStates.length; i$6 < currentLines.length; i$6++) {
 				nextTokenStates[i$6] = void 0;
 				changed = true;
 			}
+			if (currentLines.length > 0) {
+				const alignedStartLine = Math.max(0, Math.min(startLine, currentLines.length - 1));
+				const alignedEndLine = Math.max(alignedStartLine, Math.min(Math.max(endLineAfter, startLine), currentLines.length - 1));
+				for (let line = alignedStartLine; line <= alignedEndLine; line++) {
+					const lineText = currentLines[line] ?? "";
+					if (!tokensMatchLine(nextTokenLines[line], lineText)) {
+						nextTokenLines[line] = createFallbackTokenLine(lineText);
+						changed = true;
+					}
+					if (nextTokenStates[line] !== void 0) {
+						nextTokenStates[line] = void 0;
+						changed = true;
+					}
+				}
+			}
 			if (changed) bumpTokenVersion();
+			firstUnresolvedTokenLine = currentLines.length > 0 ? 0 : -1;
 			doc.tokenizationPending = true;
 			emitIncrementalChange({
 				source,
@@ -14044,9 +15402,43 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 			queueDeferredTokenization();
 			return;
 		}
+		if (source === "sync" && (doc.keyHoldActive || maxLines <= 0)) {
+			const hasLines = currentLines.length > 0;
+			firstUnresolvedTokenLine = currentLines.length > 0 ? Math.max(0, Math.min(startLine, currentLines.length - 1)) : -1;
+			doc.tokenizationPending = hasLines;
+			if (prealignedChanged && !doc.keyHoldActive) bumpTokenVersion();
+			const processedStartLine = Math.max(0, startLine);
+			const optimisticProcessedEndLine = Math.max(0, Math.max(endLineBefore, endLineAfter));
+			const layoutPatchBudgetLines = maxLines <= 0 ? SYNC_INCREMENTAL_LAYOUT_PATCH_BUDGET_PASTE_LINES : SYNC_INCREMENTAL_LAYOUT_PATCH_BUDGET_LINES;
+			emitIncrementalChange({
+				source,
+				startLine,
+				endLineBefore,
+				endLineAfter,
+				tokenProcessedStartLine: processedStartLine,
+				tokenProcessedEndLine: Math.max(processedStartLine, Math.min(optimisticProcessedEndLine, processedStartLine + layoutPatchBudgetLines - 1)),
+				tokenConverged: !hasLines
+			});
+			if (hasLines) {
+				const rangeStart = Math.max(0, Math.min(startLine, currentLines.length - 1));
+				const rangeEnd = Math.max(0, currentLines.length - 1);
+				if (pendingDeferredRange) {
+					pendingDeferredRange.startLine = Math.min(pendingDeferredRange.startLine, rangeStart);
+					pendingDeferredRange.endLine = Math.max(pendingDeferredRange.endLine, rangeEnd);
+				} else pendingDeferredRange = {
+					startLine: rangeStart,
+					endLine: rangeEnd
+				};
+				queueDeferredTokenization();
+			}
+			return;
+		}
 		const tokenized = tokenizeIncremental(doc.tokenize, currentLines, doc.tokenLines, doc.tokenStates, Math.max(0, startLine), Math.max(endLineBefore, endLineAfter) + 1, maxLines);
 		if (tokenized.changed || prealignedChanged) bumpTokenVersion();
-		doc.tokenizationPending = !tokenized.converged;
+		const unresolvedStartLine = refreshFirstUnresolvedTokenLine(tokenized.processedEndLine, currentLines);
+		const converged = tokenized.converged && unresolvedStartLine < 0;
+		const nextDeferredStartLine = unresolvedStartLine >= 0 ? Math.min(Math.max(0, tokenized.processedEndLine + 1), unresolvedStartLine) : Math.max(0, tokenized.processedEndLine + 1);
+		doc.tokenizationPending = !converged;
 		emitIncrementalChange({
 			source,
 			startLine,
@@ -14054,11 +15446,11 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 			endLineAfter,
 			tokenProcessedStartLine: tokenized.processedStartLine,
 			tokenProcessedEndLine: tokenized.processedEndLine,
-			tokenConverged: tokenized.converged
+			tokenConverged: converged
 		});
-		if (!tokenized.converged) {
+		if (!converged) {
 			pendingDeferredRange = {
-				startLine: Math.max(0, tokenized.processedEndLine + 1),
+				startLine: nextDeferredStartLine,
 				endLine: Math.max(0, currentLines.length - 1)
 			};
 			doc.tokenizationPending = true;
@@ -14068,11 +15460,13 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 	const initial = tokenizeAll(doc.tokenize, buffer.lines.value);
 	doc.tokenLines = initial.tokenLines;
 	doc.tokenStates = initial.states;
+	firstUnresolvedTokenLine = -1;
 	bumpTokenVersion();
 	buffer.onChange((change) => {
 		revision++;
 		doc.revision = revision;
 		if (change.type === "reset") {
+			cachedSpliceStart = null;
 			const nextLines$1 = change.nextCode.split("\n");
 			applyTokenization("reset", 0, 0, Math.max(0, nextLines$1.length - 1), Number.POSITIVE_INFINITY, nextLines$1);
 			return;
@@ -14082,13 +15476,17 @@ function createDoc(tokenize$3 = defaultIncrementalTokenizer) {
 		const nextLines = buffer.lines.value;
 		const lineCount = nextLines.length;
 		const maxLine = Math.max(0, lineCount - 1);
-		let startLine;
-		if (change.startLine !== void 0) startLine = Math.max(0, Math.min(change.startLine, maxLine));
-		else startLine = lineFromIndexInLines(nextLines, change.start);
+		const changeNow = Date.now();
+		const resolvedStart = resolveSpliceStartLine(nextLines, maxLine, change.start, changeNow, change.startLine, cachedSpliceStart);
+		const startLine = resolvedStart.line;
+		cachedSpliceStart = resolvedStart.cache;
 		const endLineBefore = startLine + deletedLineCount;
 		const endLineAfter = startLine + insertedLineCount;
-		const snapshotsAligned = alignTokenSnapshotsForSpliceInPlace(doc.tokenLines, doc.tokenStates, lineCount, endLineBefore, endLineAfter);
-		applyTokenization("sync", startLine, endLineBefore, endLineAfter, getSyncTokenizationBudget(lineCount), void 0, snapshotsAligned);
+		shiftUnresolvedLineForSplice(startLine, endLineBefore, endLineAfter, lineCount);
+		const shouldFastInvalidateSnapshots = !(insertedLineCount > 0 || deletedLineCount > 0) && (change.insertedText.length >= FAST_SNAPSHOT_INVALIDATE_CHAR_THRESHOLD || change.deletedText.length >= FAST_SNAPSHOT_INVALIDATE_CHAR_THRESHOLD);
+		const snapshotsAligned = shouldFastInvalidateSnapshots ? invalidateTokenSnapshotsFromLineInPlace(doc.tokenLines, doc.tokenStates, lineCount, startLine) : alignTokenSnapshotsForSpliceInPlace(doc.tokenLines, doc.tokenStates, nextLines, startLine, endLineBefore, endLineAfter);
+		if (snapshotsAligned || shouldFastInvalidateSnapshots) markUnresolvedFromLine(startLine, nextLines);
+		applyTokenization("sync", startLine, endLineBefore, endLineAfter, insertedLineCount >= BURST_SYNC_TOKENIZATION_LINE_THRESHOLD || deletedLineCount >= BURST_SYNC_TOKENIZATION_LINE_THRESHOLD || change.insertedText.length >= BURST_SYNC_TOKENIZATION_CHAR_THRESHOLD ? 0 : getSyncTokenizationBudget(lineCount), void 0, snapshotsAligned);
 	});
 	m(() => {
 		buffer.lines.value;
@@ -44765,8 +46163,8 @@ tube=(in,drive=3,bias=.2)->{
 
 // Modulated delay effect with LFO-controlled delay time
 moddelay=(in,base,depth,rate,feedback,offset=0,mode=write)->{
-  lfo = lfotri(rate, offset)
-  seconds = base + depth * lfo
+  lfo := lfotri(rate, offset)
+  seconds := base + depth * lfo
   delay(in, seconds, feedback, mode)
 }
 
@@ -44968,40 +46366,40 @@ mono=([L,R])->(L+R)*.5
 
 // Adjust stereo width using mid-side processing (1 = normal, 0 = mono, >1 = wider)
 stereowidth=([L,R],width=1)->{
-  mid=(L+R)*0.5
-  side=(L-R)*0.5
+  mid:=(L+R)*0.5
+  side:=(L-R)*0.5
   side*=width
   return [mid+side,mid-side]
 }
 
 // Widen stereo signal by delaying high frequencies in right channel
 widen=([L,R],seconds=0.0001)->{
-  cutoff=200
-  loL=lp(L,cutoff)
-  loR=lp(R,cutoff)
-  hiL=hp(L,cutoff)
-  hiR=hp(R,cutoff)
+  cutoff:=200
+  loL:=lp(L,cutoff)
+  loR:=lp(R,cutoff)
+  hiL:=hp(L,cutoff)
+  hiR:=hp(R,cutoff)
   return [loL+hiL,loR+delay(hiR,seconds)]
 }
 
 // Pan stereo signal (0=left, 0.5=center, 1=right)
 pan=([L,R],balance=0.5)->{
-  p=clamp(balance,0,1)
+  p:=clamp(balance,0,1)
   return [L*(1-p),R*p]
 }
 
 // Vocoder effect using bandpass filters and envelope following
 vocoder=(carrier,modulator,bands=16,attack=.008,release=.04,freqMin=80,freqMax=7700)->{
-  logRange = log(freqMax / freqMin)
-  step     = logRange / (bands - 1)
-  r = exp(step)
-  Q = clamp(1 / (r - 1), 8, 20)
-  s = 0
+  logRange := log(freqMax / freqMin)
+  step     := logRange / (bands - 1)
+  r := exp(step)
+  Q := clamp(1 / (r - 1), 8, 20)
+  s := 0
   for (i in 0 .. bands-1) {
-    freq = freqMin * exp(i * step)
-    modBand = bp(modulator, freq, Q)
-    env     = envfollow(abs(modBand), attack, release)
-    carBand = bp(carrier, freq, Q)
+    freq := freqMin * exp(i * step)
+    modBand := bp(modulator, freq, Q)
+    env     := envfollow(abs(modBand), attack, release)
+    carBand := bp(carrier, freq, Q)
     s += carBand * env
   }
   s/bands
@@ -45041,7 +46439,7 @@ karplus=(hz,pluck=pink,seed=123,attack=.01,decay=.1,exponent=50,damping=.5,feedb
 }
 
 rhodes=(hz,trig)->{
-  env=adsr(.00001,1.4,.92,8,e:6,trig)
+  env:=adsr(.00001,1.4,.92,8,e:6,trig)
   oversample(4,()->{
     sine(hz+sine(hz*1.013,trig)*hz*7.25,trig)*ad(.00001,1.2,e:6,trig)*.12
     +sine(hz+sine(hz*2.752,trig)*hz*2.15,trig)*env*.4
@@ -45055,9 +46453,9 @@ rhodes=(hz,trig)->{
 
 // Supersaw oscillator with detuned voices
 supersaw=(hz,voices=5,spread=.05)->{
-  s = 0
+  s := 0
   for (i in 0 .. voices) {
-    d = (i/(voices+1)-.5)*spread
+    d := (i/(voices+1)-.5)*spread
     s += saw(hz*(1+d))
   }
   s / voices
@@ -45076,32 +46474,32 @@ bdsynth=(
 )->sine(base+punch*fm(trig),offset,trig)*amp(trig) |> lps($,base+cutoff*filter(trig),q) |> limiter($)
 
 bd=(base,punch,offset,sampleOffset=0,cutoff,q,amp,fm,filter,trig=tram('x-x-x-x-'))->{
-  sample=record(.2,()->bdsynth(base,punch,offset,cutoff,q,amp,fm,filter,trig:1))
+  sample:=record(.2,()->bdsynth(base,punch,offset,cutoff,q,amp,fm,filter,trig:1))
   sampler(sample,offset:sampleOffset,trig)
 }
 
 hhsynth=(width=.4,trig)->{
-  env=adsr(.06,.05 ,.950 ,.1 ,32,trig)
+  env:=adsr(.06,.05 ,.950 ,.1 ,32,trig)
   oversample(8,()->[205.3,369.6,304.4,522.7,800,540].map(x->pwm(x,width)).avg()*env
   |> bp($,8000,.85)|>bp($,10k,.85)|>hp($,11k,.85)) |> tanh($*6)
 }
 
 ch=(width=.9,trig=tram('--x-',1/4))->{
-  sample=record(.2,()->hhsynth(width,trig:step(.9,dec())))
+  sample:=record(.2,()->hhsynth(width,trig:step(.9,dec())))
   sampler(sample,trig,offset:.29)*ad(0.0001,.5,3,trig)*.6
 }
 
 oh=(width=.4,trig=tram('-x',1/4))->{
-  sample=record(.2,()->hhsynth(width,trig:step(.9,dec())))
+  sample:=record(.2,()->hhsynth(width,trig:step(.9,dec())))
   sampler(sample,trig,offset:.299)*ad(0.0001,.9,trig)*.8
 }
 
 sdsynth=(seed=7,base=#5*o2,trig=step(.9,dec()))->{
-  amp=ad(.0001,1.7366,20,trig)
-  noise=adsr(.0001,.0231 ,.870 ,.3159 ,8.000,trig)
-  click = ad(.0001, .02, 4, trig)
-  pitch = ad(.0001, .3095 , 20, trig)
-  pitchAmt=base*2
+  amp:=ad(.0001,1.7366,20,trig)
+  noise:=adsr(.0001,.0231 ,.870 ,.3159 ,8.000,trig)
+  click:= ad(.0001, .02, 4, trig)
+  pitch:= ad(.0001, .3095 , 20, trig)
+  pitchAmt:=base*2
   ;(sine(base+pitch*pitchAmt,trig)*.3 |> bps($, base * 2, .8))*amp
 
   +(white(seed,trig) |> hps($, 1800,.4) |> bps($, 7100, .4))*noise
@@ -45110,13 +46508,13 @@ sdsynth=(seed=7,base=#5*o2,trig=step(.9,dec()))->{
 }
 
 sd=(seed,trig=tram('-x',1/2))->{
-  sample=record(.2,()->sdsynth(seed))
+  sample:=record(.2,()->sdsynth(seed))
   sampler(sample,trig)
 }
 
 drums=(seed=1)->{
-  chw = fract(seed * 1234.1234)
-  ohw = fract(seed * 4567.4567)
+  chw := fract(seed * 1234.1234)
+  ohw := fract(seed * 4567.4567)
   bd()+sd(seed)+ch(chw)+oh(ohw) |> limiter($)
 }
 
@@ -45135,10 +46533,10 @@ marimba=(hz,trig=every(1/8))->{
 }
 
 piano=(hz,trig)->{
-  s=oversample(4,()->sine(hz+sine(hz*7,trig)*hz*1.007,trig)+sine(hz+sine(hz*3,trig)*hz*1.004,trig)*.25)*.5
+  s:=oversample(4,()->sine(hz+sine(hz*7,trig)*hz*1.007,trig)+sine(hz+sine(hz*3,trig)*hz*1.004,trig)*.25)*.5
   s+=gauss()*.3*ad(.00001,.01,e:3,trig)
   s*=adsr(.0003,.18,.9,.8,e:9,trig)
-  hzco=hz**.79
+  hzco:=hz**.79
   s=s*.15+delay(s,1.2/hzco,.84,mode:append,x->tanh(lp1(x,hz*8)))*.015
          +delay(s,1.8/hzco,.94,mode:append,x->tanh(lp1(x,hz*3)))*.015
 }
@@ -45147,6 +46545,28 @@ bongo=(hz,trig)->{
   pink()*ad(.0008,.01+.02*(random(123) |> sah($,trig)),2,trig)*(1+.6*(random(567) |> sah($,trig)))+
   sine(hz+sine(300)*50+sine(800+800*(random(234) |> sah($,trig)))*(700+200*(random(345) |> sah($,trig))))*ad(.01,.12,3,trig)
   *(.2+.8*(random(456) |> sah($,trig)))
+}
+
+flute=(hz,trig)->{
+  env:=adsr(.05,.10,.82,.24,3,trig)
+  vib:=lfosine(5.0)*0.0015*ad(.2,1.5,trig)
+  freq:=hz*(1+vib)
+
+  air:=bp(pink(),hz*2.0,1.1)*.435*env
+  body:=sine(freq)*.95 + sine(freq*2)*.035 + sine(freq*3.02)*.065
+
+  s:=body + air
+  s:=lp(s,hz*8 + 1200,.7)
+  tanh(s*.95)*env*.45
+}
+
+pad=(notes,trig)->{
+  notes.map(hz->
+    (tri(hz*2.035)*.22+saw(hz*(1+.003*lfosine(1/2)))+sqr(hz/2.03)*.08)
+    |> lpm($,500+lfosine(4)*2000,1)*.5 + hpm($,6000,.5)*.02).avg()
+
+  * adsr(.03,.3,.95,1.5,trig)
+  |> ($+fdn($,.5,.5,.5,1))*.5
 }
 
 ;
@@ -47751,6 +49171,7 @@ const settings = signalify({
 	effect: "none",
 	showDocs: true,
 	wordWrap: true,
+	showMinimap: false,
 	analyserType: "waveform",
 	fullSize: false,
 	debug: false
@@ -47904,7 +49325,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-Ckc-83Ea.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-CytYnceO.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -48537,6 +49958,8 @@ var keywords = new Set([
 	"while",
 	"do"
 ]);
+var keywordTokenTypes = /* @__PURE__ */ new Map();
+for (const keyword of keywords) keywordTokenTypes.set(keyword, "keyword");
 var operators = new Set([
 	"|>",
 	"->",
@@ -48623,15 +50046,6 @@ for (const [first, list] of operatorsByFirstChar) {
 }
 function isWhitespaceCode(code) {
 	return code === codeSpace || code === codeTab || code === codeLf || code === codeCr || code === codeVt || code === codeFf;
-}
-function isDigitCode(code) {
-	return code >= 48 && code <= 57;
-}
-function isLetterCode(code) {
-	return code >= 65 && code <= 90 || code >= 97 && code <= 122 || code === codeUnderscore;
-}
-function isIdentifierCode(code) {
-	return isLetterCode(code) || isDigitCode(code) || code === codeDollar || code === codeHash;
 }
 function isPunctuationCode(code) {
 	switch (code) {
@@ -48749,7 +50163,11 @@ function tokenizeLineInternal(input, lineIndex, prevState) {
 		}
 		if (isWhitespaceCode(code)) {
 			i$6++;
-			while (i$6 < n$4 && isWhitespaceCode(input.charCodeAt(i$6))) i$6++;
+			while (i$6 < n$4) {
+				const next = input.charCodeAt(i$6);
+				if (next !== codeSpace && next !== codeTab && next !== codeLf && next !== codeCr && next !== codeVt && next !== codeFf) break;
+				i$6++;
+			}
 			tokens.push({
 				text: input.slice(start, i$6),
 				type: "text",
@@ -48825,16 +50243,31 @@ function tokenizeLineInternal(input, lineIndex, prevState) {
 			}
 			continue;
 		}
-		if (isDigitCode(code) || code === codeDot && isDigitCode(input.charCodeAt(i$6 + 1))) {
+		const nextCode = input.charCodeAt(i$6 + 1);
+		if (code >= 48 && code <= 57 || code === codeDot && nextCode >= 48 && nextCode <= 57) {
 			if (code === codeDot) {
 				i$6++;
-				while (i$6 < n$4 && isDigitCode(input.charCodeAt(i$6))) i$6++;
+				while (i$6 < n$4) {
+					const digit = input.charCodeAt(i$6);
+					if (digit < 48 || digit > 57) break;
+					i$6++;
+				}
 			} else {
 				i$6++;
-				while (i$6 < n$4 && isDigitCode(input.charCodeAt(i$6))) i$6++;
-				if (input.charCodeAt(i$6) === codeDot && isDigitCode(input.charCodeAt(i$6 + 1))) {
+				while (i$6 < n$4) {
+					const digit = input.charCodeAt(i$6);
+					if (digit < 48 || digit > 57) break;
 					i$6++;
-					while (i$6 < n$4 && isDigitCode(input.charCodeAt(i$6))) i$6++;
+				}
+				const decimal = input.charCodeAt(i$6);
+				const decimalNext = input.charCodeAt(i$6 + 1);
+				if (decimal === codeDot && decimalNext >= 48 && decimalNext <= 57) {
+					i$6++;
+					while (i$6 < n$4) {
+						const digit = input.charCodeAt(i$6);
+						if (digit < 48 || digit > 57) break;
+						i$6++;
+					}
 				}
 			}
 			const e$61 = input.charCodeAt(i$6);
@@ -48842,7 +50275,11 @@ function tokenizeLineInternal(input, lineIndex, prevState) {
 				i$6++;
 				const sign = input.charCodeAt(i$6);
 				if (sign === codePlus || sign === codeMinus) i$6++;
-				while (i$6 < n$4 && isDigitCode(input.charCodeAt(i$6))) i$6++;
+				while (i$6 < n$4) {
+					const digit = input.charCodeAt(i$6);
+					if (digit < 48 || digit > 57) break;
+					i$6++;
+				}
 			}
 			if (input.charCodeAt(i$6) === codeLowerK) i$6++;
 			tokens.push({
@@ -48856,16 +50293,19 @@ function tokenizeLineInternal(input, lineIndex, prevState) {
 		const ops = operatorsByFirstChar.get(code);
 		if (ops) {
 			let matched = false;
-			for (const op of ops) if (input.startsWith(op, i$6)) {
-				tokens.push({
-					text: op,
-					type: "operator",
-					line,
-					column: startColumn
-				});
-				i$6 += op.length;
-				matched = true;
-				break;
+			for (let opIndex = 0; opIndex < ops.length; opIndex++) {
+				const op = ops[opIndex];
+				if (input.startsWith(op, i$6)) {
+					tokens.push({
+						text: op,
+						type: "operator",
+						line,
+						column: startColumn
+					});
+					i$6 += op.length;
+					matched = true;
+					break;
+				}
 			}
 			if (matched) continue;
 		}
@@ -48879,14 +50319,17 @@ function tokenizeLineInternal(input, lineIndex, prevState) {
 			i$6++;
 			continue;
 		}
-		if (isLetterCode(code) || code === codeHash) {
+		if (code === codeHash || code >= 65 && code <= 90 || code >= 97 && code <= 122 || code === codeUnderscore) {
 			i$6++;
-			while (i$6 < n$4 && isIdentifierCode(input.charCodeAt(i$6))) i$6++;
+			while (i$6 < n$4) {
+				const ident = input.charCodeAt(i$6);
+				if (!(ident >= 65 && ident <= 90 || ident >= 97 && ident <= 122 || ident >= 48 && ident <= 57 || ident === codeUnderscore || ident === codeDollar || ident === codeHash)) break;
+				i$6++;
+			}
 			const identifier = input.slice(start, i$6);
 			let type = "identifier";
-			if (keywords.has(identifier)) type = "keyword";
-			else if (identifier === "true" || identifier === "false") type = "boolean";
-			else if (identifier === "null" || identifier === "undefined") type = "null";
+			const keywordType = keywordTokenTypes.get(identifier);
+			if (keywordType) type = keywordType;
 			else if (input.charCodeAt(i$6) === codeLParen) type = "function";
 			tokens.push({
 				text: identifier,
@@ -54909,6 +56352,9 @@ function withPeriod(s$4) {
 }
 var VISUAL_HEIGHT = 35;
 var VISUAL_SPACING = 0;
+var TOOLTIP_WIDGETS_PER_ROW = 5;
+var TOOLTIP_WIDGET_GAP = 2;
+var TOOLTIP_WIDGET_ROW_GAP = 2;
 var AUTCOMPLETE_GAP = 8;
 var AUTCOMPLETE_ITEM_HEIGHT = 20;
 var AUTCOMPLETE_PADDING = 8;
@@ -55186,19 +56632,21 @@ function drawDefinitionTooltip(overlayCanvas, editor$1, x$4, y$5, token, paramet
 		const parenI = callBlock.findIndex((t$12) => t$12.text === "(");
 		if (parenI > 0) {
 			const callee = callBlock[parenI - 1];
-			const line = callee?.line;
-			const column = callee?.column;
-			if (line != null && column != null) {
-				const resolved = resolveTooltipSource(line, column, toPascalCase(nameToGenMap.value.get(callee?.text ?? "")?.name ?? callee?.text ?? ""), definition, program.histories.value, program.userCallHistories.value);
+			const lookupLine = tokenIsDefinition && token.line != null ? token.line : callee?.line;
+			const lookupColumn = tokenIsDefinition && token.column != null ? token.column : callee?.column;
+			const calleeName = callee?.text ?? token.text;
+			if (lookupLine != null && lookupColumn != null) {
+				const resolved = resolveTooltipSource(lookupLine, lookupColumn, toPascalCase(nameToGenMap.value.get(calleeName ?? "")?.name ?? calleeName ?? ""), definition, program.histories.value, program.userCallHistories.value);
 				const widgetContext = program.tooltipWidgetContext;
 				const { history: history$1, target, isUserCallSite } = resolved;
 				if (target !== void 0) {
-					const key = `${line}:${column}`;
+					const key = `${lookupLine}:${lookupColumn}:${calleeName}`;
 					let innerSignature;
 					const widgets = isUserCallSite && "inner" in target ? (() => {
 						const inner = target.inner;
 						innerSignature = inner.map((h$5) => `${h$5.genName}:${h$5.index}`).join("|");
-						if (tooltipWidgetCache?.key === key && tooltipWidgetCache?.ref === target && tooltipWidgetCache?.innerSignature === innerSignature && tooltipWidgetCache.widgets.length === inner.length) return tooltipWidgetCache.widgets;
+						const cached = tooltipWidgetCache;
+						if (cached != null && cached.key === key && cached.ref === target && cached.innerSignature === innerSignature && cached.widgets.length === inner.length) return cached.widgets;
 						return inner.map((h$5) => {
 							const isolatedWidgetContext = {
 								...widgetContext,
@@ -55297,7 +56745,11 @@ function drawDefinitionTooltip(overlayCanvas, editor$1, x$4, y$5, token, paramet
 			contentY += lines.length * TEXT_LINE_HEIGHT + PARAGRAPH_SPACING;
 		}
 	}
-	if (tooltipWidgets.length > 0) contentY += VISUAL_SPACING + VISUAL_HEIGHT;
+	const widgetRowCount = tooltipWidgets.length > 0 ? Math.ceil(tooltipWidgets.length / TOOLTIP_WIDGETS_PER_ROW) : 0;
+	if (widgetRowCount > 0) {
+		const widgetBlockHeight = widgetRowCount * VISUAL_HEIGHT + (widgetRowCount - 1) * TOOLTIP_WIDGET_ROW_GAP;
+		contentY += VISUAL_SPACING + widgetBlockHeight;
+	}
 	const tooltipHeight = tooltipWidgets.length > 0 ? contentY + PADDING$1 : contentY - PARAGRAPH_SPACING + PADDING$1;
 	let tooltipYAbove = yLocal - tooltipHeight - ARROW_SIZE$1 - TOOLTIP_GAP$1;
 	let tooltipYBelow = yLocal + settings$1.lineHeight + ARROW_SIZE$1 + TOOLTIP_GAP$1;
@@ -55613,12 +57065,15 @@ function drawDefinitionTooltip(overlayCanvas, editor$1, x$4, y$5, token, paramet
 		contentY += VISUAL_SPACING;
 		const padding = 4;
 		const n$4 = tooltipWidgets.length;
-		const gap = n$4 > 1 ? 2 : 0;
-		const segmentWidth = (contentWidth - (n$4 - 1) * gap) / n$4;
+		const columns = Math.min(n$4, TOOLTIP_WIDGETS_PER_ROW);
+		const gap = n$4 > 1 ? TOOLTIP_WIDGET_GAP : 0;
+		const segmentWidth = (contentWidth - (columns - 1) * gap) / columns;
 		const widgetDraw = (w$5) => w$5.draw(c$7, padding, padding, segmentWidth - padding * 2, VISUAL_HEIGHT - padding * 2, segmentWidth - padding * 2, padding);
 		for (let i$6 = 0; i$6 < n$4; i$6++) {
+			const row = Math.floor(i$6 / TOOLTIP_WIDGETS_PER_ROW);
+			const col = i$6 % TOOLTIP_WIDGETS_PER_ROW;
 			c$7.save();
-			c$7.translate(PADDING$1 + i$6 * (segmentWidth + gap), contentY);
+			c$7.translate(PADDING$1 + col * (segmentWidth + gap), contentY + row * (VISUAL_HEIGHT + TOOLTIP_WIDGET_ROW_GAP));
 			c$7.beginPath();
 			c$7.rect(0, 0, segmentWidth, VISUAL_HEIGHT);
 			c$7.clip();
@@ -56810,6 +58265,9 @@ m(() => {
 				return true;
 			} else if (e$61.key === "p") {
 				settings.wordWrap = !settings.wordWrap;
+				return true;
+			} else if (e$61.key === "m") {
+				settings.showMinimap = !settings.showMinimap;
 				return true;
 			} else if (e$61.key === "l") {
 				toggleAnalyserType();
@@ -59177,7 +60635,8 @@ const Editor = ({ doc, header, gutter = true, autoHeight = false, transparent = 
 		paddingRight: !gutter ? 15 : 12,
 		paddingBottom: !header ? !gutter ? 15 : 15.5 : 17,
 		...editorSettings,
-		showGutter: gutter
+		showGutter: gutter,
+		showMinimap: settings.showMinimap
 	}), []);
 	y(() => {
 		editor$1.header = header;
@@ -59199,6 +60658,9 @@ const Editor = ({ doc, header, gutter = true, autoHeight = false, transparent = 
 	}, [editor$1]);
 	useReactiveEffect(() => {
 		editor$1.settings.wordWrap = settings.wordWrap;
+	}, [editor$1]);
+	useReactiveEffect(() => {
+		editor$1.settings.showMinimap = settings.showMinimap;
 	}, [editor$1]);
 	y(() => {
 		if (ref.current) {
@@ -63877,6 +65339,10 @@ var SettingsMap = {
 	wordWrap: {
 		name: "Word Wrap",
 		shortcut: "alt+p"
+	},
+	showMinimap: {
+		name: "Show Minimap",
+		shortcut: "alt+m"
 	}
 };
 var SettingsButton = ({ onClick, children }) => /* @__PURE__ */ u(SidebarButton, {
@@ -69162,4 +70628,4 @@ const App = () => {
 J(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-qNvliO-h.js.map
+//# sourceMappingURL=index-CeH8sR8k.js.map

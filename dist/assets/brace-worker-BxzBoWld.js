@@ -127,7 +127,7 @@
 									isOpening: false
 								});
 							}
-						} else if (openingBraces.has(char) || closingBraces.has(char)) braces.push({
+						} else if (inString === null && (openingBraces.has(char) || closingBraces.has(char))) braces.push({
 							char,
 							line: lineIndex,
 							tokenIndex,
@@ -261,4 +261,4 @@
 	};
 })();
 
-//# sourceMappingURL=brace-worker-DyuxA6xZ.js.map
+//# sourceMappingURL=brace-worker-BxzBoWld.js.map

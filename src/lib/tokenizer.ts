@@ -44,6 +44,8 @@ const keywords = new Set([
   'while',
   'do',
 ])
+const keywordTokenTypes = new Map<string, TokenType>()
+for (const keyword of keywords) keywordTokenTypes.set(keyword, 'keyword')
 
 const operators = new Set([
   '|>',
@@ -139,27 +141,6 @@ function isWhitespaceCode(code: number): boolean {
     || code === codeCr
     || code === codeVt
     || code === codeFf
-  )
-}
-
-function isDigitCode(code: number): boolean {
-  return code >= 48 && code <= 57
-}
-
-function isLetterCode(code: number): boolean {
-  return (
-    (code >= 65 && code <= 90)
-    || (code >= 97 && code <= 122)
-    || code === codeUnderscore
-  )
-}
-
-function isIdentifierCode(code: number): boolean {
-  return (
-    isLetterCode(code)
-    || isDigitCode(code)
-    || code === codeDollar
-    || code === codeHash
   )
 }
 
@@ -278,7 +259,20 @@ function tokenizeLineInternal(
 
     if (isWhitespaceCode(code)) {
       i++
-      while (i < n && isWhitespaceCode(input.charCodeAt(i))) i++
+      while (i < n) {
+        const next = input.charCodeAt(i)
+        if (
+          next !== codeSpace
+          && next !== codeTab
+          && next !== codeLf
+          && next !== codeCr
+          && next !== codeVt
+          && next !== codeFf
+        ) {
+          break
+        }
+        i++
+      }
       tokens.push({ text: input.slice(start, i), type: 'text', line, column: startColumn })
       continue
     }
@@ -338,17 +332,33 @@ function tokenizeLineInternal(
       continue
     }
 
-    if (isDigitCode(code) || (code === codeDot && isDigitCode(input.charCodeAt(i + 1)))) {
+    const nextCode = input.charCodeAt(i + 1)
+    const startsNumeric = (code >= 48 && code <= 57) || (code === codeDot && nextCode >= 48 && nextCode <= 57)
+    if (startsNumeric) {
       if (code === codeDot) {
         i++
-        while (i < n && isDigitCode(input.charCodeAt(i))) i++
+        while (i < n) {
+          const digit = input.charCodeAt(i)
+          if (digit < 48 || digit > 57) break
+          i++
+        }
       }
       else {
         i++
-        while (i < n && isDigitCode(input.charCodeAt(i))) i++
-        if (input.charCodeAt(i) === codeDot && isDigitCode(input.charCodeAt(i + 1))) {
+        while (i < n) {
+          const digit = input.charCodeAt(i)
+          if (digit < 48 || digit > 57) break
           i++
-          while (i < n && isDigitCode(input.charCodeAt(i))) i++
+        }
+        const decimal = input.charCodeAt(i)
+        const decimalNext = input.charCodeAt(i + 1)
+        if (decimal === codeDot && decimalNext >= 48 && decimalNext <= 57) {
+          i++
+          while (i < n) {
+            const digit = input.charCodeAt(i)
+            if (digit < 48 || digit > 57) break
+            i++
+          }
         }
       }
 
@@ -357,7 +367,11 @@ function tokenizeLineInternal(
         i++
         const sign = input.charCodeAt(i)
         if (sign === codePlus || sign === codeMinus) i++
-        while (i < n && isDigitCode(input.charCodeAt(i))) i++
+        while (i < n) {
+          const digit = input.charCodeAt(i)
+          if (digit < 48 || digit > 57) break
+          i++
+        }
       }
 
       if (input.charCodeAt(i) === codeLowerK) i++
@@ -369,7 +383,8 @@ function tokenizeLineInternal(
     const ops = operatorsByFirstChar.get(code)
     if (ops) {
       let matched = false
-      for (const op of ops) {
+      for (let opIndex = 0; opIndex < ops.length; opIndex++) {
+        const op = ops[opIndex]
         if (input.startsWith(op, i)) {
           tokens.push({ text: op, type: 'operator', line, column: startColumn })
           i += op.length
@@ -386,20 +401,33 @@ function tokenizeLineInternal(
       continue
     }
 
-    if (isLetterCode(code) || code === codeHash) {
+    const isIdentifierStart = (
+      code === codeHash
+      || (code >= 65 && code <= 90)
+      || (code >= 97 && code <= 122)
+      || code === codeUnderscore
+    )
+    if (isIdentifierStart) {
       i++
-      while (i < n && isIdentifierCode(input.charCodeAt(i))) i++
+      while (i < n) {
+        const ident = input.charCodeAt(i)
+        const isIdentifierPart = (
+          (ident >= 65 && ident <= 90)
+          || (ident >= 97 && ident <= 122)
+          || (ident >= 48 && ident <= 57)
+          || ident === codeUnderscore
+          || ident === codeDollar
+          || ident === codeHash
+        )
+        if (!isIdentifierPart) break
+        i++
+      }
 
       const identifier = input.slice(start, i)
       let type: TokenType = 'identifier'
-      if (keywords.has(identifier)) {
-        type = 'keyword'
-      }
-      else if (identifier === 'true' || identifier === 'false') {
-        type = 'boolean'
-      }
-      else if (identifier === 'null' || identifier === 'undefined') {
-        type = 'null'
+      const keywordType = keywordTokenTypes.get(identifier)
+      if (keywordType) {
+        type = keywordType
       }
       else if (input.charCodeAt(i) === codeLParen) {
         type = 'function'
