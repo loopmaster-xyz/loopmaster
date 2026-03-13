@@ -904,6 +904,10 @@ effect(() => {
         settings.showMinimap = !settings.showMinimap
         return true
       }
+      else if (e.key === 'u') {
+        settings.overscroll = !settings.overscroll
+        return true
+      }
       else if (e.key === 'l') {
         toggleAnalyserType()
         return true

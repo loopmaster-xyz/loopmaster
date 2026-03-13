@@ -31,6 +31,7 @@ export const Editor = (
       ...editorSettings,
       showGutter: gutter,
       showMinimap: settings.showMinimap,
+      overscroll: settings.overscroll,
     }), [])
 
   useEffect(() => {
@@ -66,6 +67,10 @@ export const Editor = (
 
   useReactiveEffect(() => {
     editor.settings.showMinimap = settings.showMinimap
+  }, [editor])
+
+  useReactiveEffect(() => {
+    editor.settings.overscroll = settings.overscroll
   }, [editor])
 
   useEffect(() => {

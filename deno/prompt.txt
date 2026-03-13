@@ -39,6 +39,7 @@ API:
 #i: Roman numeral chord I as Hz array in octave -1. Also #ii..#vii, suffixes like #i7sus2.
 #scale: Full scale degrees 1..N as Hz array in octave -1.
 abs(x) -> signal: Absolute value.
+acc(trig, amount?) -> signal: Accumulates (adds) a value on trigger
 acos(x) -> signal: Arc cosine.
 ad(attack?, decay?, exponent?, trig) -> signal: Attack/Decay envelope
 adsr(attack?, decay?, sustain?, release?, exponent?, trig) -> signal: Attack/Decay/Sustain/Release envelope
@@ -47,11 +48,14 @@ analyser(input) -> signal: Analyze the signal
 ap(input, cutoff?, q?) -> signal: Allpass filter (Biquad)
 aps(input, cutoff?, q?) -> signal: Allpass filter (SVF)
 asin(x) -> signal: Arc sine.
-at(bar?, every?, prob?, seed?) -> signal: Probabilistic trigger at bar start and/or every N bars
+at(bar?, every?, probability?, seed?) -> signal: Probabilistic trigger at bar start and/or every N bars
 atan(x) -> signal: Arc tangent.
+audio(input) -> signal: Creates an audio signal of a single value
 avg(array) -> signal: Average of array elements.
-bd(trig?) -> signal: Kick drum. Records bdsynth and plays back on trigger.
-bdsynth(base?, punch?, offset?, cutoff?, q?, amp, fm, filter, trig?) -> signal: Kick/bass drum synth. Used internally by bd().
+bd(base?, punch?, offset?, sampleOffset?, cutoff?, q?, amp, fm, filter, trig?) -> signal: Kick/bass drum. Recorded bdsynth.
+bdsynth(base?, punch?, offset?, cutoff?, q?, amp, fm, filter, trig?) -> signal: Kick/bass drum synth.
+bi(x) -> signal: Convert unipolar signal to bipolar ([0,1] to [-1,1]).
+bongo(hz, trig) -> signal: Bongo percussion.
 bp(input, cutoff?, q?) -> signal: Bandpass filter (Biquad)
 bpm: Global BPM (default 120).
 bps(input, cutoff?, q?) -> signal: Bandpass filter (SVF)
@@ -62,13 +66,15 @@ bus(index, in) -> signal: Read bus: bus(index). Write and accumulate: bus(index,
 buss(index, in) -> signal: Solo a signal from a bus.
 c4: Note names as Hz: c4, e#5, eb3, a-1. Format [a-gA-G][#b]?-?\d+. User vars shadow.
 ceil(x) -> signal: Round up.
-ch(width?, trig?) -> signal: Closed hi-hat. Recorded hhsynth, played on trigger.
+ch(width?, trig?) -> signal: Closed hi-hat. Recorded hhsynth.
 chorus(in, voices?, base?, depth?, rate?, spread?) -> signal: Multi-voice chorus with spread and modulation.
 clamp(x, lo, hi) -> signal: Clamp x to [lo, hi].
 compressor(input, attack?, release?, threshold?, ratio?, knee?, key) -> signal: Dynamic range compressor with soft knee
 cos(x) -> signal: Cosine.
+crossfade(a, b, t) -> signal: Crossfade between two signals. t 0=a, 1=b.
 cube(x) -> signal: x cubed.
 dattorro(input, room?, damping?, bandwidth?, indiff1?, indiff2?, decdiff1?, decdiff2?, excrate?, excdepth?, predelay?) -> signal: Dattorro-style stereo reverb (modulated tank)
+db(x) -> number: Convert decibels to linear gain multiplier (10^(dB/20)).
 dc(input) -> signal: DC blocker (~8 Hz highpass, removes offset)
 dec(hz?, floor?, offset?, trig) -> signal: Decrement from offset to floor at hz rate, trigger reset.
 delay(input, seconds?, feedback?, cb?, size?) -> signal: Delay effect.
@@ -76,12 +82,14 @@ diodeladder(input, cutoff?, q?, k?, sat?) -> signal: Diode ladder filter (4-pole
 drums(seed?) -> signal: Full drum kit: kick, snare, closed hi-hat, open hi-hat.
 dtof(degree) -> hz: Degree to frequency: converts scale degree (1-based) to Hz using global scale and root. Desugars to midiToHz(degreeToMidi(...)).
 envfollow(input, attack?, release?) -> signal: Envelope follower with attack and release time
+eq3(in, low?, mid?, high?, lf?, mf?, hf?) -> signal: 3-band equalizer with low/mid/high controls.
 espeak(text, variant?, speed?, pitch?) -> sample: Text-to-speech using eSpeak.
 euclid(pulses?, steps?, offset?, bar?) -> signal: Euclidean rhythm trigger (pulses over steps with offset)
-every(bars?) -> signal: Generates an impulse on a regular period in bars
+every(bars?, offset?, length?) -> signal: Generates an impulse on a regular period in bars
 exp(x) -> signal: e to the power of x.
 exp2(x) -> signal: 2 to the power of x.
 fdn(input, room?, damping?, decay?, depth?) -> signal: Feedback delay network reverb (8-line Hadamard, modulated)
+[].fit(bars, swing, offset) -> signal: Tempo-synced walk over an array, fitted into a total bar length.
 flanger(in, rate?, depth?, base?, feedback?) -> signal: Classic flanger (modulated comb filter).
 floor(x) -> signal: Round down.
 fold(x, lo, hi) -> signal: Fold x into [lo, hi].
@@ -91,8 +99,9 @@ freesound(id) -> signal: Load sample by Freesound ID.
 freeverb(input, room?, damping?) -> signal: Freeverb reverb
 gauss(seed?, trig) -> signal: Gaussian (normal-ish) noise via CLT from 6 uniforms, trigger reset
 [].glide(bar, exponent?) -> signal: Tempo-synced glide through array. Steps through elements over bar length, interpolates between consecutive elements with curve. Wraps index.
+grain(speed?, seed) -> signal: Granular synthesis-inspired trigger generator based on speed.
 heaviside(x) -> signal: Step function: 0 if x<0 else 1.
-hhsynth(width?, trig) -> signal: Hi-hat synthesis. Used by ch and oh.
+hhsynth(width?, trig) -> signal: Hi-hat synth.
 hold(input) -> signal: Holds its input if zero is received
 hp(input, cutoff?, q?) -> signal: Highpass filter (Biquad)
 hp1(input, cutoff?) -> signal: Highpass filter (One-pole)
@@ -101,7 +110,7 @@ hps(input, cutoff?, q?) -> signal: Highpass filter (SVF)
 hs(input, cutoff?, q?, gain?) -> signal: High shelf (Biquad)
 hypot(x, y) -> signal: Hypotenuse sqrt(x*x+y*y).
 impulse(hz?, offset, trig) -> signal: Impulse train (1 at phase 0, 0 elsewhere)
-inc(hz?, ceil?, offset?, trig) -> signal: Ramp from offset to ceil at hz rate, trigger reset
+inc(hz?, ceil?, offset?, trig) -> signal: Ramp from offset to ceil at hz rate
 isarray(value) -> signal: True if value is an array.
 isaudio(value) -> signal: True if value is an audio rate signal.
 isfunction(value) -> signal: True if value is a function.
@@ -128,35 +137,51 @@ lpm(input, cutoff?, q?) -> signal: Lowpass filter (Moog)
 lps(input, cutoff?, q?) -> signal: Lowpass filter (SVF)
 ls(input, cutoff?, q?, gain?) -> signal: Low shelf (Biquad)
 [].map(fn) -> array: Applies a function to each element of an array.
+marimba(hz, trig?) -> signal: Marimba mallet instrument.
+markov(states?, stay?, step?, bias?, seed?, trig) -> signal: Markov chain state sequencer with weighted transition probabilities
+[].markov(trig, stay?, step?, bias?, seed?) -> signal: Markov-chain sequencer over array values. Number of states is implicit from array length.
 max(x, y) -> signal: Maximum of x and y.
+midiToHz(midi) -> hz: Converts a midi note to a frequency in Hz. Applies transpose and tune from globals.
 min(x, y) -> signal: Minimum of x and y.
 mini(sequence, bars) -> signal: Plays a sequence of notes.
 mix: Mix bus; receives the main mix.
 mod(x, y) -> signal: Modulo.
 moddelay(in, base, depth, rate, feedback, offset?) -> signal: Modulated delay with LFO-controlled delay time.
-ntof(note) -> hz: Converts a midi note to a frequency in Hz. Applies transpose and tune from globals.
+mono(LR) -> signal: Convert stereo [L,R] to mono by averaging channels.
+mtof(note) -> hz: Alias for midiToHz. Converts midi note to Hz.
+ntof(note) -> hz: Alias for midiToHz. Converts midi note to Hz.
 o0: Octave multipliers: o0=1, o1=2, o2=4, ... o11=2048 (2^0..2^11).
-oh(width?, trig?) -> signal: Open hi-hat.
+oh(width?, trig?) -> signal: Open hi-hat. Recorded hhsynth.
 out(signal) -> signal: Sends a signal to the speakers.
 outs(signal) -> signal: Alias for `solo`.
 oversample(factor, fn) -> signal: Oversamples a function by a factor.
+pan(LR, balance?) -> array: Pan stereo signal. 0=left, 0.5=center, 1=right.
 peak(input, cutoff?, q?, gain?) -> signal: Peak (notch) (Biquad)
 peaks(input, cutoff?, q?) -> signal: Peak (notch) filter (SVF)
-phasor(hz?, offset, trig) -> signal: Phase ramp 0..1 with trigger reset
+phasor(hz?, offset, trig) -> signal: Phase ramp 0..1
+piano(hz, trig) -> signal: Acoustic piano.
 pingpong(x, lo, hi) -> signal: Ping-pong between lo and hi.
 pink(seed?, trig) -> signal: 1/f pink noise (Voss-McCartney 8 rows)
 pitchshift(input, ratio?) -> signal: Grain-based pitch shifter (overlap-add)
-play(x, cb, voices?) -> signal: Multi-voice playback. x is [hz,vel,trig] or array of such. Calls cb(hz,vel,trig) per voice, sums and averages.
+play(events, cb, voices?, glide?) -> signal: Multi-voice playback. Events: [hz, trig, from, id, glide?]. Callback receives { hz, trig }. trig: >0 onset, 1 sustained, 0 releasing.
+poly(count, trig, notescb, voicecb) -> signal: Polyphonic synth: count voices, trig selects, notescb(trig)->hz, voicecb(hz,trig)->signal.
+postfragment: Compile-time only custom post-processing fragment shader source. Runs as pass 2 over u_scene. Uniforms: u_scene, u_feedback, u_audio, u_time, u_resolution, u_primaryColor.
+postshader: Compile-time only post-processing preset selector for shader visuals: postshader='crt'.
+
+Available:
+
+none, crt, bloom, displace, duotone, swirl, trail, warp, kaleido.
 print(value) -> signal: Emit value for debugging; returns the value.
 pwm(hz?, width?, offset, trig) -> signal: Band-limited PWM oscillator
 ramp(hz?, offset, trig) -> signal: Band-limited ramp (inverse saw) oscillator
 random(seed?) -> signal: Deterministic uniform [0,1] per sample from seed
 [].random(trig, seed?) -> signal: Pick a random element from the array on trigger.
+range(start, end) -> array: Returns array of integers from start to end (inclusive). Supports descending.
 read(buffer, offset) -> signal: Read from buffer at time offset in seconds.
 record(duration: seconds, fn: () -> signal) -> signal: Records a function.
+[].reduce(reducer, initial?) -> any: Reduces an array to a single value using a reducer function (acc, item, index) -> acc.
 [].reverse: Returns a new array with elements in reverse order.
-rhodes(hz, vel?, trig) -> signal: Rhodes-style electric piano. Tine FM, tone-bar resonances, chorus.
-rhodes70(hz, vel?, trig) -> signal: Vintage Rhodes-style (70s): purer fundamental, tone-bar resonances, subtle chorus.
+rhodes(hz, trig) -> signal: Rhodes-style electric piano.
 root: Set root note: root='a4'. Default: c4.
 round(x) -> signal: Round to nearest.
 safediv(x, y) -> signal: Division; 0 if y is 0.
@@ -171,14 +196,26 @@ Default: 'major'.
 Available:
 
 major, minor, pentatonic, pent, minorpentatonic, minorpent, majorpentatonic, majorpent, ritusen, kumai, hirajoshi, iwato, chinese, indian, pelog, prometheus, scriabin, gong, shang, jiao, zhi, yu, whole, wholetone, augmented, augmented2, hexmajor7, hexdorian, hexphrygian, hexsus, hexmajor6, hexaeolian, ionian, dorian, phrygian, lydian, mixolydian, aeolian, locrian, harmonicminor, harmonicmajor, melodicminor, melodicminordesc, melodicmajor, bartok, hindu, todi, purvi, marva, bhairav, ahirbhairav, superlocrian, romanianminor, hungarianminor, neapolitanminor, enigmatic, spanish, leadingwhole, lydianminor, neapolitanmajor, locrianmajor, diminished, octatonic, diminished2, octatonic2, messiaen1, messiaen2, messiaen3, messiaen4, messiaen5, messiaen6, messiaen7, chromatic, bayati, hijaz, sikah, rast, saba, iraq.
-sd(seed, trig?) -> signal: Snare drum. Recorded sdsynth, played on trigger.
-sdsynth(seed?, base?, trig?) -> signal: Snare drum synthesis. Used by sd.
+sd(seed, trig?) -> signal: Snare drum. Recorded sdsynth.
+sdsynth(seed?, base?, trig?) -> signal: Snare drum synth.
 select(cond, a, b) -> signal: a if cond else b.
+semis(x) -> number: Convert semitones to frequency multiplier (2^(semitones/12)).
+shader: Compile-time only shader preset selector for background visuals: shader='lissajous'.
+
+Available:
+
+lissajous, scope, orbit, ribbon, plasma, tunnel, rotozoom, cube, monolith, polyexplode.
+shaderinput: Compile-time only post-processing input source selector: shaderinput='audio'.
+
+Available:
+
+audio, editor.
 [].shuffle(seed?) -> array: Shuffles array in place using Fisher-Yates. Optional seed for deterministic shuffle.
 sign(x) -> signal: Sign of x (-1, 0, or 1).
 sin(x) -> signal: Sine.
 sine(hz?, offset, trig) -> signal: Sine wave generator
 slew(input, up?, down?, exp?) -> signal: Slew rate limiter with separate rise/fall and curve
+[].slice(start?, end?) -> array: Returns a shallow copy from start (inclusive) to end (exclusive). Supports negative indices.
 slicer(sample, speed?, offset?, slice?, threshold?, repeat?, trig) -> signal: Slice-based sample player
 smooth(seed?, rate?, curve?, trig) -> signal: Smooth interpolated random steps with rate and curve
 smootherstep(edge0, edge1, x) -> signal: Smoother step (5th order).
@@ -191,10 +228,14 @@ sqrt(x) -> signal: Square root.
 square(x) -> signal: x squared.
 step(edge, x) -> signal: 0 if x < edge else 1.
 [].step(trig) -> signal: Step through array on each trigger.
-[].fit(bars, swing, offset) -> signal: Tempo-synced walk over an array fitted into a total bar length.
+stereo(in, width?) -> array: Convert mono signal to stereo, optionally with delay-based widening.
+stereowidth(LR, width?) -> array: Adjust stereo width using mid-side processing. 1=normal, 0=mono, >1=wider.
+[].sum: Sum of array elements.
 supersaw(hz, voices?, spread?) -> signal: Supersaw oscillator with detuned voices.
+sustain(seconds?, trig) -> signal: Sustain an impulse for a fixed duration
 swing(x, y) -> signal: Swing amount.
 t: BPM adjusted time elapsed: 1 t = 1 bar.
+[].take(n?) -> array: Returns the first n items of an array (implemented via slice(0, n)).
 tan(x) -> signal: Tangent.
 tanh(x) -> signal: Hyperbolic tangent.
 timeline(pattern, color?) -> signal: Value curve over time. Pattern: value pairs and glides, e.g. `0,0 1,1` (hold 0, glide to 1). Use `-` for one-shot (no wrap). Outputs 0–1. Color 0–5.
@@ -204,9 +245,12 @@ tri(hz?, offset, trig) -> signal: Band-limited triangle oscillator
 trunc(x) -> signal: Truncate toward zero.
 tube(in, drive?, bias?) -> signal: Soft saturation / tube-style distortion.
 tune: Multiply frequencies (e.g. tune=2 = octave up). Default: 1.
+uni(x) -> signal: Convert bipolar signal to unipolar ([-1,1] to [0,1]).
 velvet(input, room?, damping?, decay?) -> signal: Velvet noise stereo reverb (prime-based delay lines)
+vocoder(carrier, modulator, bands?, attack?, release?, freqMin?, freqMax?) -> signal: Vocoder effect using bandpass filters and envelope following.
 [].walk(bar, swing, offset) -> signal: Tempo-synced walk over an array.
 white(seed?, trig) -> signal: Uniform white noise with trigger reset
+widen(LR, seconds?) -> array: Widen stereo by delaying high frequencies in right channel.
 wrap(x, lo, hi) -> signal: Wrap x into [lo, hi).
 write(input, buffer) -> signal: Write input signal into buffer.
 zerox(input) -> signal: Positive zero-crossing detector (1 when input crosses from ≤0 to >0)

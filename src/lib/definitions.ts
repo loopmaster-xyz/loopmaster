@@ -979,6 +979,13 @@ export const extra: [string, Definition][] = [
       { name: 'hf', description: ['High crossover freq.'], default: 8000 },
     ],
   }],
+  ['ratchet', {
+    type: 'function',
+    name: 'ratchet',
+    category: 'generators',
+    description: ['Ratchet generator.'],
+    parameters: [{ name: 'n', description: ['Phase.'] }, { name: 'trig', description: ['Trigger.'] }],
+  }],
   ['poly', {
     type: 'function',
     name: 'poly',

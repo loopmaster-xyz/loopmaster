@@ -409,7 +409,7 @@ export async function createDspContext() {
         {
           widgets.push(createReverbWidget(h, target, ctx.doc, ctx.latency, ctx.widgetsCache))
         }
-        else if (h.genName === 'Every' || h.genName === 'At') {
+        else if (h.genName === 'Every' || h.genName === 'At' || h.genName === 'Euclid') {
           widgets.push(createEveryWidget(h as EveryHistory, target, ctx.doc, ctx.latency, ctx.widgetsCache))
         }
         else if (h.genName === 'Emit') {
