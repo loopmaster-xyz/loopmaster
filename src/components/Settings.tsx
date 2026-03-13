@@ -15,8 +15,8 @@ const SettingsMap = {
   // showShaders: { name: 'Show Shaders', shortcut: '' },
   showDocs: { name: 'Show Docs', shortcut: 'alt+o' },
   wordWrap: { name: 'Word Wrap', shortcut: 'alt+p' },
-  showMinimap: { name: 'Show Minimap', shortcut: 'alt+m' },
-  overscroll: { name: 'Overscroll', shortcut: 'alt+u' },
+  // showMinimap: { name: 'Show Minimap', shortcut: 'alt+m' },
+  // overscroll: { name: 'Overscroll', shortcut: 'alt+u' },
 } as const
 
 const SettingsButton = ({ onClick, children }: { onClick: () => void; children: preact.ComponentChildren }) => (
