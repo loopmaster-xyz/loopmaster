@@ -1,15 +1,16 @@
-import { PaperPlaneRightIcon, TrashIcon } from '@phosphor-icons/react'
-import { useSignal } from '@preact/signals'
-import { createPersistedDoc } from 'editor'
-import { useCallback, useEffect } from 'preact/hooks'
 import type { OneLiner, OneLiners as OneLinersType } from '../../deno/types.ts'
-import { api } from '../api.ts'
-import { tokenizer } from '../lib/tokenizer.ts'
-import { Link } from '../router.tsx'
+import { PaperPlaneRightIcon, TrashIcon } from '@phosphor-icons/react'
 import { primaryColor, session } from '../state.ts'
+import { useCallback, useEffect } from 'preact/hooks'
+
 import { InlineEditor } from './InlineEditor.tsx'
+import { Link } from '../router.tsx'
 import { Main } from './Main.tsx'
 import { SpinnerLarge } from './Spinner.tsx'
+import { api } from '../api.ts'
+import { createPersistedDoc } from 'editor'
+import { tokenizer } from '../lib/tokenizer.ts'
+import { useSignal } from '@preact/signals'
 
 const oneLinerDoc = createPersistedDoc('one-liner', tokenizer)
 
@@ -43,7 +44,7 @@ export const OneLiners = ({ oneLiners }: { oneLiners: OneLinersType }) => {
     <Main key="one-liners">
       <div class="flex flex-col items-start gap-4 p-4 pl-12">
         <p>
-          One-liners are short, simple code snippets that are easy to understand and help you learn to use loopmaster.
+          One-liners are short, simple code snippets that are easy to understand and help you learn to use groovemaster.
         </p>
         <p>
           Post your own one-liner here: (or <Link class="text-white" to="/docs">read the docs</Link> or{' '}

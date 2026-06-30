@@ -4,7 +4,7 @@ import { type MainPage, mainPage, type SidebarTab, sidebarTab } from './state.ts
 
 export const pathname = signal(window.location.pathname)
 
-export const title = signal('loopmaster')
+export const title = signal('groovemaster')
 
 export const section = signal<string | null>(null)
 

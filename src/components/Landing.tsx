@@ -9,15 +9,9 @@ import {
   RepeatIcon,
   ShareIcon,
   UserCircleIcon,
-  WaveformIcon,
   WaveSawtoothIcon,
+  WaveformIcon,
 } from '@phosphor-icons/react'
-import { useSignal } from '@preact/signals'
-import { isMobile } from 'utils/is-mobile'
-import bmcLogo from '../assets/bmc.svg'
-import whopLogo from '../assets/whop.svg'
-import { docs } from '../lib/docs.ts'
-import { Link } from '../router.tsx'
 import {
   backgroundColor,
   primaryColor,
@@ -28,9 +22,16 @@ import {
   themeVariation,
   widgetOptions,
 } from '../state.ts'
-import themes from '../themes/_all.json'
+
 import { InlineEditor } from './InlineEditor.tsx'
+import { Link } from '../router.tsx'
 import { Logo } from './Logo.tsx'
+import bmcLogo from '../assets/bmc.svg'
+import { docs } from '../lib/docs.ts'
+import { isMobile } from 'utils/is-mobile'
+import themes from '../themes/_all.json'
+import { useSignal } from '@preact/signals'
+import whopLogo from '../assets/whop.svg'
 
 const exampleCode = `
 fm=>sine($+sine($/2)*$*4)*ad(trig:every(1/8))
@@ -266,7 +267,7 @@ export function Landing() {
           <div class="relative max-w-7xl mx-auto px-6 py-6 md:py-14">
             <div class="flex flex-col items-center justify-center text-center mb-12">
               <Logo
-                text="loopmaster"
+                text="groovemaster"
                 size={isMobile() ? '3.5em' : '4.1em'}
                 onClick={randomizeTheme}
                 onContextMenu={previousTheme}
@@ -415,7 +416,7 @@ export function Landing() {
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
               <div>
                 <Logo
-                  text="loopmaster"
+                  text="groovemaster"
                   size="2em"
                   onClick={randomizeTheme}
                   onContextMenu={previousTheme}
@@ -485,7 +486,7 @@ export function Landing() {
               </div>
             </div>
             <div class="mt-8 text-center text-sm text-neutral-500">
-              © {new Date().getFullYear()} loopmaster. Built for music hackers.
+              © {new Date().getFullYear()} groovemaster. Built for music hackers.
             </div>
           </div>
         </footer>

@@ -1,10 +1,11 @@
-import { useSignal } from '@preact/signals'
-import { useReactiveEffect } from '../hooks/useReactiveEffect.ts'
-import { cn } from '../lib/cn.ts'
 import { busy, showIntro } from '../state.ts'
+
 import { Logo } from './Logo.tsx'
 import { RadialGradient } from './RadialGradient.tsx'
 import { SpinnerLarge } from './Spinner.tsx'
+import { cn } from '../lib/cn.ts'
+import { useReactiveEffect } from '../hooks/useReactiveEffect.ts'
+import { useSignal } from '@preact/signals'
 
 export const Intro = () => {
   const fadeIn = useSignal(false)
@@ -53,7 +54,7 @@ export const Intro = () => {
             !zoomOut.value && !zoomIn.value && 'opacity-0 scale-y-[1.025] scale-x-[1.1] translate-y-1',
             zoomOut.value && 'transition-all ease-in-out duration-[500ms] opacity-100',
           )}>
-            <Logo text="loopmaster" size="3.5em" textShadow={true} />
+            <Logo text="groovemaster" size="3.5em" textShadow={true} />
             <SpinnerLarge />
           </div>
         </RadialGradient>

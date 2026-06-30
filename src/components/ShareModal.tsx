@@ -1,8 +1,9 @@
-import { ShareNetworkIcon } from '@phosphor-icons/react'
-import { useState } from 'preact/hooks'
-import { SocialIcon } from 'react-social-icons'
 import { grayColor, primaryColor } from '../state.ts'
+
 import { Modal } from './Modal.tsx'
+import { ShareNetworkIcon } from '@phosphor-icons/react'
+import { SocialIcon } from 'react-social-icons'
+import { useState } from 'preact/hooks'
 
 interface ShareModalProps {
   isOpen: boolean
@@ -27,7 +28,7 @@ const SocialButton = ({ platform, url, label }: { platform: string; url: string;
 export function ShareModal({ isOpen, onClose, trackUrl, trackTitle, userName }: ShareModalProps) {
   const [showCopied, setShowCopied] = useState(false)
 
-  const shareText = `Listen to ${trackTitle} by ${userName || 'Unknown'} on loopmaster`
+  const shareText = `Listen to ${trackTitle} by ${userName || 'Unknown'} on groovemaster`
 
   const getSocialShareUrl = (platform: string) => {
     switch (platform) {

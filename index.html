@@ -7,19 +7,19 @@
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="loopmaster - Code music" />
+  <meta property="og:title" content="groovemaster - Code music" />
   <meta property="og:description" content="Code music in the browser." />
-  <meta property="og:image" content="https://loopmaster.xyz/screenshot.png?v=3" />
+  <meta property="og:image" content="https://groovemaster.xyz/screenshot.png?v=3" />
   <meta property="og:image:width" content="1866" />
   <meta property="og:image:height" content="1110" />
   <meta property="og:url" content="/" />
-  <meta property="og:site_name" content="loopmaster" />
+  <meta property="og:site_name" content="groovemaster" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="loopmaster - Code music" />
+  <meta name="twitter:title" content="groovemaster - Code music" />
   <meta name="twitter:description" content="Code music in the browser." />
-  <meta name="twitter:image" content="https://loopmaster.xyz/screenshot.png?v=3" />
+  <meta name="twitter:image" content="https://groovemaster.xyz/screenshot.png?v=3" />
 
   <meta name="theme-color" content="#000000" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -31,7 +31,7 @@
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Turret+Road:wght@200;300;400;500;700;800&display=block"
     rel="stylesheet">
 
-  <title>loopmaster</title>
+  <title>groovemaster</title>
 
   <style>
     html {
@@ -58,6 +58,15 @@
     window.addEventListener('contextmenu', event => {
       event.preventDefault()
     })
+  </script>
+
+  <script type="module">
+    // redirect to groovemaster.xyz
+    if (import.meta.env.PROD) {
+      if (window.location.hostname != 'groovemaster.xyz') {
+        window.location.href = 'https://groovemaster.xyz' + window.location.pathname
+      }
+    }
   </script>
 </head>
 

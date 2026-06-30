@@ -25,7 +25,7 @@ export const Tools = () => {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `loopmaster-projects-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5)}.zip`
+    a.download = `groovemaster-projects-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5)}.zip`
     a.click()
     URL.revokeObjectURL(url)
   }

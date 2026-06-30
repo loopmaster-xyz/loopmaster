@@ -1,6 +1,7 @@
-import { SocialIcon } from 'react-social-icons'
 import { currentProject, currentProjectId, session } from '../state.ts'
+
 import { SidebarButton } from './SidebarButton.tsx'
+import { SocialIcon } from 'react-social-icons'
 
 const SocialButton = ({ platform, url, label }: { platform: string; url: string; label: string }) => {
   return (
@@ -17,7 +18,7 @@ export const ShareProject = () => {
   const trackTitle = `${session.value?.artistName} - ${currentProject.value?.name}`
   const userName = session.value?.artistName
 
-  const shareText = `Listen to ${trackTitle} by ${userName || 'Unknown'} on loopmaster`
+  const shareText = `Listen to ${trackTitle} by ${userName || 'Unknown'} on groovemaster`
 
   const getSocialShareUrl = (platform: string) => {
     switch (platform) {
