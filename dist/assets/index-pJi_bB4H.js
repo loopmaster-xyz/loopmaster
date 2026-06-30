@@ -62,6 +62,7 @@ var __require = /* @__PURE__ */ ((x$5) => typeof require !== "undefined" ? requi
 		fetch(link.href, fetchOpts);
 	}
 })();
+if (window.location.hostname != "groovemaster.xyz") window.location.href = "https://groovemaster.xyz" + window.location.pathname;
 var n$3, l, u$4, t$7, i$5, r$12, o$32, e$60, f$4, c$6, s$3, a$34, h$4, p$6, v$3, y$4, d$4 = {}, w$4 = [], _$4 = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i, g$4 = Array.isArray;
 function m$4(n$4, l$10) {
 	for (var u$5 in l$10) n$4[u$5] = l$10[u$5];
@@ -50388,7 +50389,7 @@ var fft_default = (() => {
 		var ENVIRONMENT_IS_NODE = typeof process == "object" && process.versions?.node && process.type != "renderer";
 		if (ENVIRONMENT_IS_NODE) {
 			const { createRequire } = await __vitePreload(async () => {
-				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-BH4cPi85.js").then(__toDynamicImportESM(1));
+				const { createRequire: createRequire$1 } = await import("./__vite-browser-external-DAcGFe6O.js").then(__toDynamicImportESM(1));
 				return { createRequire: createRequire$1 };
 			}, []);
 			var require$1 = createRequire(import.meta.url);
@@ -59720,15 +59721,6 @@ persist("dj", () => {
 	djTitleB.value = data.djTitleB ?? "";
 	djBpm.value = data.djBpm ?? 120;
 });
-function cn(...inputs) {
-	return inputs.flat(Infinity).map((input) => {
-		if (!input) return "";
-		if (typeof input === "string" || typeof input === "number") return input;
-		if (Array.isArray(input)) return cn(...input);
-		if (typeof input === "object") return Object.entries(input).filter(([_$5, value]) => Boolean(value)).map(([key]) => key).join(" ");
-		return "";
-	}).filter(Boolean).join(" ");
-}
 var f = 0;
 Array.isArray;
 function u(e$61, t$12, n$4, o$33, i$6, u$5) {
@@ -59755,8 +59747,26 @@ function u(e$61, t$12, n$4, o$33, i$6, u$5) {
 	if ("function" == typeof e$61 && (a$35 = e$61.defaultProps)) for (c$7 in a$35) void 0 === p$7[c$7] && (p$7[c$7] = a$35[c$7]);
 	return l.vnode && l.vnode(l$10), l$10;
 }
+const Header = ({ children, class: className }) => {
+	return /* @__PURE__ */ u("div", {
+		class: `px-4 w-full h-[50px] min-h-[50px] leading-none text-white flex items-end pb-1.5 border-b-2 border-[${primaryColor.value}] ${className}`,
+		children: /* @__PURE__ */ u("div", {
+			class: "flex items-center justify-center gap-2",
+			children
+		})
+	});
+};
+function cn(...inputs) {
+	return inputs.flat(Infinity).map((input) => {
+		if (!input) return "";
+		if (typeof input === "string" || typeof input === "number") return input;
+		if (Array.isArray(input)) return cn(...input);
+		if (typeof input === "object") return Object.entries(input).filter(([_$5, value]) => Boolean(value)).map(([key]) => key).join(" ");
+		return "";
+	}).filter(Boolean).join(" ");
+}
 const pathname = y$1(window.location.pathname);
-const title = y$1("loopmaster");
+const title = y$1("groovemaster");
 const section = y$1(null);
 const subsection = y$1(null);
 j(() => {
@@ -59880,15 +59890,6 @@ j(() => {
 	if (side) sidebarTab.value = side;
 	mainPage.value = main;
 });
-const Header = ({ children, class: className }) => {
-	return /* @__PURE__ */ u("div", {
-		class: `px-4 w-full h-[50px] min-h-[50px] leading-none text-white flex items-end pb-1.5 border-b-2 border-[${primaryColor.value}] ${className}`,
-		children: /* @__PURE__ */ u("div", {
-			class: "flex items-center justify-center gap-2",
-			children
-		})
-	});
-};
 const Main = ({ children, class: className }) => {
 	return /* @__PURE__ */ u("div", {
 		ref: (el) => {
@@ -59911,7 +59912,7 @@ const AboutMain = () => {
 				class: "mb-6",
 				children: /* @__PURE__ */ u("p", {
 					class: "text-white/70 text-sm leading-relaxed",
-					children: "loopmaster is a live coding environment for audio. Write code in real time and hear the result instantly. Built-in synths, effects, and sequencing run in the browser with no installation."
+					children: "groovemaster is a live coding environment for audio. Write code in real time and hear the result instantly. Built-in synths, effects, and sequencing run in the browser with no installation."
 				})
 			}),
 			/* @__PURE__ */ u("section", {
@@ -59955,7 +59956,7 @@ const AboutMain = () => {
 				}),
 				/* @__PURE__ */ u("p", {
 					class: "text-white/70 text-sm leading-relaxed mb-4",
-					children: "By using LoopMaster you agree to use the service responsibly. Do not upload content that infringes others’ rights or violates applicable law. We may modify or discontinue the service at any time."
+					children: "By using GrooveMaster you agree to use the service responsibly. Do not upload content that infringes others’ rights or violates applicable law. We may modify or discontinue the service at any time."
 				}),
 				/* @__PURE__ */ u("h3", {
 					id: "privacy",
@@ -61600,7 +61601,7 @@ const OneLiners = ({ oneLiners }) => {
 	return /* @__PURE__ */ u(Main, { children: [/* @__PURE__ */ u("div", {
 		class: "flex flex-col items-start gap-4 p-4 pl-12",
 		children: [
-			/* @__PURE__ */ u("p", { children: "One-liners are short, simple code snippets that are easy to understand and help you learn to use loopmaster." }),
+			/* @__PURE__ */ u("p", { children: "One-liners are short, simple code snippets that are easy to understand and help you learn to use groovemaster." }),
 			/* @__PURE__ */ u("p", { children: [
 				"Post your own one-liner here: (or ",
 				/* @__PURE__ */ u(Link, {
@@ -62991,7 +62992,7 @@ const Intro = () => {
 			children: /* @__PURE__ */ u(RadialGradient, { children: /* @__PURE__ */ u("div", {
 				class: cn("flex flex-col items-center justify-center text-white", zoomIn.value && "transition-all ease-in-out duration-[1000ms] scale-y-[1.15] scale-x-[1.25] -translate-y-2.5", !zoomOut.value && !zoomIn.value && "opacity-0 scale-y-[1.025] scale-x-[1.1] translate-y-1", zoomOut.value && "transition-all ease-in-out duration-[500ms] opacity-100"),
 				children: [/* @__PURE__ */ u(Logo, {
-					text: "loopmaster",
+					text: "groovemaster",
 					size: "3.5em",
 					textShadow: true
 				}), /* @__PURE__ */ u(SpinnerLarge, {})]
@@ -63231,7 +63232,7 @@ function Landing() {
 						children: [/* @__PURE__ */ u("div", {
 							class: "flex flex-col items-center justify-center text-center mb-12",
 							children: [/* @__PURE__ */ u(Logo, {
-								text: "loopmaster",
+								text: "groovemaster",
 								size: isMobile() ? "3.5em" : "4.1em",
 								onClick: randomizeTheme,
 								onContextMenu: previousTheme
@@ -63467,7 +63468,7 @@ function Landing() {
 						children: [/* @__PURE__ */ u("div", {
 							class: "flex flex-col md:flex-row justify-between items-center gap-6",
 							children: [/* @__PURE__ */ u("div", { children: /* @__PURE__ */ u(Logo, {
-								text: "loopmaster",
+								text: "groovemaster",
 								size: "2em",
 								onClick: randomizeTheme,
 								onContextMenu: previousTheme
@@ -63559,7 +63560,7 @@ function Landing() {
 							children: [
 								"© ",
 								(/* @__PURE__ */ new Date()).getFullYear(),
-								" loopmaster. Built for music hackers."
+								" groovemaster. Built for music hackers."
 							]
 						})]
 					})
@@ -66547,7 +66548,7 @@ var SocialButton = ({ platform, url, label }) => {
 };
 const ShareProject = () => {
 	const trackUrl = location.origin + "/p/" + currentProject.value?.id;
-	const shareText = `Listen to ${`${session.value?.artistName} - ${currentProject.value?.name}`} by ${session.value?.artistName || "Unknown"} on loopmaster`;
+	const shareText = `Listen to ${`${session.value?.artistName} - ${currentProject.value?.name}`} by ${session.value?.artistName || "Unknown"} on groovemaster`;
 	const getSocialShareUrl = (platform) => {
 		switch (platform) {
 			case "twitter": return `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(trackUrl)}`;
@@ -69808,7 +69809,7 @@ const Tools = () => {
 		const url = URL.createObjectURL(blob);
 		const a$35 = document.createElement("a");
 		a$35.href = url;
-		a$35.download = `loopmaster-projects-${(/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-").slice(0, -5)}.zip`;
+		a$35.download = `groovemaster-projects-${(/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-").slice(0, -5)}.zip`;
 		a$35.click();
 		URL.revokeObjectURL(url);
 	};
@@ -71480,4 +71481,4 @@ const App = () => {
 R(/* @__PURE__ */ u(App, {}), document.getElementById("app"));
 export { __commonJSMin as t };
 
-//# sourceMappingURL=index-CWHYEpgi.js.map
+//# sourceMappingURL=index-pJi_bB4H.js.map
